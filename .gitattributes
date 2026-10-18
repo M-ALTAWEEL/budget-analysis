@@ -1,0 +1,6 @@
+# Keep LF line endings in the repo so shell commands work inside Linux containers,
+# even when the project is edited on Windows.
+* text=auto eol=lf
+*.docx binary
+*.png binary
+*.jpg binary
