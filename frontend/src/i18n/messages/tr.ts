@@ -93,6 +93,11 @@ export const tr: Messages = {
     done: (month) => `${month} bütçesi belirlendi`,
     invalidAmount: "8000 veya 7500.50 gibi bir tutar gir.",
     currencyHint: "Bütçe belirlendikten sonra ayın para birimi değişmez. Ana para birimin de bu olur.",
+    sameAsLast: (month) => `${month} ile aynı mı?`,
+    sameAsLastDetail: (total, limits) =>
+      limits === 0 ? `${total}, kategori limiti yok.` : `${total}, aynı ${limits} kategori limitiyle.`,
+    useLastMonth: "Aynı planı kullan",
+    orNew: "Ya da yeni bir tutar gir:",
   },
 
   expenses: {
@@ -268,6 +273,8 @@ export const tr: Messages = {
     light: "Açık",
     dark: "Koyu",
     system: "Cihazla aynı",
+    accent: "Renk",
+    accents: { pine: "Çam yeşili", ocean: "Okyanus", plum: "Erik", graphite: "Grafit" },
     account: "Hesap",
     mainCurrency: "Ana para birimi",
     mainCurrencyHint: "Yeni bütçeler ve harcamalar için kullanılır. Daha önce ayarladığın aylar kendi para birimini korur.",

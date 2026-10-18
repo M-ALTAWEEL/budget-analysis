@@ -13,7 +13,7 @@ import { LOCALES, LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { updateMe } from "@/services/auth";
-import { useTheme, type ThemePreference } from "@/theme/ThemeProvider";
+import { ACCENTS, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
 import { CURRENCIES, type Currency } from "@/types/api";
 
 /** A row of large, tappable options where exactly one is chosen (a radio group). */
@@ -53,7 +53,7 @@ const THEMES: { value: ThemePreference; icon: typeof Sun }[] = [
 export default function SettingsPage() {
   const { t, locale } = useI18n();
   const changeLocale = useChangeLocale();
-  const { preference, setPreference } = useTheme();
+  const { preference, setPreference, accent, setAccent } = useTheme();
   const { user, logout } = useAuth();
 
   return (
@@ -84,6 +84,21 @@ export default function SettingsPage() {
               <Choice key={value} selected={value === preference} onSelect={() => setPreference(value)}>
                 <Icon className="size-5 text-muted" aria-hidden />
                 {t.settings[value]}
+              </Choice>
+            ))}
+          </div>
+        </section>
+
+        <section aria-labelledby="accent">
+          <h2 id="accent" className="mb-3 font-display text-lg font-semibold">
+            {t.settings.accent}
+          </h2>
+          <div role="radiogroup" aria-labelledby="accent" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+            {ACCENTS.map((value) => (
+              <Choice key={value} selected={value === accent} onSelect={() => setAccent(value)}>
+                {/* The swatch shows the colour as it looks in the current theme */}
+                <span className="size-5 shrink-0 rounded-full" data-accent-swatch={value} aria-hidden />
+                {t.settings.accents[value]}
               </Choice>
             ))}
           </div>

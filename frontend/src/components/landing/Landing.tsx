@@ -99,7 +99,7 @@ export function Landing() {
             </h2>
             <Link
               href="/register"
-              className="mt-8 inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-semibold text-[#12443a] transition-transform active:scale-[0.97]"
+              className="mt-8 inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-semibold text-panel transition-transform active:scale-[0.97]"
             >
               {t.auth.createAccount}
             </Link>

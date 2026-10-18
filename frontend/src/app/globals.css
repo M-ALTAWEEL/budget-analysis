@@ -54,6 +54,63 @@
   --color-panel: #12443a;
 }
 
+/* Accent colours (Settings > Colour). Only the "pine" family changes: berry (overspent)
+   and marigold (caution) keep their meaning whatever colour the student picks.
+   Each accent has a light and a dark version, checked for text contrast like pine. */
+:root[data-accent="ocean"] {
+  --color-pine: #1d5fa8;
+  --color-pine-dark: #164a85;
+  --color-pine-soft: #dce7f5;
+  --color-panel: #1d5fa8;
+}
+:root[data-accent="plum"] {
+  --color-pine: #6b3fa0;
+  --color-pine-dark: #55307f;
+  --color-pine-soft: #ebe2f5;
+  --color-panel: #6b3fa0;
+}
+:root[data-accent="graphite"] {
+  --color-pine: #3d4a5c;
+  --color-pine-dark: #2c3644;
+  --color-pine-soft: #e3e7ed;
+  --color-panel: #3d4a5c;
+}
+:root[data-theme="dark"][data-accent="ocean"] {
+  --color-pine: #6aa7ec;
+  --color-pine-dark: #8dbdf2;
+  --color-pine-soft: #182b44;
+  --color-on-pine: #0b1a2e;
+  --color-panel: #163a66;
+}
+:root[data-theme="dark"][data-accent="plum"] {
+  --color-pine: #b18ce6;
+  --color-pine-dark: #c6a9ee;
+  --color-pine-soft: #2c2140;
+  --color-on-pine: #1c1230;
+  --color-panel: #3f2766;
+}
+:root[data-theme="dark"][data-accent="graphite"] {
+  --color-pine: #a9b6c8;
+  --color-pine-dark: #c2ccda;
+  --color-pine-soft: #252c36;
+  --color-on-pine: #111720;
+  --color-panel: #2b3442;
+}
+
+/* The round samples in Settings. */
+[data-accent-swatch="pine"] {
+  background: #1e6b57;
+}
+[data-accent-swatch="ocean"] {
+  background: #1d5fa8;
+}
+[data-accent-swatch="plum"] {
+  background: #6b3fa0;
+}
+[data-accent-swatch="graphite"] {
+  background: #3d4a5c;
+}
+
 /* Arabic: the Latin fonts have no Arabic letters, so both roles use Readex Pro.
    (Same element as the next/font variables, higher specificity, so this wins.) */
 html[lang="ar"] {

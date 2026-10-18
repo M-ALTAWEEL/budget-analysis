@@ -25,7 +25,8 @@ export function useMonth() {
 export function MonthSwitcher() {
   const { month, setMonth } = useMonth();
   const { t, monthLabel } = useI18n();
-  const isCurrent = month === currentMonth();
+  // One month ahead is allowed: the budget for next month can be planned before it starts.
+  const isLast = month === shiftMonth(currentMonth(), 1);
   return (
     <div className="flex items-center gap-1">
       <button
@@ -42,7 +43,7 @@ export function MonthSwitcher() {
       <button
         type="button"
         onClick={() => setMonth(shiftMonth(month, 1))}
-        disabled={isCurrent}
+        disabled={isLast}
         className="rounded-lg p-2 text-muted hover:bg-ink/5 hover:text-ink disabled:invisible"
         aria-label={t.month.next}
       >

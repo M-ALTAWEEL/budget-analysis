@@ -103,6 +103,11 @@ export const ar: Messages = {
     done: (month) => `تم تحديد ميزانية ${month}`,
     invalidAmount: "أدخل مبلغًا مثل 8000 أو 7500.50.",
     currencyHint: "لا يمكن تغيير عملة الشهر بعد تحديد الميزانية، وستصبح عملتك الأساسية.",
+    sameAsLast: (month) => `نفس خطة ${month}؟`,
+    sameAsLastDetail: (total, limits) =>
+      limits === 0 ? `${total}، بدون حدود للفئات.` : `${total}، مع نفس حدود الفئات (${limits}).`,
+    useLastMonth: "استخدم نفس الخطة",
+    orNew: "أو أدخل مبلغاً جديداً:",
   },
 
   expenses: {
@@ -279,6 +284,8 @@ export const ar: Messages = {
     light: "فاتح",
     dark: "داكن",
     system: "حسب الجهاز",
+    accent: "اللون",
+    accents: { pine: "أخضر", ocean: "أزرق", plum: "بنفسجي", graphite: "رمادي" },
     account: "الحساب",
     mainCurrency: "العملة الأساسية",
     mainCurrencyHint: "تُستخدم للميزانيات والمصاريف الجديدة. الأشهر التي حدّدتها سابقًا تحتفظ بعملتها.",

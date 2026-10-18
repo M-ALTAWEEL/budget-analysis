@@ -98,6 +98,11 @@ export const en = {
     done: (month: string) => `Budget set for ${month}`,
     invalidAmount: "Enter an amount like 8000 or 7500.50.",
     currencyHint: "The month's currency can't change once the budget is set. It also becomes your main currency.",
+    sameAsLast: (month: string) => `Same as ${month}?`,
+    sameAsLastDetail: (total: string, limits: number) =>
+      limits === 0 ? `${total}, no category limits.` : `${total}, with the same ${limits === 1 ? "category limit" : `${limits} category limits`}.`,
+    useLastMonth: "Use the same plan",
+    orNew: "Or enter a new amount:",
   },
 
   expenses: {
@@ -276,6 +281,8 @@ export const en = {
     light: "Light",
     dark: "Dark",
     system: "Same as device",
+    accent: "Colour",
+    accents: { pine: "Pine", ocean: "Ocean", plum: "Plum", graphite: "Graphite" },
     account: "Account",
     mainCurrency: "Main currency",
     mainCurrencyHint: "Used for new budgets and expenses. Months you already set up keep their currency.",
