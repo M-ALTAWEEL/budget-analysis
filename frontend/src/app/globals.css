@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+/* BudgetBuddy design tokens.
+   A cool, calm palette: money stress is the problem, so the interface stays quiet.
+   Pine = healthy budget, marigold = "today" and caution, berry = overspent. */
+@theme {
+  --color-paper: #f2f5f3;
+  --color-surface: #ffffff;
+  --color-ink: #16302b;
+  --color-muted: #5b6f69;
+  --color-line: #d5ded9;
+  --color-pine: #1e6b57;
+  --color-pine-dark: #17543f;
+  --color-pine-soft: #dcebe5;
+  --color-marigold: #c98516;
+  --color-marigold-soft: #f8ecd6;
+  --color-berry: #b23c63;
+  --color-berry-soft: #f6e3ea;
+}
+
+@theme inline {
+  --font-sans: var(--font-body), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display-face), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: light;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Visible keyboard focus everywhere, never for mouse clicks.
+   Inside @layer base so utilities like outline-none can still override it:
+   in Tailwind v4, CSS outside a layer beats every utility class. */
+@layer base {
+  :focus-visible {
+    outline: 2px solid var(--color-pine);
+    outline-offset: 2px;
+  }
+}
+
+/* Amounts line up in columns. */
+.tabular {
+  font-variant-numeric: tabular-nums;
+}
