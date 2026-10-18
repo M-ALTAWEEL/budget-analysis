@@ -18,7 +18,8 @@ from app.core.security import (
 )
 from app.domain.user.model import RefreshToken, User
 from app.domain.user.repository import RefreshTokenRepository, UserRepository
-from app.domain.user.schema import LoginRequest, RegisterRequest, UserUpdate
+from app.core.google import GoogleIdentity
+from app.domain.user.schema import GoogleSignInRequest, LoginRequest, RegisterRequest, UserUpdate
 
 INVALID_CREDENTIALS = "Incorrect email or password."
 INVALID_SESSION = "Session expired. Please log in again."
@@ -66,11 +67,49 @@ class AuthService:
         if user is None:
             verify_password(data.password, DUMMY_PASSWORD_HASH)  # same timing as a real check
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, INVALID_CREDENTIALS)
+        if user.password_hash is None:  # made with Google: no password to check
+            verify_password(data.password, DUMMY_PASSWORD_HASH)
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, INVALID_CREDENTIALS)
         if not verify_password(data.password, user.password_hash):
             raise HTTPException(status.HTTP_401_UNAUTHORIZED, INVALID_CREDENTIALS)
         if not user.is_active:
             raise HTTPException(status.HTTP_403_FORBIDDEN, "This account is disabled.")
 
+        tokens = self._issue_tokens(user)
+        await self.session.commit()
+        return tokens
+
+    async def google(self, identity: GoogleIdentity, data: GoogleSignInRequest) -> IssuedTokens:
+        """Log in with Google, creating the account the first time."""
+        if not identity.email_verified:
+            # Google has not confirmed this person owns the email: never trust it.
+            raise HTTPException(status.HTTP_401_UNAUTHORIZED, "Your Google email is not verified.")
+
+        user = await self.users.get_by_google_sub(identity.sub)
+        if user is None:
+            user = await self.users.get_by_email(identity.email)
+            if user is not None:
+                # Same (verified) email as an account made with a password: it is the same
+                # person, so link Google to it. Both ways of logging in keep working.
+                user.google_sub = identity.sub
+        if user is None:
+            user = User(
+                email=identity.email,
+                password_hash=None,
+                google_sub=identity.sub,
+                full_name=(identity.name or identity.email.split("@")[0])[:100],
+                base_currency=data.base_currency,
+                locale=data.locale,
+            )
+            self.users.add(user)
+            try:
+                await self.session.flush()
+            except IntegrityError:
+                await self.session.rollback()
+                raise self._email_taken() from None
+
+        if not user.is_active:
+            raise HTTPException(status.HTTP_403_FORBIDDEN, "This account is disabled.")
         tokens = self._issue_tokens(user)
         await self.session.commit()
         return tokens

@@ -12,7 +12,10 @@ class User(BaseModel):
     __tablename__ = "users"
 
     email: Mapped[str] = mapped_column(String(255), unique=True)
-    password_hash: Mapped[str] = mapped_column(String(255))
+    # None for accounts made with "Sign in with Google": they have no password here.
+    password_hash: Mapped[str | None] = mapped_column(String(255))
+    # Google's permanent id for the person (the "sub" claim), once they use Google.
+    google_sub: Mapped[str | None] = mapped_column(String(255), unique=True)
     full_name: Mapped[str] = mapped_column(String(100))
     base_currency: Mapped[str] = mapped_column(String(3), server_default="TRY")
     secondary_currency: Mapped[str | None] = mapped_column(String(3))

@@ -46,6 +46,7 @@ export const ar: Messages = {
     newHere: "جديد هنا؟",
     createOne: "أنشئ حسابًا",
     haveAccount: "لديك حساب؟",
+    or: "أو",
   },
 
   currencies: {

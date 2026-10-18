@@ -26,6 +26,10 @@ class Settings(BaseSettings):
     access_token_minutes: int = 15
     refresh_token_days: int = 7
 
+    # "Sign in with Google": the OAuth client ID from Google Cloud Console.
+    # Empty = the Google button is hidden and /auth/google answers 503.
+    google_client_id: str = ""
+
     # Exchange rates (ExchangeRate-API open access endpoint, no key needed)
     fx_api_url: str = "https://open.er-api.com/v6/latest"
     fx_cache_hours: int = 12

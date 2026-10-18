@@ -38,6 +38,7 @@ export const tr: Messages = {
     newHere: "Yeni misin?",
     createOne: "Hesap oluştur",
     haveAccount: "Zaten hesabın var mı?",
+    or: "veya",
   },
 
   currencies: {

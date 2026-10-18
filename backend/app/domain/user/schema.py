@@ -35,6 +35,19 @@ class RegisterRequest(BaseModel):
         return value
 
 
+class GoogleSignInRequest(BaseModel):
+    credential: str = Field(min_length=1, max_length=4096)  # the ID token from Google
+    # Used only when this creates a new account (what the sign-up form would ask):
+    base_currency: Currency = Currency.TRY
+    locale: Locale = "en"
+
+
+class AuthConfig(BaseModel):
+    """Public settings the sign-in page needs. The client ID is not a secret."""
+
+    google_client_id: str | None
+
+
 class LoginRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=1, max_length=200)

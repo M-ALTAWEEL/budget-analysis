@@ -21,6 +21,9 @@ class UserRepository:
     async def get_by_email(self, email: str) -> User | None:
         return await self.session.scalar(select(User).where(User.email == email))
 
+    async def get_by_google_sub(self, sub: str) -> User | None:
+        return await self.session.scalar(select(User).where(User.google_sub == sub))
+
     def add(self, user: User) -> None:
         self.session.add(user)
 

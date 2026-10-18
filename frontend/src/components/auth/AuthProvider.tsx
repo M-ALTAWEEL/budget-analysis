@@ -14,6 +14,10 @@ interface AuthContextValue {
   user: User | null;
   login: (email: string, password: string) => Promise<void>;
   register: (input: authService.RegisterInput) => Promise<void>;
+  loginWithGoogle: (
+    credential: string,
+    newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
+  ) => Promise<void>;
   logout: () => Promise<void>;
   /** After a profile change (PATCH /users/me), so every screen sees the new values. */
   updateUser: (user: User) => void;
@@ -81,6 +85,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     [signedIn],
   );
 
+  const loginWithGoogle = useCallback(
+    async (
+      credential: string,
+      newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
+    ) => {
+      await authService.googleSignIn(credential, newAccount);
+      await signedIn();
+    },
+    [signedIn],
+  );
+
   const logout = useCallback(async () => {
     await authService.logout();
     restoring = null;
@@ -94,8 +109,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ ...state, login, register, logout, updateUser }),
-    [state, login, register, logout, updateUser],
+    () => ({ ...state, login, register, loginWithGoogle, logout, updateUser }),
+    [state, login, register, loginWithGoogle, logout, updateUser],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

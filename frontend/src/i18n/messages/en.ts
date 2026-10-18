@@ -41,6 +41,7 @@ export const en = {
     newHere: "New here?",
     createOne: "Create an account",
     haveAccount: "Already have an account?",
+    or: "or",
   },
 
   currencies: {

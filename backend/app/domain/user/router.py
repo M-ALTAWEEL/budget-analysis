@@ -2,12 +2,15 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Cookie, Request, Response, status
+from fastapi import APIRouter, Cookie, Depends, Request, Response, status
 
 from app.config import settings
+from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
 from app.dependencies import CurrentUser, DbSession
 from app.domain.user.schema import (
+    AuthConfig,
+    GoogleSignInRequest,
     LoginRequest,
     RegisterRequest,
     TokenResponse,
@@ -58,6 +61,26 @@ async def login(
     db: DbSession,
 ) -> TokenResponse:
     tokens = await AuthService(db).login(data)
+    return _send_tokens(response, tokens)
+
+
+@auth_router.get("/config")
+async def auth_config() -> AuthConfig:
+    """Which sign-in options are on. One place for the client ID: the backend's .env."""
+    return AuthConfig(google_client_id=settings.google_client_id or None)
+
+
+@auth_router.post("/google")
+@limiter.limit("10/minute")
+async def google_sign_in(
+    request: Request,  # required by the rate limiter
+    data: GoogleSignInRequest,
+    response: Response,
+    db: DbSession,
+    google: Annotated[GoogleVerifier, Depends(get_google_verifier)],
+) -> TokenResponse:
+    identity = await google.verify(data.credential)
+    tokens = await AuthService(db).google(identity, data)
     return _send_tokens(response, tokens)
 
 
