@@ -313,7 +313,7 @@ export const tr: Messages = {
     f3Text:
       "Türkçe, İngilizce ve Arapça; her birinin kendi sayıları, tarihleri ve çoğulları. Arapça grafikler dahil sağdan sola okunur.",
     endTitle: "Bu ayın harçlığıyla başla. Bir dakikanı alır.",
-    footer: "BudgetBuddy, Mohammed Altaweel'in bir portfolyo projesidir.",
+    footer: "BudgetBuddy, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
   },
 

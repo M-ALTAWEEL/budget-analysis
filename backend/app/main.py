@@ -41,6 +41,12 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
 
+    @app.get(f"{settings.api_prefix}/ping", tags=["system"])
+    async def ping() -> dict:
+        """Is the server up? No database query: the host's health checks and the
+        keep-awake job call this often, and must not keep the (free) database awake."""
+        return {"status": "ok"}
+
     @app.get(f"{settings.api_prefix}/health", tags=["system"])
     async def health(response: Response, db: Annotated[AsyncSession, Depends(get_db)]) -> dict:
         """Liveness + database check. Used by Docker, Railway and us."""

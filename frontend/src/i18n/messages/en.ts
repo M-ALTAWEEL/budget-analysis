@@ -321,7 +321,7 @@ export const en = {
     f3Text:
       "English, Arabic and Turkish, each with its own numbers, dates and plurals. Arabic reads right to left, charts included.",
     endTitle: "Start with this month's allowance. It takes a minute.",
-    footer: "BudgetBuddy is a portfolio project by Mohammed Altaweel.",
+    footer: "BudgetBuddy is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
   },
 

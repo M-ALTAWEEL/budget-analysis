@@ -1,0 +1,23 @@
+# Render Blueprint: the API as a free Docker web service.
+# Render reads this file when you choose "New > Blueprint" and pick this repository.
+services:
+  - type: web
+    name: budgetbuddy-api
+    runtime: docker
+    rootDir: backend
+    plan: free
+    region: frankfurt
+    # Checked often by Render: /ping does not touch the database, so the free
+    # database can sleep when nobody is using the app.
+    healthCheckPath: /api/v1/ping
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: SECRET_KEY
+        generateValue: true # a long random value made by Render, never in git
+      - key: DATABASE_URL
+        sync: false # pasted from Neon when the Blueprint is created
+      - key: FRONTEND_URL
+        sync: false # the Vercel address, e.g. https://budgetbuddy.vercel.app
+      - key: GOOGLE_CLIENT_ID
+        sync: false

@@ -49,3 +49,10 @@ async def test_health_reports_503_when_database_is_down():
     response = await get_health()
     assert response.status_code == 503
     assert response.json() == {"status": "degraded", "database": "unavailable"}
+
+
+async def test_ping_needs_no_database():
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://testserver") as client:
+        response = await client.get("/api/v1/ping")
+    assert response.json() == {"status": "ok"}

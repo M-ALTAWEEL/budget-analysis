@@ -1,8 +1,9 @@
 """Application settings, read once from environment variables / the .env file."""
 
 from functools import lru_cache
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-from pydantic import model_validator
+from pydantic import field_validator, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 DEV_SECRET_KEY = "dev-only-secret-key-change-me-before-deploying-0123456789"
@@ -34,6 +35,23 @@ class Settings(BaseSettings):
     fx_api_url: str = "https://open.er-api.com/v6/latest"
     fx_cache_hours: int = 12
     fx_timeout_seconds: float = 10.0
+
+    @field_validator("database_url")
+    @classmethod
+    def use_asyncpg(cls, url: str) -> str:
+        """Hosts (Neon, Render) give "postgresql://...?sslmode=require". The app talks to
+        PostgreSQL through asyncpg, which needs its driver name in the URL and calls the
+        SSL option "ssl". channel_binding is a libpq option asyncpg does not know."""
+        parts = urlsplit(url)
+        scheme = parts.scheme
+        if scheme in ("postgres", "postgresql"):
+            scheme = "postgresql+asyncpg"
+        query = [
+            ("ssl" if key == "sslmode" else key, value)
+            for key, value in parse_qsl(parts.query)
+            if key != "channel_binding"
+        ]
+        return urlunsplit((scheme, parts.netloc, parts.path, urlencode(query), parts.fragment))
 
     @model_validator(mode="after")
     def check_secret_key(self) -> "Settings":
