@@ -159,3 +159,21 @@ async def test_daily_spending_needs_a_budget_and_is_private(client):
 
     assert (await client.get(f"{API}/budgets/2026-10/daily", headers=other)).status_code == 404
     assert (await client.get(f"{API}/budgets/2026-10/daily", headers=owner)).status_code == 200
+
+
+async def test_the_first_budget_of_a_month_can_use_another_currency(client):
+    headers = await signup(client, base_currency="TRY")
+    response = await client.put(
+        f"{API}/budgets/2026-10", headers=headers, json={"total_amount": "500", "currency": "USD"}
+    )
+    assert response.status_code == 200
+    assert response.json()["currency"] == "USD"
+    # ...and it becomes the main currency, for new expenses and next months.
+    me = (await client.get(f"{API}/users/me", headers=headers)).json()
+    assert me["base_currency"] == "USD"
+
+    # Changing the total later does not change the month's currency.
+    again = await client.put(
+        f"{API}/budgets/2026-10", headers=headers, json={"total_amount": "600", "currency": "EUR"}
+    )
+    assert again.json()["currency"] == "USD"

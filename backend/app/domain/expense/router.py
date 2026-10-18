@@ -6,8 +6,8 @@ from fastapi import APIRouter, Depends, Query, status
 
 from app.core.dates import MONTH_PATTERN, parse_month
 from app.dependencies import CurrentUser, DbSession
-from app.domain.currency.client import ExchangeRateClient, get_fx_client
 from app.domain.budget.schema import CategoryRead
+from app.domain.currency.client import ExchangeRateClient, get_fx_client
 from app.domain.expense.categorizer import CategorySuggester
 from app.domain.expense.schema import (
     CategorySuggestion,

@@ -89,6 +89,8 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        <MainCurrency />
+
         <SecondCurrency />
 
         <Link
@@ -117,6 +119,48 @@ export default function SettingsPage() {
         </section>
       </div>
     </>
+  );
+}
+
+/** The currency of new budgets and expenses. Months already set up keep theirs. */
+function MainCurrency() {
+  const { t } = useI18n();
+  const { user, updateUser } = useAuth();
+  const errorMessage = useErrorMessage();
+  const [error, setError] = useState<string | null>(null);
+  if (!user) return null;
+
+  async function change(value: Currency) {
+    setError(null);
+    try {
+      // If the second currency was this one, clear it: showing TRY ≈ TRY says nothing.
+      const clearSecond = user?.secondary_currency === value;
+      updateUser(
+        await updateMe({ base_currency: value, ...(clearSecond ? { secondary_currency: null } : {}) }),
+      );
+    } catch (err) {
+      setError(errorMessage(err));
+    }
+  }
+
+  return (
+    <section aria-labelledby="main-currency">
+      <h2 id="main-currency" className="mb-3 font-display text-lg font-semibold">
+        {t.settings.mainCurrency}
+      </h2>
+      <Select
+        label={t.settings.mainCurrencyHint}
+        value={user.base_currency}
+        onChange={(e) => void change(e.target.value as Currency)}
+      >
+        {CURRENCIES.map((code) => (
+          <option key={code} value={code}>
+            {t.currencies[code]} ({code})
+          </option>
+        ))}
+      </Select>
+      {error && <p className="mt-2 text-sm text-berry">{error}</p>}
+    </section>
   );
 }
 

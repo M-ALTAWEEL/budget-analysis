@@ -75,7 +75,7 @@ async def set_budget(
     """Create the month's budget, or change its total."""
     service = BudgetService(db)
     first_day = parse_month(month)
-    await service.set_total(user, first_day, to_money(data.total_amount))
+    await service.set_total(user, first_day, to_money(data.total_amount), data.currency)
     return await service.summary(user, first_day)
 
 

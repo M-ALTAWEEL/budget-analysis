@@ -1,5 +1,7 @@
 "use client";
 
+import { AnimatePresence } from "motion/react";
+
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
@@ -64,9 +66,11 @@ export default function ExpensesPage() {
                   )}
                 </div>
                 <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
-                  {items.map((expense) => (
-                    <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
-                  ))}
+                  <AnimatePresence initial={false}>
+                    {items.map((expense) => (
+                      <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
+                    ))}
+                  </AnimatePresence>
                 </ul>
               </section>
             );

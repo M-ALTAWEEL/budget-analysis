@@ -52,6 +52,9 @@ class CategoryUpdate(BaseModel):
 
 class BudgetSet(BaseModel):
     total_amount: PositiveMoney
+    # Only used when the month's budget is created (default: the user's main currency).
+    # After that it is fixed: the month's expenses are already converted into it.
+    currency: Currency | None = None
 
 
 class AllocationItem(BaseModel):

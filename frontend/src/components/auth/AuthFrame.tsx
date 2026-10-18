@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import { SampleTank } from "@/components/overview/BudgetTank";
 import { LanguageMenu } from "@/components/settings/LanguageMenu";
 import { ThemeButton } from "@/components/settings/ThemeButton";
@@ -12,9 +14,9 @@ export function AuthFrame({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <div className="flex flex-col px-6 py-8 sm:px-12">
         <div className="flex items-center justify-between gap-3">
-          <span className="font-display text-xl font-bold tracking-tight" dir="ltr">
+          <Link href="/" className="font-display text-xl font-bold tracking-tight" dir="ltr">
             BudgetBuddy
-          </span>
+          </Link>
           <div className="flex items-center gap-2">
             <LanguageMenu />
             <ThemeButton />

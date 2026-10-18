@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios";
 
 import { api } from "@/lib/api";
-import type { BudgetSummary, Category, DailySpending, Tips } from "@/types/api";
+import type { BudgetSummary, Category, Currency, DailySpending, Tips } from "@/types/api";
 
 /** The month's summary, or null when no budget has been set for it yet. */
 export async function getSummary(month: string): Promise<BudgetSummary | null> {
@@ -35,9 +35,15 @@ export async function getTips(month: string): Promise<Tips | null> {
   }
 }
 
-export async function setBudget(month: string, totalAmount: string): Promise<BudgetSummary> {
+/** `currency` only counts when the month's budget is created; after that it is fixed. */
+export async function setBudget(
+  month: string,
+  totalAmount: string,
+  currency?: Currency,
+): Promise<BudgetSummary> {
   const { data } = await api.put<BudgetSummary>(`/budgets/${month}`, {
     total_amount: totalAmount,
+    currency,
   });
   return data;
 }

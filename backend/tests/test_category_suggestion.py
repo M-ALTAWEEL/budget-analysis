@@ -17,8 +17,12 @@ async def add_expense(client, headers, description: str, uuid: str) -> dict:
     response = await client.post(
         f"{API}/expenses",
         headers=headers,
-        json={"amount": "50", "description": description, "category_uuid": uuid,
-              "spent_at": "2026-10-05"},
+        json={
+            "amount": "50",
+            "description": description,
+            "category_uuid": uuid,
+            "spent_at": "2026-10-05",
+        },
     )
     assert response.status_code == 201, response.text
     return response.json()
@@ -44,7 +48,9 @@ async def test_no_suggestion_when_the_model_is_unsure(client):
     headers = await signup(client)
     # Neither word is in the training data: the model guesses transport at ~38%.
     assert await suggest(client, headers, "birthday cake") == {
-        "category": None, "confidence": None, "source": None
+        "category": None,
+        "confidence": None,
+        "source": None,
     }
     assert (await suggest(client, headers, "150 ₺"))["category"] is None  # nothing to read
 

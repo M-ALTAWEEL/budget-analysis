@@ -1,7 +1,9 @@
 "use client";
 
+import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 
+import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
 import { MonthCompare } from "@/components/insights/MonthCompare";
@@ -52,12 +54,18 @@ export default function OverviewPage() {
   const daily = useDaily(month);
   const previousDaily = useDaily(shiftMonth(month, -1));
   const tips = useTips(month);
+  const user = useCurrentUser();
   const { t } = useI18n();
+  const hour = new Date().getHours();
+  const firstName = user.full_name.split(" ")[0];
+  const greeting =
+    hour < 12 ? t.overview.morning(firstName) : hour < 18 ? t.overview.afternoon(firstName) : t.overview.evening(firstName);
   const errorMessage = useErrorMessage();
 
   return (
     <>
       <header className="mb-10">
+        <p className="mb-1 text-[15px] text-muted">{greeting}</p>
         <MonthSwitcher />
       </header>
 
@@ -116,9 +124,11 @@ export default function OverviewPage() {
               }
             >
               <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
-                {expenses.data.slice(0, 5).map((expense) => (
-                  <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={summary.data?.currency} />
-                ))}
+                <AnimatePresence initial={false}>
+                  {expenses.data.slice(0, 5).map((expense) => (
+                    <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={summary.data?.currency} />
+                  ))}
+                </AnimatePresence>
               </ul>
             </Section>
           )}

@@ -43,9 +43,7 @@ def split_one_offs(days: list[float]) -> tuple[list[float], list[float]]:
     return everyday, one_offs
 
 
-def forecast_month(
-    days_so_far: list[Decimal] | list[float], days_in_month: int
-) -> Forecast | None:
+def forecast_month(days_so_far: list[Decimal] | list[float], days_in_month: int) -> Forecast | None:
     """`days_so_far`: what was spent on each day from the 1st up to today, in order."""
     days = [float(d) for d in days_so_far]
     n = len(days)

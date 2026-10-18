@@ -24,7 +24,7 @@ export function TotalForm({ summary, month }: { summary: BudgetSummary; month: s
     setError(null);
     if (!isValidAmount(total)) return setError(t.setup.invalidAmount);
     try {
-      await setBudget.mutateAsync(total.trim());
+      await setBudget.mutateAsync({ total: total.trim() });
       toast.success(t.budget.updated);
     } catch (err) {
       setError(errorMessage(err, { 422: t.budget.belowPlanned }));

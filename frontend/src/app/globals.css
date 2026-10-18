@@ -82,3 +82,27 @@ body {
 .tabular {
   font-variant-numeric: tabular-nums;
 }
+
+/* The tank's liquid edge: an endless wave sliding upwards (BudgetTank.tsx).
+   In right-to-left pages the tank fills from the right, so the wave is mirrored. */
+.tank-wave {
+  animation: tank-wave 2.8s linear infinite;
+}
+[dir="rtl"] .tank-edge {
+  transform: scaleX(-1);
+}
+@keyframes tank-wave {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-50%);
+  }
+}
+
+/* People who ask their system for less motion get still pictures. */
+@media (prefers-reduced-motion: reduce) {
+  .tank-wave {
+    animation: none;
+  }
+}

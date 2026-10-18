@@ -1,7 +1,20 @@
-import { redirect } from "next/navigation";
+"use client";
 
-// The app has no landing page yet: "/" goes straight to the overview.
-// Signed-out visitors are sent on to /login by the app layout.
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+
+import { useAuth } from "@/components/auth/AuthProvider";
+import { Landing } from "@/components/landing/Landing";
+import { PageLoader } from "@/components/ui/PageLoader";
+
+// Visitors see what BudgetBuddy is; signed-in students go straight to their overview.
 export default function Home() {
-  redirect("/overview");
+  const { status } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === "authenticated") router.replace("/overview");
+  }, [status, router]);
+
+  return status === "anonymous" ? <Landing /> : <PageLoader />;
 }

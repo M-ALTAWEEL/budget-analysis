@@ -38,7 +38,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
                 <>
                   <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-pine-soft">
                     <div
-                      className={`h-full rounded-full ${barColor}`}
+                      className={`h-full rounded-full transition-[width] duration-700 ease-out ${barColor}`}
                       style={{ width: `${Math.min(ratio, 1) * 100}%` }}
                     />
                   </div>

@@ -119,7 +119,8 @@ export function useDeleteExpense() {
 export function useSetBudget(month: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (total: string) => setBudget(month, total),
+    mutationFn: ({ total, currency }: { total: string; currency?: Currency }) =>
+      setBudget(month, total, currency),
     onSuccess: (summary) => {
       queryClient.setQueryData(queryKeys.summary(month), summary);
       // the even-pace line depends on the total

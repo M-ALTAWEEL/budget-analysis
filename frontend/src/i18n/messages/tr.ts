@@ -72,6 +72,9 @@ export const tr: Messages = {
   },
 
   overview: {
+    morning: (name) => `Günaydın, ${name}`,
+    afternoon: (name) => `İyi günler, ${name}`,
+    evening: (name) => `İyi akşamlar, ${name}`,
     whereItWent: "Para nereye gitti",
     planCategories: "Kategorileri planla",
     latest: "Son harcamalar",
@@ -89,6 +92,7 @@ export const tr: Messages = {
     submit: (month) => `${month} bütçesini belirle`,
     done: (month) => `${month} bütçesi belirlendi`,
     invalidAmount: "8000 veya 7500.50 gibi bir tutar gir.",
+    currencyHint: "Bütçe belirlendikten sonra ayın para birimi değişmez. Ana para birimin de bu olur.",
   },
 
   expenses: {
@@ -265,10 +269,52 @@ export const tr: Messages = {
     dark: "Koyu",
     system: "Cihazla aynı",
     account: "Hesap",
+    mainCurrency: "Ana para birimi",
+    mainCurrencyHint: "Yeni bütçeler ve harcamalar için kullanılır. Daha önce ayarladığın aylar kendi para birimini korur.",
     secondCurrency: "İkinci para birimi",
     secondCurrencyHint: "Tutarlar bugünkü kurla bu para birimine çevrilmiş olarak da görünür (≈).",
     none: "Yok",
     manageCategories: "Kategorileri yönet",
+  },
+
+  landing: {
+    heroTitle: "Harçlığından ne kaldığını ve ay sonuna yetip yetmeyeceğini bil.",
+    heroText:
+      "Harcadığını yaz. BudgetBuddy onu doğru kategoriye koyar, bir kategori bitmeden seni uyarır ve ayın nereye gittiğini gösterir.",
+    heroNote: "Ücretsiz; Türkçe, İngilizce ve Arapça.",
+    demoLabel: "Bir öğrencinin ayı birkaç saniyede: harcamalar geldikçe depo boşalır.",
+    dayOf: (day, days) => `${days} günün ${day}. günü`,
+    replay: "Tekrar oynat",
+    demo: [
+      "BİM alışverişi",
+      "Aidat",
+      "İstanbulkart dolum",
+      "Dersten önce kahve",
+      "İstatistik kitabı",
+      "İnternet faturası",
+      "Arkadaşlarla sinema",
+      "Dışarıda öğle yemeği",
+      "Otobüs",
+      "Telefon TL yükleme",
+      "Migros alışverişi",
+      "Kışlık mont",
+      "Eczane",
+      "Kahve",
+      "Market",
+    ],
+    f1Title: "Ne aldığını yaz, kategori kendini seçsin.",
+    f1Text:
+      "Bin'den fazla öğrenci harcamasıyla sıfırdan eğitilen bir model taxi, döner ve فاتورة كهربا'yı yazım hatalarıyla bile tanır. Emin olmadığında seçimi sana bırakır ve aidat gibi kendi oluşturduğun kategorileri öğrenir.",
+    f1Typed: "kampüse taksi",
+    f2Title: "Ayın sonunu oraya varmadan gör.",
+    f2Text:
+      "Kira ve tek seferlik ödemeler her gün değil bir kez sayılır; böylece tahmin büyük bir faturadan sonra sakin, yoğun bir hafta sonundan sonra dürüst kalır.",
+    f3Title: "Kendi dilinde, sağdan sola da.",
+    f3Text:
+      "Türkçe, İngilizce ve Arapça; her birinin kendi sayıları, tarihleri ve çoğulları. Arapça grafikler dahil sağdan sola okunur.",
+    endTitle: "Bu ayın harçlığıyla başla. Bir dakikanı alır.",
+    footer: "BudgetBuddy, Mohammed Altaweel'in bir portfolyo projesidir.",
+    source: "GitHub'da kaynak kodu",
   },
 
   errors: {

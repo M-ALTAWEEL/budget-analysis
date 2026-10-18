@@ -3,6 +3,7 @@
 import { motion, useReducedMotion } from "motion/react";
 
 import { Approx } from "@/components/ui/Approx";
+import { useCountUp } from "@/hooks/useCountUp";
 import { useI18n } from "@/i18n/I18nProvider";
 import { monthProgress } from "@/lib/month";
 import type { BudgetSummary, Currency, SpendingForecast } from "@/types/api";
@@ -20,6 +21,7 @@ interface TankViewProps {
   label: string;
   pace: Pace;
   inverse?: boolean; // white-on-pine version for the sign-in screen
+  quick?: boolean; // the landing page demo moves day by day: shorter fill animation
 }
 
 /**
@@ -27,11 +29,25 @@ interface TankViewProps {
  * shows how far through the month we are. The fill colour comes from the forecast, not from the
  * marker: rent paid on the 1st puts the fill far past the marker, but it is paid once.
  */
-function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, inverse }: TankViewProps) {
+export function TankView({
+  currency,
+  total,
+  spent,
+  timeRatio,
+  daysLeft,
+  label,
+  pace,
+  inverse,
+  quick,
+}: TankViewProps) {
   const remaining = total - spent;
   const spentRatio = total > 0 ? Math.min(spent / total, 1) : 0;
+  const shownLeft = useCountUp(Math.max(remaining, 0), quick ? 0.3 : 0.8);
   const fillColor =
     pace === "over" ? "bg-berry" : pace === "fast" ? "bg-marigold" : inverse ? "bg-white" : "bg-pine";
+  // The same colour for the moving liquid edge (an SVG drawn with currentColor).
+  const edgeColor =
+    pace === "over" ? "text-berry" : pace === "fast" ? "text-marigold" : inverse ? "text-white" : "text-pine";
   const muted = inverse ? "text-white/75" : "text-muted";
   const daily = daysLeft > 0 && remaining > 0 ? remaining / daysLeft : null;
   const reduceMotion = useReducedMotion();
@@ -54,7 +70,7 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
           pace === "over" && !inverse ? "text-berry" : ""
         }`}
       >
-        {format(Math.max(remaining, 0))}
+        {format(shownLeft)}
       </p>
       {!inverse && <Approx amount={Math.max(remaining, 0)} currency={currency} className="mt-1 text-[15px] text-muted" />}
 
@@ -73,7 +89,7 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
           </div>
         )}
         <div
-          className={`relative h-14 overflow-hidden rounded-2xl ${inverse ? "bg-white/15" : "bg-pine-soft"}`}
+          className={`relative h-16 overflow-hidden rounded-[1.25rem] ${inverse ? "bg-white/15" : "bg-pine-soft"}`}
           role="meter"
           aria-label={t.tank.meterLabel}
           aria-valuemin={0}
@@ -85,7 +101,26 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
             className={`absolute inset-y-0 start-0 ${fillColor}`}
             initial={reduceMotion ? false : { width: 0 }}
             animate={{ width: `${spentRatio * 100}%` }}
-            transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+            transition={
+              quick ? { duration: 0.35, ease: "easeOut" } : { duration: 0.9, ease: [0.22, 1, 0.36, 1], delay: 0.15 }
+            }
+          >
+            {/* The edge of the spent part moves like a liquid surface: it is a tank. */}
+            {spentRatio > 0 && spentRatio < 1 && (
+              <span className={`tank-edge absolute inset-y-0 -end-[7px] w-2 overflow-hidden ${edgeColor}`} aria-hidden>
+                <svg viewBox="0 0 8 64" preserveAspectRatio="none" className="tank-wave h-[200%] w-full">
+                  <path
+                    fill="currentColor"
+                    d="M0 0 H3 C8 4 8 12 3 16 C-2 20 -2 28 3 32 C8 36 8 44 3 48 C-2 52 -2 60 3 64 H0 Z"
+                  />
+                </svg>
+              </span>
+            )}
+          </motion.div>
+          {/* Glass: a soft light along the top, the same in both themes. */}
+          <span
+            className="pointer-events-none absolute inset-x-0 top-0 h-1/2 bg-gradient-to-b from-white/25 to-transparent"
+            aria-hidden
           />
         </div>
       </div>

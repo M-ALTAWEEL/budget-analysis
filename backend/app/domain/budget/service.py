@@ -88,11 +88,17 @@ class BudgetService:
         self.categories = CategoryRepository(session)
         self.expenses = ExpenseRepository(session)
 
-    async def set_total(self, user: User, month: date, total: Decimal) -> Budget:
+    async def set_total(
+        self, user: User, month: date, total: Decimal, currency: Currency | None = None
+    ) -> Budget:
         budget = await self.budgets.get_for_month(user.id, month)
         if budget is None:
             # The currency is fixed at creation: all of this month's expenses are
             # converted into it, so changing it later would mix currencies.
+            if currency is not None and currency != user.base_currency:
+                # The student's allowance comes in this currency now: make it the
+                # default for new expenses and next months too.
+                user.base_currency = currency
             budget = Budget(
                 user_id=user.id,
                 month=month,
@@ -184,9 +190,7 @@ class BudgetService:
             categories=sorted(rows, key=lambda row: row.spent, reverse=True),
         )
 
-    async def daily(
-        self, user: User, month: date, today: date | None = None
-    ) -> DailySpending:
+    async def daily(self, user: User, month: date, today: date | None = None) -> DailySpending:
         budget = await self._budget_or_404(user, month)
         end = next_month(month)
         rows = await self.expenses.total_by_day_and_category(user.id, month, end)

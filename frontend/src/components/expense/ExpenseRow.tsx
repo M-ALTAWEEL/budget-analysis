@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "motion/react";
+
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -12,7 +14,15 @@ export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budg
   const { money, categoryName } = useI18n();
 
   return (
-    <li>
+    // A new expense opens its row; a deleted one closes it (inside <AnimatePresence>).
+    <motion.li
+      layout="position"
+      initial={{ opacity: 0, height: 0 }}
+      animate={{ opacity: 1, height: "auto" }}
+      exit={{ opacity: 0, height: 0 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
+      className="overflow-hidden"
+    >
       <button
         type="button"
         onClick={() => openSheet(expense)}
@@ -30,6 +40,6 @@ export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budg
           )}
         </span>
       </button>
-    </li>
+    </motion.li>
   );
 }

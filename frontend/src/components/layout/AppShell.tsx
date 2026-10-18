@@ -1,6 +1,7 @@
 "use client";
 
 import { LayoutDashboard, LogOut, PiggyBank, Plus, ReceiptText, Settings, Shapes, Target } from "lucide-react";
+import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -42,13 +43,28 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
           <Sidebar />
           <main className="mx-auto w-full max-w-3xl px-4 pt-6 pb-44 sm:px-8 lg:pt-10 lg:pb-32">
-            {children}
+            <PageFade>{children}</PageFade>
           </main>
         </div>
         <BottomNav />
         <AddExpenseButton />
       </ExpenseSheetProvider>
     </MonthProvider>
+  );
+}
+
+/** A short fade when moving to another page, so the switch reads as one step. */
+function PageFade({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <motion.div
+      key={pathname}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.22, ease: "easeOut" }}
+    >
+      {children}
+    </motion.div>
   );
 }
 
@@ -78,12 +94,21 @@ function Sidebar() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] ${
-                active ? "bg-pine-soft font-semibold text-pine-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
+              className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] ${
+                active ? "font-semibold text-pine-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
               }`}
             >
-              <Icon className="size-5" aria-hidden />
-              {label(t)}
+              {/* One highlight that slides to the page you open. */}
+              {active && (
+                <motion.span
+                  layoutId="sidebar-active"
+                  className="absolute inset-0 rounded-xl bg-pine-soft"
+                  transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                  aria-hidden
+                />
+              )}
+              <Icon className="relative size-5" aria-hidden />
+              <span className="relative">{label(t)}</span>
             </Link>
           );
         })}
@@ -122,10 +147,18 @@ function BottomNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex min-w-0 flex-col items-center gap-1 px-1 py-2.5 text-[11px] leading-tight ${
+            className={`relative flex min-w-0 flex-col items-center gap-1 px-1 py-2.5 text-[11px] leading-tight ${
               active ? "font-semibold text-pine" : "text-muted"
             }`}
           >
+            {active && (
+              <motion.span
+                layoutId="tab-active"
+                className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-pine"
+                transition={{ type: "spring", stiffness: 500, damping: 40 }}
+                aria-hidden
+              />
+            )}
             <Icon className="size-5" aria-hidden />
             <span className="max-w-full truncate">{label(t)}</span>
           </Link>
@@ -150,7 +183,7 @@ function AddExpenseButton() {
     <button
       type="button"
       onClick={() => openSheet()}
-      className="fixed end-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-pine px-6 font-semibold text-on-pine shadow-lg shadow-pine/30 hover:bg-pine-dark lg:end-10 lg:bottom-10"
+      className="fixed end-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-pine px-6 font-semibold text-on-pine shadow-lg shadow-pine/30 transition-[background-color,transform] hover:bg-pine-dark active:scale-95 lg:end-10 lg:bottom-10"
     >
       <Plus className="size-5" aria-hidden />
       {t.expenses.add}

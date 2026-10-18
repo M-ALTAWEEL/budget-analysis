@@ -8,6 +8,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.google import GoogleIdentity
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
     create_access_token,
@@ -18,7 +19,6 @@ from app.core.security import (
 )
 from app.domain.user.model import RefreshToken, User
 from app.domain.user.repository import RefreshTokenRepository, UserRepository
-from app.core.google import GoogleIdentity
 from app.domain.user.schema import GoogleSignInRequest, LoginRequest, RegisterRequest, UserUpdate
 
 INVALID_CREDENTIALS = "Incorrect email or password."

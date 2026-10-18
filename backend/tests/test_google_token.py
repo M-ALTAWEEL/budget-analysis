@@ -60,8 +60,13 @@ def test_tokens_not_meant_for_us_are_refused(changes):
 def test_a_token_signed_by_someone_else_is_refused():
     other_key = rsa.generate_private_key(public_exponent=65537, key_size=2048)
     forged = jwt.encode(
-        {"iss": "https://accounts.google.com", "aud": CLIENT_ID, "sub": "x", "email": "a@b.c",
-         "exp": int(time.time()) + 600},
+        {
+            "iss": "https://accounts.google.com",
+            "aud": CLIENT_ID,
+            "sub": "x",
+            "email": "a@b.c",
+            "exp": int(time.time()) + 600,
+        },
         other_key,
         algorithm="RS256",
     )

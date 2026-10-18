@@ -77,6 +77,9 @@ export const en = {
   },
 
   overview: {
+    morning: (name: string) => `Good morning, ${name}`,
+    afternoon: (name: string) => `Good afternoon, ${name}`,
+    evening: (name: string) => `Good evening, ${name}`,
     whereItWent: "Where it went",
     planCategories: "Plan categories",
     latest: "Latest expenses",
@@ -94,6 +97,7 @@ export const en = {
     submit: (month: string) => `Set budget for ${month}`,
     done: (month: string) => `Budget set for ${month}`,
     invalidAmount: "Enter an amount like 8000 or 7500.50.",
+    currencyHint: "The month's currency can't change once the budget is set. It also becomes your main currency.",
   },
 
   expenses: {
@@ -273,10 +277,52 @@ export const en = {
     dark: "Dark",
     system: "Same as device",
     account: "Account",
+    mainCurrency: "Main currency",
+    mainCurrencyHint: "Used for new budgets and expenses. Months you already set up keep their currency.",
     secondCurrency: "Second currency",
     secondCurrencyHint: "Amounts also show converted to this currency, at today's rate (≈).",
     none: "None",
     manageCategories: "Manage categories",
+  },
+
+  landing: {
+    heroTitle: "Know what's left of your allowance, and whether it will last.",
+    heroText:
+      "Write down what you spend. BudgetBuddy puts it in the right category, warns you before a category runs out, and shows where the month is heading.",
+    heroNote: "Free, in English, Arabic and Turkish.",
+    demoLabel: "A student's month played in a few seconds: the tank empties as expenses come in.",
+    dayOf: (day: number, days: number) => `Day ${day} of ${days}`,
+    replay: "Play again",
+    demo: [
+      "Groceries at BİM",
+      "Building fees",
+      "İstanbulkart top-up",
+      "Coffee before class",
+      "Statistics textbook",
+      "Internet bill",
+      "Cinema with friends",
+      "Lunch out",
+      "Bus",
+      "Phone top-up",
+      "Groceries at Migros",
+      "Winter jacket",
+      "Pharmacy",
+      "Coffee",
+      "Groceries",
+    ],
+    f1Title: "Type what you bought. The category picks itself.",
+    f1Text:
+      "A model trained from scratch on over a thousand student expenses knows taxi, döner and فاتورة كهربا, typos included. When it isn't sure it leaves the choice to you, and it learns the categories you make yourself, like building fees.",
+    f1Typed: "taxi to campus",
+    f2Title: "See the end of the month before you get there.",
+    f2Text:
+      "Rent and other one-off payments count once, not every day, so the forecast stays calm after a big bill and honest after a busy weekend.",
+    f3Title: "In your language, right to left too.",
+    f3Text:
+      "English, Arabic and Turkish, each with its own numbers, dates and plurals. Arabic reads right to left, charts included.",
+    endTitle: "Start with this month's allowance. It takes a minute.",
+    footer: "BudgetBuddy is a portfolio project by Mohammed Altaweel.",
+    source: "Source code on GitHub",
   },
 
   errors: {

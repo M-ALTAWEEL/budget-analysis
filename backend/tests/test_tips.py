@@ -62,14 +62,22 @@ async def test_tips_endpoint_lists_repeated_purchases(client):
         response = await client.post(
             f"{API}/expenses",
             headers=headers,
-            json={"amount": "60", "description": "Kahve", "category_uuid": food,
-                  "spent_at": f"2026-10-0{day}"},
+            json={
+                "amount": "60",
+                "description": "Kahve",
+                "category_uuid": food,
+                "spent_at": f"2026-10-0{day}",
+            },
         )
         assert response.status_code == 201
 
     tips = (await client.get(f"{API}/budgets/2026-10/tips", headers=headers)).json()
     assert tips["repeated"] == [
-        {"label": "Kahve", "category": tips["repeated"][0]["category"], "count": 4,
-         "total": "240.00"}
+        {
+            "label": "Kahve",
+            "category": tips["repeated"][0]["category"],
+            "count": 4,
+            "total": "240.00",
+        }
     ]
     assert tips["repeated"][0]["category"]["slug"] == "food"
