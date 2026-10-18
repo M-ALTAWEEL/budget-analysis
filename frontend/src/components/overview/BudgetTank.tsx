@@ -60,10 +60,11 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
             className="absolute -top-6 bottom-0 z-10 flex -translate-x-1/2 flex-col items-center rtl:translate-x-1/2"
             style={{ insetInlineStart: `${timeRatio * 100}%` }}
           >
-            <span className={`text-xs font-semibold whitespace-nowrap ${inverse ? "text-white" : "text-marigold"}`}>
+            <span className={`text-xs font-semibold whitespace-nowrap ${inverse ? "text-white" : "text-marigold-ink"}`}>
               {t.tank.today}
             </span>
-            <span className={`mt-1 w-0.5 flex-1 rounded-full ${inverse ? "bg-white" : "bg-marigold"}`} />
+            {/* ink, not marigold: it must stay visible on top of any fill colour */}
+            <span className={`mt-1 w-0.5 flex-1 rounded-full ${inverse ? "bg-white" : "bg-ink"}`} />
           </div>
         )}
         <div

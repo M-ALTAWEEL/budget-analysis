@@ -29,6 +29,9 @@ interface I18nValue {
   monthName: (month: string) => string;
   monthLabel: (month: string) => string;
   dayLabel: (isoDate: string) => string;
+  shortDate: (isoDate: string) => string; // "5 Oct" / "5 أكتوبر" / "5 Eki"
+  percent: (ratio: number) => string; // 0.25 -> "25%" (Turkish puts it first: "%25")
+  compact: (value: number) => string; // 8000 -> "8K" (Turkish "8 B", Arabic "8 آلاف")
   /** Built-in categories are translated; the student's own ones keep the name they typed. */
   categoryName: (category: Category) => string;
 }
@@ -84,6 +87,16 @@ export function I18nProvider({ children }: { children: React.ReactNode }) {
       monthLabel: (month) => monthLabel(month, intl),
       dayLabel: (isoDate) =>
         dayLabel(isoDate, intl, { today: t.expenses.today, yesterday: t.expenses.yesterday }),
+      shortDate: (isoDate) => {
+        const [year, month, day] = isoDate.split("-").map(Number);
+        return new Intl.DateTimeFormat(intl, { day: "numeric", month: "short" }).format(
+          new Date(year, month - 1, day),
+        );
+      },
+      percent: (ratio) =>
+        new Intl.NumberFormat(intl, { style: "percent", maximumFractionDigits: 0 }).format(ratio),
+      compact: (value) =>
+        new Intl.NumberFormat(intl, { notation: "compact", maximumFractionDigits: 1 }).format(value),
       categoryName: (category) =>
         (category.is_default && category.slug && t.categories.names[category.slug]) || category.name,
     };

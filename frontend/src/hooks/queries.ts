@@ -5,6 +5,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   archiveCategory,
   createCategory,
+  getDaily,
   getSummary,
   listCategories,
   setAllocations,
@@ -18,12 +19,17 @@ import type { ExpenseInput } from "@/types/api";
 // One place for cache keys, so invalidation can never miss a spelling.
 export const queryKeys = {
   summary: (month: string) => ["summary", month] as const,
+  daily: (month: string) => ["daily", month] as const,
   expenses: (month: string) => ["expenses", month] as const,
   categories: ["categories"] as const,
 };
 
 export function useSummary(month: string) {
   return useQuery({ queryKey: queryKeys.summary(month), queryFn: () => getSummary(month) });
+}
+
+export function useDaily(month: string) {
+  return useQuery({ queryKey: queryKeys.daily(month), queryFn: () => getDaily(month) });
 }
 
 export function useExpenses(month: string) {
@@ -38,12 +44,13 @@ export function useCategories() {
   });
 }
 
-/** Any change to money refreshes every summary and every expense list. */
+/** Any change to money refreshes every summary, daily series and expense list. */
 function useInvalidateMoney() {
   const queryClient = useQueryClient();
   return () =>
     Promise.all([
       queryClient.invalidateQueries({ queryKey: ["summary"] }),
+      queryClient.invalidateQueries({ queryKey: ["daily"] }),
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
     ]);
 }
@@ -66,7 +73,11 @@ export function useSetBudget(month: string) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (total: string) => setBudget(month, total),
-    onSuccess: (summary) => queryClient.setQueryData(queryKeys.summary(month), summary),
+    onSuccess: (summary) => {
+      queryClient.setQueryData(queryKeys.summary(month), summary);
+      // the even-pace line depends on the total
+      return queryClient.invalidateQueries({ queryKey: queryKeys.daily(month) });
+    },
   });
 }
 
@@ -77,6 +88,7 @@ function useInvalidateCategories() {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
       queryClient.invalidateQueries({ queryKey: ["summary"] }),
+      queryClient.invalidateQueries({ queryKey: ["daily"] }),
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
     ]);
 }

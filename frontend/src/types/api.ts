@@ -49,6 +49,21 @@ export interface BudgetSummary {
   categories: CategorySpending[];
 }
 
+export interface DaySpending {
+  day: string; // "2026-10-05"
+  spent: string;
+  by_category: Record<string, string>; // { category uuid: amount }
+}
+
+/** GET /budgets/{month}/daily: every day of the month, zeros included. */
+export interface DailySpending {
+  month: string;
+  currency: Currency;
+  total_amount: string;
+  categories: Category[]; // every category used in by_category
+  days: DaySpending[];
+}
+
 export interface Expense {
   uuid: string;
   amount: string;

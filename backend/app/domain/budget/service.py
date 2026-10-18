@@ -1,6 +1,6 @@
 """Business rules for categories, monthly budgets and category limits."""
 
-from datetime import date
+from datetime import date, timedelta
 from decimal import Decimal
 
 from fastapi import HTTPException, status
@@ -17,6 +17,8 @@ from app.domain.budget.schema import (
     CategoryRead,
     CategorySpending,
     CategoryUpdate,
+    DailySpending,
+    DaySpending,
 )
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.user.model import User
@@ -174,6 +176,39 @@ class BudgetService:
             spent=spent,
             remaining=budget.total_amount - spent,
             categories=sorted(rows, key=lambda row: row.spent, reverse=True),
+        )
+
+    async def daily(self, user: User, month: date) -> DailySpending:
+        budget = await self._budget_or_404(user, month)
+        end = next_month(month)
+        rows = await self.expenses.total_by_day_and_category(user.id, month, end)
+        categories = await self.categories.list_by_ids(list({row[1] for row in rows}))
+        uuid_of = {category.id: category.uuid for category in categories}
+
+        by_day: dict[date, dict[str, Decimal]] = {}
+        for day, category_id, total in rows:
+            by_day.setdefault(day, {})[uuid_of[category_id]] = to_money(total)
+
+        # Fill the gaps: a chart needs every day, including the ones with nothing spent.
+        days: list[DaySpending] = []
+        day = month
+        while day < end:
+            spent_that_day = by_day.get(day, {})
+            days.append(
+                DaySpending(
+                    day=day,
+                    spent=to_money(sum(spent_that_day.values(), Decimal("0"))),
+                    by_category=spent_that_day,
+                )
+            )
+            day += timedelta(days=1)
+
+        return DailySpending(
+            month=format_month(month),
+            currency=Currency(budget.currency),
+            total_amount=budget.total_amount,
+            categories=[CategoryRead.model_validate(category) for category in categories],
+            days=days,
         )
 
     async def _budget_or_404(self, user: User, month: date) -> Budget:

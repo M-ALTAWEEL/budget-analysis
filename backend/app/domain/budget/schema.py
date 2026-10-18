@@ -1,5 +1,6 @@
 """API shapes for categories, budgets and allocations."""
 
+from datetime import date
 from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
@@ -66,6 +67,23 @@ class CategorySpending(BaseModel):
     category: CategoryRead
     limit_amount: Decimal | None  # None = spent in this category without a planned limit
     spent: Decimal
+
+
+class DaySpending(BaseModel):
+    day: date
+    spent: Decimal  # total of that day, in the budget's currency
+    by_category: dict[str, Decimal]  # {category uuid: amount}, only categories used that day
+
+
+class DailySpending(BaseModel):
+    """One row per day of the month (zero on days without expenses), for charts and for
+    fair comparisons ("by this day last month")."""
+
+    month: str  # "2026-10"
+    currency: Currency
+    total_amount: Decimal  # the month's budget, so a chart can draw the even-pace line
+    categories: list[CategoryRead]  # every category that appears in by_category
+    days: list[DaySpending]
 
 
 class BudgetSummary(BaseModel):

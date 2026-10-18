@@ -1,5 +1,6 @@
 """Database queries for expenses. Every method takes user_id: no cross-user access."""
 
+from collections.abc import Sequence
 from datetime import date
 from decimal import Decimal
 
@@ -49,6 +50,20 @@ class ExpenseRepository:
             .group_by(Expense.category_id)
         )
         return {category_id: total for category_id, total in rows}
+
+    async def total_by_day_and_category(
+        self, user_id: int, start: date, end: date
+    ) -> Sequence[tuple[date, int, Decimal]]:
+        """(day, category_id, sum of amount_base) for expenses in [start, end). Days
+        without spending are simply missing: the database only returns groups that exist."""
+        # The return type is Sequence, not list[...]: inside this class the name `list`
+        # means the list() method above, and Python would fail at import time.
+        rows = await self.session.execute(
+            select(Expense.spent_at, Expense.category_id, func.sum(Expense.amount_base))
+            .where(Expense.user_id == user_id, Expense.spent_at >= start, Expense.spent_at < end)
+            .group_by(Expense.spent_at, Expense.category_id)
+        )
+        return [(day, category_id, total) for day, category_id, total in rows]
 
     def add(self, expense: Expense) -> None:
         self.session.add(expense)

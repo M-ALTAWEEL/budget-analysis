@@ -1,12 +1,23 @@
 import { isAxiosError } from "axios";
 
 import { api } from "@/lib/api";
-import type { BudgetSummary, Category } from "@/types/api";
+import type { BudgetSummary, Category, DailySpending } from "@/types/api";
 
 /** The month's summary, or null when no budget has been set for it yet. */
 export async function getSummary(month: string): Promise<BudgetSummary | null> {
   try {
     const { data } = await api.get<BudgetSummary>(`/budgets/${month}`);
+    return data;
+  } catch (error) {
+    if (isAxiosError(error) && error.response?.status === 404) return null;
+    throw error;
+  }
+}
+
+/** Spending per day, or null when the month has no budget. */
+export async function getDaily(month: string): Promise<DailySpending | null> {
+  try {
+    const { data } = await api.get<DailySpending>(`/budgets/${month}/daily`);
     return data;
   } catch (error) {
     if (isAxiosError(error) && error.response?.status === 404) return null;

@@ -119,3 +119,43 @@ async def test_money_input_validation(client):
             f"{API}/budgets/2026-10", headers=headers, json={"total_amount": bad}
         )
         assert response.status_code == 422, bad
+
+
+# ── Daily spending (for the pace chart) ──────────────────────────────────────
+
+
+async def test_daily_spending_has_every_day_and_sums_each_day(client):
+    headers = await signup(client)
+    await set_budget(client, headers, month="2026-02", total="5000")
+    food = await category_uuid(client, headers, "food")
+    bus = await category_uuid(client, headers, "transport")
+    for amount, category, day in (
+        ("100", food, "2026-02-03"),
+        ("50.50", bus, "2026-02-03"),
+        ("20", food, "2026-02-28"),
+    ):
+        body = {"amount": amount, "description": "x", "category_uuid": category, "spent_at": day}
+        assert (await client.post(f"{API}/expenses", headers=headers, json=body)).status_code == 201
+
+    response = await client.get(f"{API}/budgets/2026-02/daily", headers=headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["currency"] == "TRY"
+    assert data["total_amount"] == "5000.00"
+    assert len(data["days"]) == 28  # February 2026, zero days included
+    by_day = {row["day"]: row for row in data["days"]}
+    assert by_day["2026-02-01"]["spent"] == "0.00"
+    assert by_day["2026-02-01"]["by_category"] == {}
+    assert by_day["2026-02-03"]["spent"] == "150.50"  # two expenses on the same day
+    assert by_day["2026-02-03"]["by_category"] == {food: "100.00", bus: "50.50"}
+    assert by_day["2026-02-28"]["spent"] == "20.00"
+    assert {c["uuid"] for c in data["categories"]} == {food, bus}
+
+
+async def test_daily_spending_needs_a_budget_and_is_private(client):
+    owner = await signup(client, email="owner@example.com")
+    await set_budget(client, owner)
+    other = await signup(client, email="other@example.com")
+
+    assert (await client.get(f"{API}/budgets/2026-10/daily", headers=other)).status_code == 404
+    assert (await client.get(f"{API}/budgets/2026-10/daily", headers=owner)).status_code == 200

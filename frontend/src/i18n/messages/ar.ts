@@ -173,6 +173,38 @@ export const ar: Messages = {
     },
   },
 
+  insights: {
+    paceTitle: "المصروف على مدار الشهر",
+    paceIntro: "مجموع ما صرفته يومًا بيوم، بجانب معدّل ثابت يستهلك الميزانية بالضبط مع نهاية الشهر.",
+    yourSpending: "مصروفك",
+    evenPace: "المعدّل الثابت",
+    budget: "الميزانية",
+    spentByThisDay: "صُرف حتى هذا اليوم",
+    onThisDay: (amount) => `${amount} في هذا اليوم`,
+    evenPaceValue: (amount) => `المعدّل الثابت: ${amount}`,
+    chartSummary: (spent, even) => `صرفت حتى الآن ${spent}. لو صرفت بمعدّل ثابت لكان ${even}.`,
+    showTable: "عرض كجدول",
+    day: "اليوم",
+    thatDay: "في ذلك اليوم",
+    soFar: "المجموع حتى الآن",
+    compareTitle: "مقارنة مع الشهر الماضي",
+    compareIntro: (count) =>
+      count === 1
+        ? "اليوم الأول من كل شهر."
+        : `أول ${count === 2 ? "يومين" : days(count)} من كل شهر، لتكون المقارنة عادلة.`,
+    sameDays: (month) => `${month}، نفس الأيام`,
+    more: (percent) => `أكثر من الشهر الماضي بـ ${percent}`,
+    less: (percent) => `أقل من الشهر الماضي بـ ${percent}`,
+    same: "تقريبًا مثل الشهر الماضي",
+    newThisMonth: "جديد هذا الشهر",
+    noComparison: "لا توجد ميزانية للشهر الماضي، فلا يوجد ما نقارن به بعد.",
+    differentCurrency: "كانت ميزانية الشهر الماضي بعملة أخرى، فلا يمكن المقارنة بينهما.",
+    alertsTitle: "يحتاج انتباهك",
+    categoryOver: (name, amount) => `فئة ${name} تجاوزت حدها بمقدار ${amount}.`,
+    categoryNear: (name, percent, left) => `فئة ${name} استهلكت ${percent} من حدها. تبقّى ${left}.`,
+    budgetAlmostGone: (percent, count) => `صُرف ${percent} من الميزانية وما زال أمامك ${days(count)}.`,
+  },
+
   settings: {
     title: "الإعدادات",
     language: "اللغة",

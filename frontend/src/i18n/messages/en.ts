@@ -169,6 +169,39 @@ export const en = {
     } as Record<string, string>,
   },
 
+  insights: {
+    paceTitle: "Spending through the month",
+    paceIntro: "Your running total, day by day, next to an even pace that would use the budget exactly by the end of the month.",
+    yourSpending: "Your spending",
+    evenPace: "Even pace",
+    budget: "Budget",
+    spentByThisDay: "spent by this day",
+    onThisDay: (amount: string) => `${amount} on this day`,
+    evenPaceValue: (amount: string) => `Even pace: ${amount}`,
+    chartSummary: (spent: string, even: string) =>
+      `So far you have spent ${spent}. Spending evenly, it would be ${even}.`,
+    showTable: "Show as a table",
+    day: "Day",
+    thatDay: "That day",
+    soFar: "Total so far",
+    compareTitle: "Compared with last month",
+    compareIntro: (days: number) =>
+      days === 1 ? "The first day of each month." : `The first ${days} days of each month, so the comparison is fair.`,
+    sameDays: (month: string) => `${month}, same days`,
+    more: (percent: string) => `${percent} more than last month`,
+    less: (percent: string) => `${percent} less than last month`,
+    same: "About the same as last month",
+    newThisMonth: "New this month",
+    noComparison: "There's no budget for last month, so there's nothing to compare with yet.",
+    differentCurrency: "Last month's budget was in another currency, so the two can't be compared.",
+    alertsTitle: "Needs attention",
+    categoryOver: (name: string, amount: string) => `${name} is ${amount} over its limit.`,
+    categoryNear: (name: string, percent: string, left: string) =>
+      `${name} has used ${percent} of its limit. ${left} left.`,
+    budgetAlmostGone: (percent: string, days: number) =>
+      `${percent} of the budget is already spent, with ${days} days still to go.`,
+  },
+
   settings: {
     title: "Settings",
     language: "Language",

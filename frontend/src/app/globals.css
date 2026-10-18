@@ -12,7 +12,8 @@
   --color-pine: #1e6b57;
   --color-pine-dark: #17543f;
   --color-pine-soft: #dcebe5;
-  --color-marigold: #9a6408; /* 4.5:1 on paper, so the small "Today" label is readable */
+  --color-marigold: #c98516; /* fills: bars, the tank when spending is fast */
+  --color-marigold-ink: #9a6408; /* small text and icons: 4.5:1 on paper */
   --color-marigold-soft: #f8ecd6;
   --color-berry: #b23c63;
   --color-berry-soft: #f6e3ea;
@@ -45,6 +46,7 @@
   --color-pine-dark: #7fd6b7;
   --color-pine-soft: #1c3a31;
   --color-marigold: #e5a53c;
+  --color-marigold-ink: #e5a53c; /* already 8.5:1 on the dark paper */
   --color-marigold-soft: #3a2e17;
   --color-berry: #ef7fa3;
   --color-berry-soft: #3a1f2a;
