@@ -2,6 +2,7 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
+import { Approx } from "@/components/ui/Approx";
 import { useI18n } from "@/i18n/I18nProvider";
 import { monthProgress } from "@/lib/month";
 import type { BudgetSummary, Currency } from "@/types/api";
@@ -52,6 +53,7 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
       >
         {format(Math.max(remaining, 0))}
       </p>
+      {!inverse && <Approx amount={Math.max(remaining, 0)} currency={currency} className="mt-1 text-[15px] text-muted" />}
 
       <div className="relative mt-8">
         {timeRatio !== null && (

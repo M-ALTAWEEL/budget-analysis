@@ -7,6 +7,7 @@ Add one line here for each new domain model file.
 from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.currency.model import ExchangeRate
 from app.domain.expense.model import Expense
+from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.user.model import RefreshToken, User
 
 __all__ = [
@@ -15,6 +16,8 @@ __all__ = [
     "Category",
     "ExchangeRate",
     "Expense",
+    "GoalContribution",
     "RefreshToken",
+    "SavingsGoal",
     "User",
 ]

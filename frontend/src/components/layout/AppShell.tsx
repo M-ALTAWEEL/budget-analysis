@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, LogOut, Plus, ReceiptText, Settings, Shapes, Target } from "lucide-react";
+import { LayoutDashboard, LogOut, PiggyBank, Plus, ReceiptText, Settings, Shapes, Target } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -17,9 +17,13 @@ const NAV = [
   { href: "/overview", label: (t: Messages) => t.nav.overview, icon: LayoutDashboard },
   { href: "/expenses", label: (t: Messages) => t.nav.expenses, icon: ReceiptText },
   { href: "/budget", label: (t: Messages) => t.nav.budget, icon: Target },
+  { href: "/goals", label: (t: Messages) => t.nav.goals, icon: PiggyBank },
   { href: "/categories", label: (t: Messages) => t.nav.categories, icon: Shapes },
   { href: "/settings", label: (t: Messages) => t.nav.settings, icon: Settings },
 ];
+
+// Phones have room for five tabs. Categories is reached from Settings and the Budget page.
+const PHONE_NAV = NAV.filter((item) => item.href !== "/categories");
 
 /** Signed-in area: redirects to /login when there is no session. */
 export function AppShell({ children }: { children: React.ReactNode }) {
@@ -102,7 +106,7 @@ function Sidebar() {
   );
 }
 
-/** Phones: the same five places as a tab bar (log out lives in Settings). */
+/** Phones: five places as a tab bar (log out lives in Settings). */
 function BottomNav() {
   const pathname = usePathname();
   const { t } = useI18n();
@@ -111,7 +115,7 @@ function BottomNav() {
       className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
       aria-label={t.nav.main}
     >
-      {NAV.map(({ href, label, icon: Icon }) => {
+      {PHONE_NAV.map(({ href, label, icon: Icon }) => {
         const active = pathname === href;
         return (
           <Link
@@ -140,7 +144,7 @@ function AddExpenseButton() {
 
   // Expenses need a budget for their month (the API answers 409 otherwise),
   // so the button appears only once the month has one, and only on money screens.
-  if (!summary || pathname === "/settings" || pathname === "/categories") return null;
+  if (!summary || !["/overview", "/expenses", "/budget"].includes(pathname)) return null;
 
   return (
     <button

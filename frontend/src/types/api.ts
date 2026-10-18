@@ -84,3 +84,55 @@ export interface ExpenseInput {
   category_uuid: string;
   spent_at: string;
 }
+
+export interface GoalContribution {
+  uuid: string;
+  amount: string; // negative = a withdrawal
+  note: string | null;
+  made_on: string;
+  created_at: string;
+}
+
+/** A savings goal with progress already worked out by the API. */
+export interface Goal {
+  uuid: string;
+  name: string;
+  icon: string;
+  color: string;
+  currency: Currency;
+  target_amount: string;
+  target_date: string | null;
+  saved: string;
+  remaining: string;
+  progress: string; // "0.4250" = 42.5%
+  achieved: boolean;
+  months_left: number | null; // null = no deadline, 0 = deadline passed
+  monthly_needed: string | null;
+  created_at: string;
+}
+
+export interface GoalDetail extends Goal {
+  contributions: GoalContribution[];
+}
+
+export interface GoalInput {
+  name: string;
+  target_amount: string;
+  currency?: Currency; // only when creating
+  target_date: string | null;
+  icon: string;
+  color: string;
+}
+
+export interface ContributionInput {
+  kind: "deposit" | "withdrawal";
+  amount: string;
+  note: string | null;
+  made_on: string;
+}
+
+/** GET /currency/rates?base=TRY -> how much 1 TRY is in each currency. */
+export interface Rates {
+  base: Currency;
+  rates: Record<Currency, string>;
+}

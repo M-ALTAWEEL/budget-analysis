@@ -1,5 +1,16 @@
 import {
   Baby,
+  Bike,
+  Camera,
+  Gem,
+  Guitar,
+  PiggyBank,
+  Sofa,
+  Tent,
+  TreePalm,
+  Trophy,
+  Wallet,
+  Watch,
   BookOpen,
   Building,
   Bus,
@@ -75,10 +86,33 @@ const ICONS: Record<string, LucideIcon> = {
   "paw-print": PawPrint,
   wrench: Wrench,
   tag: Tag,
+  // savings goals
+  "piggy-bank": PiggyBank,
+  bike: Bike,
+  camera: Camera,
+  gem: Gem,
+  guitar: Guitar,
+  sofa: Sofa,
+  tent: Tent,
+  "tree-palm": TreePalm,
+  trophy: Trophy,
+  wallet: Wallet,
+  watch: Watch,
 };
 
-/** Icons offered in the category form: everything after the 8 built-in ones. */
-export const ICON_CHOICES = Object.keys(ICONS).slice(8);
+/** Icons offered in the category form. */
+export const CATEGORY_ICON_CHOICES = [
+  "building", "house", "key-round", "zap", "droplet", "flame", "wifi", "smartphone",
+  "graduation-cap", "laptop", "coffee", "pizza", "dumbbell", "shirt", "scissors", "pill",
+  "car", "fuel", "plane", "headphones", "gift", "baby", "paw-print", "wrench", "tag",
+];
+
+/** Icons offered in the savings-goal form: things people save up for. */
+export const GOAL_ICON_CHOICES = [
+  "piggy-bank", "laptop", "smartphone", "plane", "tree-palm", "car", "bike", "house",
+  "graduation-cap", "camera", "headphones", "guitar", "gift", "gem", "watch", "sofa",
+  "tent", "trophy", "wallet", "tag",
+];
 
 /** Colours offered in the category form. Mid-tone, so they work on light and dark. */
 export const COLOR_CHOICES = [

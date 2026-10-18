@@ -1,12 +1,12 @@
 "use client";
 
-import { Check } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
-import { CategoryIcon, COLOR_CHOICES, ICON_CHOICES, IconGlyph } from "@/components/ui/CategoryIcon";
+import { CATEGORY_ICON_CHOICES, CategoryIcon, COLOR_CHOICES } from "@/components/ui/CategoryIcon";
 import { Field, FormError } from "@/components/ui/Field";
+import { IconColorPicker } from "@/components/ui/IconColorPicker";
 import { Sheet } from "@/components/ui/Sheet";
 import { useArchiveCategory, useSaveCategory } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -21,7 +21,7 @@ export function CategorySheet({ category, onClose }: { category: Category | null
   const archive = useArchiveCategory();
 
   const [name, setName] = useState(category?.name ?? "");
-  const [icon, setIcon] = useState(category?.icon ?? ICON_CHOICES[0]);
+  const [icon, setIcon] = useState(category?.icon ?? CATEGORY_ICON_CHOICES[0]);
   const [color, setColor] = useState(category?.color ?? COLOR_CHOICES[0]);
   const [error, setError] = useState<string | null>(null);
   const [confirmingArchive, setConfirmingArchive] = useState(false);
@@ -74,54 +74,15 @@ export function CategorySheet({ category, onClose }: { category: Category | null
           required
         />
 
-        <fieldset>
-          <legend className="mb-2 text-sm font-medium">{t.categories.icon}</legend>
-          <div role="radiogroup" className="grid grid-cols-8 gap-1.5">
-            {ICON_CHOICES.map((choice) => {
-              const selected = choice === icon;
-              return (
-                <button
-                  key={choice}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  aria-label={choice.replace(/-/g, " ")}
-                  onClick={() => setIcon(choice)}
-                  className={`flex aspect-square items-center justify-center rounded-lg border transition-colors ${
-                    selected ? "border-pine bg-pine-soft text-pine-dark ring-1 ring-pine" : "border-line text-muted hover:text-ink"
-                  }`}
-                >
-                  <IconGlyph name={choice} className="size-5" />
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend className="mb-2 text-sm font-medium">{t.categories.color}</legend>
-          <div role="radiogroup" className="flex flex-wrap gap-2">
-            {COLOR_CHOICES.map((choice) => {
-              const selected = choice === color;
-              return (
-                <button
-                  key={choice}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  aria-label={choice}
-                  onClick={() => setColor(choice)}
-                  className={`flex size-9 items-center justify-center rounded-full ${
-                    selected ? "ring-2 ring-ink ring-offset-2 ring-offset-surface" : ""
-                  }`}
-                  style={{ backgroundColor: choice }}
-                >
-                  {selected && <Check className="size-4 text-white" aria-hidden />}
-                </button>
-              );
-            })}
-          </div>
-        </fieldset>
+        <IconColorPicker
+          icons={CATEGORY_ICON_CHOICES}
+          icon={icon}
+          onIcon={setIcon}
+          color={color}
+          onColor={setColor}
+          iconLabel={t.categories.icon}
+          colorLabel={t.categories.color}
+        />
 
         <FormError message={error} />
       </div>

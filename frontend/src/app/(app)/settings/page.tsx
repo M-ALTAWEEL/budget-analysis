@@ -1,14 +1,20 @@
 "use client";
 
-import { LogOut, Monitor, Moon, Sun } from "lucide-react";
+import { ChevronRight, LogOut, Monitor, Moon, Shapes, Sun } from "lucide-react";
+import Link from "next/link";
+import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
 import { Button } from "@/components/ui/Button";
+import { Select } from "@/components/ui/Field";
 import { Flag } from "@/components/ui/Flag";
 import { LOCALES, LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
+import { useErrorMessage } from "@/lib/errors";
+import { updateMe } from "@/services/auth";
 import { useTheme, type ThemePreference } from "@/theme/ThemeProvider";
+import { CURRENCIES, type Currency } from "@/types/api";
 
 /** A row of large, tappable options where exactly one is chosen (a radio group). */
 function Choice({
@@ -83,6 +89,17 @@ export default function SettingsPage() {
           </div>
         </section>
 
+        <SecondCurrency />
+
+        <Link
+          href="/categories"
+          className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 text-[15px] font-semibold hover:border-ink/30"
+        >
+          <Shapes className="size-5 text-muted" aria-hidden />
+          <span className="flex-1">{t.settings.manageCategories}</span>
+          <ChevronRight className="size-5 text-muted rtl:-scale-x-100" aria-hidden />
+        </Link>
+
         <section aria-labelledby="account">
           <h2 id="account" className="mb-3 font-display text-lg font-semibold">
             {t.settings.account}
@@ -100,5 +117,44 @@ export default function SettingsPage() {
         </section>
       </div>
     </>
+  );
+}
+
+/** Show amounts also in a second currency (≈), saved on the account. */
+function SecondCurrency() {
+  const { t } = useI18n();
+  const { user, updateUser } = useAuth();
+  const errorMessage = useErrorMessage();
+  const [error, setError] = useState<string | null>(null);
+  if (!user) return null;
+
+  async function change(value: string) {
+    setError(null);
+    try {
+      updateUser(await updateMe({ secondary_currency: value === "" ? null : (value as Currency) }));
+    } catch (err) {
+      setError(errorMessage(err));
+    }
+  }
+
+  return (
+    <section aria-labelledby="second-currency">
+      <h2 id="second-currency" className="mb-3 font-display text-lg font-semibold">
+        {t.settings.secondCurrency}
+      </h2>
+      <Select
+        label={t.settings.secondCurrencyHint}
+        value={user.secondary_currency ?? ""}
+        onChange={(e) => void change(e.target.value)}
+      >
+        <option value="">{t.settings.none}</option>
+        {CURRENCIES.filter((code) => code !== user.base_currency).map((code) => (
+          <option key={code} value={code}>
+            {t.currencies[code]} ({code})
+          </option>
+        ))}
+      </Select>
+      {error && <p className="mt-2 text-sm text-berry">{error}</p>}
+    </section>
   );
 }

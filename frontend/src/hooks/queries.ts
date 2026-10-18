@@ -14,7 +14,17 @@ import {
   type CategoryInput,
 } from "@/services/budget";
 import { createExpense, deleteExpense, listExpenses, updateExpense } from "@/services/expenses";
-import type { ExpenseInput } from "@/types/api";
+import { getRates } from "@/services/currency";
+import {
+  addContribution,
+  archiveGoal,
+  createGoal,
+  getGoal,
+  listGoals,
+  removeContribution,
+  updateGoal,
+} from "@/services/goals";
+import type { ContributionInput, Currency, ExpenseInput, GoalInput } from "@/types/api";
 
 // One place for cache keys, so invalidation can never miss a spelling.
 export const queryKeys = {
@@ -22,6 +32,9 @@ export const queryKeys = {
   daily: (month: string) => ["daily", month] as const,
   expenses: (month: string) => ["expenses", month] as const,
   categories: ["categories"] as const,
+  goals: ["goals"] as const,
+  goal: (uuid: string) => ["goals", uuid] as const,
+  rates: (base: Currency) => ["rates", base] as const,
 };
 
 export function useSummary(month: string) {
@@ -113,5 +126,63 @@ export function useSetAllocations(month: string) {
     mutationFn: (allocations: { category_uuid: string; limit_amount: string }[]) =>
       setAllocations(month, allocations),
     onSuccess: (summary) => queryClient.setQueryData(queryKeys.summary(month), summary),
+  });
+}
+
+// ── Savings goals ────────────────────────────────────────────────────────────
+
+export function useGoals() {
+  return useQuery({ queryKey: queryKeys.goals, queryFn: listGoals });
+}
+
+/** History is loaded only when it is opened (enabled = false until then). */
+export function useGoal(uuid: string, enabled: boolean) {
+  return useQuery({ queryKey: queryKeys.goal(uuid), queryFn: () => getGoal(uuid), enabled });
+}
+
+/** Every goal change refreshes the list and the goal's own history. */
+function useInvalidateGoals() {
+  const queryClient = useQueryClient();
+  return () => queryClient.invalidateQueries({ queryKey: queryKeys.goals });
+}
+
+export function useSaveGoal() {
+  const invalidate = useInvalidateGoals();
+  return useMutation({
+    mutationFn: ({ uuid, input }: { uuid?: string; input: GoalInput }) =>
+      uuid ? updateGoal(uuid, input) : createGoal(input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useArchiveGoal() {
+  const invalidate = useInvalidateGoals();
+  return useMutation({ mutationFn: archiveGoal, onSuccess: invalidate });
+}
+
+export function useAddContribution(goalUuid: string) {
+  const invalidate = useInvalidateGoals();
+  return useMutation({
+    mutationFn: (input: ContributionInput) => addContribution(goalUuid, input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useRemoveContribution(goalUuid: string) {
+  const invalidate = useInvalidateGoals();
+  return useMutation({
+    mutationFn: (contributionUuid: string) => removeContribution(goalUuid, contributionUuid),
+    onSuccess: invalidate,
+  });
+}
+
+// ── Exchange rates (for the second currency) ────────────────────────────────
+
+export function useRates(base: Currency, enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.rates(base),
+    queryFn: () => getRates(base),
+    enabled,
+    staleTime: 60 * 60_000, // the API caches rates for 12 hours; an hour here is plenty
   });
 }
