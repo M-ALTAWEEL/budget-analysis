@@ -1,6 +1,16 @@
 "use client";
 
-import { LayoutDashboard, LogOut, PiggyBank, Plus, ReceiptText, Settings, Shapes, Target } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  MessageCircle,
+  PiggyBank,
+  Plus,
+  ReceiptText,
+  Settings,
+  Shapes,
+  Target,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -19,11 +29,12 @@ const NAV = [
   { href: "/expenses", label: (t: Messages) => t.nav.expenses, icon: ReceiptText },
   { href: "/budget", label: (t: Messages) => t.nav.budget, icon: Target },
   { href: "/goals", label: (t: Messages) => t.nav.goals, icon: PiggyBank },
+  { href: "/assistant", label: (t: Messages) => t.nav.assistant, icon: MessageCircle },
   { href: "/categories", label: (t: Messages) => t.nav.categories, icon: Shapes },
   { href: "/settings", label: (t: Messages) => t.nav.settings, icon: Settings },
 ];
 
-// Phones have room for five tabs. Categories is reached from Settings and the Budget page.
+// Phones get six tabs. Categories is reached from Settings and the Budget page.
 const PHONE_NAV = NAV.filter((item) => item.href !== "/categories");
 
 /** Signed-in area: redirects to /login when there is no session. */
@@ -131,13 +142,13 @@ function Sidebar() {
   );
 }
 
-/** Phones: five places as a tab bar (log out lives in Settings). */
+/** Phones: six places as a tab bar (log out lives in Settings). */
 function BottomNav() {
   const pathname = usePathname();
   const { t } = useI18n();
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
       aria-label={t.nav.main}
     >
       {PHONE_NAV.map(({ href, label, icon: Icon }) => {

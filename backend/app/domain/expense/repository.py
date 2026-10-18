@@ -68,6 +68,18 @@ class ExpenseRepository:
         )
         return {category_id: total for category_id, total in rows}
 
+    async def total_in_range(
+        self, user_id: int, start: date, end: date, category_id: int | None = None
+    ) -> tuple[Decimal, int]:
+        """(sum of amount_base, number of expenses) in [start, end), optionally one category."""
+        query = select(func.coalesce(func.sum(Expense.amount_base), 0), func.count()).where(
+            Expense.user_id == user_id, Expense.spent_at >= start, Expense.spent_at < end
+        )
+        if category_id is not None:
+            query = query.where(Expense.category_id == category_id)
+        total, count = (await self.session.execute(query)).one()
+        return Decimal(total), count
+
     async def total_by_day_and_category(
         self, user_id: int, start: date, end: date
     ) -> Sequence[tuple[date, int, Decimal]]:

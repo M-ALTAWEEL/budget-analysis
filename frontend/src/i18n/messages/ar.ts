@@ -8,6 +8,14 @@ function days(count: number): string {
   return `${count} يومًا`;
 }
 
+/** "expenses" with the Arabic count rules: مصروف واحد، مصروفان، 3-10 مصاريف، 11+ مصروفًا. */
+function expenses(count: number): string {
+  if (count === 1) return "مصروف واحد";
+  if (count === 2) return "مصروفين";
+  if (count >= 3 && count <= 10) return `${count} مصاريف`;
+  return `${count} مصروفًا`;
+}
+
 export const ar: Messages = {
   common: {
     loading: "جارٍ التحميل",
@@ -27,6 +35,7 @@ export const ar: Messages = {
     budget: "الميزانية",
     categories: "الفئات",
     goals: "الأهداف",
+    assistant: "المساعد",
     settings: "الإعدادات",
     logout: "تسجيل الخروج",
   },
@@ -334,6 +343,63 @@ export const ar: Messages = {
     footer: "BudgetBuddy مشروع من أعمال محمد الطويل.",
     source: "الكود المصدري على GitHub",
     privacy: "الخصوصية",
+  },
+
+  assistant: {
+    title: "المساعد",
+    intro: "اسأل عن مصروفك بالعربية أو الإنجليزية أو التركية. الإجابات محسوبة من مصاريفك أنت.",
+    local: "يعمل داخل BudgetBuddy نفسه. لا ترى بياناتك أي خدمة ذكاء اصطناعي خارجية.",
+    placeholder: "اكتب سؤالك…",
+    send: "إرسال",
+    thinking: "جارٍ الحساب…",
+    you: "أنت",
+    tryThese: "جرّب أحد هذه الأسئلة:",
+    suggestions: [
+      "كم صرفت هذا الأسبوع؟",
+      "كم تبقّى من ميزانيتي؟",
+      "أين يذهب معظم مصروفي؟",
+      "هل سيكفيني المصروف حتى آخر الشهر؟",
+      "هل صرفت أكثر من الشهر الماضي؟",
+      "كم صرفت على الأكل الشهر الماضي؟",
+      "ما وضع أهدافي؟",
+    ],
+    periods: {
+      today: "اليوم",
+      yesterday: "أمس",
+      this_week: "هذا الأسبوع",
+      last_week: "الأسبوع الماضي",
+      this_month: "هذا الشهر",
+      last_month: "الشهر الماضي",
+    },
+    spent: (amount, period, count) => `صرفت ${amount} ${period}، في ${expenses(count)}.`,
+    spentOn: (amount, category, period, count) =>
+      `صرفت ${amount} على ${category} ${period}، في ${expenses(count)}.`,
+    spentNothing: (period) => `لم تصرف شيئاً ${period}.`,
+    spentNothingOn: (category, period) => `لم تصرف شيئاً على ${category} ${period}.`,
+    remaining: (remaining, total) => `تبقّى ${remaining} من ميزانيتك البالغة ${total}.`,
+    remainingOn: (remaining, category, limit) => `تبقّى ${remaining} لفئة ${category} من حدّها البالغ ${limit}.`,
+    perDay: (daily, count) =>
+      count === 1 ? "اليوم هو آخر يوم في الشهر." : `أي حوالي ${daily} في اليوم، والمتبقي ${days(count)}.`,
+    over: (amount) => `تجاوزت ميزانيتك بمقدار ${amount}.`,
+    overOn: (category, amount) => `تجاوزت فئة ${category} حدّها بمقدار ${amount}.`,
+    top: (period, total) => `أين ذهب مصروفك ${period}، ${total} بالمجمل:`,
+    forecastEarly: (day, spent) =>
+      `ما زلنا في اليوم ${day}، وهذا مبكر على توقّع دقيق (يبدأ من اليوم السابع). صرفت حتى الآن ${spent}.`,
+    compareMore: (now, before, count, percent) =>
+      `في أول ${days(count)} من هذا الشهر صرفت ${now}، مقابل ${before} في الأيام نفسها من الشهر الماضي: أكثر بـ ${percent}.`,
+    compareLess: (now, before, count, percent) =>
+      `في أول ${days(count)} من هذا الشهر صرفت ${now}، مقابل ${before} في الأيام نفسها من الشهر الماضي: أقل بـ ${percent}.`,
+    compareNothing: (now) =>
+      `لا يوجد ما نقارن به: لم تصرف شيئاً في الأيام نفسها من الشهر الماضي. هذا الشهر حتى الآن: ${now}.`,
+    goals: "أهداف الادخار:",
+    goalsNone: "ليس لديك أهداف ادخار بعد. يمكنك إضافة هدف من صفحة الأهداف.",
+    goalLine: (name, saved, target, percent) => `${name}: ${saved} من ${target} (${percent}).`,
+    goalDone: (name) => `${name}: تحقّق الهدف!`,
+    goalMonthly: (amount) => `ادّخر ${amount} شهرياً لتصل إليه في موعده.`,
+    help: "أجيب عن أسئلة حول مصروفك أنت. مثلاً:",
+    unknown: "لم أفهم السؤال. جرّب أحد هذه الأسئلة:",
+    noBudget: "لا توجد ميزانية لهذا الشهر بعد. حدّدها من صفحة الميزانية ثم اسأل مجدداً.",
+    failed: "حدث خطأ ما. حاول السؤال مرة أخرى.",
   },
 
   errors: {

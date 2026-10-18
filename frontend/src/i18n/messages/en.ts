@@ -22,6 +22,7 @@ export const en = {
     budget: "Budget",
     categories: "Categories",
     goals: "Goals",
+    assistant: "Assistant",
     settings: "Settings",
     logout: "Log out",
   },
@@ -331,6 +332,66 @@ export const en = {
     footer: "BudgetBuddy is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
     privacy: "Privacy",
+  },
+
+  assistant: {
+    title: "Assistant",
+    intro: "Ask about your money in English, Arabic or Turkish. The answers are worked out from your own expenses.",
+    local: "Runs inside BudgetBuddy. No outside AI service sees your data.",
+    placeholder: "Ask a question…",
+    send: "Send",
+    thinking: "Working it out…",
+    you: "You",
+    tryThese: "Try one of these:",
+    suggestions: [
+      "How much did I spend this week?",
+      "How much is left?",
+      "Where does my money go?",
+      "Will my money last the month?",
+      "Am I spending more than last month?",
+      "How much did I spend on food last month?",
+      "How are my goals going?",
+    ],
+    periods: {
+      today: "today",
+      yesterday: "yesterday",
+      this_week: "this week",
+      last_week: "last week",
+      this_month: "this month",
+      last_month: "last month",
+    },
+    spent: (amount: string, period: string, count: number) =>
+      `You spent ${amount} ${period}, across ${count === 1 ? "1 expense" : `${count} expenses`}.`,
+    spentOn: (amount: string, category: string, period: string, count: number) =>
+      `You spent ${amount} on ${category} ${period}, across ${count === 1 ? "1 expense" : `${count} expenses`}.`,
+    spentNothing: (period: string) => `Nothing spent ${period}.`,
+    spentNothingOn: (category: string, period: string) => `Nothing spent on ${category} ${period}.`,
+    remaining: (remaining: string, total: string) => `${remaining} is left of your ${total} budget.`,
+    remainingOn: (remaining: string, category: string, limit: string) =>
+      `${remaining} is left for ${category}, of its ${limit} limit.`,
+    perDay: (daily: string, days: number) =>
+      days === 1 ? "Today is the last day of the month." : `That is about ${daily} a day for the ${days} days left.`,
+    over: (amount: string) => `You are ${amount} over budget.`,
+    overOn: (category: string, amount: string) => `${category} is ${amount} over its limit.`,
+    top: (period: string, total: string) => `Where your money went ${period}, ${total} in all:`,
+    forecastEarly: (day: number, spent: string) =>
+      `It is only day ${day}, too early for a fair forecast (it starts on day 7). So far you have spent ${spent}.`,
+    compareMore: (now: string, before: string, days: number, percent: string) =>
+      `In the first ${days} days of this month you spent ${now}, against ${before} on the same days last month: ${percent} more.`,
+    compareLess: (now: string, before: string, days: number, percent: string) =>
+      `In the first ${days} days of this month you spent ${now}, against ${before} on the same days last month: ${percent} less.`,
+    compareNothing: (now: string) =>
+      `There is nothing to compare with: no spending on the same days last month. This month so far: ${now}.`,
+    goals: "Your savings goals:",
+    goalsNone: "You have no savings goals yet. You can add one on the Goals page.",
+    goalLine: (name: string, saved: string, target: string, percent: string) =>
+      `${name}: ${saved} of ${target} (${percent}).`,
+    goalDone: (name: string) => `${name}: reached!`,
+    goalMonthly: (amount: string) => `Save ${amount} a month to reach it on time.`,
+    help: "I answer questions about your own spending. For example:",
+    unknown: "I didn't understand that question. Try one of these:",
+    noBudget: "This month has no budget yet. Set one on the Budget page, then ask again.",
+    failed: "Something went wrong. Try asking again.",
   },
 
   errors: {

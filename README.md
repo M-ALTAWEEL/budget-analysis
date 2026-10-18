@@ -22,6 +22,7 @@ Students get an allowance at the start of the month and find out at the end whet
 - **This month against last month**, on the same days, so the comparison is fair.
 - **Savings goals** with the amount to put aside each month to reach them on time.
 - **Any currency.** Expenses in a foreign currency are converted with the day's rate; amounts can also be shown in a second currency.
+- **Ask the assistant.** "How much did I spend on food last month?", "كم تبقّى؟", "Ne kadar kaldı?" Answered from your own numbers, inside the app, with no paid AI service.
 - **Sign in with Google** or with email and password.
 - **Three languages** with their own number formats, dates and plural rules, a full right-to-left layout for Arabic, and a dark theme.
 
@@ -47,6 +48,10 @@ The models were written by hand with NumPy and plain Python, following the COE30
 
 Training uses NumPy ([`ml/train_categorizer.py`](ml/train_categorizer.py)); the API reads the trained weights from JSON with plain Python ([`backend/app/ml/`](backend/app/ml/)), so the server needs no NumPy or scikit-learn and never loads a pickle.
 
+### Assistant
+
+A question is split into three smaller ones. **What** is asked (spent, remaining, top categories, forecast, comparison, goals) is decided by a second softmax regression, trained with the same code on 470 questions in three languages: 87.9% in 5-fold cross-validation, and at the chosen ≥ 0.4 confidence it answers 90% of questions and is right 90.7% of the time. **Which period and category** are found by small rules ("last week", "الأكل", "yemeğe"). **The number** comes from the database with the app's own calculations, so the model never makes one up; the browser writes the sentence in the student's language. Training: [`ml/train_assistant.py`](ml/train_assistant.py).
+
 ### Forecast
 
 Linear regression with gradient descent (and feature scaling) was built and compared with a simple "same pace" baseline on 3,000 simulated months. It did no better. Error analysis showed why: rent and building fees early in the month were projected as if they happened every day. Treating days above 3× a typical day as one-off payments cut the error on day 7 from 52% to 28%, and with that feature a plain average did as well as the regression, so the simpler method shipped.
@@ -58,19 +63,19 @@ flowchart LR
   B["Browser<br/>Next.js, React"] -->|"/api/v1/* (same origin)"| N["Next.js server<br/>rewrite proxy"]
   N --> A["FastAPI<br/>async Python"]
   A --> P[("PostgreSQL")]
-  A --> M["Categorizer weights<br/>JSON"]
+  A --> M["Model weights<br/>JSON (categorizer, assistant)"]
   A --> X["Exchange rates API<br/>cached 12 h"]
   B -.->|"ID token"| G["Google sign-in"]
   A -.->|"checks the signature"| G
 ```
 
-The backend is split by domain (`user`, `budget`, `expense`, `goal`, `currency`), each with its model, schema, repository, service and router.
+The backend is split by domain (`user`, `budget`, `expense`, `goal`, `currency`, `assistant`), each with its model, schema, repository, service and router.
 
 ## Engineering notes
 
 - **Authentication.** A short-lived access token is kept in memory; the refresh token sits in an `httpOnly`, `SameSite=Lax` cookie that JavaScript cannot read, and is rotated on use. Passwords use bcrypt; login is rate limited. Google ID tokens are verified on the server: signature, audience, issuer and expiry.
 - **Money.** Amounts are `Decimal`, never floats. Each expense stores the rate used to convert it, so old months never change when rates do.
-- **Tests.** 120 backend tests run against a real PostgreSQL database, each inside a transaction that is rolled back. Google and the exchange-rate service are replaced by fakes; the Google token check is also tested with a locally generated RSA key.
+- **Tests.** Over 140 backend tests run against a real PostgreSQL database, each inside a transaction that is rolled back. Google and the exchange-rate service are replaced by fakes; the Google token check is also tested with a locally generated RSA key.
 - **CI.** Every push runs Ruff, pytest, ESLint, TypeScript and a production build on GitHub Actions.
 - **Accessibility.** Visible keyboard focus, charts with a table of the same numbers, alerts that never rely on colour alone, and reduced motion respected.
 

@@ -1,5 +1,10 @@
 import type { Messages } from "./en";
 
+/** "bu ay" -> "Bu ay", at the start of a sentence. Turkish İ: "i" capitalizes to "İ". */
+function cap(text: string): string {
+  return text.charAt(0).toLocaleUpperCase("tr") + text.slice(1);
+}
+
 export const tr: Messages = {
   common: {
     loading: "Yükleniyor",
@@ -19,6 +24,7 @@ export const tr: Messages = {
     budget: "Bütçe",
     categories: "Kategoriler",
     goals: "Hedefler",
+    assistant: "Asistan",
     settings: "Ayarlar",
     logout: "Çıkış yap",
   },
@@ -323,6 +329,63 @@ export const tr: Messages = {
     footer: "BudgetBuddy, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
     privacy: "Gizlilik",
+  },
+
+  assistant: {
+    title: "Asistan",
+    intro: "Paranı Türkçe, Arapça veya İngilizce sor. Cevaplar kendi harcamalarından hesaplanır.",
+    local: "BudgetBuddy'nin içinde çalışır. Verilerini hiçbir dış yapay zekâ servisi görmez.",
+    placeholder: "Bir soru yaz…",
+    send: "Gönder",
+    thinking: "Hesaplanıyor…",
+    you: "Sen",
+    tryThese: "Şunlardan birini dene:",
+    suggestions: [
+      "Bu hafta ne kadar harcadım?",
+      "Ne kadar kaldı?",
+      "Param en çok nereye gidiyor?",
+      "Param ay sonuna kadar yeter mi?",
+      "Geçen aydan fazla mı harcıyorum?",
+      "Geçen ay yemeğe ne kadar harcadım?",
+      "Hedeflerim ne durumda?",
+    ],
+    periods: {
+      today: "bugün",
+      yesterday: "dün",
+      this_week: "bu hafta",
+      last_week: "geçen hafta",
+      this_month: "bu ay",
+      last_month: "geçen ay",
+    },
+    spent: (amount, period, count) => `${cap(period)} ${amount} harcadın (${count} harcama).`,
+    spentOn: (amount, category, period, count) =>
+      `${cap(period)} ${category} için ${amount} harcadın (${count} harcama).`,
+    spentNothing: (period) => `${cap(period)} hiç harcama yok.`,
+    spentNothingOn: (category, period) => `${cap(period)} ${category} için harcama yok.`,
+    remaining: (remaining, total) => `${total} bütçenden ${remaining} kaldı.`,
+    remainingOn: (remaining, category, limit) => `${category} için ${limit} limitten ${remaining} kaldı.`,
+    perDay: (daily, count) =>
+      count === 1 ? "Bugün ayın son günü." : `Kalan ${count} gün için günde yaklaşık ${daily}.`,
+    over: (amount) => `Bütçeni ${amount} aştın.`,
+    overOn: (category, amount) => `${category} limitini ${amount} aştı.`,
+    top: (period, total) => `${cap(period)} paran nereye gitti (toplam ${total}):`,
+    forecastEarly: (day, spent) =>
+      `Daha ayın ${day}. günü, sağlıklı bir tahmin için erken (7. günden itibaren). Şu ana kadar ${spent} harcadın.`,
+    compareMore: (now, before, count, percent) =>
+      `Bu ayın ilk ${count} gününde ${now} harcadın, geçen ayın aynı günlerinde ${before}: ${percent} daha fazla.`,
+    compareLess: (now, before, count, percent) =>
+      `Bu ayın ilk ${count} gününde ${now} harcadın, geçen ayın aynı günlerinde ${before}: ${percent} daha az.`,
+    compareNothing: (now) =>
+      `Karşılaştıracak bir şey yok: geçen ayın aynı günlerinde harcama yok. Bu ay şu ana kadar: ${now}.`,
+    goals: "Birikim hedeflerin:",
+    goalsNone: "Henüz birikim hedefin yok. Hedefler sayfasından ekleyebilirsin.",
+    goalLine: (name, saved, target, percent) => `${name}: ${target} hedefin ${saved} kadarı (${percent}).`,
+    goalDone: (name) => `${name}: hedefe ulaşıldı!`,
+    goalMonthly: (amount) => `Zamanında ulaşmak için ayda ${amount} biriktir.`,
+    help: "Kendi harcamaların hakkındaki soruları cevaplarım. Örneğin:",
+    unknown: "Bu soruyu anlayamadım. Şunlardan birini dene:",
+    noBudget: "Bu ayın henüz bütçesi yok. Bütçe sayfasından belirle, sonra tekrar sor.",
+    failed: "Bir şeyler ters gitti. Tekrar sormayı dene.",
   },
 
   errors: {

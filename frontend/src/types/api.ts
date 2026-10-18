@@ -166,3 +166,36 @@ export interface Rates {
   base: Currency;
   rates: Record<Currency, string>;
 }
+
+export type AssistantIntent =
+  | "spent"
+  | "remaining"
+  | "top"
+  | "forecast"
+  | "compare"
+  | "goals"
+  | "help"
+  | "unknown"
+  | "no_budget";
+
+export type AssistantPeriod = "today" | "yesterday" | "this_week" | "last_week" | "this_month" | "last_month";
+
+/** POST /assistant/ask -> numbers only; the sentence is written in the browser's language. */
+export interface AssistantAnswer {
+  intent: AssistantIntent;
+  confidence: number;
+  period: AssistantPeriod | null;
+  currency: Currency | null;
+  category: Category | null;
+  amount: string | null;
+  count: number | null;
+  total: string | null;
+  remaining: string | null;
+  daily: string | null;
+  days_left: number | null;
+  forecast: string | null;
+  previous: string | null;
+  through_day: number | null;
+  categories: { category: Category; spent: string }[];
+  goals: Goal[];
+}
