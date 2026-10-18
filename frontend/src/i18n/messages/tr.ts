@@ -197,6 +197,11 @@ export const tr: Messages = {
       `Bu hızla bu ay yaklaşık ${amount} harcayacaksın ve yaklaşık ${left} kalacak.`,
     forecastOver: (amount: string, over: string) =>
       `Bu hızla bu ay yaklaşık ${amount} harcayacaksın: bütçenden ${over} fazla.`,
+    tipsTitle: "Bilmeye değer",
+    repeated: (count, total, half) =>
+      `Bu ay ${count} kez, toplam ${total}. Yarı yarıya azaltırsan yaklaşık ${half} biriktirirsin.`,
+    busiestDay: (day, average, usual) =>
+      `${day} haftanın en pahalı günü: yaklaşık ${average}, normal bir günde ise ${usual}. (Son 12 hafta, kira ve tek seferlik harcamalar hariç.)`,
     alertsTitle: "Dikkat",
     categoryOver: (name, amount) => `${name} limitini ${amount} aştı.`,
     categoryNear: (name, percent, left) => `${name} limitinin ${percent} kadarını kullandı. ${left} kaldı.`,

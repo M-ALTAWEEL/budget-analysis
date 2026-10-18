@@ -6,13 +6,14 @@ import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
 import { MonthCompare } from "@/components/insights/MonthCompare";
 import { PaceChart } from "@/components/insights/PaceChart";
+import { TipList } from "@/components/insights/TipList";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { BudgetSetup } from "@/components/overview/BudgetSetup";
 import { BudgetTank } from "@/components/overview/BudgetTank";
 import { CategoryBreakdown } from "@/components/overview/CategoryBreakdown";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
-import { useDaily, useExpenses, useSummary } from "@/hooks/queries";
+import { useDaily, useExpenses, useSummary, useTips } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { compareWithPrevious, daysElapsed, findAlerts } from "@/lib/insights";
@@ -50,6 +51,7 @@ export default function OverviewPage() {
   const expenses = useExpenses(month);
   const daily = useDaily(month);
   const previousDaily = useDaily(shiftMonth(month, -1));
+  const tips = useTips(month);
   const { t } = useI18n();
   const errorMessage = useErrorMessage();
 
@@ -75,6 +77,12 @@ export default function OverviewPage() {
             <Section id="pace" title={t.insights.paceTitle}>
               <p className="-mt-2 mb-4 max-w-prose text-[15px] text-muted">{t.insights.paceIntro}</p>
               <PaceChart daily={daily.data} month={month} />
+            </Section>
+          )}
+
+          {tips.data && (tips.data.repeated.length > 0 || tips.data.busiest_weekday) && (
+            <Section id="tips" title={t.insights.tipsTitle}>
+              <TipList tips={tips.data} />
             </Section>
           )}
 

@@ -13,6 +13,7 @@ from app.domain.budget.schema import (
     CategoryRead,
     CategoryUpdate,
     DailySpending,
+    Tips,
 )
 from app.domain.budget.service import BudgetService, CategoryService
 
@@ -59,6 +60,12 @@ async def get_budget(month: MonthPath, user: CurrentUser, db: DbSession) -> Budg
 async def get_daily_spending(month: MonthPath, user: CurrentUser, db: DbSession) -> DailySpending:
     """Spending per day for the whole month (zeros included), for the pace chart."""
     return await BudgetService(db).daily(user, parse_month(month))
+
+
+@budgets_router.get("/{month}/tips")
+async def get_tips(month: MonthPath, user: CurrentUser, db: DbSession) -> Tips:
+    """Repeated purchases this month, and the most expensive day of the week."""
+    return await BudgetService(db).tips(user, parse_month(month))
 
 
 @budgets_router.put("/{month}")

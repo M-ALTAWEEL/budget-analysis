@@ -7,6 +7,7 @@ import {
   createCategory,
   getDaily,
   getSummary,
+  getTips,
   listCategories,
   setAllocations,
   setBudget,
@@ -36,6 +37,7 @@ import type { ContributionInput, Currency, ExpenseInput, GoalInput } from "@/typ
 export const queryKeys = {
   summary: (month: string) => ["summary", month] as const,
   daily: (month: string) => ["daily", month] as const,
+  tips: (month: string) => ["tips", month] as const,
   expenses: (month: string) => ["expenses", month] as const,
   categories: ["categories"] as const,
   goals: ["goals"] as const,
@@ -50,6 +52,10 @@ export function useSummary(month: string) {
 
 export function useDaily(month: string) {
   return useQuery({ queryKey: queryKeys.daily(month), queryFn: () => getDaily(month) });
+}
+
+export function useTips(month: string) {
+  return useQuery({ queryKey: queryKeys.tips(month), queryFn: () => getTips(month) });
 }
 
 export function useExpenses(month: string) {
@@ -71,6 +77,7 @@ function useInvalidateMoney() {
     Promise.all([
       queryClient.invalidateQueries({ queryKey: ["summary"] }),
       queryClient.invalidateQueries({ queryKey: ["daily"] }),
+      queryClient.invalidateQueries({ queryKey: ["tips"] }),
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
     ]);
 }

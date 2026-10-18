@@ -42,6 +42,17 @@ class ExpenseRepository:
         )
         return list(await self.session.scalars(query))
 
+    async def in_range(
+        self, user_id: int, start: date, end: date
+    ) -> Sequence[tuple[str, int, Decimal]]:
+        """(description, category_id, amount_base) of every expense in [start, end)."""
+        rows = await self.session.execute(
+            select(Expense.description, Expense.category_id, Expense.amount_base).where(
+                Expense.user_id == user_id, Expense.spent_at >= start, Expense.spent_at < end
+            )
+        )
+        return [(description, category_id, amount) for description, category_id, amount in rows]
+
     async def recent(self, user_id: int, limit: int) -> Sequence[Expense]:
         """The user's latest expenses, newest first (by when they were added).
         Sequence, not list[...]: inside this class `list` is the list() method above."""

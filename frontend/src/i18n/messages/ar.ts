@@ -208,6 +208,11 @@ export const ar: Messages = {
       `بهذا المعدل ستصرف حوالي ${amount} هذا الشهر، ويبقى معك نحو ${left}.`,
     forecastOver: (amount: string, over: string) =>
       `بهذا المعدل ستصرف حوالي ${amount} هذا الشهر، أي ${over} أكثر من ميزانيتك.`,
+    tipsTitle: "معلومة تهمّك",
+    repeated: (count, total, half) =>
+      `${count} ${count <= 10 ? "مرات" : "مرة"} هذا الشهر، بمجموع ${total}. لو قلّلتها للنصف لوفّرت حوالي ${half}.`,
+    busiestDay: (day, average, usual) =>
+      `يوم ${day} هو أغلى أيام أسبوعك: حوالي ${average}، مقابل ${usual} في اليوم العادي. (آخر 12 أسبوعاً، بدون الإيجار والمصاريف الاستثنائية.)`,
     alertsTitle: "يحتاج انتباهك",
     categoryOver: (name, amount) => `فئة ${name} تجاوزت حدها بمقدار ${amount}.`,
     categoryNear: (name, percent, left) => `فئة ${name} استهلكت ${percent} من حدها. تبقّى ${left}.`,

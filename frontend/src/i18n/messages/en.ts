@@ -203,6 +203,11 @@ export const en = {
       `At this pace you will spend about ${amount} this month, with about ${left} left over.`,
     forecastOver: (amount: string, over: string) =>
       `At this pace you will spend about ${amount} this month: ${over} more than your budget.`,
+    tipsTitle: "Worth knowing",
+    repeated: (count: number, total: string, half: string) =>
+      `${count} times this month, ${total} in total. Half as often would save about ${half}.`,
+    busiestDay: (day: string, average: string, usual: string) =>
+      `${day} is your most expensive day of the week: about ${average}, against ${usual} on a normal day. (Last 12 weeks, rent and other one-offs left out.)`,
     alertsTitle: "Needs attention",
     categoryOver: (name: string, amount: string) => `${name} is ${amount} over its limit.`,
     categoryNear: (name: string, percent: string, left: string) =>

@@ -19,8 +19,12 @@ from app.domain.budget.schema import (
     CategoryUpdate,
     DailySpending,
     DaySpending,
+    RepeatedPurchaseRead,
     SpendingForecast,
+    Tips,
+    WeekdayPatternRead,
 )
+from app.domain.budget.tips import busiest_weekday, repeated_purchases
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.user.model import User
 from app.ml.forecast import forecast_month
@@ -215,6 +219,64 @@ class BudgetService:
             days=days,
             forecast=month_forecast(days, month, today or date.today()),
         )
+
+    async def tips(self, user: User, month: date, today: date | None = None) -> Tips:
+        today = today or date.today()
+        budget = await self._budget_or_404(user, month)
+
+        rows = await self.expenses.in_range(user.id, month, next_month(month))
+        repeated = repeated_purchases(rows)
+        categories = await self.categories.list_by_ids([r.category_id for r in repeated])
+        by_id = {c.id: CategoryRead.model_validate(c) for c in categories}
+
+        weekday = None
+        if month_start(today) == month:
+            found = busiest_weekday(await self._last_weeks(user, budget.currency, today))
+            if found:
+                weekday = WeekdayPatternRead(
+                    weekday=found.weekday,
+                    average=to_money(Decimal(str(found.average))),
+                    usual=to_money(Decimal(str(found.usual))),
+                )
+
+        return Tips(
+            month=format_month(month),
+            currency=Currency(budget.currency),
+            repeated=[
+                RepeatedPurchaseRead(
+                    label=r.label, category=by_id[r.category_id], count=r.count, total=r.total
+                )
+                for r in repeated
+            ],
+            busiest_weekday=weekday,
+        )
+
+    async def _last_weeks(
+        self, user: User, currency: str, today: date, weeks: int = 12
+    ) -> dict[date, float]:
+        """Spending per day over the last `weeks` full days before today, starting from the
+        first expense (a new student has fewer days). Months budgeted in another currency
+        are left out: their amounts cannot be added to this month's."""
+        start = today - timedelta(weeks=weeks)
+        rows = await self.expenses.total_by_day_and_category(user.id, start, today)
+        if not rows:
+            return {}
+        spent: dict[date, float] = {}
+        for day, _, total in rows:
+            spent[day] = spent.get(day, 0.0) + float(total)
+
+        same_currency: dict[date, bool] = {}
+        days: dict[date, float] = {}
+        day = min(spent)
+        while day < today:
+            first = month_start(day)
+            if first not in same_currency:
+                budget = await self.budgets.get_for_month(user.id, first)
+                same_currency[first] = budget is not None and budget.currency == currency
+            if same_currency[first]:
+                days[day] = spent.get(day, 0.0)
+            day += timedelta(days=1)
+        return days
 
     async def _budget_or_404(self, user: User, month: date) -> Budget:
         budget = await self.budgets.get_for_month(user.id, month)

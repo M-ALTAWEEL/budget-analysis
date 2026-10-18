@@ -72,6 +72,21 @@ export interface SpendingForecast {
   one_offs: string;
 }
 
+export interface RepeatedPurchase {
+  label: string; // as the student usually writes it
+  category: Category;
+  count: number; // times this month
+  total: string;
+}
+
+/** Things worth knowing from the student's own numbers. Empty when nothing stands out. */
+export interface Tips {
+  month: string;
+  currency: Currency;
+  repeated: RepeatedPurchase[];
+  busiest_weekday: { weekday: number; average: string; usual: string } | null; // 0 = Monday
+}
+
 export interface Expense {
   uuid: string;
   amount: string;

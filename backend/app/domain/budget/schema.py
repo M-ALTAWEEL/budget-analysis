@@ -103,3 +103,25 @@ class BudgetSummary(BaseModel):
     spent: Decimal
     remaining: Decimal  # can be negative when overspent
     categories: list[CategorySpending]
+
+
+class RepeatedPurchaseRead(BaseModel):
+    label: str  # as the student usually writes it
+    category: CategoryRead
+    count: int  # times this month
+    total: Decimal
+
+
+class WeekdayPatternRead(BaseModel):
+    weekday: int  # 0 = Monday ... 6 = Sunday
+    average: Decimal  # a normal day on that weekday
+    usual: Decimal  # a normal day, any weekday
+
+
+class Tips(BaseModel):
+    """Things worth knowing, from the student's own numbers. Empty when nothing stands out."""
+
+    month: str
+    currency: Currency
+    repeated: list[RepeatedPurchaseRead]
+    busiest_weekday: WeekdayPatternRead | None = None  # current month only, needs 4 weeks
