@@ -110,10 +110,15 @@ export function Landing() {
       <footer className="border-t border-line">
         <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm text-muted sm:flex-row sm:items-center sm:justify-between sm:px-8">
           <p>{t.landing.footer}</p>
-          <a href={REPO_URL} className="inline-flex items-center gap-2 font-semibold text-ink hover:underline">
-            <FolderGit2 className="size-4" aria-hidden />
-            {t.landing.source}
-          </a>
+          <div className="flex items-center gap-5">
+            <Link href="/privacy" className="font-semibold text-ink hover:underline">
+              {t.landing.privacy}
+            </Link>
+            <a href={REPO_URL} className="inline-flex items-center gap-2 font-semibold text-ink hover:underline">
+              <FolderGit2 className="size-4" aria-hidden />
+              {t.landing.source}
+            </a>
+          </div>
         </div>
       </footer>
     </div>

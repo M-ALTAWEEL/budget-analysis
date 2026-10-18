@@ -323,6 +323,7 @@ export const en = {
     endTitle: "Start with this month's allowance. It takes a minute.",
     footer: "BudgetBuddy is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
+    privacy: "Privacy",
   },
 
   errors: {

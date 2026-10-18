@@ -315,6 +315,7 @@ export const tr: Messages = {
     endTitle: "Bu ayın harçlığıyla başla. Bir dakikanı alır.",
     footer: "BudgetBuddy, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
+    privacy: "Gizlilik",
   },
 
   errors: {

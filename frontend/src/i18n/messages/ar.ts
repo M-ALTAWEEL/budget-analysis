@@ -326,6 +326,7 @@ export const ar: Messages = {
     endTitle: "ابدأ بمصروف هذا الشهر. يكفيك دقيقة واحدة.",
     footer: "BudgetBuddy مشروع من أعمال محمد الطويل.",
     source: "الكود المصدري على GitHub",
+    privacy: "الخصوصية",
   },
 
   errors: {
