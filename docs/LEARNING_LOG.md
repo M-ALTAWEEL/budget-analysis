@@ -2380,3 +2380,83 @@ remaining = max(goal.target_amount - saved, Decimal("0"))
 - [x] صفحة الأهداف بالثلاث لغات
 - [x] العملة الثانية بالإعدادات و `≈` بالنظرة العامة والأهداف
 
+
+---
+
+# المرحلة 7: الذكاء الاصطناعي 🤖، موديل تصنيف المصاريف من الصفر
+
+## 🎯 الهدف
+الطالب بيكتب "شاورما" أو "İstanbulkart" أو "فاتورة كهربا"، والموقع **يقترح الفئة**. بدل API مدفوع، **بنينا موديل Machine Learning بإيدنا**، خطوة خطوة، بالاعتماد على مادة COE305.
+
+الشغل كله بـ `ml/notebooks/01_expense_categorizer.ipynb` (بنتائجه ورسوماته)، والكود الحقيقي بـ `backend/app/ml/` و `ml/train_categorizer.py`.
+
+## 1️⃣ البيانات (Week 1, 4)
+- **Cold start:** موقع جديد = ما في بيانات. كتبنا seed dataset بالثلاث لغات (`ml/data/seed_examples.py` ← `expenses.csv`)، ومحمد أضاف أمثلة حقيقية (باص/تكسي/مترو = مواصلات، شاي/عصير/خضار = أكل، غاز/كهربا/نت/عائدات = فواتير)
+- **Data leakage:** "Taxi" و "taxi" لازم ما يكونوا واحد بالـ train وواحد بالـ test، فمنحذف المكرر **بعد** التطبيع
+- **Imbalance:** الفئات مش متساوية، فمنقيس بـ **macro F1** ومنستخدم **Stratified K-Fold**
+
+## 2️⃣ تجهيز النص (`app/ml/text.py`)
+- تطبيع: أشكال الألف والتاء المربوطة والتشكيل بالعربي، الحروف التركية لـ ASCII (döner = doner)، حذف الأرقام
+- Features: كلمات كاملة + **قطع حروف** (character n-grams). هيك `shawrma` (غلط إملائي) بتشبه `shawarma`
+- **نفس الكود** للتدريب وللـ API، عشان ما يصير **training-serving skew**
+- Bag of Words و TF-IDF من الصفر، وطلعوا نفس scikit-learn
+
+## 3️⃣ Naive Bayes من الصفر (Week 8) (`app/ml/naive_bayes.py`)
+- Bayes + Laplace smoothing + log-probabilities، والموديل كله **عدّ**، فبينحفظ JSON (بدون pickle)
+- نفس scikit-learn لـ 14 خانة عشرية
+- الدقة كانت ضعيفة، والـ **learning curve** قال: **high variance، البيانات قليلة**. زدنا البيانات (الجولة 2): macro F1 من 0.32 لـ 0.45 ✅
+
+## 4️⃣ مقارنة الموديلات (Week 3, 5, 7, 8)
+| الموديل | macro F1 |
+|---|---|
+| Linear SVM | 0.486 |
+| Logistic Regression | 0.484 |
+| Naive Bayes | 0.453 |
+| Random Forest | 0.373 |
+| KNN | 0.362 (curse of dimensionality) |
+| Decision Tree | 0.308 (overfitting) |
+
+**الدرس الأهم: الثقة (calibration).** NB لما يقول "90% متأكد" بيكون صح بـ 66% بس. Logistic Regression لما يقول "≥ 80%" صح بـ 96%. **اخترنا Logistic Regression** لأنه أرقام ثقته منقدر نستخدمها كـ threshold.
+
+## 5️⃣ Logistic Regression من الصفر (Week 2, 3, 9)
+- **Softmax** بيحول الـ scores لاحتمالات، **Cross-entropy** هي الـ loss، و **L2** بيعاقب الأوزان الكبيرة
+- **Gradient Descent** بـ numpy على **sparse matrix** (`ml/train_categorizer.py`):
+  ```python
+  P = softmax(X @ W + b)
+  W -= lr * (X.T @ (P - Y) / n + lam * W)
+  b -= lr * (P - Y).mean(axis=0)
+  ```
+- **Learning rate:** 1 بطيء، 30 مناسب، 100 بيقفز. من 60 وطالع بتبلش المشاكل، فاخترنا 30 (مسافة أمان)
+- **λ = 1 / (C·n)** ← نفس scikit-learn: أكبر فرق بالاحتمالات 0.002، ونفس الجواب 100%
+- **GridSearchCV:** C ∈ {0.3…100} × أطوال القطع. الفائز: **C = 30 وقطع (3,4,5)** (macro F1 0.506، أحسن log loss). C صغير = underfitting، C = 100 = ثقة زيادة
+- **التدريب ≠ الاستخدام:** التدريب بـ numpy، والـ API بيقرأ JSON بـ Python عادي (`app/ml/logistic.py`)، بدون numpy ولا scikit-learn ولا pickle
+- 6 اختبارات جديدة (`tests/test_ml_logistic.py`): TF-IDF وSoftmax محسوبين بالإيد، JSON، والموديل المدرّب
+
+| الوصف | الفئة | الثقة |
+|---|---|---|
+| taxi | transport | 95% |
+| شاي | food | 92% |
+| aidat | bills | 91% |
+| netflx | entertainment | 93% |
+| birthday cake | transport | **38%** ← بيعرف إنه مش متأكد |
+
+## 🎤 أسئلة مقابلات
+- **ليش ما استخدمت API جاهز؟**
+  مجاني، أسرع (ميلي ثانية)، البيانات ما بتطلع من السيرفر، وبفهم كل سطر فيه.
+- **كيف بتعرف إنه الموديل تبعك صح؟**
+  قارنته مع scikit-learn على نفس البيانات: نفس الأوزان والاحتمالات تقريباً.
+- **ليش الدقة 50% بس؟**
+  الـ learning curve بيقول البيانات قليلة (~1000 مثال لـ 8 فئات). الحل: كل مرة الطالب بيختار فئة = مثال جديد. ولهيك الموقع رح يقترح بس لما الثقة عالية.
+- **شو الفرق بين C و learning rate؟**
+  C hyperparameter للموديل (قديش regularization)، بيغير **وين** القاع. الـ learning rate للتدريب، بيغير **كيف** منوصل للقاع.
+- **ليش JSON مش pickle؟**
+  pickle ممكن يشغّل كود وقت التحميل (خطر أمني)، و JSON بيانات بس، وبينقرأ بأي لغة.
+
+### ملخص المرحلة 7 (لهلق)
+- [x] Dataset بالثلاث لغات (1,036 مثال بعد حذف المكرر)
+- [x] تطبيع النص و n-grams، و TF-IDF من الصفر
+- [x] Naive Bayes من الصفر + learning curve
+- [x] مقارنة 8 موديلات + calibration
+- [x] Logistic Regression من الصفر بـ Gradient Descent + GridSearchCV
+- [ ] Explainability: ليش اختار هالفئة؟ (Week 10)
+- [ ] ربطه بالموقع: اقتراح الفئة، والتعلم من تصحيحات الطالب

@@ -1,0 +1,1072 @@
+description,category,language,source
+shawarma,food,en,round1
+shawrma wrap,food,en,round1
+lunch at uni cafeteria,food,en,round1
+coffee,food,en,round1
+starbucks latte,food,en,round1
+groceries at migros,food,en,round1
+bim groceries,food,en,round1
+a101 bread and milk,food,en,round1
+pizza with friends,food,en,round1
+burger king,food,en,round1
+mcdonalds,food,en,round1
+dinner,food,en,round1
+breakfast,food,en,round1
+simit and tea,food,en,round1
+getir order,food,en,round1
+yemeksepeti order,food,en,round1
+doner,food,en,round1
+kebab,food,en,round1
+water bottle,food,en,round1
+snacks,food,en,round1
+chocolate bar,food,en,round1
+fruit and vegetables,food,en,round1
+eggs and bread,food,en,round1
+chicken wrap,food,en,round1
+sushi,food,en,round1
+ice cream,food,en,round1
+energy drink,food,en,round1
+restaurant,food,en,round1
+takeaway noodles,food,en,round1
+falafel,food,en,round1
+bakery,food,en,round1
+pasta,food,en,round1
+rice and chicken,food,en,round1
+cafe with friends,food,en,round1
+orange juice,food,en,round1
+supermarket,food,en,round1
+milk,food,en,round1
+cheese and olives,food,en,round1
+kfc bucket,food,en,round1
+dominos pizza,food,en,round1
+tea,food,en,round1
+lunch,food,en,round1
+groceries,food,en,round1
+شاورما,food,ar,round1
+سندويشة شاورما,food,ar,round1
+غدا بكافتيريا الجامعة,food,ar,round1
+قهوة,food,ar,round1
+ستاربكس,food,ar,round1
+خضرة وفواكه,food,ar,round1
+بقالة,food,ar,round1
+خبز وحليب,food,ar,round1
+بيتزا مع الشباب,food,ar,round1
+برغر,food,ar,round1
+عشاء,food,ar,round1
+فطور,food,ar,round1
+سميت وشاي,food,ar,round1
+طلب من يمك سبيتي,food,ar,round1
+طلبية غيتير,food,ar,round1
+كباب,food,ar,round1
+فلافل,food,ar,round1
+مشروبات غازية,food,ar,round1
+شوكولا,food,ar,round1
+فروج,food,ar,round1
+رز ودجاج,food,ar,round1
+حلويات,food,ar,round1
+مطعم,food,ar,round1
+كنافة,food,ar,round1
+عصير,food,ar,round1
+سوبرماركت,food,ar,round1
+شاي,food,ar,round1
+مي,food,ar,round1
+سلطة,food,ar,round1
+فول وحمص,food,ar,round1
+مشاوي,food,ar,round1
+قهوة مع الاصحاب,food,ar,round1
+غدا,food,ar,round1
+اكل,food,ar,round1
+ميغروس,food,ar,round1
+بيم,food,ar,round1
+بيض وجبنة,food,ar,round1
+كيك,food,ar,round1
+döner,food,tr,round1
+öğle yemeği yemekhane,food,tr,round1
+kahve,food,tr,round1
+çay simit,food,tr,round1
+market alışverişi,food,tr,round1
+migros,food,tr,round1
+bim alışveriş,food,tr,round1
+a101 ekmek süt,food,tr,round1
+pizza,food,tr,round1
+hamburger,food,tr,round1
+akşam yemeği,food,tr,round1
+kahvaltı,food,tr,round1
+yemeksepeti siparişi,food,tr,round1
+getir siparişi,food,tr,round1
+kebap,food,tr,round1
+lahmacun,food,tr,round1
+su,food,tr,round1
+atıştırmalık,food,tr,round1
+çikolata,food,tr,round1
+meyve sebze,food,tr,round1
+tavuk dürüm,food,tr,round1
+tatlı,food,tr,round1
+baklava,food,tr,round1
+dondurma,food,tr,round1
+ayran,food,tr,round1
+restoran,food,tr,round1
+pide,food,tr,round1
+köfte,food,tr,round1
+manav,food,tr,round1
+kafe,food,tr,round1
+börek,food,tr,round1
+tost,food,tr,round1
+çorba,food,tr,round1
+yemek,food,tr,round1
+istanbulkart top up,transport,en,round1
+istanbulkart,transport,en,round1
+bus ticket,transport,en,round1
+metro,transport,en,round1
+taxi,transport,en,round1
+uber,transport,en,round1
+bitaksi,transport,en,round1
+flight ticket,transport,en,round1
+train ticket,transport,en,round1
+ferry,transport,en,round1
+marmaray,transport,en,round1
+fuel,transport,en,round1
+gas for car,transport,en,round1
+parking,transport,en,round1
+scooter rental,transport,en,round1
+marti scooter,transport,en,round1
+dolmus,transport,en,round1
+airport shuttle,transport,en,round1
+havaist,transport,en,round1
+car rental,transport,en,round1
+metrobus,transport,en,round1
+bus to campus,transport,en,round1
+taxi home,transport,en,round1
+plane ticket to dubai,transport,en,round1
+petrol,transport,en,round1
+تعبئة اسطنبول كارت,transport,ar,round1
+اسطنبول كارت,transport,ar,round1
+باص,transport,ar,round1
+مترو,transport,ar,round1
+تكسي,transport,ar,round1
+اوبر,transport,ar,round1
+تذكرة طيران,transport,ar,round1
+قطار,transport,ar,round1
+عبارة,transport,ar,round1
+بنزين,transport,ar,round1
+موقف سيارات,transport,ar,round1
+سكوتر,transport,ar,round1
+دولموش,transport,ar,round1
+باص المطار,transport,ar,round1
+مواصلات للجامعة,transport,ar,round1
+تكسي للبيت,transport,ar,round1
+تذكرة باص,transport,ar,round1
+مترو بوس,transport,ar,round1
+شحن الكارت,transport,ar,round1
+istanbulkart dolum,transport,tr,round1
+otobüs,transport,tr,round1
+metro,transport,tr,round1
+taksi,transport,tr,round1
+bitaksi,transport,tr,round1
+uçak bileti,transport,tr,round1
+tren bileti,transport,tr,round1
+vapur,transport,tr,round1
+benzin,transport,tr,round1
+otopark,transport,tr,round1
+martı,transport,tr,round1
+dolmuş,transport,tr,round1
+havaist,transport,tr,round1
+araç kiralama,transport,tr,round1
+metrobüs,transport,tr,round1
+otobüs bileti,transport,tr,round1
+akbil,transport,tr,round1
+yol parası,transport,tr,round1
+textbook,study,en,round1
+notebooks and pens,study,en,round1
+printing,study,en,round1
+photocopies,study,en,round1
+course fee,study,en,round1
+udemy course,study,en,round1
+tuition installment,study,en,round1
+library fine,study,en,round1
+calculator,study,en,round1
+stationery,study,en,round1
+flash drive,study,en,round1
+highlighters,study,en,round1
+school supplies,study,en,round1
+english course,study,en,round1
+exam fee,study,en,round1
+coursera,study,en,round1
+lab coat,study,en,round1
+lecture notes,study,en,round1
+graph paper,study,en,round1
+printer ink,study,en,round1
+كتاب جامعي,study,ar,round1
+دفاتر واقلام,study,ar,round1
+طباعة,study,ar,round1
+تصوير اوراق,study,ar,round1
+رسوم كورس,study,ar,round1
+كورس يوديمي,study,ar,round1
+قسط الجامعة,study,ar,round1
+آلة حاسبة,study,ar,round1
+قرطاسية,study,ar,round1
+فلاشة,study,ar,round1
+رسوم امتحان,study,ar,round1
+كورس انجليزي,study,ar,round1
+ملخصات,study,ar,round1
+مستلزمات الجامعة,study,ar,round1
+طباعة مشروع,study,ar,round1
+كتاب,study,ar,round1
+ders kitabı,study,tr,round1
+defter kalem,study,tr,round1
+fotokopi,study,tr,round1
+çıktı,study,tr,round1
+kurs ücreti,study,tr,round1
+udemy kursu,study,tr,round1
+okul taksiti,study,tr,round1
+hesap makinesi,study,tr,round1
+kırtasiye,study,tr,round1
+usb bellek,study,tr,round1
+sınav ücreti,study,tr,round1
+ingilizce kursu,study,tr,round1
+ders notları,study,tr,round1
+kitap,study,tr,round1
+netflix,entertainment,en,round1
+netflx,entertainment,en,round1
+spotify,entertainment,en,round1
+cinema tickets,entertainment,en,round1
+movie,entertainment,en,round1
+bowling,entertainment,en,round1
+playstation game,entertainment,en,round1
+steam game,entertainment,en,round1
+concert ticket,entertainment,en,round1
+youtube premium,entertainment,en,round1
+football match ticket,entertainment,en,round1
+escape room,entertainment,en,round1
+karaoke,entertainment,en,round1
+museum entry,entertainment,en,round1
+amusement park,entertainment,en,round1
+disney plus,entertainment,en,round1
+billiards,entertainment,en,round1
+theater,entertainment,en,round1
+ps plus,entertainment,en,round1
+festival,entertainment,en,round1
+نتفليكس,entertainment,ar,round1
+سبوتيفاي,entertainment,ar,round1
+سينما,entertainment,ar,round1
+بولينغ,entertainment,ar,round1
+لعبة بلايستيشن,entertainment,ar,round1
+ستيم,entertainment,ar,round1
+حفلة,entertainment,ar,round1
+يوتيوب بريميوم,entertainment,ar,round1
+تذكرة مباراة,entertainment,ar,round1
+ملاهي,entertainment,ar,round1
+متحف,entertainment,ar,round1
+بلياردو,entertainment,ar,round1
+مسرح,entertainment,ar,round1
+اشتراك العاب,entertainment,ar,round1
+طلعة مع الشباب,entertainment,ar,round1
+فيلم,entertainment,ar,round1
+netflix üyeliği,entertainment,tr,round1
+spotify,entertainment,tr,round1
+sinema bileti,entertainment,tr,round1
+bowling,entertainment,tr,round1
+oyun,entertainment,tr,round1
+konser bileti,entertainment,tr,round1
+maç bileti,entertainment,tr,round1
+lunapark,entertainment,tr,round1
+müze girişi,entertainment,tr,round1
+bilardo,entertainment,tr,round1
+tiyatro,entertainment,tr,round1
+exxen,entertainment,tr,round1
+blutv,entertainment,tr,round1
+film,entertainment,tr,round1
+t-shirt,shopping,en,round1
+jeans,shopping,en,round1
+shoes,shopping,en,round1
+trendyol order,shopping,en,round1
+hepsiburada,shopping,en,round1
+amazon order,shopping,en,round1
+phone case,shopping,en,round1
+headphones,shopping,en,round1
+zara,shopping,en,round1
+h&m,shopping,en,round1
+lc waikiki,shopping,en,round1
+backpack,shopping,en,round1
+perfume,shopping,en,round1
+shampoo,shopping,en,round1
+toothpaste,shopping,en,round1
+detergent,shopping,en,round1
+sunglasses,shopping,en,round1
+jacket,shopping,en,round1
+gift for a friend,shopping,en,round1
+watch,shopping,en,round1
+ikea,shopping,en,round1
+towels,shopping,en,round1
+charger cable,shopping,en,round1
+sneakers,shopping,en,round1
+تيشيرت,shopping,ar,round1
+بنطلون جينز,shopping,ar,round1
+حذاء,shopping,ar,round1
+طلبية ترينديول,shopping,ar,round1
+كفر موبايل,shopping,ar,round1
+سماعات,shopping,ar,round1
+زارا,shopping,ar,round1
+شنطة ظهر,shopping,ar,round1
+عطر,shopping,ar,round1
+شامبو,shopping,ar,round1
+معجون اسنان,shopping,ar,round1
+منظفات,shopping,ar,round1
+نظارة شمسية,shopping,ar,round1
+جاكيت,shopping,ar,round1
+هدية لصديق,shopping,ar,round1
+مناشف,shopping,ar,round1
+شاحن,shopping,ar,round1
+ملابس,shopping,ar,round1
+tişört,shopping,tr,round1
+kot pantolon,shopping,tr,round1
+ayakkabı,shopping,tr,round1
+trendyol siparişi,shopping,tr,round1
+hepsiburada,shopping,tr,round1
+telefon kılıfı,shopping,tr,round1
+kulaklık,shopping,tr,round1
+zara,shopping,tr,round1
+lc waikiki,shopping,tr,round1
+sırt çantası,shopping,tr,round1
+parfüm,shopping,tr,round1
+şampuan,shopping,tr,round1
+diş macunu,shopping,tr,round1
+deterjan,shopping,tr,round1
+güneş gözlüğü,shopping,tr,round1
+mont,shopping,tr,round1
+hediye,shopping,tr,round1
+havlu,shopping,tr,round1
+şarj aleti,shopping,tr,round1
+kıyafet,shopping,tr,round1
+pharmacy,health,en,round1
+painkillers,health,en,round1
+vitamins,health,en,round1
+doctor visit,health,en,round1
+dentist,health,en,round1
+hospital fee,health,en,round1
+gym membership,health,en,round1
+glasses,health,en,round1
+contact lenses,health,en,round1
+blood test,health,en,round1
+cold medicine,health,en,round1
+physiotherapy,health,en,round1
+protein powder,health,en,round1
+panadol,health,en,round1
+health insurance,health,en,round1
+صيدلية,health,ar,round1
+مسكن,health,ar,round1
+فيتامينات,health,ar,round1
+مراجعة دكتور,health,ar,round1
+طبيب اسنان,health,ar,round1
+مستشفى,health,ar,round1
+اشتراك جيم,health,ar,round1
+نظارة طبية,health,ar,round1
+عدسات,health,ar,round1
+تحليل دم,health,ar,round1
+دوا رشح,health,ar,round1
+علاج فيزيائي,health,ar,round1
+دواء,health,ar,round1
+بنادول,health,ar,round1
+eczane,health,tr,round1
+ağrı kesici,health,tr,round1
+vitamin,health,tr,round1
+doktor muayenesi,health,tr,round1
+diş hekimi,health,tr,round1
+hastane,health,tr,round1
+spor salonu üyeliği,health,tr,round1
+gözlük,health,tr,round1
+lens,health,tr,round1
+kan tahlili,health,tr,round1
+grip ilacı,health,tr,round1
+fizik tedavi,health,tr,round1
+ilaç,health,tr,round1
+phone bill,bills,en,round1
+internet bill,bills,en,round1
+electricity bill,bills,en,round1
+water bill,bills,en,round1
+gas bill,bills,en,round1
+rent,bills,en,round1
+dorm fee,bills,en,round1
+turkcell package,bills,en,round1
+vodafone,bills,en,round1
+mobile data top up,bills,en,round1
+icloud storage,bills,en,round1
+google one,bills,en,round1
+building fees,bills,en,round1
+residence permit fee,bills,en,round1
+bank fee,bills,en,round1
+فاتورة موبايل,bills,ar,round1
+فاتورة انترنت,bills,ar,round1
+كهربا,bills,ar,round1
+فاتورة مي,bills,ar,round1
+غاز,bills,ar,round1
+ايجار البيت,bills,ar,round1
+سكن طلاب,bills,ar,round1
+باقة تركسل,bills,ar,round1
+شحن رصيد,bills,ar,round1
+عائدات,bills,ar,round1
+رسوم اقامة,bills,ar,round1
+رسوم بنك,bills,ar,round1
+آي كلاود,bills,ar,round1
+انترنت,bills,ar,round1
+telefon faturası,bills,tr,round1
+internet faturası,bills,tr,round1
+elektrik faturası,bills,tr,round1
+su faturası,bills,tr,round1
+doğalgaz,bills,tr,round1
+kira,bills,tr,round1
+yurt ücreti,bills,tr,round1
+turkcell paket,bills,tr,round1
+vodafone,bills,tr,round1
+tl yükleme,bills,tr,round1
+aidat,bills,tr,round1
+ikamet harcı,bills,tr,round1
+banka masrafı,bills,tr,round1
+haircut,other,en,round1
+donation,other,en,round1
+laundry,other,en,round1
+passport photos,other,en,round1
+notary,other,en,round1
+cargo shipping,other,en,round1
+tip,other,en,round1
+lent money to a friend,other,en,round1
+atm fee,other,en,round1
+حلاق,other,ar,round1
+تبرع,other,ar,round1
+غسيل ملابس,other,ar,round1
+صور شخصية,other,ar,round1
+كاتب عدل,other,ar,round1
+شحن طرد,other,ar,round1
+بقشيش,other,ar,round1
+دين لصديق,other,ar,round1
+berber,other,tr,round1
+bağış,other,tr,round1
+çamaşırhane,other,tr,round1
+vesikalık fotoğraf,other,tr,round1
+noter,other,tr,round1
+kargo,other,tr,round1
+bahşiş,other,tr,round1
+arkadaşa borç,other,tr,round1
+tea,food,en,round2
+juice,food,en,round2
+vegetables,food,en,round2
+fruits,food,en,round2
+apples,food,en,round2
+bananas,food,en,round2
+tomatoes,food,en,round2
+potatoes,food,en,round2
+onions,food,en,round2
+bread,food,en,round2
+rice,food,en,round2
+chicken,food,en,round2
+meat,food,en,round2
+fish,food,en,round2
+yogurt,food,en,round2
+butter,food,en,round2
+honey,food,en,round2
+cereal,food,en,round2
+nuts,food,en,round2
+chips,food,en,round2
+biscuits,food,en,round2
+cookies,food,en,round2
+cola,food,en,round2
+soda,food,en,round2
+red bull,food,en,round2
+espresso,food,en,round2
+cappuccino,food,en,round2
+turkish coffee,food,en,round2
+nescafe,food,en,round2
+takeaway,food,en,round2
+food delivery,food,en,round2
+dinner out,food,en,round2
+lunch with classmates,food,en,round2
+brunch,food,en,round2
+street food,food,en,round2
+sandwich,food,en,round2
+salad,food,en,round2
+soup,food,en,round2
+chicken doner,food,en,round2
+dessert,food,en,round2
+candy,food,en,round2
+olive oil,food,en,round2
+sugar,food,en,round2
+flour,food,en,round2
+tuna can,food,en,round2
+frozen pizza,food,en,round2
+weekly groceries,food,en,round2
+market,food,en,round2
+fruit juice,food,en,round2
+مية,food,ar,round2
+فواكه,food,ar,round2
+تفاح,food,ar,round2
+موز,food,ar,round2
+بندورة,food,ar,round2
+بطاطا,food,ar,round2
+بصل,food,ar,round2
+خبز,food,ar,round2
+رز,food,ar,round2
+معكرونة,food,ar,round2
+دجاج,food,ar,round2
+لحمة,food,ar,round2
+سمك,food,ar,round2
+لبن,food,ar,round2
+زبدة,food,ar,round2
+عسل,food,ar,round2
+مربى,food,ar,round2
+كورن فليكس,food,ar,round2
+مكسرات,food,ar,round2
+شيبس,food,ar,round2
+بسكويت,food,ar,round2
+كولا,food,ar,round2
+بيبسي,food,ar,round2
+قهوة تركية,food,ar,round2
+نسكافيه,food,ar,round2
+كابتشينو,food,ar,round2
+ديليفري اكل,food,ar,round2
+عشا برا,food,ar,round2
+غدا مع الزملاء,food,ar,round2
+سندويشة,food,ar,round2
+شوربة,food,ar,round2
+شاورما دجاج,food,ar,round2
+معجنات,food,ar,round2
+فطاير,food,ar,round2
+بوظة,food,ar,round2
+سكاكر,food,ar,round2
+زيت زيتون,food,ar,round2
+سكر,food,ar,round2
+طحين,food,ar,round2
+تونة,food,ar,round2
+اغراض البيت,food,ar,round2
+تسوق اسبوعي,food,ar,round2
+خضرجي,food,ar,round2
+فرن,food,ar,round2
+مناقيش,food,ar,round2
+عشا,food,ar,round2
+ترويقة,food,ar,round2
+çay,food,tr,round2
+meyve suyu,food,tr,round2
+su şişesi,food,tr,round2
+sebze,food,tr,round2
+meyve,food,tr,round2
+elma,food,tr,round2
+muz,food,tr,round2
+domates,food,tr,round2
+patates,food,tr,round2
+soğan,food,tr,round2
+ekmek,food,tr,round2
+pirinç,food,tr,round2
+makarna,food,tr,round2
+tavuk,food,tr,round2
+et,food,tr,round2
+balık,food,tr,round2
+yoğurt,food,tr,round2
+tereyağı,food,tr,round2
+bal,food,tr,round2
+reçel,food,tr,round2
+kuruyemiş,food,tr,round2
+cips,food,tr,round2
+bisküvi,food,tr,round2
+kola,food,tr,round2
+türk kahvesi,food,tr,round2
+nescafe,food,tr,round2
+latte,food,tr,round2
+sandviç,food,tr,round2
+salata,food,tr,round2
+tavuk döner,food,tr,round2
+simit,food,tr,round2
+poğaça,food,tr,round2
+pasta,food,tr,round2
+şeker,food,tr,round2
+zeytinyağı,food,tr,round2
+ton balığı,food,tr,round2
+haftalık market,food,tr,round2
+şok market,food,tr,round2
+fırın,food,tr,round2
+kumpir,food,tr,round2
+mantı,food,tr,round2
+lokanta,food,tr,round2
+tram,transport,en,round2
+tram ticket,transport,en,round2
+bus fare,transport,en,round2
+subway,transport,en,round2
+metro card,transport,en,round2
+taxi ride,transport,en,round2
+cab,transport,en,round2
+uber ride,transport,en,round2
+ride to campus,transport,en,round2
+bus pass,transport,en,round2
+monthly transport card,transport,en,round2
+student transport card,transport,en,round2
+ferry ticket,transport,en,round2
+boat,transport,en,round2
+intercity bus,transport,en,round2
+airport taxi,transport,en,round2
+diesel,transport,en,round2
+car wash,transport,en,round2
+bike repair,transport,en,round2
+highway toll,transport,en,round2
+e-scooter,transport,en,round2
+train,transport,en,round2
+high speed train,transport,en,round2
+pegasus flight,transport,en,round2
+turkish airlines,transport,en,round2
+flight,transport,en,round2
+تذكرة ترام,transport,ar,round2
+اجرة باص,transport,ar,round2
+مترو الانفاق,transport,ar,round2
+تاكسي,transport,ar,round2
+تكسي للجامعة,transport,ar,round2
+اوبر للبيت,transport,ar,round2
+توصيلة,transport,ar,round2
+كرت المواصلات,transport,ar,round2
+اشتراك مواصلات شهري,transport,ar,round2
+عبارة بحرية,transport,ar,round2
+باص بين المدن,transport,ar,round2
+تذكرة باص سفر,transport,ar,round2
+تكسي المطار,transport,ar,round2
+مازوت,transport,ar,round2
+غسيل سيارة,transport,ar,round2
+تصليح بسكليت,transport,ar,round2
+رسوم طريق,transport,ar,round2
+سكوتر كهربائي,transport,ar,round2
+قطار سريع,transport,ar,round2
+طيران,transport,ar,round2
+حجز طيران,transport,ar,round2
+تذكرة سفر,transport,ar,round2
+مواصلات,transport,ar,round2
+tramvay,transport,tr,round2
+tramvay bileti,transport,tr,round2
+otobüs parası,transport,tr,round2
+taksi ücreti,transport,tr,round2
+uber,transport,tr,round2
+kampüse ulaşım,transport,tr,round2
+aylık abonman,transport,tr,round2
+öğrenci kart dolum,transport,tr,round2
+vapur bileti,transport,tr,round2
+deniz otobüsü,transport,tr,round2
+şehirlerarası otobüs,transport,tr,round2
+obilet,transport,tr,round2
+havalimanı taksi,transport,tr,round2
+mazot,transport,tr,round2
+araba yıkama,transport,tr,round2
+bisiklet tamiri,transport,tr,round2
+köprü geçişi,transport,tr,round2
+scooter,transport,tr,round2
+hızlı tren,transport,tr,round2
+pegasus,transport,tr,round2
+thy bilet,transport,tr,round2
+uçak,transport,tr,round2
+ulaşım,transport,tr,round2
+gas,bills,en,round2
+natural gas bill,bills,en,round2
+electricity,bills,en,round2
+power bill,bills,en,round2
+internet,bills,en,round2
+wifi bill,bills,en,round2
+home internet,bills,en,round2
+mobile bill,bills,en,round2
+phone credit,bills,en,round2
+sim card,bills,en,round2
+rent payment,bills,en,round2
+monthly rent,bills,en,round2
+apartment rent,bills,en,round2
+dormitory,bills,en,round2
+building maintenance fee,bills,en,round2
+aidat,bills,en,round2
+utilities,bills,en,round2
+heating,bills,en,round2
+turk telekom,bills,en,round2
+superonline,bills,en,round2
+bills,bills,en,round2
+insurance,bills,en,round2
+visa fee,bills,en,round2
+card annual fee,bills,en,round2
+فاتورة غاز,bills,ar,round2
+كهرباء,bills,ar,round2
+فاتورة كهرباء,bills,ar,round2
+كهربا البيت,bills,ar,round2
+فاتورة النت,bills,ar,round2
+واي فاي,bills,ar,round2
+انترنت البيت,bills,ar,round2
+رصيد,bills,ar,round2
+شريحة,bills,ar,round2
+خط موبايل,bills,ar,round2
+ايجار,bills,ar,round2
+اجار الشهر,bills,ar,round2
+قسط السكن,bills,ar,round2
+سكن جامعي,bills,ar,round2
+عائدات البناية,bills,ar,round2
+مصاريف البناية,bills,ar,round2
+تدفئة,bills,ar,round2
+ترك تيليكوم,bills,ar,round2
+سوبر اونلاين,bills,ar,round2
+فاتورة تركسل,bills,ar,round2
+فاتورة,bills,ar,round2
+تأمين,bills,ar,round2
+رسوم الفيزا,bills,ar,round2
+doğalgaz faturası,bills,tr,round2
+elektrik,bills,tr,round2
+fatura,bills,tr,round2
+faturalar,bills,tr,round2
+wifi,bills,tr,round2
+ev interneti,bills,tr,round2
+telefon faturası ödeme,bills,tr,round2
+kontör,bills,tr,round2
+sim kart,bills,tr,round2
+kira ödemesi,bills,tr,round2
+ev kirası,bills,tr,round2
+yurt,bills,tr,round2
+apartman aidatı,bills,tr,round2
+site aidatı,bills,tr,round2
+ısınma,bills,tr,round2
+türk telekom,bills,tr,round2
+superonline,bills,tr,round2
+turkcell fatura,bills,tr,round2
+sigorta,bills,tr,round2
+ikamet kartı,bills,tr,round2
+vize ücreti,bills,tr,round2
+books,study,en,round2
+course book,study,en,round2
+pdf notes,study,en,round2
+printing assignment,study,en,round2
+copy center,study,en,round2
+pens,study,en,round2
+pencils,study,en,round2
+eraser,study,en,round2
+ruler,study,en,round2
+folder,study,en,round2
+a4 paper,study,en,round2
+notebook,study,en,round2
+tuition,study,en,round2
+semester fee,study,en,round2
+registration fee,study,en,round2
+ielts exam,study,en,round2
+toefl,study,en,round2
+online course,study,en,round2
+programming course,study,en,round2
+software license,study,en,round2
+lab materials,study,en,round2
+drawing supplies,study,en,round2
+thesis printing,study,en,round2
+graduation project,study,en,round2
+library,study,en,round2
+كتب,study,ar,round2
+كتاب الجامعة,study,ar,round2
+نوط,study,ar,round2
+طباعة واجب,study,ar,round2
+مكتبة تصوير,study,ar,round2
+قلم,study,ar,round2
+اقلام,study,ar,round2
+ممحاة,study,ar,round2
+مسطرة,study,ar,round2
+دوسية,study,ar,round2
+ورق,study,ar,round2
+دفتر,study,ar,round2
+رسوم الفصل,study,ar,round2
+رسوم التسجيل,study,ar,round2
+امتحان ايلتس,study,ar,round2
+توفل,study,ar,round2
+كورس اونلاين,study,ar,round2
+كورس برمجة,study,ar,round2
+مواد مختبر,study,ar,round2
+ادوات رسم,study,ar,round2
+طباعة مشروع التخرج,study,ar,round2
+مكتبة الجامعة,study,ar,round2
+قرطاسية للجامعة,study,ar,round2
+kitaplar,study,tr,round2
+ders notu,study,tr,round2
+ödev çıktısı,study,tr,round2
+fotokopi merkezi,study,tr,round2
+kalem,study,tr,round2
+silgi,study,tr,round2
+cetvel,study,tr,round2
+dosya,study,tr,round2
+a4 kağıt,study,tr,round2
+defter,study,tr,round2
+dönem ücreti,study,tr,round2
+kayıt ücreti,study,tr,round2
+ielts sınavı,study,tr,round2
+online kurs,study,tr,round2
+yazılım kursu,study,tr,round2
+laboratuvar malzemesi,study,tr,round2
+çizim malzemesi,study,tr,round2
+bitirme projesi,study,tr,round2
+kütüphane,study,tr,round2
+kırtasiye alışverişi,study,tr,round2
+movies,entertainment,en,round2
+netflix subscription,entertainment,en,round2
+spotify premium,entertainment,en,round2
+apple music,entertainment,en,round2
+games,entertainment,en,round2
+video game,entertainment,en,round2
+ps5 game,entertainment,en,round2
+xbox game pass,entertainment,en,round2
+steam sale,entertainment,en,round2
+valorant points,entertainment,en,round2
+pubg uc,entertainment,en,round2
+concert,entertainment,en,round2
+party,entertainment,en,round2
+night out,entertainment,en,round2
+club entry,entertainment,en,round2
+hookah,entertainment,en,round2
+shisha,entertainment,en,round2
+trip with friends,entertainment,en,round2
+day trip,entertainment,en,round2
+boat tour,entertainment,en,round2
+paintball,entertainment,en,round2
+go kart,entertainment,en,round2
+zoo,entertainment,en,round2
+aquarium,entertainment,en,round2
+افلام,entertainment,ar,round2
+اشتراك نتفليكس,entertainment,ar,round2
+سبوتيفاي بريميوم,entertainment,ar,round2
+العاب,entertainment,ar,round2
+لعبة,entertainment,ar,round2
+بلايستيشن,entertainment,ar,round2
+شحن شدات ببجي,entertainment,ar,round2
+شحن فالورانت,entertainment,ar,round2
+سهرة,entertainment,ar,round2
+حفلة مع الاصحاب,entertainment,ar,round2
+ارجيلة,entertainment,ar,round2
+اركيلة,entertainment,ar,round2
+رحلة,entertainment,ar,round2
+رحلة مع الشباب,entertainment,ar,round2
+جولة بالبحر,entertainment,ar,round2
+كارتينغ,entertainment,ar,round2
+حديقة الحيوان,entertainment,ar,round2
+اكواريوم,entertainment,ar,round2
+بلايستيشن كافيه,entertainment,ar,round2
+كاراوكي,entertainment,ar,round2
+filmler,entertainment,tr,round2
+netflix aboneliği,entertainment,tr,round2
+spotify premium,entertainment,tr,round2
+oyunlar,entertainment,tr,round2
+ps5 oyun,entertainment,tr,round2
+valorant vp,entertainment,tr,round2
+pubg uc,entertainment,tr,round2
+parti,entertainment,tr,round2
+gece çıkışı,entertainment,tr,round2
+nargile,entertainment,tr,round2
+gezi,entertainment,tr,round2
+arkadaşlarla gezi,entertainment,tr,round2
+tekne turu,entertainment,tr,round2
+karting,entertainment,tr,round2
+hayvanat bahçesi,entertainment,tr,round2
+akvaryum,entertainment,tr,round2
+ps cafe,entertainment,tr,round2
+konser,entertainment,tr,round2
+eğlence,entertainment,tr,round2
+clothes,shopping,en,round2
+new clothes,shopping,en,round2
+shirt,shopping,en,round2
+hoodie,shopping,en,round2
+socks,shopping,en,round2
+boots,shopping,en,round2
+coat,shopping,en,round2
+dress,shopping,en,round2
+skirt,shopping,en,round2
+bag,shopping,en,round2
+wallet,shopping,en,round2
+belt,shopping,en,round2
+cap,shopping,en,round2
+power bank,shopping,en,round2
+usb cable,shopping,en,round2
+mouse,shopping,en,round2
+keyboard,shopping,en,round2
+earbuds,shopping,en,round2
+makeup,shopping,en,round2
+skincare,shopping,en,round2
+deodorant,shopping,en,round2
+razor,shopping,en,round2
+soap,shopping,en,round2
+toilet paper,shopping,en,round2
+tissues,shopping,en,round2
+cleaning supplies,shopping,en,round2
+dish soap,shopping,en,round2
+kitchen stuff,shopping,en,round2
+plates,shopping,en,round2
+bedsheets,shopping,en,round2
+pillow,shopping,en,round2
+lamp,shopping,en,round2
+اواعي,shopping,ar,round2
+قميص,shopping,ar,round2
+هودي,shopping,ar,round2
+كنزة,shopping,ar,round2
+جرابات,shopping,ar,round2
+بوط,shopping,ar,round2
+معطف,shopping,ar,round2
+فستان,shopping,ar,round2
+تنورة,shopping,ar,round2
+شنتاية,shopping,ar,round2
+محفظة,shopping,ar,round2
+قشاط,shopping,ar,round2
+كاب,shopping,ar,round2
+باور بانك,shopping,ar,round2
+كيبل,shopping,ar,round2
+ماوس,shopping,ar,round2
+كيبورد,shopping,ar,round2
+ايربودز,shopping,ar,round2
+مكياج,shopping,ar,round2
+كريم,shopping,ar,round2
+مزيل عرق,shopping,ar,round2
+شفرات حلاقة,shopping,ar,round2
+صابون,shopping,ar,round2
+محارم,shopping,ar,round2
+ورق تواليت,shopping,ar,round2
+مواد تنظيف,shopping,ar,round2
+اغراض مطبخ,shopping,ar,round2
+صحون,shopping,ar,round2
+شرشف,shopping,ar,round2
+مخدة,shopping,ar,round2
+ديكور,shopping,ar,round2
+kıyafet,shopping,tr,round2
+gömlek,shopping,tr,round2
+kazak,shopping,tr,round2
+çorap,shopping,tr,round2
+bot,shopping,tr,round2
+elbise,shopping,tr,round2
+etek,shopping,tr,round2
+çanta,shopping,tr,round2
+cüzdan,shopping,tr,round2
+kemer,shopping,tr,round2
+şapka,shopping,tr,round2
+powerbank,shopping,tr,round2
+kablo,shopping,tr,round2
+klavye,shopping,tr,round2
+airpods,shopping,tr,round2
+makyaj,shopping,tr,round2
+kozmetik,shopping,tr,round2
+krem,shopping,tr,round2
+deodorant,shopping,tr,round2
+jilet,shopping,tr,round2
+sabun,shopping,tr,round2
+peçete,shopping,tr,round2
+tuvalet kağıdı,shopping,tr,round2
+temizlik malzemesi,shopping,tr,round2
+bulaşık deterjanı,shopping,tr,round2
+mutfak eşyası,shopping,tr,round2
+tabak,shopping,tr,round2
+nevresim,shopping,tr,round2
+yastık,shopping,tr,round2
+lamba,shopping,tr,round2
+watsons,shopping,tr,round2
+gratis,shopping,tr,round2
+rossmann,shopping,tr,round2
+medicine,health,en,round2
+pills,health,en,round2
+antibiotics,health,en,round2
+doctor,health,en,round2
+clinic,health,en,round2
+checkup,health,en,round2
+dental cleaning,health,en,round2
+tooth filling,health,en,round2
+eye exam,health,en,round2
+x-ray,health,en,round2
+allergy medicine,health,en,round2
+cough syrup,health,en,round2
+bandages,health,en,round2
+gym,health,en,round2
+fitness,health,en,round2
+swimming pool,health,en,round2
+yoga class,health,en,round2
+therapy session,health,en,round2
+psychologist,health,en,round2
+prescription,health,en,round2
+ادوية,health,ar,round2
+حبوب,health,ar,round2
+مضاد حيوي,health,ar,round2
+مستوصف,health,ar,round2
+عيادة,health,ar,round2
+طبيب,health,ar,round2
+كشفية,health,ar,round2
+تنظيف اسنان,health,ar,round2
+حشوة سن,health,ar,round2
+فحص نظر,health,ar,round2
+صورة اشعة,health,ar,round2
+دوا حساسية,health,ar,round2
+شراب كحة,health,ar,round2
+لزقات,health,ar,round2
+جيم,health,ar,round2
+نادي رياضي,health,ar,round2
+مسبح,health,ar,round2
+يوغا,health,ar,round2
+جلسة علاج,health,ar,round2
+اخصائي نفسي,health,ar,round2
+وصفة طبية,health,ar,round2
+ilaçlar,health,tr,round2
+antibiyotik,health,tr,round2
+klinik,health,tr,round2
+doktor,health,tr,round2
+check up,health,tr,round2
+diş temizliği,health,tr,round2
+dolgu,health,tr,round2
+göz muayenesi,health,tr,round2
+röntgen,health,tr,round2
+alerji ilacı,health,tr,round2
+öksürük şurubu,health,tr,round2
+yara bandı,health,tr,round2
+fitness,health,tr,round2
+yüzme havuzu,health,tr,round2
+yoga dersi,health,tr,round2
+terapi,health,tr,round2
+psikolog,health,tr,round2
+reçete,health,tr,round2
+gift money,other,en,round2
+wedding gift,other,en,round2
+charity,other,en,round2
+zakat,other,en,round2
+fine,other,en,round2
+traffic fine,other,en,round2
+phone repair,other,en,round2
+repair,other,en,round2
+dry cleaning,other,en,round2
+barber,other,en,round2
+salon,other,en,round2
+post office,other,en,round2
+photo printing,other,en,round2
+key copy,other,en,round2
+moving,other,en,round2
+misc,other,en,round2
+عيدية,other,ar,round2
+هدية عرس,other,ar,round2
+صدقة,other,ar,round2
+زكاة,other,ar,round2
+مخالفة,other,ar,round2
+مخالفة سير,other,ar,round2
+تصليح موبايل,other,ar,round2
+تصليح,other,ar,round2
+دراي كلين,other,ar,round2
+صالون,other,ar,round2
+بريد,other,ar,round2
+طباعة صور,other,ar,round2
+نسخ مفتاح,other,ar,round2
+نقل اغراض,other,ar,round2
+متفرقات,other,ar,round2
+düğün hediyesi,other,tr,round2
+sadaka,other,tr,round2
+zekat,other,tr,round2
+ceza,other,tr,round2
+trafik cezası,other,tr,round2
+telefon tamiri,other,tr,round2
+tamir,other,tr,round2
+kuru temizleme,other,tr,round2
+kuaför,other,tr,round2
+ptt,other,tr,round2
+fotoğraf baskı,other,tr,round2
+anahtar kopyalama,other,tr,round2
+nakliye,other,tr,round2
+çeşitli,other,tr,round2
+باص,transport,ar,mohammed
+تكسي,transport,ar,mohammed
+مترو,transport,ar,mohammed
+ترام,transport,ar,mohammed
+شاي,food,ar,mohammed
+عصير,food,ar,mohammed
+مي,food,ar,mohammed
+خضار,food,ar,mohammed
+فواكة,food,ar,mohammed
+غاز,bills,ar,mohammed
+كهربا,bills,ar,mohammed
+نت,bills,ar,mohammed
+فواتير,bills,ar,mohammed
+عائدات,bills,ar,mohammed
