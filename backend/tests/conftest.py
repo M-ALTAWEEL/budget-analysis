@@ -10,6 +10,7 @@ import os
 import asyncpg
 import pytest
 from httpx import ASGITransport, AsyncClient
+from sqlalchemy import insert
 from sqlalchemy.engine import make_url
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.pool import NullPool
@@ -18,7 +19,11 @@ import app.models  # noqa: F401  (registers every table on Base.metadata)
 from app.base import Base
 from app.core.limiter import limiter
 from app.database import get_db
+from app.domain.budget.defaults import DEFAULT_CATEGORIES
+from app.domain.budget.model import Category
+from app.domain.currency.client import get_fx_client
 from app.main import app
+from tests.fakes import FakeFxClient
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -62,6 +67,8 @@ async def db_session():
         async with engine.begin() as conn:
             await conn.run_sync(Base.metadata.drop_all)
             await conn.run_sync(Base.metadata.create_all)
+            # create_all makes empty tables; the migration's seed data has to be added here.
+            await conn.execute(insert(Category), DEFAULT_CATEGORIES)
         _schema_ready = True
 
     connection = await engine.connect()
@@ -83,11 +90,18 @@ async def db_session():
 
 
 @pytest.fixture
-async def client(db_session):
+def fx():
+    """The fake exchange-rate client used by the API during tests."""
+    return FakeFxClient()
+
+
+@pytest.fixture
+async def client(db_session, fx):
     async def override_get_db():
         yield db_session
 
     app.dependency_overrides[get_db] = override_get_db
+    app.dependency_overrides[get_fx_client] = lambda: fx
     limiter.reset()
     limiter.enabled = False  # tests that check rate limiting turn it back on
 

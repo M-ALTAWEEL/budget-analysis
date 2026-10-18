@@ -26,6 +26,11 @@ class Settings(BaseSettings):
     access_token_minutes: int = 15
     refresh_token_days: int = 7
 
+    # Exchange rates (ExchangeRate-API open access endpoint, no key needed)
+    fx_api_url: str = "https://open.er-api.com/v6/latest"
+    fx_cache_hours: int = 12
+    fx_timeout_seconds: float = 10.0
+
     @model_validator(mode="after")
     def check_secret_key(self) -> "Settings":
         if len(self.secret_key) < 32:

@@ -1,0 +1,57 @@
+"""Database queries for expenses. Every method takes user_id: no cross-user access."""
+
+from datetime import date
+from decimal import Decimal
+
+from sqlalchemy import func, select
+from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.domain.budget.model import Category
+from app.domain.expense.model import Expense
+
+
+class ExpenseRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    async def get(self, user_id: int, expense_uuid: str) -> Expense | None:
+        return await self.session.scalar(
+            select(Expense).where(Expense.uuid == expense_uuid, Expense.user_id == user_id)
+        )
+
+    async def list(
+        self,
+        user_id: int,
+        *,
+        start: date | None = None,
+        end: date | None = None,
+        category_uuid: str | None = None,
+        limit: int = 50,
+        offset: int = 0,
+    ) -> list[Expense]:
+        query = select(Expense).where(Expense.user_id == user_id)
+        if start is not None:
+            query = query.where(Expense.spent_at >= start)
+        if end is not None:
+            query = query.where(Expense.spent_at < end)
+        if category_uuid is not None:
+            query = query.join(Expense.category).where(Category.uuid == category_uuid)
+        query = (
+            query.order_by(Expense.spent_at.desc(), Expense.id.desc()).limit(limit).offset(offset)
+        )
+        return list(await self.session.scalars(query))
+
+    async def total_by_category(self, user_id: int, start: date, end: date) -> dict[int, Decimal]:
+        """{category_id: sum of amount_base} for expenses in [start, end)."""
+        rows = await self.session.execute(
+            select(Expense.category_id, func.sum(Expense.amount_base))
+            .where(Expense.user_id == user_id, Expense.spent_at >= start, Expense.spent_at < end)
+            .group_by(Expense.category_id)
+        )
+        return {category_id: total for category_id, total in rows}
+
+    def add(self, expense: Expense) -> None:
+        self.session.add(expense)
+
+    async def delete(self, expense: Expense) -> None:
+        await self.session.delete(expense)

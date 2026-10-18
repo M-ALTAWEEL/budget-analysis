@@ -12,6 +12,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.config import settings
 from app.core.limiter import limiter
 from app.database import get_db
+from app.domain.budget.router import budgets_router, categories_router
+from app.domain.currency.router import router as currency_router
+from app.domain.expense.router import router as expenses_router
 from app.domain.user.router import auth_router, users_router
 
 
@@ -51,6 +54,10 @@ def create_app() -> FastAPI:
     # One router per domain, all under /api/v1.
     app.include_router(auth_router, prefix=settings.api_prefix)
     app.include_router(users_router, prefix=settings.api_prefix)
+    app.include_router(categories_router, prefix=settings.api_prefix)
+    app.include_router(budgets_router, prefix=settings.api_prefix)
+    app.include_router(expenses_router, prefix=settings.api_prefix)
+    app.include_router(currency_router, prefix=settings.api_prefix)
 
     return app
 
