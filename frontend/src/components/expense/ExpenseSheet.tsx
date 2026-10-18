@@ -1,5 +1,6 @@
 "use client";
 
+import { Sparkles } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "sonner";
@@ -9,7 +10,13 @@ import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { Field, FormError, Select } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
-import { useCategories, useDeleteExpense, useSaveExpense } from "@/hooks/queries";
+import {
+  useCategories,
+  useCategorySuggestion,
+  useDeleteExpense,
+  useSaveExpense,
+} from "@/hooks/queries";
+import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount, toInputAmount } from "@/lib/money";
@@ -61,10 +68,23 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const [amount, setAmount] = useState(expense ? toInputAmount(expense.amount) : "");
   const [currency, setCurrency] = useState<Currency>(expense?.currency ?? user.base_currency);
   const [description, setDescription] = useState(expense?.description ?? "");
-  const [categoryUuid, setCategoryUuid] = useState(expense?.category.uuid ?? "");
+  // The category the student tapped. Until they tap one, the suggestion fills it in.
+  const [pickedUuid, setPickedUuid] = useState(expense?.category.uuid ?? "");
   const [spentAt, setSpentAt] = useState(expense?.spent_at ?? todayISO());
   const [error, setError] = useState<string | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+
+  // Ask for a suggestion once the student pauses typing; only for a new expense that
+  // has no category chosen by hand yet.
+  const typed = useDebouncedValue(description.trim());
+  const asking = !expense && !pickedUuid ? typed : "";
+  const suggestion = useCategorySuggestion(asking);
+  const suggested = asking.length >= 2 && description.trim() ? suggestion.data?.category : null;
+  // Only a category the student can actually see in the list below.
+  const suggestedUuid =
+    suggested && categories.data?.some((c) => c.uuid === suggested.uuid) ? suggested.uuid : "";
+  const categoryUuid = pickedUuid || suggestedUuid || "";
+  const autoPicked = !pickedUuid && Boolean(suggestedUuid);
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -145,6 +165,12 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
 
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium">{t.expenses.category}</legend>
+          {autoPicked && (
+            <p className="mb-2 flex items-center gap-1.5 text-xs text-muted" aria-live="polite">
+              <Sparkles className="size-3.5 text-pine" aria-hidden />
+              {t.expenses.autoPicked}
+            </p>
+          )}
           {categories.isPending ? (
             <p className="text-sm text-muted">{t.expenses.loadingCategories}</p>
           ) : (
@@ -157,7 +183,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
                     type="button"
                     role="radio"
                     aria-checked={selected}
-                    onClick={() => setCategoryUuid(category.uuid)}
+                    onClick={() => setPickedUuid(category.uuid)}
                     className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
                       selected
                         ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine"

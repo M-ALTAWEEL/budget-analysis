@@ -77,6 +77,13 @@ export interface Expense {
   created_at: string;
 }
 
+/** All null when the API has no suggestion: the student chooses, as before. */
+export interface CategorySuggestion {
+  category: Category | null;
+  confidence: number | null; // 0..1
+  source: "history" | "model" | null;
+}
+
 export interface ExpenseInput {
   amount: string;
   currency: Currency;

@@ -33,6 +33,12 @@ class CategoryRepository:
             )
         )
 
+    async def get_default(self, slug: str) -> Category | None:
+        """One of the 8 categories everyone has ("food", "transport", ...)."""
+        return await self.session.scalar(
+            select(Category).where(Category.user_id.is_(None), Category.slug == slug)
+        )
+
     async def list_by_ids(self, category_ids: list[int]) -> list[Category]:
         return list(
             await self.session.scalars(select(Category).where(Category.id.in_(category_ids)))

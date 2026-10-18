@@ -22,7 +22,8 @@ async def test_expense_in_base_currency(client):
     assert expense["amount_base"] == "120.00"
     assert expense["fx_rate"] == "1.00000000"
     assert expense["category"]["slug"] == "food"
-    assert expense["categorized_by"] == "user"
+    # "Shawarma" -> food is also what the model suggests (test_category_suggestion.py)
+    assert expense["categorized_by"] == "ai"
 
 
 async def test_foreign_currency_expense_is_converted_and_rate_saved(client):

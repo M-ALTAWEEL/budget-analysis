@@ -12,6 +12,7 @@ from app.domain.budget.model import Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
 from app.domain.currency.client import ExchangeRateClient
 from app.domain.currency.service import CurrencyService
+from app.domain.expense.categorizer import CategorySuggester
 from app.domain.expense.model import Expense
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.expense.schema import ExpenseCreate, ExpenseUpdate
@@ -25,6 +26,7 @@ class ExpenseService:
         self.budgets = BudgetRepository(session)
         self.categories = CategoryRepository(session)
         self.currency = CurrencyService(session, fx_client)
+        self.suggester = CategorySuggester(session)
 
     async def create(self, user: User, data: ExpenseCreate) -> Expense:
         category = await self._category(user, data.category_uuid)
@@ -42,6 +44,7 @@ class ExpenseService:
             description=data.description,
             spent_at=data.spent_at,
         )
+        await self._record_who_categorized(user, expense)
         self.expenses.add(expense)
         await self.session.commit()
         return expense
@@ -72,7 +75,12 @@ class ExpenseService:
         changes = data.model_dump(exclude_unset=True)
 
         if "category_uuid" in changes:
-            expense.category = await self._category(user, changes["category_uuid"])
+            category = await self._category(user, changes["category_uuid"])
+            if category.id != expense.category.id:
+                # The student corrected the category: from now on it is their choice.
+                expense.categorized_by = "user"
+                expense.ai_confidence = None
+            expense.category = category
         if "description" in changes:
             expense.description = changes["description"]
 
@@ -97,6 +105,18 @@ class ExpenseService:
         await self.session.commit()
 
     # ── helpers ──────────────────────────────────────────────────────────────
+
+    async def _record_who_categorized(self, user: User, expense: Expense) -> None:
+        """Decided here, not sent by the browser: did the student keep the suggestion?
+        That tells us how often the suggestions are right (and the ones that were not)."""
+        suggestion = await self.suggester.suggest(user, expense.description)
+        if suggestion is None or suggestion.category.id != expense.category.id:
+            expense.categorized_by = "user"
+        elif suggestion.source == "history":
+            expense.categorized_by = "history"
+        else:
+            expense.categorized_by = "ai"
+            expense.ai_confidence = Decimal(str(round(suggestion.confidence, 2)))
 
     async def _category(self, user: User, category_uuid: str) -> Category:
         category = await self.categories.get_visible(user.id, category_uuid)

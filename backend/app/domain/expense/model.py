@@ -28,7 +28,10 @@ class Expense(BaseModel):
     description: Mapped[str] = mapped_column(String(200))
     spent_at: Mapped[date] = mapped_column(Date)
 
-    # Who chose the category: "user" now; "ai" or "rule" from phase 7.
+    # Where the category came from:
+    # "ai"      the student kept the model's suggestion (ai_confidence = how sure it was)
+    # "history" the same as last time they wrote this description
+    # "user"    the student chose something else, or changed it later (a correction)
     categorized_by: Mapped[str] = mapped_column(String(10), server_default="user")
     ai_confidence: Mapped[Decimal | None] = mapped_column(Numeric(3, 2))
 

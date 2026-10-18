@@ -35,11 +35,19 @@ from app.ml.logistic import SoftmaxRegression, TfidfVocabulary  # noqa: E402
 from app.ml.text import normalize  # noqa: E402
 
 DATA = ROOT / "ml" / "data" / "expenses.csv"
+# Labels fixed after looking at the model's mistakes. Kept apart from expenses.csv so the
+# notebook can still show the data as it was, and every fix has a written reason.
+CORRECTIONS = ROOT / "ml" / "data" / "corrections.csv"
 OUTPUT = ROOT / "backend" / "app" / "ml" / "artifacts" / "categorizer.json"
 
 
 def load_data() -> pd.DataFrame:
     data = pd.read_csv(DATA)
+    fixes = pd.read_csv(CORRECTIONS).set_index("description")["category"]
+    unknown = set(fixes.index) - set(data["description"])
+    if unknown:
+        raise ValueError(f"corrections.csv names examples that do not exist: {unknown}")
+    data["category"] = data["description"].map(fixes).fillna(data["category"])
     # The same expense written twice ("Taxi" / "taxi") would leak between train and test.
     data["normalized"] = data["description"].map(normalize)
     return data.drop_duplicates("normalized").reset_index(drop=True)

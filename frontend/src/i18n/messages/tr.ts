@@ -110,6 +110,7 @@ export const tr: Messages = {
     invalidAmount: "45 veya 12.50 gibi bir tutar gir.",
     needDescription: "Ne için ödediğini yaz.",
     needCategory: "Bir kategori seç.",
+    autoPicked: "Senin için seçtik. Değiştirmek için başka birine dokun.",
     today: "Bugün",
     yesterday: "Dün",
   },

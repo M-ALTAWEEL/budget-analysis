@@ -119,6 +119,7 @@ export const ar: Messages = {
     invalidAmount: "أدخل مبلغًا مثل 45 أو 12.50.",
     needDescription: "اكتب على ماذا صرفت.",
     needCategory: "اختر فئة.",
+    autoPicked: "اخترناها لك. اضغط على فئة ثانية لتغييرها.",
     today: "اليوم",
     yesterday: "أمس",
   },

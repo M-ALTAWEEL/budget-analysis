@@ -42,6 +42,12 @@ class ExpenseRepository:
         )
         return list(await self.session.scalars(query))
 
+    async def recent(self, user_id: int, limit: int) -> Sequence[Expense]:
+        """The user's latest expenses, newest first (by when they were added).
+        Sequence, not list[...]: inside this class `list` is the list() method above."""
+        query = select(Expense).where(Expense.user_id == user_id)
+        return list(await self.session.scalars(query.order_by(Expense.id.desc()).limit(limit)))
+
     async def total_by_category(self, user_id: int, start: date, end: date) -> dict[int, Decimal]:
         """{category_id: sum of amount_base} for expenses in [start, end)."""
         rows = await self.session.execute(

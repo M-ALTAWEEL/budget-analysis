@@ -1,6 +1,6 @@
 "use client";
 
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   archiveCategory,
@@ -13,7 +13,13 @@ import {
   updateCategory,
   type CategoryInput,
 } from "@/services/budget";
-import { createExpense, deleteExpense, listExpenses, updateExpense } from "@/services/expenses";
+import {
+  createExpense,
+  deleteExpense,
+  listExpenses,
+  suggestCategory,
+  updateExpense,
+} from "@/services/expenses";
 import { getRates } from "@/services/currency";
 import {
   addContribution,
@@ -35,6 +41,7 @@ export const queryKeys = {
   goals: ["goals"] as const,
   goal: (uuid: string) => ["goals", uuid] as const,
   rates: (base: Currency) => ["rates", base] as const,
+  suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
 export function useSummary(month: string) {
@@ -70,10 +77,30 @@ function useInvalidateMoney() {
 
 export function useSaveExpense() {
   const invalidate = useInvalidateMoney();
+  const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ uuid, input }: { uuid?: string; input: ExpenseInput }) =>
       uuid ? updateExpense(uuid, input) : createExpense(input),
-    onSuccess: invalidate,
+    onSuccess: () => {
+      // The saved category is now part of the student's history: suggestions change.
+      queryClient.removeQueries({ queryKey: ["category-suggestion"] });
+      return invalidate();
+    },
+  });
+}
+
+/**
+ * The category the API suggests for a description. Pass "" to ask nothing.
+ * A failed suggestion is not an error the student needs to see: they just choose.
+ */
+export function useCategorySuggestion(description: string) {
+  return useQuery({
+    queryKey: queryKeys.suggestion(description),
+    queryFn: ({ signal }) => suggestCategory(description, signal),
+    enabled: description.length >= 2,
+    staleTime: 5 * 60_000,
+    retry: false,
+    placeholderData: keepPreviousData, // no flicker while the next answer is on its way
   });
 }
 

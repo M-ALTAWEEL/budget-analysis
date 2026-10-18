@@ -114,6 +114,7 @@ export const en = {
     invalidAmount: "Enter an amount like 45 or 12.50.",
     needDescription: "Describe what you paid for.",
     needCategory: "Choose a category.",
+    autoPicked: "Picked for you. Tap another one to change it.",
     today: "Today",
     yesterday: "Yesterday",
   },

@@ -2,6 +2,7 @@
 
 from datetime import date, datetime, timedelta
 from decimal import Decimal
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -22,7 +23,7 @@ class ExpenseCreate(BaseModel):
     amount: PositiveMoney
     currency: Currency | None = None  # default: the user's base currency
     description: str = Field(min_length=1, max_length=200)
-    category_uuid: str  # required for now; the AI picks it automatically in phase 7
+    category_uuid: str  # the frontend fills it in from /expenses/category-suggestion
     spent_at: date = Field(default_factory=date.today)
 
     _check_date = field_validator("spent_at")(_not_in_future)
@@ -60,3 +61,11 @@ class ExpenseRead(BaseModel):
     spent_at: date
     categorized_by: str
     created_at: datetime
+
+
+class CategorySuggestion(BaseModel):
+    """All fields are null when there is no suggestion: the student chooses, as before."""
+
+    category: CategoryRead | None = None
+    confidence: float | None = None  # 0..1
+    source: Literal["history", "model"] | None = None
