@@ -2440,6 +2440,19 @@ remaining = max(goal.target_amount - saved, Decimal("0"))
 | netflx | entertainment | 93% |
 | birthday cake | transport | **38%** ← بيعرف إنه مش متأكد |
 
+## 6️⃣ ليش اختار هالفئة؟ Explainability (Week 10) (`app/ml/explain.py`)
+- الموديل **خطي**، فالشرح **دقيق مش تقريبي** (ما بنحتاج SHAP أو LIME): الـ score = الـ prior + مجموع حصص الكلمات
+- منطرح متوسط الوزن على كل الفئات، لأنه القطعة اللي بتساعد كل الفئات بنفس القدر ما بتشرح شي
+- كل قطعة حروف بترجع للكلمة اللي إجت منها، لأنه الطالب بيفكر بكلمات: `kahve ve simit` ← أكل بسبب `kahve +2.21` و `simit +1.82`
+- **`birthday cake` ← مواصلات (38%):** `cake` و `birthday` مش موجودين بالبيانات، فحكم من التهجئة: `cak` من `uçak`، و `ay_` من `subway`. **المشكلة بالبيانات مش بالموديل**
+- **Error analysis:**
+  - 40% من الأغلاط بتقول "أكل"، لأنه أكبر فئة (prior أعلى)
+  - كلمة جوا كلمة: `okul taksiti` ← مواصلات (فيها `taksi`)
+  - كلمة بفئتين: تذكرة/bilet/ticket
+  - **البيانات نفسها مش متسقة:** الهدايا مرة shopping ومرة other
+  - العربي أضعف (49% مقابل 55%)
+- 5 اختبارات (`tests/test_ml_explain.py`)، أهمها: مجموع الحصص = الـ score بالضبط
+
 ## 🎤 أسئلة مقابلات
 - **ليش ما استخدمت API جاهز؟**
   مجاني، أسرع (ميلي ثانية)، البيانات ما بتطلع من السيرفر، وبفهم كل سطر فيه.
@@ -2449,6 +2462,8 @@ remaining = max(goal.target_amount - saved, Decimal("0"))
   الـ learning curve بيقول البيانات قليلة (~1000 مثال لـ 8 فئات). الحل: كل مرة الطالب بيختار فئة = مثال جديد. ولهيك الموقع رح يقترح بس لما الثقة عالية.
 - **شو الفرق بين C و learning rate؟**
   C hyperparameter للموديل (قديش regularization)، بيغير **وين** القاع. الـ learning rate للتدريب، بيغير **كيف** منوصل للقاع.
+- **كيف بتشرح قرار الموديل؟**
+  الموديل خطي، فالـ score مجموع حصص. بوزّع كل حصة على الكلمة اللي إجت منها، وبتحقق إنه المجموع بيساوي الـ score بالضبط.
 - **ليش JSON مش pickle؟**
   pickle ممكن يشغّل كود وقت التحميل (خطر أمني)، و JSON بيانات بس، وبينقرأ بأي لغة.
 
@@ -2458,5 +2473,5 @@ remaining = max(goal.target_amount - saved, Decimal("0"))
 - [x] Naive Bayes من الصفر + learning curve
 - [x] مقارنة 8 موديلات + calibration
 - [x] Logistic Regression من الصفر بـ Gradient Descent + GridSearchCV
-- [ ] Explainability: ليش اختار هالفئة؟ (Week 10)
+- [x] Explainability: ليش اختار هالفئة؟ + Error analysis (Week 10)
 - [ ] ربطه بالموقع: اقتراح الفئة، والتعلم من تصحيحات الطالب
