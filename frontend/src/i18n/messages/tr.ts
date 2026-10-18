@@ -64,7 +64,8 @@ export const tr: Messages = {
     over: (amount) => `Bütçeyi ${amount} aştın.`,
     finished: (spent, total) => `${total} bütçeden ${spent} harcadın.`,
     fast: (daily) =>
-      `Ayın geçtiğinden daha hızlı harcıyorsun. Ayı çıkarmak için günde yaklaşık ${daily} ile yetin.`,
+      `Bu hızla bütçeni aşacaksın. Ayı çıkarmak için günde yaklaşık ${daily} ile yetin.`,
+    early: (daily, count) => `Ayın başındayız. Kalan ${count} gün için günde yaklaşık ${daily} ile yetin.`,
     onPaceDaily: (daily, count) => `Yolundasın. Kalan ${count} gün için günde yaklaşık ${daily}.`,
     onPace: "Yolundasın.",
   },
@@ -191,6 +192,11 @@ export const tr: Messages = {
     newThisMonth: "Bu ay yeni",
     noComparison: "Geçen ay için bütçe yok, bu yüzden henüz karşılaştırılacak bir şey yok.",
     differentCurrency: "Geçen ayın bütçesi başka bir para birimindeydi, karşılaştırılamaz.",
+    forecast: "Tahmin",
+    forecastUnder: (amount: string, left: string) =>
+      `Bu hızla bu ay yaklaşık ${amount} harcayacaksın ve yaklaşık ${left} kalacak.`,
+    forecastOver: (amount: string, over: string) =>
+      `Bu hızla bu ay yaklaşık ${amount} harcayacaksın: bütçenden ${over} fazla.`,
     alertsTitle: "Dikkat",
     categoryOver: (name, amount) => `${name} limitini ${amount} aştı.`,
     categoryNear: (name, percent, left) => `${name} limitinin ${percent} kadarını kullandı. ${left} kaldı.`,

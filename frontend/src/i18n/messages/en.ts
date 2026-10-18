@@ -67,7 +67,9 @@ export const en = {
     over: (amount: string) => `Over budget by ${amount}.`,
     finished: (spent: string, total: string) => `You spent ${spent} of ${total}.`,
     fast: (daily: string) =>
-      `You're spending faster than the month is passing. Keep to about ${daily} a day to make it.`,
+      `At this pace you will go over your budget. Keep to about ${daily} a day to make it.`,
+    early: (daily: string, days: number) =>
+      `It's early in the month. Keep to about ${daily} a day for the ${days === 1 ? "last day" : `${days} days left`}.`,
     onPaceDaily: (daily: string, days: number) =>
       `On pace. That's about ${daily} a day for the ${days === 1 ? "last day" : `${days} days left`}.`,
     onPace: "On pace.",
@@ -196,6 +198,11 @@ export const en = {
     newThisMonth: "New this month",
     noComparison: "There's no budget for last month, so there's nothing to compare with yet.",
     differentCurrency: "Last month's budget was in another currency, so the two can't be compared.",
+    forecast: "Forecast",
+    forecastUnder: (amount: string, left: string) =>
+      `At this pace you will spend about ${amount} this month, with about ${left} left over.`,
+    forecastOver: (amount: string, over: string) =>
+      `At this pace you will spend about ${amount} this month: ${over} more than your budget.`,
     alertsTitle: "Needs attention",
     categoryOver: (name: string, amount: string) => `${name} is ${amount} over its limit.`,
     categoryNear: (name: string, percent: string, left: string) =>

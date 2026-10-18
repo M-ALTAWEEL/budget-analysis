@@ -6,7 +6,7 @@ from decimal import Decimal
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dates import format_month, next_month
+from app.core.dates import format_month, month_start, next_month
 from app.core.money import Currency, to_money
 from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
@@ -19,9 +19,11 @@ from app.domain.budget.schema import (
     CategoryUpdate,
     DailySpending,
     DaySpending,
+    SpendingForecast,
 )
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.user.model import User
+from app.ml.forecast import forecast_month
 
 
 def _not_found(what: str) -> HTTPException:
@@ -178,7 +180,9 @@ class BudgetService:
             categories=sorted(rows, key=lambda row: row.spent, reverse=True),
         )
 
-    async def daily(self, user: User, month: date) -> DailySpending:
+    async def daily(
+        self, user: User, month: date, today: date | None = None
+    ) -> DailySpending:
         budget = await self._budget_or_404(user, month)
         end = next_month(month)
         rows = await self.expenses.total_by_day_and_category(user.id, month, end)
@@ -209,6 +213,7 @@ class BudgetService:
             total_amount=budget.total_amount,
             categories=[CategoryRead.model_validate(category) for category in categories],
             days=days,
+            forecast=month_forecast(days, month, today or date.today()),
         )
 
     async def _budget_or_404(self, user: User, month: date) -> Budget:
@@ -218,3 +223,19 @@ class BudgetService:
                 status.HTTP_404_NOT_FOUND, f"No budget set for {format_month(month)} yet."
             )
         return budget
+
+
+def month_forecast(days: list[DaySpending], month: date, today: date) -> SpendingForecast | None:
+    """Only the current month has a future to forecast. Days up to and including today
+    count as "so far" (today may not be finished, but leaving it out would ignore money
+    that is already spent)."""
+    if month_start(today) != month:
+        return None
+    found = forecast_month([day.spent for day in days[: today.day]], len(days))
+    if found is None:
+        return None
+    return SpendingForecast(
+        total=to_money(Decimal(str(found.total))),
+        daily_rate=to_money(Decimal(str(found.daily_rate))),
+        one_offs=to_money(Decimal(str(found.one_offs))),
+    )

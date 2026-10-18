@@ -75,6 +75,14 @@ class DaySpending(BaseModel):
     by_category: dict[str, Decimal]  # {category uuid: amount}, only categories used that day
 
 
+class SpendingForecast(BaseModel):
+    """Where this month is heading (app/ml/forecast.py). Only for the current month."""
+
+    total: Decimal  # expected spending by the last day of the month
+    daily_rate: Decimal  # what a normal day costs
+    one_offs: Decimal  # rent, aidat, a big purchase: counted once, not every day
+
+
 class DailySpending(BaseModel):
     """One row per day of the month (zero on days without expenses), for charts and for
     fair comparisons ("by this day last month")."""
@@ -84,6 +92,7 @@ class DailySpending(BaseModel):
     total_amount: Decimal  # the month's budget, so a chart can draw the even-pace line
     categories: list[CategoryRead]  # every category that appears in by_category
     days: list[DaySpending]
+    forecast: SpendingForecast | None = None  # null: past month, or too early to say
 
 
 class BudgetSummary(BaseModel):

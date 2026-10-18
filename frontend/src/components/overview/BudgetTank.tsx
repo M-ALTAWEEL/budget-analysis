@@ -5,9 +5,11 @@ import { motion, useReducedMotion } from "motion/react";
 import { Approx } from "@/components/ui/Approx";
 import { useI18n } from "@/i18n/I18nProvider";
 import { monthProgress } from "@/lib/month";
-import type { BudgetSummary, Currency } from "@/types/api";
+import type { BudgetSummary, Currency, SpendingForecast } from "@/types/api";
 
-type Pace = "on-pace" | "fast" | "over" | "finished";
+// "early": the first days of the month, before there is a forecast.
+const FORECAST_FROM_DAY = 7; // backend/app/ml/forecast.py MIN_DAYS
+type Pace = "on-pace" | "early" | "fast" | "over" | "finished";
 
 interface TankViewProps {
   currency: Currency;
@@ -22,8 +24,8 @@ interface TankViewProps {
 
 /**
  * The "tank": the budget drains from the start side (left, or right in Arabic) as money is spent, and a marker
- * shows how far through the month we are. Fill behind the marker = on pace;
- * fill past it = spending faster than time passes.
+ * shows how far through the month we are. The fill colour comes from the forecast, not from the
+ * marker: rent paid on the 1st puts the fill far past the marker, but it is paid once.
  */
 function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, inverse }: TankViewProps) {
   const remaining = total - spent;
@@ -40,6 +42,7 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
   if (pace === "over") sentence = t.tank.over(format(-remaining));
   else if (pace === "finished") sentence = t.tank.finished(format(spent), format(total));
   else if (pace === "fast") sentence = t.tank.fast(format(daily ?? 0));
+  else if (pace === "early" && daily !== null) sentence = t.tank.early(format(daily), daysLeft);
   else if (daily !== null) sentence = t.tank.onPaceDaily(format(daily), daysLeft);
   else sentence = t.tank.onPace;
 
@@ -96,17 +99,27 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
   );
 }
 
-export function BudgetTank({ summary, month }: { summary: BudgetSummary; month: string }) {
+export function BudgetTank({
+  summary,
+  month,
+  forecast,
+}: {
+  summary: BudgetSummary;
+  month: string;
+  forecast: SpendingForecast | null | undefined; // undefined while it loads
+}) {
   const total = Number(summary.total_amount);
   const spent = Number(summary.spent);
   const progress = monthProgress(month);
   const { t, monthName } = useI18n();
-  const spentRatio = total > 0 ? spent / total : 0;
 
+  // Is the month heading over budget? Asked of the forecast, which counts rent and other
+  // one-offs once. Before day 7 there is no forecast, so the tank does not judge yet.
   let pace: Pace = "on-pace";
   if (spent > total) pace = "over";
   else if (!progress.isCurrent && progress.ratio === 1) pace = "finished";
-  else if (progress.isCurrent && spentRatio > progress.ratio + 0.05) pace = "fast";
+  else if (progress.isCurrent && forecast) pace = Number(forecast.total) > total ? "fast" : "on-pace";
+  else if (progress.isCurrent && progress.dayOfMonth < FORECAST_FROM_DAY) pace = "early";
 
   return (
     <TankView

@@ -62,6 +62,14 @@ export interface DailySpending {
   total_amount: string;
   categories: Category[]; // every category used in by_category
   days: DaySpending[];
+  forecast: SpendingForecast | null; // null: past month, or too early in the month
+}
+
+/** Where this month is heading. One-offs (rent, aidat) are counted once, not every day. */
+export interface SpendingForecast {
+  total: string;
+  daily_rate: string;
+  one_offs: string;
 }
 
 export interface Expense {

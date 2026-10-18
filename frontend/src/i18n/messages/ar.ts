@@ -72,7 +72,9 @@ export const ar: Messages = {
     over: (amount) => `تجاوزت الميزانية بمقدار ${amount}.`,
     finished: (spent, total) => `صرفت ${spent} من ${total}.`,
     fast: (daily) =>
-      `أنت تصرف أسرع من مرور الشهر. التزم بحوالي ${daily} في اليوم حتى يكفيك المصروف.`,
+      `بهذا المعدل ستتجاوز ميزانيتك. التزم بحوالي ${daily} في اليوم حتى يكفيك المصروف.`,
+    early: (daily, count) =>
+      `ما زلنا في بداية الشهر. التزم بحوالي ${daily} في اليوم، والمتبقي ${days(count)}.`,
     onPaceDaily: (daily, count) =>
       `أنت على المسار الصحيح: حوالي ${daily} في اليوم، والمتبقي ${days(count)}.`,
     onPace: "أنت على المسار الصحيح.",
@@ -119,7 +121,7 @@ export const ar: Messages = {
     invalidAmount: "أدخل مبلغًا مثل 45 أو 12.50.",
     needDescription: "اكتب على ماذا صرفت.",
     needCategory: "اختر فئة.",
-    autoPicked: "اخترناها لك. اضغط على فئة ثانية لتغييرها.",
+    autoPicked: "اخترناها لك. اضغط على فئة أخرى لتغييرها.",
     today: "اليوم",
     yesterday: "أمس",
   },
@@ -201,6 +203,11 @@ export const ar: Messages = {
     newThisMonth: "جديد هذا الشهر",
     noComparison: "لا توجد ميزانية للشهر الماضي، فلا يوجد ما نقارن به بعد.",
     differentCurrency: "كانت ميزانية الشهر الماضي بعملة أخرى، فلا يمكن المقارنة بينهما.",
+    forecast: "التوقع",
+    forecastUnder: (amount: string, left: string) =>
+      `بهذا المعدل ستصرف حوالي ${amount} هذا الشهر، ويبقى معك نحو ${left}.`,
+    forecastOver: (amount: string, over: string) =>
+      `بهذا المعدل ستصرف حوالي ${amount} هذا الشهر، أي ${over} أكثر من ميزانيتك.`,
     alertsTitle: "يحتاج انتباهك",
     categoryOver: (name, amount) => `فئة ${name} تجاوزت حدها بمقدار ${amount}.`,
     categoryNear: (name, percent, left) => `فئة ${name} استهلكت ${percent} من حدها. تبقّى ${left}.`,

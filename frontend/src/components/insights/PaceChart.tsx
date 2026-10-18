@@ -42,12 +42,14 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
   const evenAt = (index: number) => (total * (index + 1)) / count;
   const last = running.length - 1;
   const format = (amount: number) => money(amount, daily.currency);
+  const forecast = daily.forecast && running.length ? Number(daily.forecast.total) : null;
+  const forecastOver = forecast !== null && forecast > total;
 
   // ── scales ──
   const rtl = dir === "rtl";
   const plotStart = LABEL_SIDE;
   const plotWidth = Math.max(width - LABEL_SIDE - FAR_SIDE, 1);
-  const yMax = Math.max(total, ...running, 1) * 1.08;
+  const yMax = Math.max(total, ...running, forecast ?? 0, 1) * 1.08;
   const flip = (x: number) => (rtl ? width - x : x); // mirror for right-to-left
   const x = (index: number) => flip(plotStart + (count > 1 ? index / (count - 1) : 0) * plotWidth);
   const y = (value: number) => TOP + PLOT_HEIGHT - (value / yMax) * PLOT_HEIGHT;
@@ -84,6 +86,14 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
 
   return (
     <div>
+      {forecast !== null && (
+        <p className="mb-3 text-sm">
+          {forecastOver
+            ? t.insights.forecastOver(format(forecast), format(forecast - total))
+            : t.insights.forecastUnder(format(forecast), format(total - forecast))}
+        </p>
+      )}
+
       {/* Legend: line keys, like the marks they name */}
       <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
         <span className="inline-flex items-center gap-2">
@@ -94,6 +104,15 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
           <span className="h-0.5 w-4 rounded-full bg-muted/60" aria-hidden />
           {t.insights.evenPace}
         </span>
+        {forecast !== null && (
+          <span className="inline-flex items-center gap-2">
+            <span
+              className={`w-4 border-t-2 border-dashed ${forecastOver ? "border-berry" : "border-pine"}`}
+              aria-hidden
+            />
+            {t.insights.forecast}
+          </span>
+        )}
       </div>
 
       {running.length > 0 && (
@@ -178,6 +197,42 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
                 strokeLinejoin="round"
                 strokeLinecap="round"
               />
+            )}
+
+            {/* forecast: dashed, from today's total to the last day */}
+            {forecast !== null && (
+              <>
+                <line
+                  x1={x(last)}
+                  y1={y(running[last])}
+                  x2={x(count - 1)}
+                  y2={y(forecast)}
+                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-pine)"}
+                  strokeWidth={2}
+                  strokeDasharray="5 5"
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx={x(count - 1)}
+                  cy={y(forecast)}
+                  r={3.5}
+                  fill="var(--color-surface)"
+                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-pine)"}
+                  strokeWidth={2}
+                />
+                {active === null && last < count * 0.75 && (
+                  <text
+                    x={x(count - 1)}
+                    y={y(forecast) - 12}
+                    textAnchor="end"
+                    fontSize={12}
+                    fontWeight={600}
+                    fill={forecastOver ? "var(--color-berry)" : "var(--color-ink)"}
+                  >
+                    ≈ {format(forecast)}
+                  </text>
+                )}
+              </>
             )}
 
             {/* crosshair */}

@@ -67,7 +67,7 @@ export default function OverviewPage() {
         <BudgetSetup month={month} />
       ) : (
         <>
-          <BudgetTank summary={summary.data} month={month} />
+          <BudgetTank summary={summary.data} month={month} forecast={daily.data?.forecast} />
 
           <AlertList alerts={findAlerts(summary.data, month)} currency={summary.data.currency} />
 
