@@ -2,7 +2,10 @@
 
 from functools import lru_cache
 
+from pydantic import model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
+DEV_SECRET_KEY = "dev-only-secret-key-change-me-before-deploying-0123456789"
 
 
 class Settings(BaseSettings):
@@ -16,6 +19,20 @@ class Settings(BaseSettings):
 
     # Comma-separated list of origins allowed to call the API from a browser.
     frontend_url: str = "http://localhost:3000"
+
+    # Authentication
+    secret_key: str = DEV_SECRET_KEY
+    jwt_algorithm: str = "HS256"
+    access_token_minutes: int = 15
+    refresh_token_days: int = 7
+
+    @model_validator(mode="after")
+    def check_secret_key(self) -> "Settings":
+        if len(self.secret_key) < 32:
+            raise ValueError("SECRET_KEY must be at least 32 characters long.")
+        if self.is_production and self.secret_key == DEV_SECRET_KEY:
+            raise ValueError("SECRET_KEY must be set to a private random value in production.")
+        return self
 
     @property
     def cors_origins(self) -> list[str]:

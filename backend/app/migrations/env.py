@@ -6,11 +6,9 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy.ext.asyncio import create_async_engine
 
+import app.models  # noqa: F401  (registers every table on Base.metadata)
 from app.base import Base
 from app.config import settings
-
-# Domain models are imported here as they are created, so Alembic can see their tables:
-# import app.domain.user.model  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:

@@ -24,6 +24,9 @@ class BaseModel(Base):
     """Abstract parent: every entity gets id, uuid, created_at and updated_at."""
 
     __abstract__ = True
+    # Fetch server-generated values (created_at, updated_at) right after INSERT/UPDATE
+    # using RETURNING, so reading them later never triggers a hidden async query.
+    __mapper_args__ = {"eager_defaults": True}
 
     # Internal key, used for joins. Never exposed in the API.
     id: Mapped[int] = mapped_column(primary_key=True)

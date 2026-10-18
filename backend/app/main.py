@@ -4,11 +4,15 @@ from typing import Annotated
 
 from fastapi import Depends, FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.limiter import limiter
 from app.database import get_db
+from app.domain.user.router import auth_router, users_router
 
 
 def create_app() -> FastAPI:
@@ -20,6 +24,10 @@ def create_app() -> FastAPI:
         docs_url=None if settings.is_production else "/docs",
         redoc_url=None,
     )
+
+    # Rate limiting: too many requests -> 429 Too Many Requests.
+    app.state.limiter = limiter
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
     app.add_middleware(
         CORSMiddleware,
@@ -40,8 +48,9 @@ def create_app() -> FastAPI:
             response.status_code = status.HTTP_503_SERVICE_UNAVAILABLE
         return {"status": "ok" if database == "ok" else "degraded", "database": database}
 
-    # Domain routers are registered here in the next phases, e.g.:
-    # app.include_router(user_router, prefix=settings.api_prefix)
+    # One router per domain, all under /api/v1.
+    app.include_router(auth_router, prefix=settings.api_prefix)
+    app.include_router(users_router, prefix=settings.api_prefix)
 
     return app
 
