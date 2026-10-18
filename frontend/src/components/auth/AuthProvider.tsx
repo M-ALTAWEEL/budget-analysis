@@ -15,6 +15,8 @@ interface AuthContextValue {
   login: (email: string, password: string) => Promise<void>;
   register: (input: authService.RegisterInput) => Promise<void>;
   logout: () => Promise<void>;
+  /** After a profile change (PATCH /users/me), so every screen sees the new values. */
+  updateUser: (user: User) => void;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -86,9 +88,14 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState({ status: "anonymous", user: null });
   }, [queryClient]);
 
+  const updateUser = useCallback((user: User) => {
+    restoring = Promise.resolve(user);
+    setState({ status: "authenticated", user });
+  }, []);
+
   const value = useMemo(
-    () => ({ ...state, login, register, logout }),
-    [state, login, register, logout],
+    () => ({ ...state, login, register, logout, updateUser }),
+    [state, login, register, logout, updateUser],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

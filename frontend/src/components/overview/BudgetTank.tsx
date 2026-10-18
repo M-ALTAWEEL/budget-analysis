@@ -2,8 +2,8 @@
 
 import { motion, useReducedMotion } from "motion/react";
 
-import { formatMoney } from "@/lib/money";
-import { monthName, monthProgress } from "@/lib/month";
+import { useI18n } from "@/i18n/I18nProvider";
+import { monthProgress } from "@/lib/month";
 import type { BudgetSummary, Currency } from "@/types/api";
 
 type Pace = "on-pace" | "fast" | "over" | "finished";
@@ -20,7 +20,7 @@ interface TankViewProps {
 }
 
 /**
- * The "tank": the budget drains from left to right as money is spent, and a marker
+ * The "tank": the budget drains from the start side (left, or right in Arabic) as money is spent, and a marker
  * shows how far through the month we are. Fill behind the marker = on pace;
  * fill past it = spending faster than time passes.
  */
@@ -32,15 +32,15 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
   const muted = inverse ? "text-white/75" : "text-muted";
   const daily = daysLeft > 0 && remaining > 0 ? remaining / daysLeft : null;
   const reduceMotion = useReducedMotion();
+  const { t, money } = useI18n();
+  const format = (amount: number) => money(amount, currency);
 
   let sentence: string;
-  if (pace === "over") sentence = `Over budget by ${formatMoney(-remaining, currency)}.`;
-  else if (pace === "finished") sentence = `You spent ${formatMoney(spent, currency)} of ${formatMoney(total, currency)}.`;
-  else if (pace === "fast")
-    sentence = `You're spending faster than the month is passing. Keep to about ${formatMoney(daily ?? 0, currency)} a day to make it.`;
-  else if (daily !== null)
-    sentence = `On pace. That's about ${formatMoney(daily, currency)} a day for the ${daysLeft} days left.`;
-  else sentence = "On pace.";
+  if (pace === "over") sentence = t.tank.over(format(-remaining));
+  else if (pace === "finished") sentence = t.tank.finished(format(spent), format(total));
+  else if (pace === "fast") sentence = t.tank.fast(format(daily ?? 0));
+  else if (daily !== null) sentence = t.tank.onPaceDaily(format(daily), daysLeft);
+  else sentence = t.tank.onPace;
 
   return (
     <div>
@@ -50,27 +50,30 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
           pace === "over" && !inverse ? "text-berry" : ""
         }`}
       >
-        {formatMoney(Math.max(remaining, 0), currency)}
+        {format(Math.max(remaining, 0))}
       </p>
 
       <div className="relative mt-8">
         {timeRatio !== null && (
           <div
-            className="absolute -top-6 bottom-0 z-10 flex flex-col items-center"
-            style={{ insetInlineStart: `${timeRatio * 100}%`, transform: "translateX(-50%)" }}
+            // centred on its position: -50% in left-to-right, +50% in right-to-left
+            className="absolute -top-6 bottom-0 z-10 flex -translate-x-1/2 flex-col items-center rtl:translate-x-1/2"
+            style={{ insetInlineStart: `${timeRatio * 100}%` }}
           >
-            <span className={`text-xs font-semibold ${inverse ? "text-white" : "text-marigold"}`}>Today</span>
+            <span className={`text-xs font-semibold whitespace-nowrap ${inverse ? "text-white" : "text-marigold"}`}>
+              {t.tank.today}
+            </span>
             <span className={`mt-1 w-0.5 flex-1 rounded-full ${inverse ? "bg-white" : "bg-marigold"}`} />
           </div>
         )}
         <div
           className={`relative h-14 overflow-hidden rounded-2xl ${inverse ? "bg-white/15" : "bg-pine-soft"}`}
           role="meter"
-          aria-label="Budget spent"
+          aria-label={t.tank.meterLabel}
           aria-valuemin={0}
           aria-valuemax={total}
           aria-valuenow={Math.min(spent, total)}
-          aria-valuetext={`${formatMoney(spent, currency)} spent of ${formatMoney(total, currency)}`}
+          aria-valuetext={t.tank.meterText(format(spent), format(total))}
         >
           <motion.div
             className={`absolute inset-y-0 start-0 ${fillColor}`}
@@ -82,8 +85,8 @@ function TankView({ currency, total, spent, timeRatio, daysLeft, label, pace, in
       </div>
 
       <div className={`tabular mt-2 flex justify-between text-sm ${muted}`}>
-        <span>Spent {formatMoney(spent, currency)}</span>
-        <span>of {formatMoney(total, currency)}</span>
+        <span>{t.tank.spent(format(spent))}</span>
+        <span>{t.tank.of(format(total))}</span>
       </div>
       <p className={`mt-4 max-w-prose text-[15px] ${inverse ? "text-white" : ""}`}>{sentence}</p>
     </div>
@@ -94,6 +97,7 @@ export function BudgetTank({ summary, month }: { summary: BudgetSummary; month: 
   const total = Number(summary.total_amount);
   const spent = Number(summary.spent);
   const progress = monthProgress(month);
+  const { t, monthName } = useI18n();
   const spentRatio = total > 0 ? spent / total : 0;
 
   let pace: Pace = "on-pace";
@@ -108,7 +112,7 @@ export function BudgetTank({ summary, month }: { summary: BudgetSummary; month: 
       spent={spent}
       timeRatio={progress.isCurrent ? progress.ratio : null}
       daysLeft={progress.daysLeft}
-      label={`Left to spend in ${monthName(month)}`}
+      label={t.tank.leftToSpend(monthName(month))}
       pace={pace}
     />
   );
@@ -116,6 +120,7 @@ export function BudgetTank({ summary, month }: { summary: BudgetSummary; month: 
 
 /** A fixed example for the sign-in screen. */
 export function SampleTank() {
+  const { t, monthName } = useI18n();
   return (
     <TankView
       currency="TRY"
@@ -123,7 +128,7 @@ export function SampleTank() {
       spent={3900}
       timeRatio={16 / 31}
       daysLeft={15}
-      label="Left to spend in October"
+      label={t.tank.leftToSpend(monthName("2026-10"))}
       pace="on-pace"
       inverse
     />

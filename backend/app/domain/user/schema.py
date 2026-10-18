@@ -21,6 +21,7 @@ class RegisterRequest(BaseModel):
     password: str = Field(min_length=8, max_length=72)
     full_name: str = Field(min_length=1, max_length=100)
     base_currency: Currency = Currency.TRY
+    locale: Locale = "en"  # the language picked on the sign-up page
 
     _lower_email = field_validator("email")(_normalize_email)
 

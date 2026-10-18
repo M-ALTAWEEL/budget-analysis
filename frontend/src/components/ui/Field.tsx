@@ -21,7 +21,7 @@ export function Field({ label, hint, suffix, className = "", ...props }: FieldPr
           {...props}
           className="h-11 w-full min-w-0 rounded-xl bg-transparent px-3.5 text-[15px] outline-none placeholder:text-muted/70"
         />
-        {suffix && <span className="pr-3.5 text-sm text-muted">{suffix}</span>}
+        {suffix && <span className="pe-3.5 text-sm text-muted">{suffix}</span>}
       </div>
       {hint && (
         <p id={hintId} className="mt-1.5 text-sm text-muted">

@@ -1,16 +1,17 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { X } from "lucide-react";
-import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import { AnimatePresence } from "motion/react";
+import { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "sonner";
 
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { Field, FormError, Select } from "@/components/ui/Field";
+import { Sheet } from "@/components/ui/Sheet";
 import { useCategories, useDeleteExpense, useSaveExpense } from "@/hooks/queries";
-import { errorMessage } from "@/lib/errors";
+import { useI18n } from "@/i18n/I18nProvider";
+import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount, toInputAmount } from "@/lib/money";
 import { todayISO } from "@/lib/month";
 import { CURRENCIES, type Currency, type Expense } from "@/types/api";
@@ -54,6 +55,8 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const categories = useCategories();
   const save = useSaveExpense();
   const remove = useDeleteExpense();
+  const { t, categoryName } = useI18n();
+  const errorMessage = useErrorMessage();
 
   const [amount, setAmount] = useState(expense ? toInputAmount(expense.amount) : "");
   const [currency, setCurrency] = useState<Currency>(expense?.currency ?? user.base_currency);
@@ -63,24 +66,12 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const [error, setError] = useState<string | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
-  useEffect(() => {
-    const onKey = (event: KeyboardEvent) => event.key === "Escape" && onClose();
-    window.addEventListener("keydown", onKey);
-    // Freeze the page behind the sheet so only the sheet scrolls.
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = previousOverflow;
-    };
-  }, [onClose]);
-
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
     setError(null);
-    if (!isValidAmount(amount)) return setError("Enter an amount like 45 or 12.50.");
-    if (!description.trim()) return setError("Describe what you paid for.");
-    if (!categoryUuid) return setError("Choose a category.");
+    if (!isValidAmount(amount)) return setError(t.expenses.invalidAmount);
+    if (!description.trim()) return setError(t.expenses.needDescription);
+    if (!categoryUuid) return setError(t.expenses.needCategory);
 
     try {
       await save.mutateAsync({
@@ -93,10 +84,10 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
           spent_at: spentAt,
         },
       });
-      toast.success(expense ? "Changes saved" : "Expense added");
+      toast.success(expense ? t.expenses.saved : t.expenses.added);
       onClose();
     } catch (err) {
-      setError(errorMessage(err));
+      setError(errorMessage(err, { 409: t.errors.needBudget }));
     }
   }
 
@@ -105,7 +96,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
     if (!confirmingDelete) return setConfirmingDelete(true);
     try {
       await remove.mutateAsync(expense.uuid);
-      toast.success("Expense deleted");
+      toast.success(t.expenses.deleted);
       onClose();
     } catch (err) {
       setError(errorMessage(err));
@@ -113,129 +104,99 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
-      <motion.div
-        className="absolute inset-0 bg-ink/40"
-        onClick={onClose}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        aria-hidden
-      />
-      <motion.form
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="expense-sheet-title"
-        onSubmit={handleSubmit}
-        className="relative max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-surface p-6 shadow-2xl sm:max-w-lg sm:rounded-3xl"
-        initial={{ y: 40, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        exit={{ y: 40, opacity: 0 }}
-        transition={{ type: "spring", damping: 30, stiffness: 320 }}
-      >
-        <div className="mb-5 flex items-center justify-between">
-          <h2 id="expense-sheet-title" className="font-display text-xl font-semibold">
-            {expense ? "Edit expense" : "New expense"}
-          </h2>
-          <button
-            type="button"
-            onClick={onClose}
-            className="rounded-lg p-1.5 text-muted hover:bg-ink/5"
-            aria-label="Close"
+    <Sheet
+      title={expense ? t.expenses.editTitle : t.expenses.newTitle}
+      onClose={onClose}
+      onSubmit={handleSubmit}
+    >
+      <div className="space-y-4">
+        <div className="grid grid-cols-[1fr_auto] gap-3">
+          <Field
+            label={t.expenses.amount}
+            inputMode="decimal"
+            autoComplete="off"
+            placeholder="0.00"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value.replace(",", "."))}
+            autoFocus
+            required
+          />
+          <Select
+            label={t.expenses.currency}
+            value={currency}
+            onChange={(e) => setCurrency(e.target.value as Currency)}
           >
-            <X className="size-5" />
-          </button>
+            {CURRENCIES.map((code) => (
+              <option key={code} value={code}>
+                {code}
+              </option>
+            ))}
+          </Select>
         </div>
 
-        <div className="space-y-4">
-          <div className="grid grid-cols-[1fr_auto] gap-3">
-            <Field
-              label="Amount"
-              inputMode="decimal"
-              autoComplete="off"
-              placeholder="0.00"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value.replace(",", "."))}
-              autoFocus
-              required
-            />
-            <Select
-              label="Currency"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value as Currency)}
-            >
-              {CURRENCIES.map((code) => (
-                <option key={code} value={code}>
-                  {code}
-                </option>
-              ))}
-            </Select>
-          </div>
+        <Field
+          label={t.expenses.what}
+          placeholder={t.expenses.whatPlaceholder}
+          maxLength={200}
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          required
+        />
 
-          <Field
-            label="What was it?"
-            placeholder="Shawarma, bus card, notebook…"
-            maxLength={200}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-
-          <fieldset>
-            <legend className="mb-1.5 text-sm font-medium">Category</legend>
-            {categories.isPending ? (
-              <p className="text-sm text-muted">Loading categories…</p>
-            ) : (
-              <div role="radiogroup" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                {categories.data?.map((category) => {
-                  const selected = category.uuid === categoryUuid;
-                  return (
-                    <button
-                      key={category.uuid}
-                      type="button"
-                      role="radio"
-                      aria-checked={selected}
-                      onClick={() => setCategoryUuid(category.uuid)}
-                      className={`flex items-center gap-2 rounded-xl border p-2 text-left text-sm transition-colors ${
-                        selected
-                          ? "border-pine bg-pine-soft font-semibold"
-                          : "border-line hover:border-ink/30"
-                      }`}
-                    >
-                      <CategoryIcon category={category} size="sm" />
-                      <span className="truncate">{category.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-          </fieldset>
-
-          <Field
-            label="Date"
-            type="date"
-            value={spentAt}
-            max={todayISO()}
-            onChange={(e) => setSpentAt(e.target.value)}
-            required
-          />
-
-          <FormError message={error} />
-        </div>
-
-        <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
-          {expense ? (
-            <Button type="button" variant="danger" onClick={handleDelete} loading={remove.isPending}>
-              {confirmingDelete ? "Tap again to delete" : "Delete"}
-            </Button>
+        <fieldset>
+          <legend className="mb-1.5 text-sm font-medium">{t.expenses.category}</legend>
+          {categories.isPending ? (
+            <p className="text-sm text-muted">{t.expenses.loadingCategories}</p>
           ) : (
-            <span />
+            <div role="radiogroup" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+              {categories.data?.map((category) => {
+                const selected = category.uuid === categoryUuid;
+                return (
+                  <button
+                    key={category.uuid}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    onClick={() => setCategoryUuid(category.uuid)}
+                    className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
+                      selected
+                        ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine"
+                        : "border-line hover:border-ink/30"
+                    }`}
+                  >
+                    <CategoryIcon category={category} size="sm" />
+                    <span className="truncate">{categoryName(category)}</span>
+                  </button>
+                );
+              })}
+            </div>
           )}
-          <Button type="submit" loading={save.isPending}>
-            {expense ? "Save changes" : "Add expense"}
+        </fieldset>
+
+        <Field
+          label={t.expenses.date}
+          type="date"
+          value={spentAt}
+          max={todayISO()}
+          onChange={(e) => setSpentAt(e.target.value)}
+          required
+        />
+
+        <FormError message={error} />
+      </div>
+
+      <div className="mt-6 flex flex-col-reverse gap-2 sm:flex-row sm:justify-between">
+        {expense ? (
+          <Button type="button" variant="danger" onClick={handleDelete} loading={remove.isPending}>
+            {confirmingDelete ? t.common.tapAgainToDelete : t.common.delete}
           </Button>
-        </div>
-      </motion.form>
-    </div>
+        ) : (
+          <span />
+        )}
+        <Button type="submit" loading={save.isPending}>
+          {expense ? t.expenses.saveChanges : t.expenses.add}
+        </Button>
+      </div>
+    </Sheet>
   );
 }

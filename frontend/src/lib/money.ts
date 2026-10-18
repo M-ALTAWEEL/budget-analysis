@@ -1,10 +1,11 @@
 import type { Currency } from "@/types/api";
 
-/** Format an amount for display. Cents are shown only when there are any. */
-export function formatMoney(value: string | number, currency: Currency): string {
+/** Format an amount for display. Cents are shown only when there are any.
+ *  `intl` is the language's Intl tag: "en" -> "TRY 8,000", "tr" -> "8.000 TRY". */
+export function formatMoney(value: string | number, currency: Currency, intl = "en"): string {
   const amount = typeof value === "string" ? Number(value) : value;
   const hasCents = Math.round(Math.abs(amount) * 100) % 100 !== 0;
-  return new Intl.NumberFormat("en", {
+  return new Intl.NumberFormat(intl, {
     style: "currency",
     currency,
     currencyDisplay: "code",

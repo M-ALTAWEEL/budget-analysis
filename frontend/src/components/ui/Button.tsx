@@ -3,7 +3,7 @@ import { LoaderCircle } from "lucide-react";
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 
 const VARIANTS: Record<Variant, string> = {
-  primary: "bg-pine text-white hover:bg-pine-dark",
+  primary: "bg-pine text-on-pine hover:bg-pine-dark",
   secondary: "bg-surface text-ink border border-line hover:border-ink/40",
   danger: "bg-surface text-berry border border-berry/40 hover:bg-berry-soft",
   ghost: "text-muted hover:text-ink hover:bg-ink/5",

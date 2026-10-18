@@ -35,3 +35,20 @@ export async function listCategories(): Promise<Category[]> {
   const { data } = await api.get<Category[]>("/categories");
   return data;
 }
+
+export type CategoryInput = Pick<Category, "name" | "icon" | "color">;
+
+export async function createCategory(input: CategoryInput): Promise<Category> {
+  const { data } = await api.post<Category>("/categories", input);
+  return data;
+}
+
+export async function updateCategory(uuid: string, input: Partial<CategoryInput>): Promise<Category> {
+  const { data } = await api.patch<Category>(`/categories/${uuid}`, input);
+  return data;
+}
+
+/** Archived, not deleted: old expenses still point at it. */
+export async function archiveCategory(uuid: string): Promise<void> {
+  await api.delete(`/categories/${uuid}`);
+}

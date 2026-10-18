@@ -3,7 +3,8 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { createContext, useContext, useState } from "react";
 
-import { currentMonth, monthLabel, shiftMonth } from "@/lib/month";
+import { useI18n } from "@/i18n/I18nProvider";
+import { currentMonth, shiftMonth } from "@/lib/month";
 
 const MonthContext = createContext<{ month: string; setMonth: (month: string) => void } | null>(
   null,
@@ -23,6 +24,7 @@ export function useMonth() {
 
 export function MonthSwitcher() {
   const { month, setMonth } = useMonth();
+  const { t, monthLabel } = useI18n();
   const isCurrent = month === currentMonth();
   return (
     <div className="flex items-center gap-1">
@@ -30,9 +32,9 @@ export function MonthSwitcher() {
         type="button"
         onClick={() => setMonth(shiftMonth(month, -1))}
         className="rounded-lg p-2 text-muted hover:bg-ink/5 hover:text-ink"
-        aria-label="Previous month"
+        aria-label={t.month.previous}
       >
-        <ChevronLeft className="size-5" />
+        <ChevronLeft className="size-5 rtl:-scale-x-100" />
       </button>
       <h1 className="min-w-44 text-center font-display text-2xl font-semibold" aria-live="polite">
         {monthLabel(month)}
@@ -42,9 +44,9 @@ export function MonthSwitcher() {
         onClick={() => setMonth(shiftMonth(month, 1))}
         disabled={isCurrent}
         className="rounded-lg p-2 text-muted hover:bg-ink/5 hover:text-ink disabled:invisible"
-        aria-label="Next month"
+        aria-label={t.month.next}
       >
-        <ChevronRight className="size-5" />
+        <ChevronRight className="size-5 rtl:-scale-x-100" />
       </button>
     </div>
   );

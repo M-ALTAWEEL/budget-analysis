@@ -6,12 +6,15 @@ import { BudgetSetup } from "@/components/overview/BudgetSetup";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useCategories, useSummary } from "@/hooks/queries";
-import { errorMessage } from "@/lib/errors";
+import { useI18n } from "@/i18n/I18nProvider";
+import { useErrorMessage } from "@/lib/errors";
 
 export default function BudgetPage() {
   const { month } = useMonth();
   const summary = useSummary(month);
   const categories = useCategories();
+  const { t } = useI18n();
+  const errorMessage = useErrorMessage();
 
   return (
     <>
@@ -39,11 +42,10 @@ export default function BudgetPage() {
           </section>
           <section aria-labelledby="limits">
             <h2 id="limits" className="font-display text-xl font-semibold">
-              Category limits
+              {t.budget.limitsTitle}
             </h2>
             <p className="mt-1 mb-4 text-[15px] text-muted">
-              Decide how much each category may use this month. The overview warns you as a category
-              gets close to its limit.
+              {t.budget.limitsIntro}
             </p>
             <AllocationEditor key={month} summary={summary.data} month={month} categories={categories.data} />
           </section>

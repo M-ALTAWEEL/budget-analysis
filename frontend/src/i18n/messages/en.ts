@@ -1,0 +1,196 @@
+// English is the source language: ar.ts and tr.ts must have exactly the same keys
+// (TypeScript checks it through the `Messages` type below).
+// Sentences that contain numbers or names are functions, so each language can put
+// the value where its grammar needs it, and handle its own plural rules.
+
+export const en = {
+  common: {
+    loading: "Loading",
+    tryAgain: "Try again",
+    close: "Close",
+    cancel: "Cancel",
+    save: "Save",
+    delete: "Delete",
+    tapAgainToDelete: "Tap again to delete",
+    noLimit: "No limit",
+  },
+
+  nav: {
+    main: "Main",
+    overview: "Overview",
+    expenses: "Expenses",
+    budget: "Budget",
+    categories: "Categories",
+    settings: "Settings",
+    logout: "Log out",
+  },
+
+  auth: {
+    tagline: "See how much of your allowance is left, and whether it will last the month.",
+    loginTitle: "Log in",
+    registerTitle: "Create your account",
+    name: "Name",
+    email: "Email",
+    password: "Password",
+    passwordHint: "At least 8 characters.",
+    passwordTooShort: "Password: use at least 8 characters.",
+    currency: "Your allowance currency",
+    logIn: "Log in",
+    createAccount: "Create account",
+    newHere: "New here?",
+    createOne: "Create an account",
+    haveAccount: "Already have an account?",
+  },
+
+  currencies: {
+    TRY: "Turkish lira",
+    USD: "US dollar",
+    AED: "UAE dirham",
+    SAR: "Saudi riyal",
+    QAR: "Qatari riyal",
+    EUR: "Euro",
+  },
+
+  month: {
+    previous: "Previous month",
+    next: "Next month",
+  },
+
+  tank: {
+    leftToSpend: (month: string) => `Left to spend in ${month}`,
+    today: "Today",
+    meterLabel: "Budget spent",
+    meterText: (spent: string, total: string) => `${spent} spent of ${total}`,
+    spent: (amount: string) => `Spent ${amount}`,
+    of: (amount: string) => `of ${amount}`,
+    over: (amount: string) => `Over budget by ${amount}.`,
+    finished: (spent: string, total: string) => `You spent ${spent} of ${total}.`,
+    fast: (daily: string) =>
+      `You're spending faster than the month is passing. Keep to about ${daily} a day to make it.`,
+    onPaceDaily: (daily: string, days: number) =>
+      `On pace. That's about ${daily} a day for the ${days === 1 ? "last day" : `${days} days left`}.`,
+    onPace: "On pace.",
+  },
+
+  overview: {
+    whereItWent: "Where it went",
+    planCategories: "Plan categories",
+    latest: "Latest expenses",
+    seeAll: "See all",
+    nothingSpent: "Nothing spent yet this month. Each expense you add shows up here under its category.",
+    noLimitSet: "No limit set",
+    overLimit: (amount: string) => `${amount} over the limit`,
+    onlyLeft: (amount: string) => `Only ${amount} left`,
+  },
+
+  setup: {
+    title: (month: string) => `How much do you have for ${month}?`,
+    intro: "Enter your allowance for the month. You can split it into categories after.",
+    monthlyBudget: "Monthly budget",
+    submit: (month: string) => `Set budget for ${month}`,
+    done: (month: string) => `Budget set for ${month}`,
+    invalidAmount: "Enter an amount like 8000 or 7500.50.",
+  },
+
+  expenses: {
+    add: "Add expense",
+    addFirst: "Add an expense",
+    empty: (month: string) => `No expenses in ${month} yet`,
+    emptyHint: "Add them as you spend, so the overview always shows what's really left.",
+    newTitle: "New expense",
+    editTitle: "Edit expense",
+    amount: "Amount",
+    currency: "Currency",
+    what: "What was it?",
+    whatPlaceholder: "Shawarma, bus card, notebook…",
+    category: "Category",
+    date: "Date",
+    loadingCategories: "Loading categories…",
+    saveChanges: "Save changes",
+    added: "Expense added",
+    saved: "Changes saved",
+    deleted: "Expense deleted",
+    invalidAmount: "Enter an amount like 45 or 12.50.",
+    needDescription: "Describe what you paid for.",
+    needCategory: "Choose a category.",
+    today: "Today",
+    yesterday: "Yesterday",
+  },
+
+  budget: {
+    totalLabel: (month: string) => `Budget for ${month}`,
+    update: "Update budget",
+    updated: "Budget updated",
+    belowPlanned: "The budget can't be less than what you already planned for categories.",
+    limitsTitle: "Category limits",
+    limitsIntro:
+      "Decide how much each category may use this month. The overview warns you as a category gets close to its limit.",
+    invalidLimits: "Limits must be amounts like 1500 or 250.50.",
+    limitsTooHigh: "Your limits add up to more than the monthly budget.",
+    planned: (planned: string, total: string) => `Planned ${planned} of ${total}.`,
+    unassigned: (amount: string) => `${amount} not assigned to a category.`,
+    overBy: (amount: string) => `${amount} more than your budget.`,
+    savePlan: "Save plan",
+    planSaved: "Plan saved",
+  },
+
+  categories: {
+    title: "Categories",
+    intro: "Add your own categories, like building fees, rent or the gym. They work everywhere: expenses, limits and the overview.",
+    add: "New category",
+    newTitle: "New category",
+    editTitle: "Edit category",
+    name: "Name",
+    namePlaceholder: "Building fees, rent, gym…",
+    icon: "Icon",
+    color: "Colour",
+    create: "Create category",
+    created: "Category created",
+    updated: "Category updated",
+    archive: "Archive",
+    confirmArchive: "Tap again to archive",
+    archived: "Category archived",
+    archiveHint: "Archived categories disappear from the lists. Expenses you already added keep them.",
+    yours: "Your categories",
+    yoursEmpty: "You haven't added any yet.",
+    builtIn: "Built-in",
+    builtInHint: "These come with every account and can't be changed.",
+    needName: "Give the category a name.",
+    nameTaken: "You already have a category with this name.",
+    names: {
+      food: "Food",
+      transport: "Transport",
+      study: "Study",
+      entertainment: "Entertainment",
+      shopping: "Shopping",
+      health: "Health",
+      bills: "Bills",
+      other: "Other",
+    } as Record<string, string>,
+  },
+
+  settings: {
+    title: "Settings",
+    language: "Language",
+    appearance: "Appearance",
+    light: "Light",
+    dark: "Dark",
+    system: "Same as device",
+    account: "Account",
+  },
+
+  errors: {
+    network: "Can't reach BudgetBuddy's server. Check your connection and try again.",
+    tooMany: "Too many attempts. Wait a minute and try again.",
+    generic: "Something went wrong. Try again.",
+    invalid: "Some of the values aren't valid. Check them and try again.",
+    invalidLogin: "Incorrect email or password.",
+    forbidden: "You can't change this.",
+    notFound: "We couldn't find that. It may have been deleted.",
+    server: "BudgetBuddy's server had a problem. Try again in a moment.",
+    emailTaken: "An account with this email already exists.",
+    needBudget: "Set a budget for that month before adding expenses to it.",
+  },
+};
+
+export type Messages = typeof en;

@@ -46,6 +46,7 @@ class AuthService:
             password_hash=hash_password(data.password),
             full_name=data.full_name,
             base_currency=data.base_currency,
+            locale=data.locale,
         )
         self.users.add(user)
         try:

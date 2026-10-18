@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutDashboard, LogOut, Plus, ReceiptText, Target } from "lucide-react";
+import { LayoutDashboard, LogOut, Plus, ReceiptText, Settings, Shapes, Target } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -10,11 +10,15 @@ import { ExpenseSheetProvider, useExpenseSheet } from "@/components/expense/Expe
 import { MonthProvider, useMonth } from "@/components/layout/MonthProvider";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useSummary } from "@/hooks/queries";
+import { useI18n } from "@/i18n/I18nProvider";
+import type { Messages } from "@/i18n/messages/en";
 
 const NAV = [
-  { href: "/overview", label: "Overview", icon: LayoutDashboard },
-  { href: "/expenses", label: "Expenses", icon: ReceiptText },
-  { href: "/budget", label: "Budget", icon: Target },
+  { href: "/overview", label: (t: Messages) => t.nav.overview, icon: LayoutDashboard },
+  { href: "/expenses", label: (t: Messages) => t.nav.expenses, icon: ReceiptText },
+  { href: "/budget", label: (t: Messages) => t.nav.budget, icon: Target },
+  { href: "/categories", label: (t: Messages) => t.nav.categories, icon: Shapes },
+  { href: "/settings", label: (t: Messages) => t.nav.settings, icon: Settings },
 ];
 
 /** Signed-in area: redirects to /login when there is no session. */
@@ -45,19 +49,24 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 }
 
 function Wordmark() {
-  return <span className="font-display text-xl font-bold tracking-tight">BudgetBuddy</span>;
+  return (
+    <span className="font-display text-xl font-bold tracking-tight" dir="ltr">
+      BudgetBuddy
+    </span>
+  );
 }
 
 function Sidebar() {
   const pathname = usePathname();
   const { user, logout } = useAuth();
+  const { t } = useI18n();
 
   return (
-    <aside className="sticky top-0 hidden h-screen flex-col border-r border-line bg-surface px-4 py-6 lg:flex">
+    <aside className="sticky top-0 hidden h-screen flex-col border-e border-line bg-surface px-4 py-6 lg:flex">
       <div className="px-3">
         <Wordmark />
       </div>
-      <nav className="mt-8 flex flex-col gap-1" aria-label="Main">
+      <nav className="mt-8 flex flex-col gap-1" aria-label={t.nav.main}>
         {NAV.map(({ href, label, icon: Icon }) => {
           const active = pathname === href;
           return (
@@ -70,34 +79,37 @@ function Sidebar() {
               }`}
             >
               <Icon className="size-5" aria-hidden />
-              {label}
+              {label(t)}
             </Link>
           );
         })}
       </nav>
       <div className="mt-auto border-t border-line px-3 pt-4">
         <p className="truncate text-sm font-semibold">{user?.full_name}</p>
-        <p className="truncate text-sm text-muted">{user?.email}</p>
+        <p className="truncate text-sm text-muted" dir="ltr">
+          {user?.email}
+        </p>
         <button
           type="button"
           onClick={logout}
           className="mt-3 inline-flex items-center gap-2 text-sm text-muted hover:text-ink"
         >
-          <LogOut className="size-4" aria-hidden />
-          Log out
+          <LogOut className="size-4 rtl:-scale-x-100" aria-hidden />
+          {t.nav.logout}
         </button>
       </div>
     </aside>
   );
 }
 
+/** Phones: the same five places as a tab bar (log out lives in Settings). */
 function BottomNav() {
   const pathname = usePathname();
-  const { logout } = useAuth();
+  const { t } = useI18n();
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
-      aria-label="Main"
+      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
+      aria-label={t.nav.main}
     >
       {NAV.map(({ href, label, icon: Icon }) => {
         const active = pathname === href;
@@ -106,17 +118,15 @@ function BottomNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`flex flex-col items-center gap-1 py-2.5 text-xs ${active ? "font-semibold text-pine" : "text-muted"}`}
+            className={`flex min-w-0 flex-col items-center gap-1 px-1 py-2.5 text-[11px] leading-tight ${
+              active ? "font-semibold text-pine" : "text-muted"
+            }`}
           >
             <Icon className="size-5" aria-hidden />
-            {label}
+            <span className="max-w-full truncate">{label(t)}</span>
           </Link>
         );
       })}
-      <button type="button" onClick={logout} className="flex flex-col items-center gap-1 py-2.5 text-xs text-muted">
-        <LogOut className="size-5" aria-hidden />
-        Log out
-      </button>
     </nav>
   );
 }
@@ -125,19 +135,21 @@ function AddExpenseButton() {
   const openSheet = useExpenseSheet();
   const { month } = useMonth();
   const { data: summary } = useSummary(month); // shared cache: no extra request
+  const pathname = usePathname();
+  const { t } = useI18n();
 
   // Expenses need a budget for their month (the API answers 409 otherwise),
-  // so the button appears only once the month has one.
-  if (!summary) return null;
+  // so the button appears only once the month has one, and only on money screens.
+  if (!summary || pathname === "/settings" || pathname === "/categories") return null;
 
   return (
     <button
       type="button"
       onClick={() => openSheet()}
-      className="fixed right-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-pine px-6 font-semibold text-white shadow-lg shadow-pine/30 hover:bg-pine-dark lg:right-10 lg:bottom-10"
+      className="fixed end-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-pine px-6 font-semibold text-on-pine shadow-lg shadow-pine/30 hover:bg-pine-dark lg:end-10 lg:bottom-10"
     >
       <Plus className="size-5" aria-hidden />
-      Add expense
+      {t.expenses.add}
     </button>
   );
 }

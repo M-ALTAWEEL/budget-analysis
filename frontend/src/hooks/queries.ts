@@ -2,7 +2,16 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getSummary, listCategories, setAllocations, setBudget } from "@/services/budget";
+import {
+  archiveCategory,
+  createCategory,
+  getSummary,
+  listCategories,
+  setAllocations,
+  setBudget,
+  updateCategory,
+  type CategoryInput,
+} from "@/services/budget";
 import { createExpense, deleteExpense, listExpenses, updateExpense } from "@/services/expenses";
 import type { ExpenseInput } from "@/types/api";
 
@@ -59,6 +68,31 @@ export function useSetBudget(month: string) {
     mutationFn: (total: string) => setBudget(month, total),
     onSuccess: (summary) => queryClient.setQueryData(queryKeys.summary(month), summary),
   });
+}
+
+/** A category change can rename or recolour rows in summaries and expense lists too. */
+function useInvalidateCategories() {
+  const queryClient = useQueryClient();
+  return () =>
+    Promise.all([
+      queryClient.invalidateQueries({ queryKey: queryKeys.categories }),
+      queryClient.invalidateQueries({ queryKey: ["summary"] }),
+      queryClient.invalidateQueries({ queryKey: ["expenses"] }),
+    ]);
+}
+
+export function useSaveCategory() {
+  const invalidate = useInvalidateCategories();
+  return useMutation({
+    mutationFn: ({ uuid, input }: { uuid?: string; input: CategoryInput }) =>
+      uuid ? updateCategory(uuid, input) : createCategory(input),
+    onSuccess: invalidate,
+  });
+}
+
+export function useArchiveCategory() {
+  const invalidate = useInvalidateCategories();
+  return useMutation({ mutationFn: archiveCategory, onSuccess: invalidate });
 }
 
 export function useSetAllocations(month: string) {

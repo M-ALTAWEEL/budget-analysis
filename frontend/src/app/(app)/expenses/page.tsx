@@ -7,9 +7,8 @@ import { Button } from "@/components/ui/Button";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useExpenses, useSummary } from "@/hooks/queries";
-import { errorMessage } from "@/lib/errors";
-import { formatMoney } from "@/lib/money";
-import { dayLabel, monthName } from "@/lib/month";
+import { useI18n } from "@/i18n/I18nProvider";
+import { useErrorMessage } from "@/lib/errors";
 import type { Expense } from "@/types/api";
 
 /** Expenses are already sorted newest first; group consecutive ones by day. */
@@ -29,6 +28,8 @@ export default function ExpensesPage() {
   const summary = useSummary(month);
   const openSheet = useExpenseSheet();
   const currency = summary.data?.currency;
+  const { t, money, monthName, dayLabel } = useI18n();
+  const errorMessage = useErrorMessage();
 
   return (
     <>
@@ -42,12 +43,12 @@ export default function ExpensesPage() {
         <LoadError message={errorMessage(expenses.error)} onRetry={() => expenses.refetch()} />
       ) : expenses.data.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-line px-6 py-10">
-          <p className="font-display text-xl font-semibold">No expenses in {monthName(month)} yet</p>
+          <p className="font-display text-xl font-semibold">{t.expenses.empty(monthName(month))}</p>
           <p className="mt-1 text-[15px] text-muted">
-            Add them as you spend, so the overview always shows what&apos;s really left.
+            {t.expenses.emptyHint}
           </p>
           <Button className="mt-5" onClick={() => openSheet()}>
-            Add an expense
+            {t.expenses.addFirst}
           </Button>
         </div>
       ) : (
@@ -59,7 +60,7 @@ export default function ExpensesPage() {
                 <div className="mb-2 flex items-baseline justify-between px-1">
                   <h2 className="font-semibold">{dayLabel(day)}</h2>
                   {currency && (
-                    <span className="tabular text-sm text-muted">{formatMoney(dayTotal, currency)}</span>
+                    <span className="tabular text-sm text-muted">{money(dayTotal, currency)}</span>
                   )}
                 </div>
                 <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">

@@ -33,8 +33,9 @@ def _send_tokens(response: Response, tokens: IssuedTokens) -> TokenResponse:
         path=REFRESH_COOKIE_PATH,
         httponly=True,
         secure=settings.is_production,
-        # Frontend and API live on different domains in production, which needs "none".
-        samesite="none" if settings.is_production else "lax",
+        # The frontend proxies /api/v1 to this server, so the browser sees one site
+        # and "lax" is enough (and safer than "none").
+        samesite="lax",
     )
     return TokenResponse(access_token=tokens.access_token, expires_in=tokens.expires_in)
 

@@ -1,10 +1,12 @@
+import type { Locale } from "@/i18n/config";
+
 // Shapes returned by the BudgetBuddy API. Money is always a string ("120.50"):
 // the backend uses exact decimals, and JavaScript numbers are floats.
 
 export const CURRENCIES = ["TRY", "USD", "AED", "SAR", "QAR", "EUR"] as const;
 export type Currency = (typeof CURRENCIES)[number];
 
-export type Locale = "en" | "ar" | "tr";
+export type { Locale };
 
 export interface TokenResponse {
   access_token: string;

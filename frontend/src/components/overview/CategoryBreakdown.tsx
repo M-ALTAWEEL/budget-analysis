@@ -1,12 +1,17 @@
+"use client";
+
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
-import { formatMoney } from "@/lib/money";
+import { useI18n } from "@/i18n/I18nProvider";
 import type { BudgetSummary } from "@/types/api";
 
 export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
+  const { t, money, categoryName } = useI18n();
+  const formatMoney = (amount: string | number) => money(amount, summary.currency);
+
   if (summary.categories.length === 0) {
     return (
       <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">
-        Nothing spent yet this month. Each expense you add shows up here under its category.
+        {t.overview.nothingSpent}
       </p>
     );
   }
@@ -23,12 +28,10 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
             <CategoryIcon category={category} />
             <div className="min-w-0 flex-1">
               <div className="flex items-baseline justify-between gap-3">
-                <span className="truncate font-semibold">{category.name}</span>
+                <span className="truncate font-semibold">{categoryName(category)}</span>
                 <span className="tabular shrink-0 text-[15px]">
-                  {formatMoney(spent, summary.currency)}
-                  {limit !== null && (
-                    <span className="text-muted"> of {formatMoney(limit, summary.currency)}</span>
-                  )}
+                  {formatMoney(spent)}
+                  {limit !== null && <span className="text-muted"> {t.tank.of(formatMoney(limit))}</span>}
                 </span>
               </div>
               {ratio !== null && limit !== null ? (
@@ -43,13 +46,13 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
                   {ratio > 0.85 && (
                     <p className={`mt-1 text-sm ${ratio > 1 ? "font-medium text-berry" : "text-muted"}`}>
                       {ratio > 1
-                        ? `${formatMoney(Number(spent) - limit, summary.currency)} over the limit`
-                        : `Only ${formatMoney(limit - Number(spent), summary.currency)} left`}
+                        ? t.overview.overLimit(formatMoney(Number(spent) - limit))
+                        : t.overview.onlyLeft(formatMoney(limit - Number(spent)))}
                     </p>
                   )}
                 </>
               ) : (
-                <p className="mt-0.5 text-sm text-muted">No limit set</p>
+                <p className="mt-0.5 text-sm text-muted">{t.overview.noLimitSet}</p>
               )}
             </div>
           </li>

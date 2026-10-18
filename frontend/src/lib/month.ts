@@ -16,14 +16,14 @@ export function shiftMonth(month: string, delta: number): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}`;
 }
 
-export function monthName(month: string): string {
+export function monthName(month: string, intl = "en"): string {
   const [year, monthNumber] = parts(month);
-  return new Intl.DateTimeFormat("en", { month: "long" }).format(new Date(year, monthNumber - 1, 1));
+  return new Intl.DateTimeFormat(intl, { month: "long" }).format(new Date(year, monthNumber - 1, 1));
 }
 
-export function monthLabel(month: string): string {
+export function monthLabel(month: string, intl = "en"): string {
   const [year, monthNumber] = parts(month);
-  return new Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
+  return new Intl.DateTimeFormat(intl, { month: "long", year: "numeric" }).format(
     new Date(year, monthNumber - 1, 1),
   );
 }
@@ -54,13 +54,17 @@ export function monthProgress(month: string) {
   };
 }
 
-export function dayLabel(isoDate: string): string {
+export function dayLabel(
+  isoDate: string,
+  intl = "en",
+  words = { today: "Today", yesterday: "Yesterday" },
+): string {
   const [year, monthNumber, day] = isoDate.split("-").map(Number);
   const date = new Date(year, monthNumber - 1, day);
   const today = todayISO();
-  if (isoDate === today) return "Today";
+  if (isoDate === today) return words.today;
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
-  if (date.toDateString() === yesterday.toDateString()) return "Yesterday";
-  return new Intl.DateTimeFormat("en", { weekday: "long", day: "numeric", month: "long" }).format(date);
+  if (date.toDateString() === yesterday.toDateString()) return words.yesterday;
+  return new Intl.DateTimeFormat(intl, { weekday: "long", day: "numeric", month: "long" }).format(date);
 }

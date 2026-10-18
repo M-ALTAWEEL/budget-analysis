@@ -113,6 +113,14 @@ async def test_me_returns_profile_without_secrets(client):
     assert "id" not in profile  # only the uuid is public
 
 
+async def test_register_saves_the_chosen_language(client):
+    registered = await register(client, locale="tr")
+    profile = (await client.get(f"{API}/users/me", headers=auth_header(registered))).json()
+    assert profile["locale"] == "tr"
+
+    assert (await register(client, email="x@example.com", locale="fr")).status_code == 422
+
+
 async def test_update_me_changes_only_sent_fields(client):
     registered = await register(client)
     headers = auth_header(registered)

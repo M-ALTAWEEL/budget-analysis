@@ -1,0 +1,198 @@
+import type { Messages } from "./en";
+
+/** Arabic plural for "days": 1 يوم واحد، 2 يومان، 3-10 أيام، 11+ يومًا. */
+function days(count: number): string {
+  if (count === 1) return "يوم واحد";
+  if (count === 2) return "يومان";
+  if (count >= 3 && count <= 10) return `${count} أيام`;
+  return `${count} يومًا`;
+}
+
+export const ar: Messages = {
+  common: {
+    loading: "جارٍ التحميل",
+    tryAgain: "حاول مرة أخرى",
+    close: "إغلاق",
+    cancel: "إلغاء",
+    save: "حفظ",
+    delete: "حذف",
+    tapAgainToDelete: "اضغط مرة أخرى للحذف",
+    noLimit: "بلا حد",
+  },
+
+  nav: {
+    main: "القائمة الرئيسية",
+    overview: "نظرة عامة",
+    expenses: "المصاريف",
+    budget: "الميزانية",
+    categories: "الفئات",
+    settings: "الإعدادات",
+    logout: "تسجيل الخروج",
+  },
+
+  auth: {
+    tagline: "اعرف كم تبقّى من مصروفك، وهل سيكفيك حتى نهاية الشهر.",
+    loginTitle: "تسجيل الدخول",
+    registerTitle: "أنشئ حسابك",
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    password: "كلمة المرور",
+    passwordHint: "8 أحرف على الأقل.",
+    passwordTooShort: "كلمة المرور: استخدم 8 أحرف على الأقل.",
+    currency: "عملة مصروفك",
+    logIn: "دخول",
+    createAccount: "إنشاء الحساب",
+    newHere: "جديد هنا؟",
+    createOne: "أنشئ حسابًا",
+    haveAccount: "لديك حساب؟",
+  },
+
+  currencies: {
+    TRY: "الليرة التركية",
+    USD: "الدولار الأمريكي",
+    AED: "الدرهم الإماراتي",
+    SAR: "الريال السعودي",
+    QAR: "الريال القطري",
+    EUR: "اليورو",
+  },
+
+  month: {
+    previous: "الشهر السابق",
+    next: "الشهر التالي",
+  },
+
+  tank: {
+    leftToSpend: (month) => `المتبقي للصرف في ${month}`,
+    today: "اليوم",
+    meterLabel: "ما صُرف من الميزانية",
+    meterText: (spent, total) => `صُرف ${spent} من ${total}`,
+    spent: (amount) => `صرفت ${amount}`,
+    of: (amount) => `من ${amount}`,
+    over: (amount) => `تجاوزت الميزانية بمقدار ${amount}.`,
+    finished: (spent, total) => `صرفت ${spent} من ${total}.`,
+    fast: (daily) =>
+      `أنت تصرف أسرع من مرور الشهر. التزم بحوالي ${daily} في اليوم حتى يكفيك المصروف.`,
+    onPaceDaily: (daily, count) =>
+      `أنت على المسار الصحيح: حوالي ${daily} في اليوم، والمتبقي ${days(count)}.`,
+    onPace: "أنت على المسار الصحيح.",
+  },
+
+  overview: {
+    whereItWent: "أين ذهب المال",
+    planCategories: "خطط للفئات",
+    latest: "آخر المصاريف",
+    seeAll: "عرض الكل",
+    nothingSpent: "لم تصرف شيئًا هذا الشهر بعد. كل مصروف تضيفه سيظهر هنا تحت فئته.",
+    noLimitSet: "لا يوجد حد",
+    overLimit: (amount) => `تجاوزت الحد بمقدار ${amount}`,
+    onlyLeft: (amount) => `تبقّى ${amount} فقط`,
+  },
+
+  setup: {
+    title: (month) => `كم معك لشهر ${month}؟`,
+    intro: "أدخل مصروفك لهذا الشهر، ويمكنك تقسيمه على الفئات بعد ذلك.",
+    monthlyBudget: "الميزانية الشهرية",
+    submit: (month) => `حدّد ميزانية ${month}`,
+    done: (month) => `تم تحديد ميزانية ${month}`,
+    invalidAmount: "أدخل مبلغًا مثل 8000 أو 7500.50.",
+  },
+
+  expenses: {
+    add: "إضافة مصروف",
+    addFirst: "أضف مصروفًا",
+    empty: (month) => `لا توجد مصاريف في ${month} بعد`,
+    emptyHint: "سجّلها أولًا بأول، لتعرض لك النظرة العامة دائمًا ما تبقّى فعلًا.",
+    newTitle: "مصروف جديد",
+    editTitle: "تعديل المصروف",
+    amount: "المبلغ",
+    currency: "العملة",
+    what: "على ماذا صرفت؟",
+    whatPlaceholder: "شاورما، بطاقة باص، دفتر…",
+    category: "الفئة",
+    date: "التاريخ",
+    loadingCategories: "جارٍ تحميل الفئات…",
+    saveChanges: "حفظ التعديلات",
+    added: "تمت إضافة المصروف",
+    saved: "تم حفظ التعديلات",
+    deleted: "تم حذف المصروف",
+    invalidAmount: "أدخل مبلغًا مثل 45 أو 12.50.",
+    needDescription: "اكتب على ماذا صرفت.",
+    needCategory: "اختر فئة.",
+    today: "اليوم",
+    yesterday: "أمس",
+  },
+
+  budget: {
+    totalLabel: (month) => `ميزانية ${month}`,
+    update: "تحديث الميزانية",
+    updated: "تم تحديث الميزانية",
+    belowPlanned: "لا يمكن أن تكون الميزانية أقل مما خططته للفئات.",
+    limitsTitle: "حدود الفئات",
+    limitsIntro: "حدّد كم يمكن لكل فئة أن تصرف هذا الشهر. ستنبّهك النظرة العامة عندما تقترب فئة من حدها.",
+    invalidLimits: "يجب أن تكون الحدود مبالغ مثل 1500 أو 250.50.",
+    limitsTooHigh: "مجموع حدودك أكبر من الميزانية الشهرية.",
+    planned: (planned, total) => `خططت ${planned} من ${total}.`,
+    unassigned: (amount) => `${amount} غير موزّعة على فئة.`,
+    overBy: (amount) => `${amount} أكثر من ميزانيتك.`,
+    savePlan: "حفظ الخطة",
+    planSaved: "تم حفظ الخطة",
+  },
+
+  categories: {
+    title: "الفئات",
+    intro: "أضف فئاتك الخاصة، مثل عائدات البناية أو الإيجار أو النادي. ستظهر في كل مكان: المصاريف والحدود والنظرة العامة.",
+    add: "فئة جديدة",
+    newTitle: "فئة جديدة",
+    editTitle: "تعديل الفئة",
+    name: "الاسم",
+    namePlaceholder: "عائدات، إيجار، نادي رياضي…",
+    icon: "الأيقونة",
+    color: "اللون",
+    create: "إنشاء الفئة",
+    created: "تم إنشاء الفئة",
+    updated: "تم تحديث الفئة",
+    archive: "أرشفة",
+    confirmArchive: "اضغط مرة أخرى للأرشفة",
+    archived: "تمت أرشفة الفئة",
+    archiveHint: "الفئات المؤرشفة تختفي من القوائم، والمصاريف التي سجلتها سابقًا تبقى عليها.",
+    yours: "فئاتك",
+    yoursEmpty: "لم تضف أي فئة بعد.",
+    builtIn: "الفئات الأساسية",
+    builtInHint: "تأتي مع كل حساب ولا يمكن تعديلها.",
+    needName: "اكتب اسمًا للفئة.",
+    nameTaken: "لديك فئة بهذا الاسم مسبقًا.",
+    names: {
+      food: "طعام",
+      transport: "مواصلات",
+      study: "دراسة",
+      entertainment: "ترفيه",
+      shopping: "تسوّق",
+      health: "صحة",
+      bills: "فواتير",
+      other: "أخرى",
+    },
+  },
+
+  settings: {
+    title: "الإعدادات",
+    language: "اللغة",
+    appearance: "المظهر",
+    light: "فاتح",
+    dark: "داكن",
+    system: "حسب الجهاز",
+    account: "الحساب",
+  },
+
+  errors: {
+    network: "تعذّر الوصول إلى خادم BudgetBuddy. تحقق من اتصالك وحاول مرة أخرى.",
+    tooMany: "محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.",
+    generic: "حدث خطأ ما. حاول مرة أخرى.",
+    invalid: "بعض القيم غير صحيحة. راجعها وحاول مرة أخرى.",
+    invalidLogin: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
+    forbidden: "لا يمكنك تعديل هذا.",
+    notFound: "لم نجد ما تبحث عنه. ربما تم حذفه.",
+    server: "حدثت مشكلة في خادم BudgetBuddy. حاول بعد قليل.",
+    emailTaken: "يوجد حساب بهذا البريد الإلكتروني مسبقًا.",
+    needBudget: "حدّد ميزانية لذلك الشهر قبل إضافة مصاريف إليه.",
+  },
+};

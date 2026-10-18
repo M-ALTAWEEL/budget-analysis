@@ -38,8 +38,8 @@ Then open:
 cd backend
 python -m venv .venv
 .venv\Scripts\activate          # Windows (macOS/Linux: source .venv/bin/activate)
-pip install -e ".[dev]"
-pytest
+python -m pip install --timeout 120 -e ".[dev]"
+python -m pytest
 ```
 
 ## Author
