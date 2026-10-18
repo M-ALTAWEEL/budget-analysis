@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-/* BudgetBuddy design tokens.
+/* Budget Analysis design tokens.
    A cool, calm palette: money stress is the problem, so the interface stays quiet.
    Pine = healthy budget, marigold = "today" and caution, berry = overspent. */
 @theme {
@@ -19,12 +19,14 @@
   --color-berry-soft: #f6e3ea;
   --color-on-pine: #ffffff; /* text on pine buttons */
   --color-panel: #1e6b57; /* the green panel on the sign-in screen (same in both themes) */
+  --color-logo: #05194b; /* the navy of the logo; light in dark mode */
 }
 
 @theme inline {
   /* Readex Pro as a fallback: Arabic words (a category named "عائدات") look right
      even when the interface is in English or Turkish. */
   --font-sans: var(--font-body), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-logo: var(--font-logo-face), ui-sans-serif, system-ui, sans-serif;
   --font-display: var(--font-display-face), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
 }
 
@@ -37,6 +39,7 @@
    ThemeProvider. Pine gets lighter (readable on dark) and text on it turns dark. */
 :root[data-theme="dark"] {
   color-scheme: dark; /* native inputs, date pickers and scrollbars go dark too */
+  --color-logo: #e9eef7;
   --color-paper: #0e1715;
   --color-surface: #15211e;
   --color-ink: #e4ece9;

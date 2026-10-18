@@ -4,6 +4,7 @@ import Link from "next/link";
 
 import { LanguageMenu } from "@/components/settings/LanguageMenu";
 import { ThemeButton } from "@/components/settings/ThemeButton";
+import { Logo } from "@/components/ui/Logo";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { Locale } from "@/i18n/config";
 
@@ -25,7 +26,7 @@ const POLICY: Record<Locale, Policy> = {
     title: "Privacy policy",
     updated: "Last updated 19 October 2026",
     intro:
-      "BudgetBuddy is a student portfolio project by Mouhammed Altaweel. This page says what it stores about you and why.",
+      "Budget Analysis is a student portfolio project by Mouhammed Altaweel. This page says what it stores about you and why.",
     sections: [
       {
         heading: "What is stored",
@@ -37,7 +38,7 @@ const POLICY: Record<Locale, Policy> = {
       {
         heading: "Sign in with Google",
         body: [
-          "If you use Google, BudgetBuddy receives only your name, email address and Google's account id. It never sees your Google password and cannot read your Gmail, Drive or anything else.",
+          "If you use Google, Budget Analysis receives only your name, email address and Google's account id. It never sees your Google password and cannot read your Gmail, Drive or anything else.",
         ],
       },
       {
@@ -62,12 +63,12 @@ const POLICY: Record<Locale, Policy> = {
       },
     ],
     contact: "Contact",
-    back: "Back to BudgetBuddy",
+    back: "Back to Budget Analysis",
   },
   ar: {
     title: "سياسة الخصوصية",
     updated: "آخر تحديث: 19 أكتوبر 2026",
-    intro: "BudgetBuddy مشروع طالب من أعمال محمد الطويل. توضّح هذه الصفحة ما يحفظه الموقع عنك ولماذا.",
+    intro: "Budget Analysis مشروع طالب من أعمال محمد الطويل. توضّح هذه الصفحة ما يحفظه الموقع عنك ولماذا.",
     sections: [
       {
         heading: "ما الذي يُحفظ",
@@ -79,7 +80,7 @@ const POLICY: Record<Locale, Policy> = {
       {
         heading: "الدخول بحساب Google",
         body: [
-          "إذا استخدمت Google، يصل إلى BudgetBuddy اسمك وبريدك ورقم حسابك في Google فقط. لا يرى كلمة مرور Google، ولا يستطيع قراءة بريدك أو ملفاتك أو أي شيء آخر.",
+          "إذا استخدمت Google، يصل إلى Budget Analysis اسمك وبريدك ورقم حسابك في Google فقط. لا يرى كلمة مرور Google، ولا يستطيع قراءة بريدك أو ملفاتك أو أي شيء آخر.",
         ],
       },
       {
@@ -104,13 +105,13 @@ const POLICY: Record<Locale, Policy> = {
       },
     ],
     contact: "تواصل",
-    back: "العودة إلى BudgetBuddy",
+    back: "العودة إلى Budget Analysis",
   },
   tr: {
     title: "Gizlilik politikası",
     updated: "Son güncelleme: 19 Ekim 2026",
     intro:
-      "BudgetBuddy, Mouhammed Altaweel'in bir öğrenci portfolyo projesidir. Bu sayfa senin hakkında neyin, neden saklandığını anlatır.",
+      "Budget Analysis, Mouhammed Altaweel'in bir öğrenci portfolyo projesidir. Bu sayfa senin hakkında neyin, neden saklandığını anlatır.",
     sections: [
       {
         heading: "Neler saklanır",
@@ -122,7 +123,7 @@ const POLICY: Record<Locale, Policy> = {
       {
         heading: "Google ile giriş",
         body: [
-          "Google kullanırsan BudgetBuddy yalnızca adını, e-posta adresini ve Google hesap kimliğini alır. Google şifreni görmez; Gmail'ini, Drive'ını veya başka bir şeyi okuyamaz.",
+          "Google kullanırsan Budget Analysis yalnızca adını, e-posta adresini ve Google hesap kimliğini alır. Google şifreni görmez; Gmail'ini, Drive'ını veya başka bir şeyi okuyamaz.",
         ],
       },
       {
@@ -147,7 +148,7 @@ const POLICY: Record<Locale, Policy> = {
       },
     ],
     contact: "İletişim",
-    back: "BudgetBuddy'ye dön",
+    back: "Budget Analysis'e dön",
   },
 };
 
@@ -157,8 +158,8 @@ export default function PrivacyPage() {
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-5 sm:px-8">
-        <Link href="/" className="font-display text-xl font-bold tracking-tight" dir="ltr">
-          BudgetBuddy
+        <Link href="/" aria-label="Budget Analysis">
+          <Logo />
         </Link>
         <div className="flex items-center gap-2">
           <LanguageMenu />

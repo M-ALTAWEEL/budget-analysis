@@ -293,7 +293,7 @@ export const tr: Messages = {
   landing: {
     heroTitle: "Harçlığından ne kaldığını ve ay sonuna yetip yetmeyeceğini bil.",
     heroText:
-      "Harcadığını yaz. BudgetBuddy onu doğru kategoriye koyar, bir kategori bitmeden seni uyarır ve ayın nereye gittiğini gösterir.",
+      "Harcadığını yaz. Budget Analysis onu doğru kategoriye koyar, bir kategori bitmeden seni uyarır ve ayın nereye gittiğini gösterir.",
     heroNote: "Ücretsiz; Türkçe, İngilizce ve Arapça.",
     demoLabel: "Bir öğrencinin ayı birkaç saniyede: harcamalar geldikçe depo boşalır.",
     dayOf: (day, days) => `${days} günün ${day}. günü`,
@@ -326,7 +326,7 @@ export const tr: Messages = {
     f3Text:
       "Türkçe, İngilizce ve Arapça; her birinin kendi sayıları, tarihleri ve çoğulları. Arapça grafikler dahil sağdan sola okunur.",
     endTitle: "Bu ayın harçlığıyla başla. Bir dakikanı alır.",
-    footer: "BudgetBuddy, Mouhammed Altaweel'in bir portfolyo projesidir.",
+    footer: "Budget Analysis, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
     privacy: "Gizlilik",
   },
@@ -334,7 +334,7 @@ export const tr: Messages = {
   assistant: {
     title: "Asistan",
     intro: "Paranı Türkçe, Arapça veya İngilizce sor. Cevaplar kendi harcamalarından hesaplanır.",
-    local: "BudgetBuddy'nin içinde çalışır. Verilerini hiçbir dış yapay zekâ servisi görmez.",
+    local: "Budget Analysis'in içinde çalışır. Verilerini hiçbir dış yapay zekâ servisi görmez.",
     placeholder: "Bir soru yaz…",
     send: "Gönder",
     thinking: "Hesaplanıyor…",
@@ -389,14 +389,14 @@ export const tr: Messages = {
   },
 
   errors: {
-    network: "BudgetBuddy sunucusuna ulaşılamıyor. Bağlantını kontrol edip tekrar dene.",
+    network: "Budget Analysis sunucusuna ulaşılamıyor. Bağlantını kontrol edip tekrar dene.",
     tooMany: "Çok fazla deneme. Bir dakika bekleyip tekrar dene.",
     generic: "Bir şeyler ters gitti. Tekrar dene.",
     invalid: "Bazı değerler geçersiz. Kontrol edip tekrar dene.",
     invalidLogin: "E-posta veya şifre hatalı.",
     forbidden: "Bunu değiştiremezsin.",
     notFound: "Bulunamadı. Silinmiş olabilir.",
-    server: "BudgetBuddy sunucusunda bir sorun oluştu. Birazdan tekrar dene.",
+    server: "Budget Analysis sunucusunda bir sorun oluştu. Birazdan tekrar dene.",
     emailTaken: "Bu e-posta ile kayıtlı bir hesap zaten var.",
     needBudget: "O aya harcama eklemeden önce bir bütçe belirle.",
   },

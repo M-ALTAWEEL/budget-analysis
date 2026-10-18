@@ -12,7 +12,7 @@ DEV_SECRET_KEY = "dev-only-secret-key-change-me-before-deploying-0123456789"
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "BudgetBuddy API"
+    app_name: str = "Budget Analysis API"
     app_env: str = "development"
     api_prefix: str = "/api/v1"
 

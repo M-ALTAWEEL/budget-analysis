@@ -296,7 +296,7 @@ export const en = {
   landing: {
     heroTitle: "Know what's left of your allowance, and whether it will last.",
     heroText:
-      "Write down what you spend. BudgetBuddy puts it in the right category, warns you before a category runs out, and shows where the month is heading.",
+      "Write down what you spend. Budget Analysis puts it in the right category, warns you before a category runs out, and shows where the month is heading.",
     heroNote: "Free, in English, Arabic and Turkish.",
     demoLabel: "A student's month played in a few seconds: the tank empties as expenses come in.",
     dayOf: (day: number, days: number) => `Day ${day} of ${days}`,
@@ -329,7 +329,7 @@ export const en = {
     f3Text:
       "English, Arabic and Turkish, each with its own numbers, dates and plurals. Arabic reads right to left, charts included.",
     endTitle: "Start with this month's allowance. It takes a minute.",
-    footer: "BudgetBuddy is a portfolio project by Mouhammed Altaweel.",
+    footer: "Budget Analysis is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
     privacy: "Privacy",
   },
@@ -337,7 +337,7 @@ export const en = {
   assistant: {
     title: "Assistant",
     intro: "Ask about your money in English, Arabic or Turkish. The answers are worked out from your own expenses.",
-    local: "Runs inside BudgetBuddy. No outside AI service sees your data.",
+    local: "Runs inside Budget Analysis. No outside AI service sees your data.",
     placeholder: "Ask a question…",
     send: "Send",
     thinking: "Working it out…",
@@ -395,14 +395,14 @@ export const en = {
   },
 
   errors: {
-    network: "Can't reach BudgetBuddy's server. Check your connection and try again.",
+    network: "Can't reach the Budget Analysis server. Check your connection and try again.",
     tooMany: "Too many attempts. Wait a minute and try again.",
     generic: "Something went wrong. Try again.",
     invalid: "Some of the values aren't valid. Check them and try again.",
     invalidLogin: "Incorrect email or password.",
     forbidden: "You can't change this.",
     notFound: "We couldn't find that. It may have been deleted.",
-    server: "BudgetBuddy's server had a problem. Try again in a moment.",
+    server: "The Budget Analysis server had a problem. Try again in a moment.",
     emailTaken: "An account with this email already exists.",
     needBudget: "Set a budget for that month before adding expenses to it.",
   },

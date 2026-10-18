@@ -1,4 +1,4 @@
-// The languages BudgetBuddy speaks. The same codes are stored on the user (users.locale).
+// The languages Budget Analysis speaks. The same codes are stored on the user (users.locale).
 
 export const LOCALES = ["en", "ar", "tr"] as const;
 export type Locale = (typeof LOCALES)[number];

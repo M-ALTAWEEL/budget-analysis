@@ -9,6 +9,7 @@ import { TankView } from "@/components/overview/BudgetTank";
 import { LanguageMenu } from "@/components/settings/LanguageMenu";
 import { ThemeButton } from "@/components/settings/ThemeButton";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { Logo } from "@/components/ui/Logo";
 import { Flag } from "@/components/ui/Flag";
 import { LOCALE_INFO, LOCALES } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -56,30 +57,41 @@ function spentBy(day: number) {
   return MONTH_OF_EXPENSES.filter((e) => e.day <= day).reduce((sum, e) => sum + e.amount, 0);
 }
 
-/** For people coming in from a link: what BudgetBuddy is, shown rather than told. */
+/** For people coming in from a link: what Budget Analysis is, shown rather than told. */
 export function Landing() {
   const { t } = useI18n();
   return (
     <div className="min-h-screen">
-      <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-8">
-        <span className="font-display text-xl font-bold tracking-tight" dir="ltr">
-          BudgetBuddy
-        </span>
-        <div className="flex items-center gap-2">
-          <LanguageMenu />
-          <ThemeButton />
-          <Link
-            href="/login"
-            // On phones the hero's own buttons are right below: keep the header short.
-            className="hidden h-10 items-center rounded-xl px-4 text-[15px] font-semibold hover:bg-ink/5 sm:inline-flex"
-          >
-            {t.auth.logIn}
-          </Link>
-        </div>
-      </header>
+      {/* The picture sits behind the header and the hero. The paper colour is laid over
+          it, strong behind the text and gone on the far side, so the text stays readable
+          in both themes (in dark mode the paper, and so the veil, is dark). */}
+      <div className="relative isolate overflow-hidden">
+        {/* Anchored at the bottom: the picture's own title (at its top) is cropped away. */}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[url(/hero.webp)] bg-cover bg-bottom" />
+        <div aria-hidden className="absolute inset-0 -z-10 bg-paper/70 lg:hidden" />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10 hidden bg-linear-to-r from-paper/90 from-20% via-paper/50 via-50% to-paper/0 to-85% lg:block rtl:bg-linear-to-l"
+        />
+        <div aria-hidden className="absolute inset-x-0 bottom-0 -z-10 h-24 bg-linear-to-b from-transparent to-paper" />
+        <header className="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-5 sm:px-8">
+          <Logo />
+          <div className="flex items-center gap-2">
+            <LanguageMenu />
+            <ThemeButton />
+            <Link
+              href="/login"
+              // On phones the hero's own buttons are right below: keep the header short.
+              className="hidden h-10 items-center rounded-xl px-4 text-[15px] font-semibold hover:bg-ink/5 sm:inline-flex"
+            >
+              {t.auth.logIn}
+            </Link>
+          </div>
+        </header>
+        <Hero />
+      </div>
 
       <main>
-        <Hero />
         <div className="mx-auto max-w-6xl space-y-28 px-4 py-24 sm:px-8 lg:space-y-36">
           <Feature title={t.landing.f1Title} text={t.landing.f1Text}>
             <CategoryDemo />
@@ -128,7 +140,7 @@ export function Landing() {
 function Hero() {
   const { t } = useI18n();
   return (
-    <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-10 pb-6 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20">
+    <section className="mx-auto grid max-w-6xl items-center gap-12 px-4 pt-10 pb-16 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:pt-20 lg:pb-24">
       <div>
         <h1 className="max-w-xl font-display text-[2.6rem] leading-[1.05] font-bold tracking-tight sm:text-6xl">
           {t.landing.heroTitle}

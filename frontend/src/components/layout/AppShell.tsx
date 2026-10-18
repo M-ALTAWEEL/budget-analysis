@@ -19,6 +19,7 @@ import { useEffect } from "react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { ExpenseSheetProvider, useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { MonthProvider, useMonth } from "@/components/layout/MonthProvider";
+import { Logo } from "@/components/ui/Logo";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useSummary } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -80,11 +81,7 @@ function PageFade({ children }: { children: React.ReactNode }) {
 }
 
 function Wordmark() {
-  return (
-    <span className="font-display text-xl font-bold tracking-tight" dir="ltr">
-      BudgetBuddy
-    </span>
-  );
+  return <Logo />;
 }
 
 function Sidebar() {

@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/config";
 
-// Shapes returned by the BudgetBuddy API. Money is always a string ("120.50"):
+// Shapes returned by the Budget Analysis API. Money is always a string ("120.50"):
 // the backend uses exact decimals, and JavaScript numbers are floats.
 
 export const CURRENCIES = ["TRY", "USD", "AED", "SAR", "QAR", "EUR"] as const;

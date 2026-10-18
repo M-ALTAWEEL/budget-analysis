@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Instrument_Sans, Readex_Pro } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans, Montserrat, Readex_Pro } from "next/font/google";
 
 import { Providers } from "./providers";
 import "./globals.css";
@@ -12,9 +12,11 @@ const display = Bricolage_Grotesque({
 });
 const body = Instrument_Sans({ variable: "--font-body", subsets: ["latin", "latin-ext"] });
 const arabic = Readex_Pro({ variable: "--font-arabic", subsets: ["arabic", "latin"] });
+// Only for the name in the logo ("Budget" bold, "Analysis" regular).
+const logo = Montserrat({ variable: "--font-logo-face", subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata: Metadata = {
-  title: "BudgetBuddy",
+  title: "Budget Analysis",
   description: "Know what's left of your allowance before it runs out.",
 };
 
@@ -39,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       dir="ltr"
       suppressHydrationWarning
-      className={`${display.variable} ${body.variable} ${arabic.variable} h-full`}
+      className={`${display.variable} ${body.variable} ${arabic.variable} ${logo.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: EARLY_SCRIPT }} />
