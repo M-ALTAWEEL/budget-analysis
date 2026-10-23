@@ -52,6 +52,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | T1 | SQL injection | SQLAlchemy with bound parameters only; no string-built SQL | ✅ |
 | T2 | Editing another user's data (IDOR) | Every query filtered by the current user id; public ids are random UUIDs; 404 for others' items | ✅ personal · 🔜 3: groups |
 | T3 | Changing a group expense you don't own | Role checks (member / admin / owner) inside the query | 🔜 3 |
+| T5 | **Found by CodeQL (alert #1):** server-side request forgery: the exchange-rate URL contained the currency from the request | The currency is validated to six values, and the URL is now built from our own table, never from request text | ✅ phase 1 |
 | T4 | Amount tricks (negative, too many decimals, splits that don't add up) | Pydantic validation; Decimal only; DB CHECK constraints; shares must sum exactly | ✅ personal · 🔜 3 |
 | **R: Repudiation** ||||
 | R1 | "I never changed that" | Security log for sign-ins, password and 2FA changes; group history with author and soft delete | 🔜 2, 3 |
@@ -90,4 +91,5 @@ the date here.
 | Date | Phase | Change |
 |---|---|---|
 | 2026-10-23 | 0 | First version |
+| 2026-10-24 | 1 | CodeQL alert #1 (SSRF) fixed: T5 |
 | 2026-10-24 | 1 | Security headers, CSP, CodeQL, Dependabot, dependency audit, Redis-ready limiter; found S6 |
