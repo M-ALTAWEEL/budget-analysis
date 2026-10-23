@@ -30,3 +30,6 @@ Thumbs.db
 
 # Office lock files
 ~$*
+
+# Private notes, kept on this computer only
+docs/LEARNING_LOG.md

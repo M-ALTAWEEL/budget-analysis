@@ -127,7 +127,7 @@ python ml/train_categorizer.py --check
 backend/   FastAPI app, domains, Alembic migrations, tests, app/ml (the models the API uses)
 frontend/  Next.js app: pages, components, i18n (en, ar, tr), theme
 ml/        datasets, training script, notebooks
-docs/      architecture document and a step-by-step learning log
+docs/      architecture, roadmap, design documents and threat model
 ```
 
 ## Author
