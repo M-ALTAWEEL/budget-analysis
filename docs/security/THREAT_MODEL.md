@@ -43,7 +43,8 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 |---|---|---|---|
 | **S: Spoofing** ||||
 | S1 | Password guessing / credential stuffing | bcrypt; login rate limit; breached-password check; 2FA | ✅ bcrypt + limit · 🔜 2: HIBP, 2FA |
-| S2 | Rate limit bypassed across server instances | Shared limiter in Redis, per IP **and** per account | 🔜 1 |
+| S2 | Rate limit bypassed across server instances | Shared limiter in Redis, per IP **and** per account | ✅ Redis support (phase 1) · 🔜 2: per account |
+| S6 | **Found in phase 1:** the client IP is read from `X-Forwarded-For`, which a client can fake, so the IP rate limit can be bypassed | Trust only the IP set by our own proxy (Vercel), and send a secret header from the proxy so the API refuses direct calls; limits per account as well | 🔜 2 |
 | S3 | Fake Google / Apple identity | Verify the ID token's signature, audience, issuer and expiry on the server | ✅ Google · 🔜 2: Apple |
 | S4 | Signing up with someone else's email or phone | Email verification; phone OTP | 🔜 2 |
 | S5 | SMS pumping (fake numbers that cost us money) | Limits per number, IP and country; country allow-list; provider fraud guard; CAPTCHA after repeats | 🔜 2 |
@@ -55,12 +56,12 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | **R: Repudiation** ||||
 | R1 | "I never changed that" | Security log for sign-ins, password and 2FA changes; group history with author and soft delete | 🔜 2, 3 |
 | **I: Information disclosure** ||||
-| I1 | Session token stolen by XSS | Access token in memory only; refresh token in an `httpOnly`, `Secure`, `SameSite=Lax` cookie; strict CSP | ✅ cookies · 🔜 1: CSP |
+| I1 | Session token stolen by XSS | Access token in memory only; refresh token in an `httpOnly`, `Secure`, `SameSite=Lax` cookie; CSP | ✅ cookies, CSP (phase 1) · 🔜 5: nonce-based CSP without `'unsafe-inline'` |
 | I2 | Group members seeing personal data | Group and personal queries never join; responses carry display names only; privacy tests | 🔜 3 |
 | I3 | Error messages or logs leaking data | Generic errors in production; structured logs without passwords, tokens, emails or amounts | ✅ generic errors · 🔜 1: logs |
 | I4 | Tokens on the phone read by other apps | iOS Keychain / Android Keystore; biometric lock | 🔜 6 |
 | I5 | Data sent to AI services (receipts) | Opt-in only; only the image is sent; disclosed in the privacy policy | 🔜 later |
-| I6 | Secrets in the repo | `.env` git-ignored; GitHub secret scanning; separate secrets per environment | ✅ ignored · 🔜 1: scanning |
+| I6 | Secrets in the repo | `.env` git-ignored; GitHub secret scanning; separate secrets per environment | ✅ ignored · 🔜 1: scanning, environments |
 | **D: Denial of service** ||||
 | D1 | Request floods | Rate limits on every endpoint group; pagination limits; request size limits | ✅ login · 🔜 1, 4 |
 | D2 | Expensive endpoints (reports, exports) | Caching; background jobs for exports | 🔜 4 |
@@ -68,7 +69,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | E1 | A member making themselves admin | Role changes allowed only to owner/admin, checked on the server | 🔜 3 |
 | E2 | Getting paid features without paying | Entitlements checked on the server from RevenueCat; store receipts verified server-side | 🔜 7 |
 | E3 | Guessing or reusing coupon codes | Long random codes, stored hashed, with expiry and use limits; redemption rate limited | 🔜 7 |
-| E4 | A compromised dependency | Dependabot, pip-audit, npm audit, CodeQL in CI; lock files; minimal dependencies | 🔜 1 |
+| E4 | A compromised dependency | Dependabot, pip-audit, npm audit, CodeQL in CI; lock files; minimal dependencies | ✅ phase 1 |
 
 ## 6. Store and privacy-law requirements
 
@@ -89,3 +90,4 @@ the date here.
 | Date | Phase | Change |
 |---|---|---|
 | 2026-10-23 | 0 | First version |
+| 2026-10-24 | 1 | Security headers, CSP, CodeQL, Dependabot, dependency audit, Redis-ready limiter; found S6 |

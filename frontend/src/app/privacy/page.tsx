@@ -8,7 +8,7 @@ import { Logo } from "@/components/ui/Logo";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { Locale } from "@/i18n/config";
 
-const REPO_ISSUES = "https://github.com/M-ALTAWEEL/budgetbuddy/issues";
+const REPO_ISSUES = "https://github.com/M-ALTAWEEL/budget-analysis/issues";
 const LINKEDIN = "https://www.linkedin.com/in/mouhammed-altaweel";
 
 interface Policy {

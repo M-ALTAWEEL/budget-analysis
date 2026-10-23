@@ -2,7 +2,7 @@
 
 **An expense tracker for students that knows where the allowance is going, and whether it will last the month.**
 
-[![CI](https://github.com/M-ALTAWEEL/budgetbuddy/actions/workflows/ci.yml/badge.svg)](https://github.com/M-ALTAWEEL/budgetbuddy/actions/workflows/ci.yml)
+[![CI](https://github.com/M-ALTAWEEL/budget-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/M-ALTAWEEL/budget-analysis/actions/workflows/ci.yml)
 
 ![Budget Analysis landing page](docs/screenshots/landing.png)
 

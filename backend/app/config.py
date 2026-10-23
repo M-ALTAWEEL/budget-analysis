@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     # Empty = the Google button is hidden and /auth/google answers 503.
     google_client_id: str = ""
 
+    # Shared rate-limit counters (Redis). Empty = in memory, fine for one server.
+    redis_url: str = ""
+
     # Exchange rates (ExchangeRate-API open access endpoint, no key needed)
     fx_api_url: str = "https://open.er-api.com/v6/latest"
     fx_cache_hours: int = 12
