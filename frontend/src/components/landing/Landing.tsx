@@ -66,8 +66,9 @@ export function Landing() {
           it, strong behind the text and gone on the far side, so the text stays readable
           in both themes (in dark mode the paper, and so the veil, is dark). */}
       <div className="relative isolate overflow-hidden">
-        {/* Anchored at the bottom: the picture's own title (at its top) is cropped away. */}
-        <div aria-hidden className="absolute inset-0 -z-10 bg-[url(/hero.webp)] bg-cover bg-bottom" />
+        {/* The picture's own title was cut off the file itself, so it never shows twice,
+            whatever the screen shape (on phones the whole height is visible). */}
+        <div aria-hidden className="absolute inset-0 -z-10 bg-[url(/hero.webp)] bg-cover bg-center" />
         <div aria-hidden className="absolute inset-0 -z-10 bg-paper/70 lg:hidden" />
         <div
           aria-hidden

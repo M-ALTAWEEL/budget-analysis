@@ -11,14 +11,18 @@ const API_ORIGIN = process.env.API_ORIGIN ?? "http://localhost:8000";
 // our theme script in layout.tsx). Replacing it with per-request nonces is planned for
 // the security audit (phase 5, docs/security/THREAT_MODEL.md).
 const GOOGLE = "https://accounts.google.com";
+// Preview deployments (one per branch) show Vercel's comment toolbar, which loads from
+// vercel.live. It is allowed there only: the real site never needs it.
+const PREVIEW = process.env.VERCEL_ENV === "preview";
+const VERCEL_LIVE = PREVIEW ? " https://vercel.live" : "";
 const CSP = [
   "default-src 'self'",
-  `script-src 'self' 'unsafe-inline' ${GOOGLE}/gsi/client`,
-  `style-src 'self' 'unsafe-inline' ${GOOGLE}/gsi/style`,
-  "img-src 'self' data: blob:",
-  "font-src 'self' data:",
-  `connect-src 'self' ${GOOGLE}/gsi/`,
-  `frame-src ${GOOGLE}/gsi/`,
+  `script-src 'self' 'unsafe-inline' ${GOOGLE}/gsi/client${VERCEL_LIVE}`,
+  `style-src 'self' 'unsafe-inline' ${GOOGLE}/gsi/style${VERCEL_LIVE}`,
+  `img-src 'self' data: blob:${PREVIEW ? " https://vercel.live https://vercel.com" : ""}`,
+  `font-src 'self' data:${PREVIEW ? " https://vercel.live https://assets.vercel.com" : ""}`,
+  `connect-src 'self' ${GOOGLE}/gsi/${PREVIEW ? " https://vercel.live wss://ws-us3.pusher.com" : ""}`,
+  `frame-src ${GOOGLE}/gsi/${VERCEL_LIVE}`,
   "object-src 'none'",
   "base-uri 'self'",
   "form-action 'self'",
