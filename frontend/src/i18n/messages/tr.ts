@@ -288,6 +288,7 @@ export const tr: Messages = {
     secondCurrencyHint: "Tutarlar bugünkü kurla bu para birimine çevrilmiş olarak da görünür (≈).",
     none: "Yok",
     manageCategories: "Kategorileri yönet",
+    version: "Sürüm",
   },
 
   landing: {

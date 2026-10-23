@@ -7,12 +7,20 @@ updates:
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      # Major versions change how things work, so we move to them on purpose, on a
+      # branch, not from a bot. Security fixes still arrive, majors included.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: npm
     directory: /frontend
     schedule:
       interval: weekly
     open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
       # Minor and patch updates together, so they arrive as one PR instead of twenty.
       minor-and-patch:

@@ -11,6 +11,11 @@ import httpx
 from app.config import settings
 from app.core.money import Currency
 
+# The provider's path for each currency, built from our own list. The URL we call never
+# contains text that came from a request, not even text that validation already limited
+# to six values (CodeQL alert #1, "partial server-side request forgery": defence in depth).
+_CURRENCY_PATHS: dict[Currency, str] = {currency: currency.name for currency in Currency}
+
 
 class FxUnavailableError(Exception):
     """The provider could not be reached or answered with something unusable."""
@@ -21,11 +26,14 @@ class ExchangeRateClient:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
 
+    def rates_url(self, base: Currency) -> str:
+        return f"{self.base_url}/{_CURRENCY_PATHS[base]}"
+
     async def fetch_rates(self, base: Currency) -> dict[str, Decimal]:
         """Return {quote: rate} for every supported currency, where 1 base = rate quote."""
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
-                response = await client.get(f"{self.base_url}/{base.value}")
+                response = await client.get(self.rates_url(base))
                 response.raise_for_status()
                 data = response.json()
             if data.get("result") != "success":

@@ -16,6 +16,7 @@ dependencies = [
     "slowapi>=0.1.9",
     "redis>=5.0",  # shared rate-limit counters when there is more than one server
     "httpx>=0.28",
+    "sentry-sdk[fastapi]>=2.0",  # error reports, only active when SENTRY_DSN is set
 ]
 
 [project.optional-dependencies]

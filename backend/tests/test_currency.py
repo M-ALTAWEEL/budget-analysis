@@ -6,6 +6,7 @@ import pytest
 from fastapi import HTTPException
 
 from app.core.money import Currency
+from app.domain.currency.client import ExchangeRateClient
 from app.domain.currency.service import CurrencyService
 from tests.fakes import FakeFxClient
 from tests.helpers import API, signup
@@ -70,3 +71,9 @@ async def test_rates_endpoint_defaults_to_user_base_currency(client):
     assert body["base"] == "USD"
     assert Decimal(body["rates"]["AED"]) == Decimal("3.6725")
     assert set(body["rates"]) == {"TRY", "USD", "AED", "SAR", "QAR", "EUR"}
+
+
+def test_the_rates_url_only_ever_contains_our_own_currency_codes():
+    client = ExchangeRateClient("https://rates.example/v6/latest/", timeout=1)
+    assert client.rates_url(Currency.TRY) == "https://rates.example/v6/latest/TRY"
+    assert {client.rates_url(c).rsplit("/", 1)[1] for c in Currency} == {c.value for c in Currency}

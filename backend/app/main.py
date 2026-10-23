@@ -11,6 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.core.limiter import limiter
+from app.core.observability import RequestContextMiddleware, setup_logging, setup_sentry
 from app.database import get_db
 from app.domain.assistant.router import router as assistant_router
 from app.domain.budget.router import budgets_router, categories_router
@@ -21,6 +22,8 @@ from app.domain.user.router import auth_router, users_router
 
 
 def create_app() -> FastAPI:
+    setup_logging()
+    setup_sentry()
     app = FastAPI(
         title=settings.app_name,
         version="0.1.0",
@@ -52,6 +55,9 @@ def create_app() -> FastAPI:
             headers.setdefault("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
         return response
 
+    # Wraps the routes and the headers above: it times every request, errors included.
+    app.add_middleware(RequestContextMiddleware)
+
     app.add_middleware(
         CORSMiddleware,
         allow_origins=settings.cors_origins,
@@ -65,6 +71,12 @@ def create_app() -> FastAPI:
         """Is the server up? No database query: the host's health checks and the
         keep-awake job call this often, and must not keep the (free) database awake."""
         return {"status": "ok"}
+
+    @app.get(f"{settings.api_prefix}/version", tags=["system"])
+    async def version() -> dict:
+        """Which code is running here. The website shows it in Settings next to its own
+        version, so a server that stopped deploying is noticed at a glance."""
+        return {"commit": settings.git_commit[:7], "environment": settings.deploy_env}
 
     @app.get(f"{settings.api_prefix}/health", tags=["system"])
     async def health(response: Response, db: Annotated[AsyncSession, Depends(get_db)]) -> dict:

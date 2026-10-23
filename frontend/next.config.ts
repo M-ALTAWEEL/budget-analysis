@@ -44,6 +44,11 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // The commit this build was made from (Vercel sets VERCEL_GIT_COMMIT_SHA), shown in
+  // Settings next to the server's own commit.
+  env: {
+    NEXT_PUBLIC_COMMIT: (process.env.VERCEL_GIT_COMMIT_SHA ?? "dev").slice(0, 7),
+  },
   cacheComponents: true,
   partialPrefetching: true,
   experimental: {

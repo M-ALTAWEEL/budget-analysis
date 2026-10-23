@@ -302,6 +302,7 @@ export const ar: Messages = {
     secondCurrencyHint: "تظهر المبالغ أيضًا محوّلة إلى هذه العملة بسعر اليوم (≈).",
     none: "بدون",
     manageCategories: "إدارة الفئات",
+    version: "الإصدار",
   },
 
   landing: {
