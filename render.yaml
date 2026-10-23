@@ -1,10 +1,14 @@
-# Render Blueprint: the API as a free Docker web service.
+# Render Blueprint: the API, twice.
+# - budgetbuddy-api: production, deployed from the `main` branch (the real site).
+# - budget-analysis-api-staging: staging, deployed from the `staging` branch, with its own
+#   database and secrets. Every change is tried there before it reaches main.
 # Render reads this file when you choose "New > Blueprint" and pick this repository.
 services:
   - type: web
-    name: budgetbuddy-api
+    name: budgetbuddy-api # kept: renaming a Blueprint service would create a new one
     runtime: docker
     rootDir: backend
+    branch: main
     plan: free
     region: frankfurt
     # Checked often by Render: /ping does not touch the database, so the free
@@ -13,6 +17,8 @@ services:
     envVars:
       - key: APP_ENV
         value: production
+      - key: DEPLOY_ENV
+        value: production
       - key: SECRET_KEY
         generateValue: true # a long random value made by Render, never in git
       - key: DATABASE_URL
@@ -20,4 +26,30 @@ services:
       - key: FRONTEND_URL
         sync: false # the site address(es), comma-separated, e.g. https://budgetanalysis.vercel.app
       - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: SENTRY_DSN
+        sync: false # optional: error reports
+
+  - type: web
+    name: budget-analysis-api-staging
+    runtime: docker
+    rootDir: backend
+    branch: staging
+    plan: free # sleeps when unused: fine for testing, and it saves instance hours
+    region: frankfurt
+    healthCheckPath: /api/v1/ping
+    envVars:
+      - key: APP_ENV
+        value: production # behaves exactly like production (hidden docs, secure cookies)
+      - key: DEPLOY_ENV
+        value: staging
+      - key: SECRET_KEY
+        generateValue: true # its own key: staging tokens never work on production
+      - key: DATABASE_URL
+        sync: false # the Neon "staging" branch, never the production database
+      - key: FRONTEND_URL
+        sync: false # the Vercel preview addresses
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: SENTRY_DSN
         sync: false

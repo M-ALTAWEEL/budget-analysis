@@ -28,4 +28,5 @@ EXPOSE 8000
 # Apply pending migrations, then start the server. Railway provides $PORT.
 # --proxy-headers: behind the host's proxy, take the visitor's IP from X-Forwarded-For,
 # so the login rate limit counts each visitor, not the proxy.
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*'"]
+# --no-access-log: app/core/observability.py logs each request once, as JSON.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --proxy-headers --forwarded-allow-ips='*' --no-access-log"]

@@ -1,5 +1,6 @@
 "use client";
 
+import { useQuery } from "@tanstack/react-query";
 import { ChevronRight, LogOut, Monitor, Moon, Shapes, Sun } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -13,6 +14,7 @@ import { LOCALES, LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { updateMe } from "@/services/auth";
+import { getVersion } from "@/services/system";
 import { ACCENTS, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
 import { CURRENCIES, type Currency } from "@/types/api";
 
@@ -132,8 +134,23 @@ export default function SettingsPage() {
             </Button>
           </div>
         </section>
+
+        <Versions />
       </div>
     </>
+  );
+}
+
+/** Which code runs on the website and on the server. If they ever stop matching after a
+ *  release, one of the two did not deploy. */
+function Versions() {
+  const { t } = useI18n();
+  const { data } = useQuery({ queryKey: ["version"], queryFn: getVersion, staleTime: 5 * 60_000 });
+  return (
+    <p className="text-xs text-muted" dir="ltr">
+      {t.settings.version}: web {process.env.NEXT_PUBLIC_COMMIT} · api {data?.commit ?? "…"}
+      {data && data.environment !== "production" && ` (${data.environment})`}
+    </p>
   );
 }
 

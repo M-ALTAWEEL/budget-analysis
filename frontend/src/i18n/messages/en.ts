@@ -291,6 +291,7 @@ export const en = {
     secondCurrencyHint: "Amounts also show converted to this currency, at today's rate (≈).",
     none: "None",
     manageCategories: "Manage categories",
+    version: "Version",
   },
 
   landing: {
