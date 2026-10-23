@@ -55,6 +55,7 @@
 - [x] **فحص تلقائي بالـ CI**: CodeQL، و Dependabot، و pip-audit، و npm audit
 - [ ] تفعيل secret scanning من إعدادات GitHub (عليك)
 - [x] تحديث روابط الريبو للاسم الجديد `budget-analysis`
+- [x] **إصلاح الـ Auto-Deploy على Render**: تطبيق Render على GitHub بصلاحية على `budget-analysis` بس (كان ما بيعمل deploy من 19 أكتوبر)
 - [ ] **Logs منظّمة** (JSON) بدون بيانات شخصية، وتنبيه لما الموقع يوقف (uptime)
 - [ ] نسخة للـ API بالمسار (`/api/v1`، موجودة) وسياسة واضحة لتغييرها، لأنه تطبيقات الموبايل القديمة بتضل شغالة سنين
 
