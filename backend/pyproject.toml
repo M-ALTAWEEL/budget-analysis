@@ -1,7 +1,7 @@
 [project]
-name = "budgetbuddy-backend"
+name = "budget-analysis-backend"
 version = "0.1.0"
-description = "BudgetBuddy REST API - AI expense tracker and savings coach for students"
+description = "Budget Analysis REST API - budget tracker with ML for students"
 requires-python = ">=3.12"
 dependencies = [
     "fastapi>=0.118",  # needs Starlette >= 0.48 (HTTP_422_UNPROCESSABLE_CONTENT)
@@ -14,6 +14,7 @@ dependencies = [
     "pyjwt[crypto]>=2.10",  # [crypto]: RS256, to check Google's signed ID tokens
     "bcrypt>=4.2",
     "slowapi>=0.1.9",
+    "redis>=5.0",  # shared rate-limit counters when there is more than one server
     "httpx>=0.28",
 ]
 

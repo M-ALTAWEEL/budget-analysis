@@ -1,0 +1,30 @@
+# CodeQL: GitHub's static analysis. Reads the code (without running it) looking for
+# security bugs: injections, unsafe redirects, secrets in code, and more. Results appear
+# under the repository's Security tab. Free for public repositories.
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "0 3 * * 1" # every Monday: new checks are added to CodeQL all the time
+
+jobs:
+  analyze:
+    name: Analyze (${{ matrix.language }})
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write # to upload the results
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [python, javascript-typescript]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+          queries: security-extended
+      - uses: github/codeql-action/analyze@v3

@@ -19,7 +19,7 @@ import { tr } from "@/i18n/messages/tr";
 import { formatMoney } from "@/lib/money";
 import { currentMonth } from "@/lib/month";
 
-const REPO_URL = "https://github.com/M-ALTAWEEL/budgetbuddy";
+const REPO_URL = "https://github.com/M-ALTAWEEL/budget-analysis";
 
 // The default categories, as the app draws them (backend/app/domain/budget/defaults.py).
 const CATEGORY = {

@@ -2,7 +2,7 @@
 
 from typing import Annotated
 
-from fastapi import Depends, FastAPI, Response, status
+from fastapi import Depends, FastAPI, Request, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 from slowapi import _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -33,6 +33,24 @@ def create_app() -> FastAPI:
     # Rate limiting: too many requests -> 429 Too Many Requests.
     app.state.limiter = limiter
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+
+    @app.middleware("http")
+    async def security_headers(request: Request, call_next):
+        """Headers on every API answer (OWASP Secure Headers). The answers are JSON with
+        personal data: never cached by a browser or a proxy, never shown inside a page."""
+        response = await call_next(request)
+        headers = response.headers
+        headers.setdefault("X-Content-Type-Options", "nosniff")
+        headers.setdefault("X-Frame-Options", "DENY")
+        headers.setdefault("Referrer-Policy", "no-referrer")
+        headers.setdefault("Cache-Control", "no-store")
+        if settings.is_production:
+            # JSON needs nothing from anywhere. (Not in development: /docs loads its UI.)
+            headers.setdefault(
+                "Content-Security-Policy", "default-src 'none'; frame-ancestors 'none'"
+            )
+            headers.setdefault("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
+        return response
 
     app.add_middleware(
         CORSMiddleware,
