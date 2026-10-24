@@ -33,6 +33,9 @@ class Expense(BaseModel):
     # "history" the same as last time they wrote this description
     # "user"    the student chose something else, or changed it later (a correction)
     categorized_by: Mapped[str] = mapped_column(String(10), server_default="user")
+    # "manual": typed by the student. "group": their share of a group expense, copied here
+    # by the system (phase 3d); the group expense's share points at this row.
+    source: Mapped[str] = mapped_column(String(10), server_default="manual")
     ai_confidence: Mapped[Decimal | None] = mapped_column(Numeric(3, 2))
 
     category: Mapped[Category] = relationship(lazy="joined")

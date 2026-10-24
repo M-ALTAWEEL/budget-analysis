@@ -16,6 +16,7 @@ from app.domain.expense.categorizer import CategorySuggester
 from app.domain.expense.model import Expense
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.expense.schema import ExpenseCreate, ExpenseUpdate
+from app.domain.group.shares import on_copy_changed
 from app.domain.user.model import User
 
 
@@ -83,6 +84,11 @@ class ExpenseService:
             expense.category = category
         if "description" in changes:
             expense.description = changes["description"]
+        if expense.source == "group" and changes.keys() - {"category_uuid"}:
+            # Their share of a group expense, changed by hand: from now on it's theirs,
+            # and the group won't touch it again. (Only moving it to another category
+            # keeps it linked.)
+            await on_copy_changed(self.session, expense, deleted=False)
 
         # Amount, currency or date changed -> convert again with the right month's budget.
         if changes.keys() & {"amount", "currency", "spent_at"}:
@@ -101,6 +107,8 @@ class ExpenseService:
 
     async def delete(self, user: User, expense_uuid: str) -> None:
         expense = await self.get(user, expense_uuid)
+        if expense.source == "group":
+            await on_copy_changed(self.session, expense, deleted=True)
         await self.expenses.delete(expense)
         await self.session.commit()
 

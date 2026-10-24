@@ -108,6 +108,7 @@ export interface Expense {
   category: Category;
   spent_at: string; // "2026-10-05"
   categorized_by: string;
+  source: "manual" | "group"; // "group": my share of a group expense, added by itself
   created_at: string;
 }
 

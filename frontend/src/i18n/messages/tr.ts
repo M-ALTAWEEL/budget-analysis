@@ -214,6 +214,18 @@ export const tr: Messages = {
     invitedYou: (name: string) => `${name} seni davet etti`,
     accept: "Katıl",
     decline: "Hayır, teşekkürler",
+    fromGroup: "Bir gruptan",
+    copyNote: "Bir grup harcamasındaki payın. Burada değiştirir ya da silersen artık senindir ve grup onu güncellemez.",
+    autoAdd: "Paylarımı bütçeme ekle",
+    autoAddText: "Biri senin de olduğun bir harcama eklediğinde, payın kendiliğinden harcamalarına eklenir.",
+    pending: "Bütçeni bekleyen paylar",
+    pendingText: "Grup harcamalarındaki, henüz bütçende olmayan payın.",
+    pendingCount: (n: number) => `Eklenecek ${n} grup payı`,
+    addToBudget: "Ekle",
+    addAll: "Hepsini ekle",
+    dismiss: "Atla",
+    addedSome: (n: number) => `${n} pay eklendi.`,
+    stillWaiting: (n: number) => `${n} tanesi için o ayın bütçesi gerekiyor.`,
   },
 
   currencies: {

@@ -19,6 +19,7 @@ import {
   listInvites,
   removeMember,
   revokeInvite,
+  setAutoAdd,
   setMemberRole,
   updateGroup,
   type GroupDetail,
@@ -59,6 +60,7 @@ export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }
         <GroupExpenses group={g} />
         <Members group={g} />
         {admin && <Invites group={g} />}
+        <AutoAdd group={g} />
         {g.my_role === "owner" && <GroupSettings group={g} />}
         <Leave group={g} onLeft={onBack} />
       </div>
@@ -263,6 +265,41 @@ function Invites({ group }: { group: GroupDetail }) {
         <hr className="border-line" />
         <ByUsername group={group} />
       </div>
+    </section>
+  );
+}
+
+function AutoAdd({ group }: { group: GroupDetail }) {
+  const { t } = useI18n();
+  const queryClient = useQueryClient();
+  const errorMessage = useErrorMessage();
+  const [error, setError] = useState<string | null>(null);
+  const change = useMutation({
+    mutationFn: (enabled: boolean) => setAutoAdd(group.uuid, enabled),
+    onSuccess: (detail) => queryClient.setQueryData(groupKey(group.uuid), detail),
+    onError: (err) => setError(errorMessage(err)),
+  });
+  const on = change.isPending ? Boolean(change.variables) : group.my_auto_add;
+
+  return (
+    <section className="rounded-2xl border border-line bg-surface px-5 py-4">
+      <label className="flex cursor-pointer items-start gap-4">
+        <span className="min-w-0 flex-1">
+          <span className="block font-semibold">{t.groups.autoAdd}</span>
+          <span className="mt-0.5 block text-sm text-muted">{t.groups.autoAddText}</span>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          checked={on}
+          onChange={(e) => {
+            setError(null);
+            change.mutate(e.target.checked);
+          }}
+          className="mt-1 size-5 shrink-0 accent-pine"
+        />
+      </label>
+      <FormError message={error} />
     </section>
   );
 }

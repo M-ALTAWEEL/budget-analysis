@@ -77,7 +77,8 @@ export function GroupExpenseSheet({
       : previewSplit(total, numbers);
   const money = (n: number) => formatMoney(n, currency, intl);
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["groups", group.uuid] });
+  // Everything: the group, and my own expenses and budget (my share is copied there).
+  const invalidate = () => queryClient.invalidateQueries();
   const save = useMutation({
     mutationFn: () =>
       saveGroupExpense(

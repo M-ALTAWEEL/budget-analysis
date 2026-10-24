@@ -212,6 +212,18 @@ export const en = {
     invitedYou: (name: string) => `${name} invited you`,
     accept: "Join",
     decline: "No thanks",
+    fromGroup: "From a group",
+    copyNote: "Your share of a group expense. If you change or delete it here, it's yours from then on and the group won't update it.",
+    autoAdd: "Add my shares to my budget",
+    autoAddText: "Each time someone adds an expense you're part of, your share goes into your own expenses by itself.",
+    pending: "Shares waiting for your budget",
+    pendingText: "Your part of group expenses that isn't in your budget yet.",
+    pendingCount: (n: number) => (n === 1 ? "1 group share to add" : `${n} group shares to add`),
+    addToBudget: "Add",
+    addAll: "Add all",
+    dismiss: "Skip",
+    addedSome: (n: number) => (n === 1 ? "1 share added." : `${n} shares added.`),
+    stillWaiting: (n: number) => `${n} still need a budget for their month.`,
   },
 
   currencies: {

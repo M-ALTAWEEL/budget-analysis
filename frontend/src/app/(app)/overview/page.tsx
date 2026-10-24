@@ -3,6 +3,7 @@
 import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 
+import { PendingSharesBanner } from "@/components/groups/PendingShares";
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
@@ -68,6 +69,8 @@ export default function OverviewPage() {
         <p className="mb-1 text-[15px] text-muted">{greeting}</p>
         <MonthSwitcher />
       </header>
+
+      <PendingSharesBanner />
 
       {summary.isPending ? (
         <PageLoader />
