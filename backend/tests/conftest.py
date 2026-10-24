@@ -17,13 +17,14 @@ from sqlalchemy.pool import NullPool
 
 import app.models  # noqa: F401  (registers every table on Base.metadata)
 from app.base import Base
+from app.core.breached import get_breach_checker
 from app.core.limiter import limiter
 from app.database import get_db
 from app.domain.budget.defaults import DEFAULT_CATEGORIES
 from app.domain.budget.model import Category
 from app.domain.currency.client import get_fx_client
 from app.main import app
-from tests.fakes import FakeFxClient
+from tests.fakes import FakeBreachChecker, FakeFxClient
 
 TEST_DATABASE_URL = os.getenv(
     "TEST_DATABASE_URL",
@@ -102,6 +103,8 @@ async def client(db_session, fx):
 
     app.dependency_overrides[get_db] = override_get_db
     app.dependency_overrides[get_fx_client] = lambda: fx
+    # No network in tests: every password counts as never breached, unless a test says so.
+    app.dependency_overrides[get_breach_checker] = lambda: FakeBreachChecker()
     limiter.reset()
     limiter.enabled = False  # tests that check rate limiting turn it back on
 

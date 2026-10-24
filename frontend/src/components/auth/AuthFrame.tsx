@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 
+import { useAuth } from "@/components/auth/AuthProvider";
+import { TwoFactorStep } from "@/components/auth/TwoFactorStep";
 import { SampleTank } from "@/components/overview/BudgetTank";
 import { LanguageMenu } from "@/components/settings/LanguageMenu";
 import { ThemeButton } from "@/components/settings/ThemeButton";
@@ -11,6 +13,8 @@ import { useI18n } from "@/i18n/I18nProvider";
 /** Split screen for login/register: the form, and a sample tank explaining the idea. */
 export function AuthFrame({ children }: { children: React.ReactNode }) {
   const { t } = useI18n();
+  // Password (or Google) was right and 2FA is on: the code step replaces the form.
+  const { twoFactorChallenge } = useAuth();
   return (
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <div className="flex flex-col px-6 py-8 sm:px-12">
@@ -23,7 +27,9 @@ export function AuthFrame({ children }: { children: React.ReactNode }) {
             <ThemeButton />
           </div>
         </div>
-        <div className="my-auto w-full max-w-sm py-12">{children}</div>
+        <div className="my-auto w-full max-w-sm py-12">
+          {twoFactorChallenge ? <TwoFactorStep /> : children}
+        </div>
       </div>
       <aside className="relative isolate hidden flex-col justify-center overflow-hidden px-16 text-white lg:flex">
         {/* The landing picture, under the accent colour: white text stays readable. */}

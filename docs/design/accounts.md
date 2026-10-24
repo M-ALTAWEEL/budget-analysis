@@ -184,6 +184,9 @@ code has run in production. Every step has a `downgrade`.
   (5 minutes, purpose `2fa`) → the 6-digit code or a backup code → session. Codes are
   accepted ±30 seconds, and **each code works only once** (the last used time step is stored).
 - **Turning it off, or making new backup codes,** needs a recent sign-in (see 9).
+- **How (2d):** TOTP is ~30 lines in `app/core/totp.py`, checked against RFC 6238's test
+  values. The QR code is an SVG made by `segno`. A wrong code 5 times ends that sign-in.
+  Without `TOTP_ENCRYPTION_KEY`, staging and production hide 2FA instead of guessing a key.
 
 ## 8. Other ways to sign in
 
@@ -289,7 +292,7 @@ GET  /me/export                       DELETE /me
 | **2a** ✅ | S6 (client IP), S7 (linking), `sessions`, `security_events`, "my devices" | Fixes the two holes; everything else creates sessions |
 | **2b** ✅ | `EmailSender` + Mailpit, verification, forgot/reset password, change password | Needed by linking, groups and deletion |
 | **2c** ✅ | Re-auth, **change email** (needs re-auth), delete account, export | Store requirements |
-| **2d** | Password rules + breached check, 2FA with backup codes | |
+| **2d** ✅ | Password rules + breached check, 2FA with backup codes | |
 | **2e** | Phone sign-in (console sender) | |
 | **2f** | Apple sign-in (tests with local keys) | |
 

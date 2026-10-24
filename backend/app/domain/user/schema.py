@@ -48,6 +48,7 @@ class AuthConfig(BaseModel):
 
     google_client_id: str | None
     email_enabled: bool  # false: hide "forgot password" and "verify your email"
+    two_factor_available: bool  # false: the server has no key to protect 2FA secrets yet
 
 
 class TokenRequest(BaseModel):
@@ -95,6 +96,37 @@ class ChangeEmailRequest(BaseModel):
     _lower_email = field_validator("new_email")(_normalize_email)
 
 
+class TwoFactorChallenge(BaseModel):
+    """The answer to a correct password when 2FA is on: no session yet, a code comes next."""
+
+    two_factor_required: Literal[True] = True
+    challenge: str
+
+
+class TwoFactorVerifyRequest(BaseModel):
+    challenge: str = Field(min_length=10, max_length=200)
+    code: str = Field(min_length=6, max_length=20)  # 6 digits, or a backup code
+
+
+class CodeRequest(BaseModel):
+    code: str = Field(min_length=6, max_length=20)
+
+
+class TwoFactorSetup(BaseModel):
+    secret: str  # for typing into the app by hand
+    otpauth_uri: str  # what the QR code holds
+    qr_svg: str  # data: URI of the QR code
+
+
+class TwoFactorStatus(BaseModel):
+    enabled: bool
+    backup_codes_left: int
+
+
+class BackupCodes(BaseModel):
+    codes: list[str]  # shown once: only their hashes are kept
+
+
 class Message(BaseModel):
     detail: str
 
@@ -119,6 +151,7 @@ class UserRead(BaseModel):
     email: str
     email_verified: bool
     has_password: bool  # false for Google-only accounts: they set one via "forgot password"
+    two_factor_enabled: bool
     full_name: str
     base_currency: Currency
     secondary_currency: Currency | None

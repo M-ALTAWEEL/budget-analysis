@@ -42,7 +42,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | # | Threat | Mitigation | Status |
 |---|---|---|---|
 | **S: Spoofing** ||||
-| S1 | Password guessing / credential stuffing | bcrypt; login rate limit; breached-password check; 2FA | ✅ bcrypt + limit · 🔜 2: HIBP, 2FA |
+| S1 | Password guessing / credential stuffing | bcrypt; login rate limit; breached-password check; 2FA | ✅ bcrypt + limit · ✅ 2d: HIBP, 2FA (TOTP + backup codes) |
 | S2 | Rate limit bypassed across server instances | Shared limiter in Redis, per IP **and** per account | ✅ Redis support (phase 1) · 🔜 2: per account |
 | S6 | **Found in phase 1:** the client IP is read from `X-Forwarded-For`, which a client can fake, so the IP rate limit can be bypassed | The website's server sends the visitor's IP with a secret header (`X-Edge-Secret`), trusted only when it matches; otherwise the last `X-Forwarded-For` entry (added by Render), never the first; uvicorn no longer decides the IP. Limits per account as well | ✅ 2a (`app/core/client_ip.py`, `frontend/src/proxy.ts`) · 🔜 2d: per account |
 | S7 | **Found in phase 2 design:** account pre-hijacking. Someone signs up with the victim's (unverified) email; when the victim later signs in with Google, the accounts are linked and the attacker keeps his password | Link only to verified emails; a verified Google/Apple identity takes over an unverified account (password removed, sessions revoked) | ✅ 2a |
@@ -98,3 +98,4 @@ the date here.
 | 2026-10-24 | 2a | S6 and S7 fixed; sessions in the database with immediate sign-out; security log |
 | 2026-10-24 | 2b | Email verification, password reset (one-time links, hashed, no enumeration) |
 | 2026-10-24 | 2c | Re-auth for sensitive actions; email change via the new inbox; account deletion; data export |
+| 2026-10-25 | 2d | 2FA (TOTP, encrypted keys, single-use codes, backup codes); breached-password check |

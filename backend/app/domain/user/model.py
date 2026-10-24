@@ -2,7 +2,17 @@
 
 from datetime import datetime
 
-from sqlalchemy import Boolean, DateTime, ForeignKey, Index, String, UniqueConstraint, true
+from sqlalchemy import (
+    BigInteger,
+    Boolean,
+    DateTime,
+    ForeignKey,
+    Index,
+    Integer,
+    String,
+    UniqueConstraint,
+    true,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.base import BaseModel
@@ -26,6 +36,16 @@ class User(BaseModel):
     secondary_currency: Mapped[str | None] = mapped_column(String(3))
     locale: Mapped[str] = mapped_column(String(5), server_default="en")
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
+    # Two-factor authentication (2d). The key is encrypted (app/core/secret_box.py); it
+    # exists but is not enabled while the person is still scanning the QR code.
+    totp_secret_enc: Mapped[str | None] = mapped_column(String(255))
+    totp_enabled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # The last 30-second step a code was accepted for: the same code never works twice.
+    totp_last_step: Mapped[int | None] = mapped_column(BigInteger)
+
+    @property
+    def two_factor_enabled(self) -> bool:
+        return self.totp_enabled_at is not None
 
     @property
     def email_verified(self) -> bool:
@@ -85,11 +105,23 @@ class OneTimeToken(BaseModel):
     )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    # 'verify_email' | 'reset_password' | 'change_email'
+    # 'verify_email' | 'reset_password' | 'change_email' | 'two_factor' (sign-in step)
     purpose: Mapped[str] = mapped_column(String(20))
     token_hash: Mapped[str] = mapped_column(String(64), unique=True)
     payload: Mapped[str | None] = mapped_column(String(255))  # e.g. the new email (2c)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    # Wrong codes typed against this token (the 2FA step of signing in): 5 and it's dead.
+    attempts: Mapped[int] = mapped_column(Integer, server_default="0")
+
+
+class BackupCode(BaseModel):
+    """2FA recovery codes: 10, shown once, each works once. Only the hash is stored."""
+
+    __tablename__ = "backup_codes"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    code_hash: Mapped[str] = mapped_column(String(64))
     used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
@@ -102,7 +134,8 @@ class SecurityEvent(BaseModel):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     # 'sign_in' | 'sign_in_failed' | 'session_revoked' | 'token_reuse' | 'identity_linked'
     # | 'account_taken_over' | 'email_verified' | 'password_changed' | 'password_reset'
-    # | 'reauthenticated' | 'email_changed' | 'data_exported'
+    # | 'reauthenticated' | 'email_changed' | 'data_exported' | '2fa_enabled' | '2fa_disabled'
+    # | 'backup_codes_created' | 'backup_code_used'
     type: Mapped[str] = mapped_column(String(30))
     device: Mapped[str | None] = mapped_column(String(100))
     country: Mapped[str | None] = mapped_column(String(2))

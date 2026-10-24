@@ -22,9 +22,9 @@ import {
 } from "@/services/auth";
 
 /** The person closed "is it you?": the action just doesn't happen, and no error is shown. */
-class ReauthCancelled extends Error {}
+export class ReauthCancelled extends Error {}
 
-function failure(err: unknown, errorMessage: (e: unknown) => string): string | null {
+export function failure(err: unknown, errorMessage: (e: unknown) => string): string | null {
   return err instanceof ReauthCancelled ? null : errorMessage(err);
 }
 
@@ -32,7 +32,7 @@ function failure(err: unknown, errorMessage: (e: unknown) => string): string | n
  * Runs a sensitive action. If the server answers "is it you?" (the sign-in is more than
  * 10 minutes old), it asks for the password or Google first, then runs the action again.
  */
-function useSensitiveAction() {
+export function useSensitiveAction() {
   const [asking, setAsking] = useState(false);
   const pending = useRef<{ retry: () => Promise<void>; fail: (error: unknown) => void } | null>(null);
 

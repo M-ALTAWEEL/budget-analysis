@@ -1,5 +1,5 @@
 import { api, setAccessToken } from "@/lib/api";
-import type { Currency, Locale, TokenResponse, User } from "@/types/api";
+import type { Currency, Locale, TokenResponse, TwoFactorChallenge, User } from "@/types/api";
 
 export interface RegisterInput {
   email: string;
@@ -9,8 +9,23 @@ export interface RegisterInput {
   locale: Locale;
 }
 
-export async function login(email: string, password: string): Promise<void> {
-  const { data } = await api.post<TokenResponse>("/auth/login", { email, password });
+/** Signed in, or the 2FA challenge when a code is needed next (then: verifyTwoFactor). */
+function signedInOrChallenge(data: TokenResponse | TwoFactorChallenge): string | null {
+  if ("two_factor_required" in data) return data.challenge;
+  setAccessToken(data.access_token);
+  return null;
+}
+
+export async function login(email: string, password: string): Promise<string | null> {
+  const { data } = await api.post<TokenResponse | TwoFactorChallenge>("/auth/login", {
+    email,
+    password,
+  });
+  return signedInOrChallenge(data);
+}
+
+export async function verifyTwoFactor(challenge: string, code: string): Promise<void> {
+  const { data } = await api.post<TokenResponse>("/auth/2fa/verify", { challenge, code });
   setAccessToken(data.access_token);
 }
 
@@ -22,6 +37,7 @@ export async function register(input: RegisterInput): Promise<void> {
 export interface AuthConfig {
   google_client_id: string | null;
   email_enabled: boolean; // false: no "forgot password" and no "confirm your email" yet
+  two_factor_available: boolean; // false: the server can't protect 2FA keys yet
 }
 
 /** Which sign-in options the server has turned on. */
@@ -59,9 +75,12 @@ export async function changePassword(currentPassword: string, newPassword: strin
 export async function googleSignIn(
   credential: string,
   newAccount: Pick<RegisterInput, "base_currency" | "locale">,
-): Promise<void> {
-  const { data } = await api.post<TokenResponse>("/auth/google", { credential, ...newAccount });
-  setAccessToken(data.access_token);
+): Promise<string | null> {
+  const { data } = await api.post<TokenResponse | TwoFactorChallenge>("/auth/google", {
+    credential,
+    ...newAccount,
+  });
+  return signedInOrChallenge(data);
 }
 
 export async function logout(): Promise<void> {
@@ -115,4 +134,36 @@ export async function deleteAccount(): Promise<void> {
 export async function exportData(): Promise<Blob> {
   const { data } = await api.get<Blob>("/me/export", { responseType: "blob" });
   return data;
+}
+
+// ── two-factor authentication ───────────────────────────────────────────────
+
+export interface TwoFactorSetup {
+  secret: string;
+  otpauth_uri: string;
+  qr_svg: string; // data: URI
+}
+
+export async function twoFactorStatus(): Promise<{ enabled: boolean; backup_codes_left: number }> {
+  const { data } = await api.get<{ enabled: boolean; backup_codes_left: number }>("/me/2fa");
+  return data;
+}
+
+export async function setupTwoFactor(): Promise<TwoFactorSetup> {
+  const { data } = await api.post<TwoFactorSetup>("/me/2fa/setup");
+  return data;
+}
+
+export async function enableTwoFactor(code: string): Promise<string[]> {
+  const { data } = await api.post<{ codes: string[] }>("/me/2fa/enable", { code });
+  return data.codes;
+}
+
+export async function disableTwoFactor(): Promise<void> {
+  await api.post("/me/2fa/disable");
+}
+
+export async function newBackupCodes(): Promise<string[]> {
+  const { data } = await api.post<{ codes: string[] }>("/me/2fa/backup-codes");
+  return data.codes;
 }
