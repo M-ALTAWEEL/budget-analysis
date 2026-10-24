@@ -20,7 +20,10 @@ class BreachChecker:
         self.timeout = timeout
 
     async def times_seen(self, password: str) -> int:
-        digest = hashlib.sha1(password.encode("utf-8")).hexdigest().upper()  # noqa: S324
+        # SHA-1 because that's the format the Pwned Passwords API is built on: it is a lookup
+        # key here, never stored and never used to protect anything (passwords are kept with
+        # bcrypt, app/core/security.py). usedforsecurity=False says exactly that.
+        digest = hashlib.sha1(password.encode("utf-8"), usedforsecurity=False).hexdigest().upper()
         prefix, suffix = digest[:5], digest[5:]
         try:
             async with httpx.AsyncClient(timeout=self.timeout) as client:
