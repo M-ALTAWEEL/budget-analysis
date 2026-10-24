@@ -60,6 +60,7 @@ class ExpenseRead(BaseModel):
     category: CategoryRead
     spent_at: date
     categorized_by: str
+    source: str = "manual"  # "group": my share of a group expense, added automatically
     created_at: datetime
 
 

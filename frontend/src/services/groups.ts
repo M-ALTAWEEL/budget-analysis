@@ -23,6 +23,7 @@ export interface GroupSummary {
 export interface GroupDetail extends GroupSummary {
   members: GroupMember[];
   created_at: string;
+  my_auto_add: boolean; // my shares go into my budget by themselves
 }
 
 export interface Invite {
@@ -262,4 +263,41 @@ export async function acceptRequest(requestUuid: string): Promise<{ group_uuid: 
 
 export async function declineRequest(requestUuid: string): Promise<void> {
   await api.post(`/me/group-requests/${encodeURIComponent(requestUuid)}/decline`);
+}
+
+// ── my shares in my own budget (phase 3d) ────────────────────────────────────
+
+export interface PendingShare {
+  uuid: string;
+  group_uuid: string;
+  group_name: string;
+  description: string;
+  amount: string;
+  currency: Currency;
+  spent_at: string;
+}
+
+export async function setAutoAdd(groupUuid: string, enabled: boolean): Promise<GroupDetail> {
+  const { data } = await api.put<GroupDetail>(`/groups/${encodeURIComponent(groupUuid)}/auto-add`, {
+    enabled,
+  });
+  return data;
+}
+
+export async function listPendingShares(): Promise<PendingShare[]> {
+  const { data } = await api.get<PendingShare[]>("/me/group-shares");
+  return data;
+}
+
+export async function addAllShares(): Promise<{ added: number; waiting: number }> {
+  const { data } = await api.post<{ added: number; waiting: number }>("/me/group-shares/add-all");
+  return data;
+}
+
+export async function addShare(shareUuid: string): Promise<void> {
+  await api.post(`/me/group-shares/${encodeURIComponent(shareUuid)}/add`);
+}
+
+export async function dismissShare(shareUuid: string): Promise<void> {
+  await api.post(`/me/group-shares/${encodeURIComponent(shareUuid)}/dismiss`);
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import { Users } from "lucide-react";
 import { motion } from "motion/react";
 
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
@@ -11,7 +12,7 @@ import type { Currency, Expense } from "@/types/api";
 export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budgetCurrency?: Currency }) {
   const openSheet = useExpenseSheet();
   const converted = budgetCurrency && expense.currency !== budgetCurrency;
-  const { money, categoryName } = useI18n();
+  const { t, money, categoryName } = useI18n();
 
   return (
     // A new expense opens its row; a deleted one closes it (inside <AnimatePresence>).
@@ -31,7 +32,15 @@ export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budg
         <CategoryIcon category={expense.category} />
         <span className="min-w-0 flex-1">
           <span className="block truncate font-semibold">{expense.description}</span>
-          <span className="block truncate text-sm text-muted">{categoryName(expense.category)}</span>
+          <span className="flex items-center gap-1.5 truncate text-sm text-muted">
+            {categoryName(expense.category)}
+            {expense.source === "group" && (
+              <span className="inline-flex items-center gap-1" title={t.groups.fromGroup}>
+                · <Users className="size-3.5" aria-hidden />
+                <span className="sr-only">{t.groups.fromGroup}</span>
+              </span>
+            )}
+          </span>
         </span>
         <span className="tabular shrink-0 text-end">
           <span className="block font-semibold">{money(expense.amount, expense.currency)}</span>

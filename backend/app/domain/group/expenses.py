@@ -21,6 +21,7 @@ from app.domain.currency.service import CurrencyService
 from app.domain.group.model import Group, GroupExpense, GroupExpenseShare, GroupMember
 from app.domain.group.schema import GroupExpenseInput, GroupExpenseRead, MemberRef, ShareRead
 from app.domain.group.service import GroupService
+from app.domain.group.shares import ShareCopies
 from app.domain.group.split import split_amount
 from app.domain.user.model import User
 
@@ -33,6 +34,7 @@ class GroupExpenseService:
         self.session = session
         self.groups = GroupService(session)
         self.currency = CurrencyService(session, fx_client)
+        self.copies = ShareCopies(session, self.currency)
 
     async def list(
         self, user: User, group_uuid: str, limit: int, offset: int
@@ -55,8 +57,10 @@ class GroupExpenseService:
     ) -> GroupExpenseRead:
         group, me = await self.groups.membership(user, group_uuid)
         expense = GroupExpense(group_id=group.id, created_by=me.id, shares=[])
-        await self._fill(group, me, expense, data)
+        members = await self._fill(group, me, expense, data)
         self.session.add(expense)
+        await self.session.flush()
+        await self.copies.sync(group, expense, members)
         await self.session.commit()
         return await self._fresh(group, me, expense.id)
 
@@ -65,7 +69,9 @@ class GroupExpenseService:
     ) -> GroupExpenseRead:
         group, me = await self.groups.membership(user, group_uuid)
         expense = await self._editable(group, me, expense_uuid)
-        await self._fill(group, me, expense, data)
+        members = await self._fill(group, me, expense, data)
+        await self.session.flush()  # new shares get their defaults (status "pending")
+        await self.copies.sync(group, expense, members)
         await self.session.commit()
         return await self._fresh(group, me, expense.id)
 
@@ -73,13 +79,17 @@ class GroupExpenseService:
         group, me = await self.groups.membership(user, group_uuid)
         expense = await self._editable(group, me, expense_uuid)
         expense.deleted_at = datetime.now(UTC)
+        # Everyone's copy goes too (except copies people changed: those are theirs).
+        await self.copies.sync(group, expense, await self._members(group.id))
         await self.session.commit()
 
     # ── the rules ────────────────────────────────────────────────────────────
 
     async def _fill(
         self, group: Group, me: GroupMember, expense: GroupExpense, data: GroupExpenseInput
-    ) -> None:
+    ) -> dict[int, GroupMember]:
+        """Set the expense and its shares from the input; people taken out of it lose their
+        copy. Returns the group's members."""
         members = await self._members(group.id)
         by_uuid = {m.uuid: m for m in members.values()}
         # Who can be in it: today's members, plus anyone already in this expense (someone
@@ -133,7 +143,12 @@ class GroupExpenseService:
             share.amount = part
             share.weight = weight
             kept.append(share)
+        staying = {share.member_id for share in kept}
+        removed = [share for share in current.values() if share.member_id not in staying]
+        # Their copies first: the share rows themselves are deleted with the new list.
+        await self.copies.drop(removed)
         expense.shares = kept
+        return members
 
     async def _editable(self, group: Group, me: GroupMember, expense_uuid: str) -> GroupExpense:
         expense = await self.session.scalar(

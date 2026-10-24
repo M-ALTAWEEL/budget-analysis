@@ -8,6 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 
 import { CreateGroupSheet } from "@/components/groups/CreateGroupSheet";
 import { GroupView } from "@/components/groups/GroupView";
+import { PendingShares } from "@/components/groups/PendingShares";
 import { ReceivedInvitations } from "@/components/groups/ReceivedInvitations";
 import { Button } from "@/components/ui/Button";
 import { LoadError } from "@/components/ui/LoadError";
@@ -54,6 +55,7 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
       </header>
 
       <ReceivedInvitations onJoined={onOpen} />
+      <PendingShares />
 
       {groups.isPending ? (
         <PageLoader />

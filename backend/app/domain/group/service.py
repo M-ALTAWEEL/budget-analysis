@@ -104,6 +104,7 @@ class GroupService:
         return GroupDetail(
             **self._summary(group, me.role, active).model_dump(),
             created_at=group.created_at,
+            my_auto_add=me.auto_add_shares,
             members=[
                 MemberRead(
                     uuid=m.uuid,
@@ -275,6 +276,14 @@ class GroupService:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, "Give ownership by leaving instead.")
         target.role = role
         await self.session.commit()
+
+    async def set_auto_add(self, user: User, group_uuid: str, enabled: bool) -> GroupDetail:
+        """Whether my shares of this group's expenses go into my budget by themselves.
+        Only changes what happens from now on: copies already made stay."""
+        _, me = await self.membership(user, group_uuid)
+        me.auto_add_shares = enabled
+        await self.session.commit()
+        return await self.detail(user, group_uuid)
 
     async def on_account_deleted(self, user_id: int) -> None:
         """Before an account is deleted (8.4): its memberships become "Deleted user",

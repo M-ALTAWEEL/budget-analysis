@@ -130,6 +130,9 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
       onSubmit={handleSubmit}
     >
       <div className="space-y-4">
+        {expense?.source === "group" && (
+          <p className="rounded-xl bg-pine-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
+        )}
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <Field
             label={t.expenses.amount}

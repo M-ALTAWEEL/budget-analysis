@@ -1,6 +1,7 @@
 """HTTP endpoints for groups (/groups), their expenses, invite links (/invites) and
 invitations by username (/me/group-requests).
-Phase 3a: groups, members, invites. Phase 3b: expenses. Phase 3c: usernames."""
+Phase 3a: groups, members, invites. Phase 3b: expenses. Phase 3c: usernames.
+Phase 3d: my shares in my own budget (/me/group-shares)."""
 
 from typing import Annotated
 
@@ -9,9 +10,12 @@ from fastapi import APIRouter, Depends, Query, Request, status
 from app.core.limiter import limiter
 from app.dependencies import CurrentUser, DbSession
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
+from app.domain.currency.service import CurrencyService
 from app.domain.group.expenses import GroupExpenseService
 from app.domain.group.requests import GroupRequestService
 from app.domain.group.schema import (
+    AddAllResult,
+    AutoAddUpdate,
     GroupCreate,
     GroupDetail,
     GroupExpenseInput,
@@ -21,18 +25,21 @@ from app.domain.group.schema import (
     InviteCreate,
     InvitePreview,
     InviteRead,
+    PendingShareRead,
     ReceivedRequestRead,
     RoleUpdate,
     SentRequestRead,
     UsernameInvite,
 )
 from app.domain.group.service import GroupService
+from app.domain.group.shares import MyShares
 from app.domain.user.router import Email
 
 router = APIRouter(prefix="/groups", tags=["groups"])
 FxClient = Annotated[ExchangeRateClient, Depends(get_fx_client)]
 invites_router = APIRouter(prefix="/invites", tags=["groups"])
 my_requests_router = APIRouter(prefix="/me/group-requests", tags=["groups"])
+my_shares_router = APIRouter(prefix="/me/group-shares", tags=["groups"])
 
 
 @router.get("")
@@ -198,3 +205,40 @@ async def accept_request(
 @my_requests_router.post("/{request_uuid}/decline", status_code=status.HTTP_204_NO_CONTENT)
 async def decline_request(request_uuid: str, user: CurrentUser, db: DbSession) -> None:
     await GroupRequestService(db).decline(user, request_uuid)
+
+
+# ── my shares in my own budget (phase 3d) ────────────────────────────────────
+
+
+@router.put("/{group_uuid}/auto-add")
+async def set_auto_add(
+    group_uuid: str, data: AutoAddUpdate, user: CurrentUser, db: DbSession
+) -> GroupDetail:
+    return await GroupService(db).set_auto_add(user, group_uuid, data.enabled)
+
+
+def _my_shares(db, fx) -> MyShares:
+    return MyShares(db, CurrencyService(db, fx))
+
+
+@my_shares_router.get("")
+async def list_pending_shares(
+    user: CurrentUser, db: DbSession, fx: FxClient
+) -> list[PendingShareRead]:
+    """My shares of group expenses that aren't in my budget yet."""
+    return await _my_shares(db, fx).list(user.id)
+
+
+@my_shares_router.post("/add-all")
+async def add_all_shares(user: CurrentUser, db: DbSession, fx: FxClient) -> AddAllResult:
+    return await _my_shares(db, fx).add_all(user.id)
+
+
+@my_shares_router.post("/{share_uuid}/add", status_code=status.HTTP_204_NO_CONTENT)
+async def add_share(share_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient) -> None:
+    await _my_shares(db, fx).add(user.id, share_uuid)
+
+
+@my_shares_router.post("/{share_uuid}/dismiss", status_code=status.HTTP_204_NO_CONTENT)
+async def dismiss_share(share_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient) -> None:
+    await _my_shares(db, fx).dismiss(user.id, share_uuid)

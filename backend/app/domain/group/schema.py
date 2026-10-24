@@ -52,6 +52,8 @@ class GroupSummary(BaseModel):
 class GroupDetail(GroupSummary):
     members: list[MemberRead]
     created_at: datetime
+    # Phase 3d: whether my shares go into my own budget by themselves.
+    my_auto_add: bool = True
 
 
 class InviteCreate(BaseModel):
@@ -189,3 +191,27 @@ class ReceivedRequestRead(BaseModel):
     member_limit: int
     invited_by: str | None  # the inviter's display name
     created_at: datetime
+
+
+# ── my shares in my own budget (phase 3d) ────────────────────────────────────
+
+
+class PendingShareRead(BaseModel):
+    """A share of a group expense that isn't in my budget yet."""
+
+    uuid: str
+    group_uuid: str
+    group_name: str
+    description: str
+    amount: Decimal
+    currency: Currency
+    spent_at: date
+
+
+class AddAllResult(BaseModel):
+    added: int
+    waiting: int  # no budget for that month yet
+
+
+class AutoAddUpdate(BaseModel):
+    enabled: bool
