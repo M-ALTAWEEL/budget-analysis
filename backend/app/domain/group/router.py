@@ -1,8 +1,10 @@
 """HTTP endpoints for groups (/groups), their expenses, invite links (/invites) and
 invitations by username (/me/group-requests).
 Phase 3a: groups, members, invites. Phase 3b: expenses. Phase 3c: usernames.
-Phase 3d: my shares in my own budget (/me/group-shares)."""
+Phase 3d: my shares in my own budget (/me/group-shares). Phase 3e: balances, paying
+back, and the group's chat (/groups/{uuid}/activity)."""
 
+from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, Depends, Query, Request, status
@@ -14,8 +16,10 @@ from app.domain.currency.service import CurrencyService
 from app.domain.group.expenses import GroupExpenseService
 from app.domain.group.requests import GroupRequestService
 from app.domain.group.schema import (
+    ActivityItem,
     AddAllResult,
     AutoAddUpdate,
+    BalancesRead,
     GroupCreate,
     GroupDetail,
     GroupExpenseInput,
@@ -29,9 +33,12 @@ from app.domain.group.schema import (
     ReceivedRequestRead,
     RoleUpdate,
     SentRequestRead,
+    SettlementInput,
+    SettlementRead,
     UsernameInvite,
 )
 from app.domain.group.service import GroupService
+from app.domain.group.settle import SettlementService
 from app.domain.group.shares import MyShares
 from app.domain.user.router import Email
 
@@ -242,3 +249,48 @@ async def add_share(share_uuid: str, user: CurrentUser, db: DbSession, fx: FxCli
 @my_shares_router.post("/{share_uuid}/dismiss", status_code=status.HTTP_204_NO_CONTENT)
 async def dismiss_share(share_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient) -> None:
     await _my_shares(db, fx).dismiss(user.id, share_uuid)
+
+
+# ── balances, paying back, the chat (phase 3e) ───────────────────────────────
+
+
+@router.get("/{group_uuid}/balances")
+async def group_balances(
+    group_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient
+) -> BalancesRead:
+    return await SettlementService(db, fx).balances(user, group_uuid)
+
+
+@router.post("/{group_uuid}/settlements", status_code=status.HTTP_201_CREATED)
+@limiter.limit("60/hour")
+async def record_settlement(
+    request: Request,
+    group_uuid: str,
+    data: SettlementInput,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+) -> SettlementRead:
+    return await SettlementService(db, fx).record(user, group_uuid, data)
+
+
+@router.delete(
+    "/{group_uuid}/settlements/{settlement_uuid}", status_code=status.HTTP_204_NO_CONTENT
+)
+async def delete_settlement(
+    group_uuid: str, settlement_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient
+) -> None:
+    await SettlementService(db, fx).delete(user, group_uuid, settlement_uuid)
+
+
+@router.get("/{group_uuid}/activity")
+async def group_activity(
+    group_uuid: str,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+    before: datetime | None = None,
+    limit: Annotated[int, Query(ge=1, le=100)] = 30,
+) -> list[ActivityItem]:
+    """The group's chat, newest first: every expense and payment, with the server's time."""
+    return await SettlementService(db, fx).activity(user, group_uuid, before, limit)

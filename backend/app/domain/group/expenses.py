@@ -8,6 +8,10 @@ Design: docs/design/groups.md, sections 3, 4 and 7.
   rate is kept (a snapshot, like personal expenses).
 - Deleting is soft: the row stays, so balances can always be explained later."""
 
+# The class has a method called `list`: without this, `list[...]` in the annotations
+# below would mean that method, not the built-in type.
+from __future__ import annotations
+
 from datetime import UTC, datetime
 from decimal import Decimal
 
@@ -18,7 +22,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.money import Currency, to_rate
 from app.domain.currency.client import ExchangeRateClient
 from app.domain.currency.service import CurrencyService
-from app.domain.group.model import Group, GroupExpense, GroupExpenseShare, GroupMember
+from app.domain.group.model import (
+    Group,
+    GroupExpense,
+    GroupExpenseShare,
+    GroupMember,
+    GroupSettlement,
+)
 from app.domain.group.schema import GroupExpenseInput, GroupExpenseRead, MemberRef, ShareRead
 from app.domain.group.service import GroupService
 from app.domain.group.shares import ShareCopies
@@ -49,8 +59,14 @@ class GroupExpenseService:
                 .offset(offset)
             )
         ).all()
+        return await self.read_many(group, me, list(expenses))
+
+    async def read_many(
+        self, group: Group, me: GroupMember, expenses: list[GroupExpense]
+    ) -> list[GroupExpenseRead]:
         members = await self._members(group.id)
-        return [self._read(expense, me, members) for expense in expenses]
+        paid_back = await self._paid_back([e.id for e in expenses])
+        return [self._read(e, me, members, paid_back.get(e.id, set())) for e in expenses]
 
     async def create(
         self, user: User, group_uuid: str, data: GroupExpenseInput
@@ -174,7 +190,7 @@ class GroupExpenseService:
             .where(GroupExpense.id == expense_id)
             .execution_options(populate_existing=True)
         )
-        return self._read(expense, me, await self._members(group.id))
+        return (await self.read_many(group, me, [expense]))[0]
 
     async def _members(self, group_id: int) -> dict[int, GroupMember]:
         rows = await self.session.scalars(
@@ -186,8 +202,27 @@ class GroupExpenseService:
     def _can_edit(expense: GroupExpense, me: GroupMember) -> bool:
         return me.role in ("owner", "admin") or expense.created_by == me.id
 
+    async def _paid_back(self, expense_ids: list[int]) -> dict[int, set[int]]:
+        """Who marked their share of each expense as paid back (phase 3e)."""
+        if not expense_ids:
+            return {}
+        rows = await self.session.execute(
+            select(GroupSettlement.group_expense_id, GroupSettlement.from_member).where(
+                GroupSettlement.group_expense_id.in_(expense_ids),
+                GroupSettlement.deleted_at.is_(None),
+            )
+        )
+        result: dict[int, set[int]] = {}
+        for expense_id, member_id in rows:
+            result.setdefault(expense_id, set()).add(member_id)
+        return result
+
     def _read(
-        self, expense: GroupExpense, me: GroupMember, members: dict[int, GroupMember]
+        self,
+        expense: GroupExpense,
+        me: GroupMember,
+        members: dict[int, GroupMember],
+        paid_back: set[int],
     ) -> GroupExpenseRead:
         def ref(member_id: int) -> MemberRef:
             member = members[member_id]
@@ -206,11 +241,13 @@ class GroupExpenseService:
             split_method=expense.split_method,
             spent_at=expense.spent_at,
             paid_by=ref(expense.paid_by),
+            added_by=ref(expense.created_by) if expense.created_by else None,
             shares=[
                 ShareRead(member=ref(s.member_id), amount=s.amount, weight=s.weight)
                 for s in expense.shares
             ],
             my_share=mine,
+            paid_back=[members[m].uuid for m in sorted(paid_back)],
             can_edit=self._can_edit(expense, me),
             created_at=expense.created_at,
         )

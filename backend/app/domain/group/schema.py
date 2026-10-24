@@ -160,8 +160,10 @@ class GroupExpenseRead(BaseModel):
     split_method: SplitMethod
     spent_at: date
     paid_by: MemberRef
+    added_by: MemberRef | None = None  # who wrote it down (None: a deleted membership)
     shares: list[ShareRead]
     my_share: Decimal | None  # None: I'm not part of it
+    paid_back: list[str] = []  # members (uuids) who marked their share as paid back (3e)
     can_edit: bool
     created_at: datetime
 
@@ -215,3 +217,63 @@ class AddAllResult(BaseModel):
 
 class AutoAddUpdate(BaseModel):
     enabled: bool
+
+
+# ── balances, settling up, the group's chat (phase 3e) ───────────────────────
+
+
+class SettlementInput(BaseModel):
+    """Either "I paid my share of this expense" (`expense`), or a payment of any amount
+    from one member to another (`to` and `amount`; `from_member` defaults to me)."""
+
+    expense: str | None = None  # a group expense's uuid
+    to: str | None = None  # a member's uuid
+    from_member: str | None = None
+    amount: PositiveMoney | None = None
+
+    @model_validator(mode="after")
+    def one_kind(self):
+        if self.expense is None and (self.to is None or self.amount is None):
+            raise ValueError("Say which expense, or who was paid and how much.")
+        return self
+
+
+class SettlementRead(BaseModel):
+    uuid: str
+    from_member: MemberRef
+    to_member: MemberRef
+    amount: Decimal
+    expense_uuid: str | None  # set when it paid one share of one expense
+    expense_description: str | None
+    by: MemberRef | None  # who wrote it down
+    can_delete: bool
+    created_at: datetime
+
+
+class DebtRead(BaseModel):
+    from_member: MemberRef
+    to_member: MemberRef
+    amount: Decimal
+
+
+class MemberBalance(BaseModel):
+    member: MemberRef
+    net: Decimal  # > 0: the group owes them; < 0: they owe
+
+
+class BalancesRead(BaseModel):
+    currency: Currency
+    debts: list[DebtRead]  # who owes whom, after everything paid back
+    members: list[MemberBalance]
+    my_net: Decimal
+
+
+class ActivityItem(BaseModel):
+    """One message in the group's chat: an expense or a payment, at the moment it was
+    written down (set by the server, not the phone's clock)."""
+
+    kind: Literal["expense", "settlement"]
+    at: datetime
+    by: MemberRef | None
+    expense: GroupExpenseRead | None = None
+    settlement: SettlementRead | None = None

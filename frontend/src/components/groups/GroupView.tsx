@@ -5,6 +5,7 @@ import { ArrowLeft, Check, Copy, Crown, LogOut, Share2, Shield, UserMinus, Users
 import { useState } from "react";
 
 import { ByUsername } from "@/components/groups/ByUsername";
+import { GroupBalances } from "@/components/groups/GroupBalances";
 import { GroupExpenses } from "@/components/groups/GroupExpenses";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
@@ -57,6 +58,7 @@ export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }
         </p>
       </header>
       <div className="space-y-10">
+        <GroupBalances group={g} />
         <GroupExpenses group={g} />
         <Members group={g} />
         {admin && <Invites group={g} />}
@@ -365,7 +367,7 @@ function Leave({ group, onLeft }: { group: GroupDetail; onLeft: () => void }) {
       void queryClient.invalidateQueries({ queryKey: ["groups"] });
       onLeft();
     },
-    onError: (err) => setError(errorMessage(err)),
+    onError: (err) => setError(errorMessage(err, { 409: t.groups.settleFirst })),
   });
   if (!me) return null;
 

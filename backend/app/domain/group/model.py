@@ -3,7 +3,7 @@
 Group tables never join personal ones, and personal tables never join group ones: the
 only bridge (a member's share copied into their own budget) comes in phase 3c.
 Phase 3a: groups, members, invites. Phase 3b: expenses and their shares.
-Phase 3c: invitations by username."""
+Phase 3c: invitations by username. Phase 3e: settlements."""
 
 from datetime import date, datetime
 from decimal import Decimal
@@ -162,3 +162,28 @@ class GroupRequest(BaseModel):
     )
     status: Mapped[str] = mapped_column(String(10), server_default="pending")
     responded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class GroupSettlement(BaseModel):
+    """Money paid back between two members (phase 3e). It changes balances only, never a
+    budget: paying someone back is not spending (docs/design/groups.md, principle 4)."""
+
+    __tablename__ = "group_settlements"
+    __table_args__ = (
+        Index("ix_group_settlements_group_id_created_at", "group_id", "created_at"),
+        CheckConstraint("amount > 0", name="amount_positive"),
+        CheckConstraint("from_member <> to_member", name="not_to_self"),
+    )
+
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id", ondelete="CASCADE"))
+    from_member: Mapped[int] = mapped_column(ForeignKey("group_members.id", ondelete="CASCADE"))
+    to_member: Mapped[int] = mapped_column(ForeignKey("group_members.id", ondelete="CASCADE"))
+    amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))  # in the group's currency
+    created_by: Mapped[int | None] = mapped_column(
+        ForeignKey("group_members.id", ondelete="SET NULL")
+    )
+    # Set when it pays one person's share of one expense ("I paid my part of this").
+    group_expense_id: Mapped[int | None] = mapped_column(
+        ForeignKey("group_expenses.id", ondelete="SET NULL"), index=True
+    )
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
