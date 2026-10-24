@@ -200,6 +200,20 @@ export const tr: Messages = {
     otherCurrency: "Başka para biriminde ödendi: bugünkü kurla grubun para birimine çevrilir.",
     showMore: "Daha fazla göster",
     edit: "Düzenle",
+    byUsername: "Kullanıcı adıyla ekle",
+    byUsernameText: "Gruplar sayfasında bir davet görür, kabul edince katılır.",
+    usernamePlaceholder: "@kullaniciadi",
+    send: "Gönder",
+    sentTo: (name: string) => `Davet ${name} kişisine gönderildi.`,
+    noSuchUser: "Bu kullanıcı adına sahip kimse yok.",
+    alreadyMember: "Zaten bu grupta.",
+    declinedRecently: "Daveti yakın zamanda reddetti. Daha sonra tekrar sorabilirsin.",
+    waiting: "Yanıt bekleniyor",
+    cancel: "İptal",
+    invitations: "Davetler",
+    invitedYou: (name: string) => `${name} seni davet etti`,
+    accept: "Katıl",
+    decline: "Hayır, teşekkürler",
   },
 
   currencies: {
@@ -425,6 +439,18 @@ export const tr: Messages = {
     tooMuch: "Bu hedefte biriktirdiğinden fazlasını çekemezsin.",
     removeOrder: "Önce ondan sonra yapılan çekimleri sil.",
     futureDate: "Tarih gelecekte olamaz.",
+  },
+
+  profile: {
+    title: "Profil",
+    name: "Adın",
+    nameHint: "Gruplarındaki kişiler bunu görür.",
+    username: "Kullanıcı adı",
+    usernameHint: "Arkadaşların seni bununla bir gruba ekleyebilir. 3–20 harf, rakam, nokta veya alt çizgi.",
+    usernameRule: "Kullanıcı adı: harfle başlayan 3 ile 20 arası harf, rakam, nokta veya alt çizgi kullan.",
+    usernameTaken: "Bu kullanıcı adı alınmış. Başka bir tane dene.",
+    save: "Kaydet",
+    saved: "Kaydedildi",
   },
 
   settings: {

@@ -2,7 +2,8 @@
 
 Group tables never join personal ones, and personal tables never join group ones: the
 only bridge (a member's share copied into their own budget) comes in phase 3c.
-Phase 3a: groups, members, invites. Phase 3b: expenses and their shares."""
+Phase 3a: groups, members, invites. Phase 3b: expenses and their shares.
+Phase 3c: invitations by username."""
 
 from datetime import date, datetime
 from decimal import Decimal
@@ -139,3 +140,25 @@ class GroupExpenseShare(BaseModel):
     personal_expense_id: Mapped[int | None] = mapped_column(
         ForeignKey("expenses.id", ondelete="SET NULL"), unique=True
     )
+
+
+class GroupRequest(BaseModel):
+    """An invitation sent to one person by their username (phase 3c). Nobody is put in a
+    group without saying yes: they accept or decline it in their Groups page."""
+
+    __tablename__ = "group_requests"
+    __table_args__ = (
+        UniqueConstraint("group_id", "user_id"),
+        CheckConstraint(
+            "status IN ('pending', 'accepted', 'declined', 'cancelled')", name="status_known"
+        ),
+    )
+
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id", ondelete="CASCADE"), index=True)
+    # The invited person. Deleting the account deletes their invitations.
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"), index=True)
+    invited_by: Mapped[int | None] = mapped_column(
+        ForeignKey("group_members.id", ondelete="SET NULL")
+    )
+    status: Mapped[str] = mapped_column(String(10), server_default="pending")
+    responded_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

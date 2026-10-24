@@ -5,6 +5,7 @@ from datetime import UTC, datetime, timedelta
 from uuid import uuid4
 
 from fastapi import HTTPException, status
+from sqlalchemy import select, update
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -20,6 +21,7 @@ from app.core.security import (
     hash_token,
     verify_password,
 )
+from app.domain.group.model import GroupMember
 from app.domain.user.model import OneTimeToken, SecurityEvent, User, UserIdentity, UserSession
 from app.domain.user.repository import (
     IdentityRepository,
@@ -499,7 +501,32 @@ class UserService:
 
     async def update_profile(self, user: User, data: UserUpdate) -> User:
         # exclude_unset: only the fields the client actually sent.
-        for field, value in data.model_dump(exclude_unset=True).items():
+        changes = data.model_dump(exclude_unset=True)
+        username = changes.get("username")
+        if username and username != user.username:
+            taken = await self.session.scalar(
+                select(User.id).where(User.username == username, User.id != user.id)
+            )
+            if taken:
+                raise _username_taken()
+        for field, value in changes.items():
             setattr(user, field, value)
-        await self.session.commit()
+        if "full_name" in changes:
+            # The groups show the new name too (the history keeps the person, not the name).
+            await self.session.execute(
+                update(GroupMember)
+                .where(GroupMember.user_id == user.id)
+                .values(display_name=changes["full_name"])
+            )
+        try:
+            await self.session.commit()
+        except IntegrityError:
+            # Two people taking the same username at the same moment: the UNIQUE
+            # constraint in the database is the final guard.
+            await self.session.rollback()
+            raise _username_taken() from None
         return user
+
+
+def _username_taken() -> HTTPException:
+    return HTTPException(status.HTTP_409_CONFLICT, "This username is taken.")

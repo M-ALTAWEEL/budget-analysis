@@ -211,3 +211,55 @@ export function previewSplit(total: number, weights: number[]): number[] {
   }
   return parts.map((p) => p / 100);
 }
+
+// ── invitations by username (phase 3c) ───────────────────────────────────────
+
+export interface SentRequest {
+  uuid: string;
+  username: string | null;
+  display_name: string;
+  created_at: string;
+}
+
+export interface ReceivedRequest {
+  uuid: string;
+  group_name: string;
+  member_count: number;
+  member_limit: number;
+  invited_by: string | null;
+  created_at: string;
+}
+
+export async function inviteByUsername(groupUuid: string, username: string): Promise<SentRequest> {
+  const { data } = await api.post<SentRequest>(`/groups/${encodeURIComponent(groupUuid)}/requests`, {
+    username,
+  });
+  return data;
+}
+
+export async function listSentRequests(groupUuid: string): Promise<SentRequest[]> {
+  const { data } = await api.get<SentRequest[]>(`/groups/${encodeURIComponent(groupUuid)}/requests`);
+  return data;
+}
+
+export async function cancelRequest(groupUuid: string, requestUuid: string): Promise<void> {
+  await api.delete(
+    `/groups/${encodeURIComponent(groupUuid)}/requests/${encodeURIComponent(requestUuid)}`,
+  );
+}
+
+export async function listMyRequests(): Promise<ReceivedRequest[]> {
+  const { data } = await api.get<ReceivedRequest[]>("/me/group-requests");
+  return data;
+}
+
+export async function acceptRequest(requestUuid: string): Promise<{ group_uuid: string }> {
+  const { data } = await api.post<{ group_uuid: string }>(
+    `/me/group-requests/${encodeURIComponent(requestUuid)}/accept`,
+  );
+  return data;
+}
+
+export async function declineRequest(requestUuid: string): Promise<void> {
+  await api.post(`/me/group-requests/${encodeURIComponent(requestUuid)}/decline`);
+}

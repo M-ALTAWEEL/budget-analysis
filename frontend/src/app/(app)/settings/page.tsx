@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AccountActions } from "@/components/settings/AccountActions";
+import { ProfileSection } from "@/components/settings/ProfileSection";
 import { SecuritySection } from "@/components/settings/SecuritySection";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
 import { Button } from "@/components/ui/Button";
@@ -65,6 +66,8 @@ export default function SettingsPage() {
       <h1 className="mb-10 font-display text-2xl font-semibold">{t.settings.title}</h1>
 
       <div className="space-y-10">
+        <ProfileSection />
+
         <section aria-labelledby="language">
           <h2 id="language" className="mb-3 font-display text-lg font-semibold">
             {t.settings.language}
@@ -128,6 +131,7 @@ export default function SettingsPage() {
           <div className="rounded-2xl border border-line bg-surface px-5 py-4">
             <p className="font-semibold">{user?.full_name}</p>
             <p className="text-sm text-muted" dir="ltr">
+              {user?.username ? `@${user.username} · ` : ""}
               {user?.email ?? user?.phone}
             </p>
             <Button variant="secondary" className="mt-4" onClick={logout}>

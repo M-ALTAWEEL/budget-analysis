@@ -9,12 +9,12 @@ from datetime import UTC, datetime, timedelta
 
 import segno
 from fastapi import HTTPException, status
-from sqlalchemy import func, select
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.core.security import generate_refresh_token, hash_token
-from app.domain.group.model import Group, GroupInvite, GroupMember
+from app.domain.group.model import Group, GroupInvite, GroupMember, GroupRequest
 from app.domain.group.schema import (
     GroupCreate,
     GroupDetail,
@@ -118,10 +118,10 @@ class GroupService:
 
     async def update(self, user: User, group_uuid: str, data: GroupUpdate) -> GroupDetail:
         group, me = await self.membership(user, group_uuid, lock=True)
-        self._require(me, "owner")
+        self.require(me, "owner")
         changes = data.model_dump(exclude_unset=True)
         if "member_limit" in changes:
-            if changes["member_limit"] < await self._count_active(group.id):
+            if changes["member_limit"] < await self.count_active(group.id):
                 raise HTTPException(
                     status.HTTP_409_CONFLICT, "The limit can't be lower than the members now."
                 )
@@ -135,7 +135,7 @@ class GroupService:
 
     async def create_invite(self, user: User, group_uuid: str, data: InviteCreate) -> InviteRead:
         group, me = await self.membership(user, group_uuid)
-        self._require(me, "owner", "admin")
+        self.require(me, "owner", "admin")
         raw = generate_refresh_token()
         invite = GroupInvite(
             group_id=group.id,
@@ -158,7 +158,7 @@ class GroupService:
 
     async def list_invites(self, user: User, group_uuid: str) -> list[InviteRead]:
         group, me = await self.membership(user, group_uuid)
-        self._require(me, "owner", "admin")
+        self.require(me, "owner", "admin")
         invites = (
             await self.session.scalars(
                 select(GroupInvite)
@@ -178,7 +178,7 @@ class GroupService:
 
     async def revoke_invite(self, user: User, group_uuid: str, invite_uuid: str) -> None:
         group, me = await self.membership(user, group_uuid)
-        self._require(me, "owner", "admin")
+        self.require(me, "owner", "admin")
         invite = await self.session.scalar(
             select(GroupInvite).where(
                 GroupInvite.group_id == group.id, GroupInvite.uuid == invite_uuid
@@ -194,20 +194,26 @@ class GroupService:
         member = await self._member_row(group.id, user.id)
         return InvitePreview(
             group_name=group.name,
-            member_count=await self._count_active(group.id),
+            member_count=await self.count_active(group.id),
             member_limit=group.member_limit,
             already_member=member is not None and member.left_at is None,
         )
 
     async def accept(self, user: User, raw_token: str) -> GroupDetail:
         invite, group = await self._usable_invite(raw_token, lock=True)
+        if await self.join(group, user):
+            invite.uses += 1
+        await self.session.commit()
+        return await self.detail(user, group.uuid)
+
+    async def join(self, group: Group, user: User) -> bool:
+        """Add the person to a group whose row the caller has locked (FOR UPDATE): two
+        people joining at the same moment are counted one after the other, so the limit
+        can't be passed. False when they were already in. The caller commits."""
         member = await self._member_row(group.id, user.id)
         if member is not None and member.left_at is None:
-            return await self.detail(user, group.uuid)  # already in: nothing to do
-
-        # The group row is locked (FOR UPDATE) until commit: two people accepting at the
-        # same moment are counted one after the other, so the limit can't be passed.
-        if await self._count_active(group.id) >= group.member_limit:
+            return False
+        if await self.count_active(group.id) >= group.member_limit:
             raise HTTPException(status.HTTP_409_CONFLICT, "This group is full.")
         if member is not None:  # left before, coming back
             member.left_at = None
@@ -219,9 +225,17 @@ class GroupService:
                     group_id=group.id, user_id=user.id, display_name=user.full_name, role="member"
                 )
             )
-        invite.uses += 1
-        await self.session.commit()
-        return await self.detail(user, group.uuid)
+        # An invitation by username to the same group is answered too.
+        await self.session.execute(
+            update(GroupRequest)
+            .where(
+                GroupRequest.group_id == group.id,
+                GroupRequest.user_id == user.id,
+                GroupRequest.status == "pending",
+            )
+            .values(status="accepted", responded_at=datetime.now(UTC))
+        )
+        return True
 
     # ── members ──────────────────────────────────────────────────────────────
 
@@ -239,7 +253,7 @@ class GroupService:
         if target is None:
             raise HTTPException(status.HTTP_404_NOT_FOUND, "Member not found.")
         if target.id != me.id:
-            self._require(me, "owner", "admin")
+            self.require(me, "owner", "admin")
             if me.role == "admin" and target.role != "member":
                 raise HTTPException(status.HTTP_403_FORBIDDEN, "Only the owner can do that.")
         await self._leave(group, target)
@@ -247,7 +261,7 @@ class GroupService:
 
     async def set_role(self, user: User, group_uuid: str, member_uuid: str, role: str) -> None:
         group, me = await self.membership(user, group_uuid)
-        self._require(me, "owner")
+        self.require(me, "owner")
         target = await self.session.scalar(
             select(GroupMember).where(
                 GroupMember.group_id == group.id,
@@ -349,7 +363,7 @@ class GroupService:
             )
         )
 
-    async def _count_active(self, group_id: int) -> int:
+    async def count_active(self, group_id: int) -> int:
         return await self.session.scalar(
             select(func.count())
             .select_from(GroupMember)
@@ -366,7 +380,7 @@ class GroupService:
         )
 
     @staticmethod
-    def _require(member: GroupMember, *roles: str) -> None:
+    def require(member: GroupMember, *roles: str) -> None:
         if member.role not in roles:
             raise HTTPException(status.HTTP_403_FORBIDDEN, "Only the group's admins can do that.")
 

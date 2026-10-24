@@ -211,6 +211,20 @@ export const ar: Messages = {
     otherCurrency: "مدفوع بعملة أخرى: سيُحوَّل إلى عملة المجموعة بسعر اليوم.",
     showMore: "عرض المزيد",
     edit: "تعديل",
+    byUsername: "إضافة باسم المستخدم",
+    byUsernameText: "تصله دعوة في صفحة المجموعات، وينضم عندما يقبلها.",
+    usernamePlaceholder: "@اسم_المستخدم",
+    send: "إرسال",
+    sentTo: (name: string) => `أُرسلت الدعوة إلى ${name}.`,
+    noSuchUser: "لا يوجد أحد بهذا الاسم.",
+    alreadyMember: "هو موجود في المجموعة بالفعل.",
+    declinedRecently: "رفض الدعوة مؤخراً. يمكنك المحاولة لاحقاً.",
+    waiting: "بانتظار الرد",
+    cancel: "إلغاء",
+    invitations: "الدعوات",
+    invitedYou: (name: string) => `دعاك ${name}`,
+    accept: "انضمام",
+    decline: "لا، شكراً",
   },
 
   currencies: {
@@ -439,6 +453,18 @@ export const ar: Messages = {
     tooMuch: "لا يمكنك سحب أكثر مما ادّخرته في هذا الهدف.",
     removeOrder: "احذف عمليات السحب التي جاءت بعده أولًا.",
     futureDate: "لا يمكن أن يكون التاريخ في المستقبل.",
+  },
+
+  profile: {
+    title: "الملف الشخصي",
+    name: "اسمك",
+    nameHint: "هذا ما يراه أعضاء مجموعاتك.",
+    username: "اسم المستخدم",
+    usernameHint: "يستطيع أصدقاؤك إضافتك إلى مجموعة به. من 3 إلى 20 حرفاً إنجليزياً أو رقماً أو نقطة أو _.",
+    usernameRule: "اسم المستخدم: من 3 إلى 20 حرفاً إنجليزياً أو رقماً أو نقطة أو _، ويبدأ بحرف.",
+    usernameTaken: "اسم المستخدم هذا مأخوذ. جرّب غيره.",
+    save: "حفظ",
+    saved: "تم الحفظ",
   },
 
   settings: {
