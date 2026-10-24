@@ -19,6 +19,7 @@ from app.core.security import generate_refresh_token, hash_token, verify_passwor
 from app.domain.budget.model import Budget, Category
 from app.domain.expense.model import Expense
 from app.domain.goal.model import SavingsGoal
+from app.domain.group.service import GroupService
 from app.domain.user.model import (
     OneTimeToken,
     SecurityEvent,
@@ -132,6 +133,9 @@ class AccountService:
             if user.email
             else None
         )
+        # Groups keep their history and balances: the memberships become "Deleted user".
+        await GroupService(self.session).on_account_deleted(user.id)
+        await self.session.flush()
         await self.session.execute(delete(User).where(User.id == user.id))
         await self.session.commit()
         return goodbye
