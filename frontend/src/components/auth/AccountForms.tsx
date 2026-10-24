@@ -193,26 +193,25 @@ export function VerifyEmailView() {
   const started = useRef(false); // a link works once: never send it twice
 
   useEffect(() => {
-    if (token === undefined || started.current) return;
+    if (!token || started.current) return;
     started.current = true;
-    if (!token) {
-      setState("invalid");
-      return;
-    }
     verifyEmail(token)
       .then(() => setState("done"))
       .catch(() => setState("invalid"));
   }, [token]);
 
+  // No token in the address at all: nothing to send, the link is broken.
+  const shown = token === null ? "invalid" : state;
+
   // If this browser is signed in to the same account, the banner goes away at once.
   useEffect(() => {
-    if (state === "done" && user && !user.email_verified) updateUser({ ...user, email_verified: true });
-  }, [state, user, updateUser]);
+    if (shown === "done" && user && !user.email_verified) updateUser({ ...user, email_verified: true });
+  }, [shown, user, updateUser]);
 
   return (
     <div className="space-y-4">
-      {state === "working" && <h1 className="font-display text-3xl font-semibold">{t.account.verifyingTitle}</h1>}
-      {state === "done" && (
+      {shown === "working" && <h1 className="font-display text-3xl font-semibold">{t.account.verifyingTitle}</h1>}
+      {shown === "done" && (
         <>
           <h1 className="font-display text-3xl font-semibold">{t.account.verifiedTitle}</h1>
           <Notice icon={CheckCircle2} tone="ok">
@@ -223,7 +222,7 @@ export function VerifyEmailView() {
           </Link>
         </>
       )}
-      {state === "invalid" && (
+      {shown === "invalid" && (
         <>
           <h1 className="font-display text-3xl font-semibold">{t.account.verifyFailedTitle}</h1>
           <Notice icon={TriangleAlert} tone="bad">
