@@ -49,6 +49,8 @@ class AuthConfig(BaseModel):
     google_client_id: str | None
     email_enabled: bool  # false: hide "forgot password" and "verify your email"
     two_factor_available: bool  # false: the server has no key to protect 2FA secrets yet
+    phone_enabled: bool  # false: no SMS here yet, "Continue with phone" is hidden
+    phone_countries: list[str]  # ISO codes that can receive codes, e.g. ["TR", "AE", ...]
 
 
 class TokenRequest(BaseModel):
@@ -127,6 +129,19 @@ class BackupCodes(BaseModel):
     codes: list[str]  # shown once: only their hashes are kept
 
 
+class PhoneSendRequest(BaseModel):
+    phone: str = Field(min_length=6, max_length=20)  # +905321234567
+    locale: Locale = "en"  # the language of the SMS
+
+
+class PhoneVerifyRequest(BaseModel):
+    phone: str = Field(min_length=6, max_length=20)
+    code: str = Field(min_length=6, max_length=6, pattern=r"^\d{6}$")
+    # Used only when this creates a new account:
+    base_currency: Currency = Currency.TRY
+    locale: Locale = "en"
+
+
 class Message(BaseModel):
     detail: str
 
@@ -148,7 +163,8 @@ class UserRead(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 
     uuid: str
-    email: str
+    email: str | None  # None: an account made with a phone number, no email added yet
+    phone: str | None = None  # +905321234567, when the account signs in with one
     email_verified: bool
     has_password: bool  # false for Google-only accounts: they set one via "forgot password"
     two_factor_enabled: bool

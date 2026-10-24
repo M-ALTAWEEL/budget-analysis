@@ -64,6 +64,18 @@ class Settings(BaseSettings):
     # The website address used in email links. Empty = the first FRONTEND_URL.
     app_url: str = ""
 
+    # Sign-in with a phone number (2e). "none" (off: the option is hidden), "console" (the
+    # code is written to the log; staging only) or a real provider at activation (phase 8).
+    sms_backend: Literal["none", "console"] = "none"
+    # Countries that can receive codes (ISO codes, comma-separated). Turkey and the Arab
+    # League first; more later without a code change.
+    sms_allowed_countries: str = (
+        "TR,AE,SA,QA,KW,BH,OM,JO,LB,SY,IQ,PS,EG,LY,TN,DZ,MA,SD,YE,MR,SO,DJ,KM"
+    )
+    # All codes sent in a day, everywhere. Past it, sending stops and Sentry is told:
+    # the guard against SMS pumping (fake numbers that run up the bill, threat S5).
+    sms_daily_cap: int = 300
+
     # Encrypts the 2FA keys in the database (app/core/secret_box.py). A Fernet key:
     # python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
     # Empty on staging/production = 2FA can't be turned on there yet.
@@ -104,11 +116,18 @@ class Settings(BaseSettings):
         if self.deploy_env == "production" and self.email_backend == "console":
             # The log would hold password-reset links: anyone who reads logs could use them.
             raise ValueError("EMAIL_BACKEND=console is not allowed in production.")
+        if self.deploy_env == "production" and self.sms_backend == "console":
+            # Same reason: sign-in codes in the log would open accounts.
+            raise ValueError("SMS_BACKEND=console is not allowed in production.")
         return self
 
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.frontend_url.split(",") if origin.strip()]
+
+    @property
+    def sms_countries(self) -> set[str]:
+        return {c.strip().upper() for c in self.sms_allowed_countries.split(",") if c.strip()}
 
     @property
     def public_app_url(self) -> str:

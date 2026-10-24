@@ -35,6 +35,8 @@ services:
         value: none # until a real provider is switched on (phase 8); console is refused here
       - key: TOTP_ENCRYPTION_KEY
         sync: false # Fernet key for 2FA secrets; its own value, never the staging one
+      - key: SMS_BACKEND
+        value: none # until an SMS provider is switched on (phase 8); console is refused here
 
   - type: web
     name: budget-analysis-api-staging
@@ -65,3 +67,5 @@ services:
         value: console # emails (with their links) appear in this service's Logs
       - key: TOTP_ENCRYPTION_KEY
         sync: false # Fernet key for 2FA secrets
+      - key: SMS_BACKEND
+        value: console # sign-in codes appear in this service's Logs

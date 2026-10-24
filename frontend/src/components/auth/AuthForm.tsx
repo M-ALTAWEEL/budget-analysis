@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useAuthConfig } from "@/components/auth/AccountForms";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { GoogleButton } from "@/components/auth/GoogleButton";
+import { PhoneSignIn } from "@/components/auth/PhoneSignIn";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError, Select } from "@/components/ui/Field";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -38,6 +39,7 @@ export function LoginForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <h1 className="font-display text-3xl font-semibold">{t.auth.loginTitle}</h1>
       <GoogleButton />
+      <PhoneSignIn />
       <Field
         label={t.auth.email}
         type="email"
@@ -110,6 +112,7 @@ export function RegisterForm() {
     <form onSubmit={handleSubmit} className="space-y-4">
       <h1 className="font-display text-3xl font-semibold">{t.auth.registerTitle}</h1>
       <GoogleButton currency={currency} />
+      <PhoneSignIn currency={currency} />
       <Field
         label={t.auth.name}
         autoComplete="name"

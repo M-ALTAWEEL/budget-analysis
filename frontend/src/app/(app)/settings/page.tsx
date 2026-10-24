@@ -128,7 +128,7 @@ export default function SettingsPage() {
           <div className="rounded-2xl border border-line bg-surface px-5 py-4">
             <p className="font-semibold">{user?.full_name}</p>
             <p className="text-sm text-muted" dir="ltr">
-              {user?.email}
+              {user?.email ?? user?.phone}
             </p>
             <Button variant="secondary" className="mt-4" onClick={logout}>
               <LogOut className="size-4 rtl:-scale-x-100" aria-hidden />

@@ -53,3 +53,18 @@ class FakeBreachChecker:
 
     async def times_seen(self, password: str) -> int:
         return self.breached.get(password, 0)
+
+
+class FakeSmsSender:
+    """Keeps the SMS instead of sending them, so tests can read the code."""
+
+    def __init__(self) -> None:
+        self.sent: list[tuple[str, str]] = []
+
+    async def send(self, phone: str, text: str) -> None:
+        self.sent.append((phone, text))
+
+    def last_code(self) -> str:
+        import re
+
+        return re.search(r"\b(\d{6})\b", self.sent[-1][1]).group(1)

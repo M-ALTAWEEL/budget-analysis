@@ -15,13 +15,14 @@ from fastapi import (
 )
 
 from app.config import settings
-from app.core import secret_box
+from app.core import secret_box, sms
 from app.core.breached import BreachChecker, get_breach_checker
 from app.core.email import EmailSender, get_email_sender, send_safely
 from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
 from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession, RecentAuth
 from app.domain.user.account import AccountService
+from app.domain.user.phone import PhoneService
 from app.domain.user.schema import (
     AuthConfig,
     BackupCodes,
@@ -32,6 +33,8 @@ from app.domain.user.schema import (
     GoogleSignInRequest,
     LoginRequest,
     Message,
+    PhoneSendRequest,
+    PhoneVerifyRequest,
     ReauthRequest,
     RegisterRequest,
     ResetPasswordRequest,
@@ -65,6 +68,7 @@ users_router = APIRouter(prefix="/users", tags=["users"])
 
 Email = Annotated[EmailSender | None, Depends(get_email_sender)]
 Breach = Annotated[BreachChecker, Depends(get_breach_checker)]
+Sms = Annotated[sms.SmsSender | None, Depends(sms.get_sms_sender)]
 BREACHED = (
     "This password has appeared in a data breach, so attackers try it first. "
     "Please choose another one."
@@ -146,12 +150,14 @@ async def login(
 
 
 @auth_router.get("/config")
-async def auth_config(email: Email) -> AuthConfig:
+async def auth_config(email: Email, sender: Sms) -> AuthConfig:
     """Which sign-in options are on. One place for the client ID: the backend's .env."""
     return AuthConfig(
         google_client_id=settings.google_client_id or None,
         email_enabled=email is not None,
         two_factor_available=secret_box.available(),
+        phone_enabled=sender is not None,
+        phone_countries=sorted(settings.sms_countries) if sender is not None else [],
     )
 
 
@@ -325,7 +331,7 @@ async def delete_account(
 ) -> None:
     """Deletes the account and everything in it, now (App Store 5.1.1(v), Google Play)."""
     goodbye = await AccountService(db, client).delete_account(auth.user)
-    if email is not None:
+    if email is not None and goodbye is not None:
         background.add_task(send_safely, email, goodbye)
     response.delete_cookie(REFRESH_COOKIE, path=REFRESH_COOKIE_PATH)
 
@@ -343,6 +349,44 @@ async def export_data(
         media_type="application/zip",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+# ── phone number (phase 2e) ──────────────────────────────────────────────────
+
+
+@auth_router.post("/phone/send", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("5/minute;20/day")  # per IP; per number and per day in PhoneService
+async def send_phone_code(
+    request: Request,
+    data: PhoneSendRequest,
+    db: DbSession,
+    sender: Sms,
+    background: BackgroundTasks,
+) -> Message:
+    if sender is None:
+        raise HTTPException(
+            status.HTTP_503_SERVICE_UNAVAILABLE, "Sign-in by phone is not available yet."
+        )
+    phone, text = await PhoneService(db).send_code(data.phone, data.locale)
+    background.add_task(sms.send_safely, sender, phone, text)
+    return Message(detail="We sent a code to this number.")
+
+
+@auth_router.post("/phone/verify")
+@limiter.limit("30/hour")
+async def verify_phone_code(
+    request: Request,
+    data: PhoneVerifyRequest,
+    response: Response,
+    db: DbSession,
+    client: Client,
+) -> TokenResponse | TwoFactorChallenge:
+    """Signs in with the code; the first time, this creates the account."""
+    phones = PhoneService(db)
+    phone = await phones.check_code(data.phone, data.code)
+    user = await phones.user_for(phone, data.base_currency, data.locale)
+    result = await AuthService(db, client).finish_sign_in(user)
+    return await _signed_in(result, response, db, client)
 
 
 # ── two-factor authentication (phase 2d) ─────────────────────────────────────
@@ -397,15 +441,21 @@ async def new_backup_codes(auth: RecentAuth, db: DbSession, client: Client) -> B
 # ── /users ───────────────────────────────────────────────────────────────────
 
 
+async def _user_read(db, user) -> UserRead:
+    read = UserRead.model_validate(user)
+    read.phone = await PhoneService(db).phone_of(user)
+    return read
+
+
 @users_router.get("/me")
-async def read_me(user: CurrentUser) -> UserRead:
-    return UserRead.model_validate(user)
+async def read_me(user: CurrentUser, db: DbSession) -> UserRead:
+    return await _user_read(db, user)
 
 
 @users_router.patch("/me")
 async def update_me(data: UserUpdate, user: CurrentUser, db: DbSession) -> UserRead:
     updated = await UserService(db).update_profile(user, data)
-    return UserRead.model_validate(updated)
+    return await _user_read(db, updated)
 
 
 # ── /me: Settings → Security ─────────────────────────────────────────────────

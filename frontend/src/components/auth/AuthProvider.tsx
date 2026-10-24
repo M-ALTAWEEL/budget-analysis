@@ -18,6 +18,11 @@ interface AuthContextValue {
     credential: string,
     newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
   ) => Promise<void>;
+  loginWithPhone: (
+    phone: string,
+    code: string,
+    newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
+  ) => Promise<void>;
   logout: () => Promise<void>;
   /** Set when the password (or Google) was right but a 2FA code is needed next. */
   twoFactorChallenge: string | null;
@@ -96,6 +101,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const cancelTwoFactor = useCallback(() => setTwoFactorChallenge(null), []);
 
+  const loginWithPhone = useCallback(
+    async (
+      phone: string,
+      code: string,
+      newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
+    ) => {
+      const challenge = await authService.verifyPhoneCode(phone, code, newAccount);
+      if (challenge) return setTwoFactorChallenge(challenge);
+      await signedIn();
+    },
+    [signedIn],
+  );
+
   const register = useCallback(
     async (input: authService.RegisterInput) => {
       await authService.register(input);
@@ -134,6 +152,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       register,
       loginWithGoogle,
+      loginWithPhone,
       logout,
       updateUser,
       twoFactorChallenge,
@@ -145,6 +164,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       login,
       register,
       loginWithGoogle,
+      loginWithPhone,
       logout,
       updateUser,
       twoFactorChallenge,
