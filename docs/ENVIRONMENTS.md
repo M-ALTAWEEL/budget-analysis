@@ -71,3 +71,11 @@ sentry.io ← حساب مجاني ← **Create Project** ← **FastAPI** ← ا�
 | production | `none` | الإيميلات مطفية لحد التفعيل (المرحلة 8). "نسيت كلمة السر" ما بيظهر |
 
 الـ production **بيرفض يشتغل** إذا حطيت `console`، لأنه روابط تغيير كلمة السر بتصير بالـ logs.
+
+### 8. `TOTP_ENCRYPTION_KEY` (من المرحلة 2d)
+مفتاح بيشفّر مفاتيح المصادقة الثنائية بقاعدة البيانات. **مفتاحين مختلفين**، واحد لكل خدمة على Render (`budgetbuddy-api` و `budget-analysis-api-staging`). بتعمله بأمر:
+```
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+```
+- بدونه، الـ staging والـ production **بيخبّوا** خيار المصادقة الثنائية.
+- ⚠️ **إذا ضاع المفتاح أو تغيّر، كل اللي مفعّلين 2FA ما بيقدروا يدخلوا** إلا بالرموز الاحتياطية. احفظه بمكان آمن (مدير كلمات سر)، وما بيتغيّر.

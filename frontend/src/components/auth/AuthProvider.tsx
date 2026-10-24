@@ -19,6 +19,10 @@ interface AuthContextValue {
     newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
   ) => Promise<void>;
   logout: () => Promise<void>;
+  /** Set when the password (or Google) was right but a 2FA code is needed next. */
+  twoFactorChallenge: string | null;
+  completeTwoFactor: (code: string) => Promise<void>;
+  cancelTwoFactor: () => void;
   /** After a profile change (PATCH /users/me), so every screen sees the new values. */
   updateUser: (user: User) => void;
 }
@@ -69,13 +73,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setState({ status: "authenticated", user });
   }, []);
 
+  const [twoFactorChallenge, setTwoFactorChallenge] = useState<string | null>(null);
+
   const login = useCallback(
     async (email: string, password: string) => {
-      await authService.login(email, password);
+      const challenge = await authService.login(email, password);
+      if (challenge) return setTwoFactorChallenge(challenge);
       await signedIn();
     },
     [signedIn],
   );
+
+  const completeTwoFactor = useCallback(
+    async (code: string) => {
+      if (!twoFactorChallenge) return;
+      await authService.verifyTwoFactor(twoFactorChallenge, code);
+      setTwoFactorChallenge(null);
+      await signedIn();
+    },
+    [twoFactorChallenge, signedIn],
+  );
+
+  const cancelTwoFactor = useCallback(() => setTwoFactorChallenge(null), []);
 
   const register = useCallback(
     async (input: authService.RegisterInput) => {
@@ -90,7 +109,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       credential: string,
       newAccount: Pick<authService.RegisterInput, "base_currency" | "locale">,
     ) => {
-      await authService.googleSignIn(credential, newAccount);
+      const challenge = await authService.googleSignIn(credential, newAccount);
+      if (challenge) return setTwoFactorChallenge(challenge);
       await signedIn();
     },
     [signedIn],
@@ -109,8 +129,28 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ ...state, login, register, loginWithGoogle, logout, updateUser }),
-    [state, login, register, loginWithGoogle, logout, updateUser],
+    () => ({
+      ...state,
+      login,
+      register,
+      loginWithGoogle,
+      logout,
+      updateUser,
+      twoFactorChallenge,
+      completeTwoFactor,
+      cancelTwoFactor,
+    }),
+    [
+      state,
+      login,
+      register,
+      loginWithGoogle,
+      logout,
+      updateUser,
+      twoFactorChallenge,
+      completeTwoFactor,
+      cancelTwoFactor,
+    ],
   );
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

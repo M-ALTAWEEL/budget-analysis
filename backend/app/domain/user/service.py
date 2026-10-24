@@ -52,6 +52,13 @@ class IssuedTokens:
     refresh_max_age: int  # seconds until the session ends if it is not used
 
 
+@dataclass(frozen=True)
+class SecondStepNeeded:
+    """Signed in with the first factor; the 2FA code comes next (see two_factor.py)."""
+
+    user: User
+
+
 def _alive(user_session: UserSession, now: datetime) -> bool:
     return (
         user_session.revoked_at is None
@@ -91,11 +98,11 @@ class AuthService:
             await self.session.rollback()
             raise self._email_taken() from None
 
-        tokens = self._start_session(user)
+        tokens = self.start_session(user)
         await self.session.commit()
         return tokens
 
-    async def login(self, data: LoginRequest) -> IssuedTokens:
+    async def login(self, data: LoginRequest) -> IssuedTokens | SecondStepNeeded:
         user = await self.users.get_by_email(data.email)
         if user is None:
             verify_password(data.password, DUMMY_PASSWORD_HASH)  # same timing as a real check
@@ -107,12 +114,11 @@ class AuthService:
             await self._record_failed_sign_in(user)
         if not user.is_active:
             raise HTTPException(status.HTTP_403_FORBIDDEN, ACCOUNT_DISABLED)
+        return await self._finish_sign_in(user)
 
-        tokens = self._start_session(user)
-        await self.session.commit()
-        return tokens
-
-    async def google(self, identity: GoogleIdentity, data: GoogleSignInRequest) -> IssuedTokens:
+    async def google(
+        self, identity: GoogleIdentity, data: GoogleSignInRequest
+    ) -> IssuedTokens | SecondStepNeeded:
         """Sign in with Google, linking or creating the account the first time."""
         if not identity.email_verified:
             # Google has not confirmed this person owns the email: never trust it.
@@ -157,8 +163,14 @@ class AuthService:
                     last_used_at=now,
                 )
             )
+        return await self._finish_sign_in(user)
 
-        tokens = self._start_session(user)
+    async def _finish_sign_in(self, user: User) -> IssuedTokens | SecondStepNeeded:
+        """The first factor (password or Google) is right. With 2FA on, no session yet."""
+        if user.two_factor_enabled:
+            await self.session.commit()  # keep what changed (e.g. Google just linked)
+            return SecondStepNeeded(user)
+        tokens = self.start_session(user)
         await self.session.commit()
         return tokens
 
@@ -235,7 +247,7 @@ class AuthService:
 
     # ── helpers ──────────────────────────────────────────────────────────────
 
-    def _start_session(self, user: User) -> IssuedTokens:
+    def start_session(self, user: User) -> IssuedTokens:
         now = datetime.now(UTC)
         raw_refresh = generate_refresh_token()
         user_session = UserSession(

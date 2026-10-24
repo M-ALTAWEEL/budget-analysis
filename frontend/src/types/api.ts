@@ -14,11 +14,18 @@ export interface TokenResponse {
   expires_in: number;
 }
 
+/** The answer to a right password when 2FA is on: a code is needed before any session. */
+export interface TwoFactorChallenge {
+  two_factor_required: true;
+  challenge: string;
+}
+
 export interface User {
   uuid: string;
   email: string;
   email_verified: boolean;
   has_password: boolean; // false: signs in with Google only
+  two_factor_enabled: boolean;
   full_name: string;
   base_currency: Currency;
   secondary_currency: Currency | null;

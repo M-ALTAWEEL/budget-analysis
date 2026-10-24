@@ -15,6 +15,8 @@ from fastapi import (
 )
 
 from app.config import settings
+from app.core import secret_box
+from app.core.breached import BreachChecker, get_breach_checker
 from app.core.email import EmailSender, get_email_sender, send_safely
 from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
@@ -22,8 +24,10 @@ from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession, Recent
 from app.domain.user.account import AccountService
 from app.domain.user.schema import (
     AuthConfig,
+    BackupCodes,
     ChangeEmailRequest,
     ChangePasswordRequest,
+    CodeRequest,
     ForgotPasswordRequest,
     GoogleSignInRequest,
     LoginRequest,
@@ -36,6 +40,10 @@ from app.domain.user.schema import (
     SessionRead,
     TokenRequest,
     TokenResponse,
+    TwoFactorChallenge,
+    TwoFactorSetup,
+    TwoFactorStatus,
+    TwoFactorVerifyRequest,
     UserRead,
     UserUpdate,
 )
@@ -43,9 +51,11 @@ from app.domain.user.service import (
     AccountEmailService,
     AuthService,
     IssuedTokens,
+    SecondStepNeeded,
     SessionService,
     UserService,
 )
+from app.domain.user.two_factor import TwoFactorService
 
 REFRESH_COOKIE = "refresh_token"
 REFRESH_COOKIE_PATH = f"{settings.api_prefix}/auth"
@@ -54,6 +64,28 @@ auth_router = APIRouter(prefix="/auth", tags=["auth"])
 users_router = APIRouter(prefix="/users", tags=["users"])
 
 Email = Annotated[EmailSender | None, Depends(get_email_sender)]
+Breach = Annotated[BreachChecker, Depends(get_breach_checker)]
+BREACHED = (
+    "This password has appeared in a data breach, so attackers try it first. "
+    "Please choose another one."
+)
+
+
+async def _ensure_not_breached(breach: BreachChecker, password: str) -> None:
+    # 422 like the other password rules, so the website shows it next to the form.
+    if await breach.times_seen(password) > 0:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, BREACHED)
+
+
+async def _signed_in(
+    result: IssuedTokens | SecondStepNeeded, response: Response, db, client
+) -> TokenResponse | TwoFactorChallenge:
+    if isinstance(result, SecondStepNeeded):
+        challenge = await TwoFactorService(db, client).start_challenge(result.user)
+        return TwoFactorChallenge(challenge=challenge)
+    return _send_tokens(response, result)
+
+
 EMAIL_ON_ITS_WAY = "If an account exists for this email, we sent a link to it."
 me_router = APIRouter(prefix="/me", tags=["me"])
 
@@ -86,8 +118,10 @@ async def register(
     db: DbSession,
     client: Client,
     email: Email,
+    breach: Breach,
     background: BackgroundTasks,
 ) -> TokenResponse:
+    await _ensure_not_breached(breach, data.password)
     auth = AuthService(db, client)
     tokens = await auth.register(data)
     if email is not None:
@@ -106,16 +140,18 @@ async def login(
     response: Response,
     db: DbSession,
     client: Client,
-) -> TokenResponse:
-    tokens = await AuthService(db, client).login(data)
-    return _send_tokens(response, tokens)
+) -> TokenResponse | TwoFactorChallenge:
+    result = await AuthService(db, client).login(data)
+    return await _signed_in(result, response, db, client)
 
 
 @auth_router.get("/config")
 async def auth_config(email: Email) -> AuthConfig:
     """Which sign-in options are on. One place for the client ID: the backend's .env."""
     return AuthConfig(
-        google_client_id=settings.google_client_id or None, email_enabled=email is not None
+        google_client_id=settings.google_client_id or None,
+        email_enabled=email is not None,
+        two_factor_available=secret_box.available(),
     )
 
 
@@ -128,10 +164,10 @@ async def google_sign_in(
     db: DbSession,
     client: Client,
     google: Annotated[GoogleVerifier, Depends(get_google_verifier)],
-) -> TokenResponse:
+) -> TokenResponse | TwoFactorChallenge:
     identity = await google.verify(data.credential)
-    tokens = await AuthService(db, client).google(identity, data)
-    return _send_tokens(response, tokens)
+    result = await AuthService(db, client).google(identity, data)
+    return await _signed_in(result, response, db, client)
 
 
 @auth_router.post("/refresh")
@@ -209,16 +245,23 @@ async def forgot_password(
 @auth_router.post("/password/reset", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("10/hour")
 async def reset_password(
-    request: Request, data: ResetPasswordRequest, db: DbSession, client: Client
+    request: Request, data: ResetPasswordRequest, db: DbSession, client: Client, breach: Breach
 ) -> None:
+    await _ensure_not_breached(breach, data.password)
     await AccountEmailService(db, client).reset_password(data.token, data.password)
 
 
 @auth_router.post("/password/change", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("10/hour")
 async def change_password(
-    request: Request, data: ChangePasswordRequest, auth: CurrentAuth, db: DbSession, client: Client
+    request: Request,
+    data: ChangePasswordRequest,
+    auth: CurrentAuth,
+    db: DbSession,
+    client: Client,
+    breach: Breach,
 ) -> None:
+    await _ensure_not_breached(breach, data.new_password)
     await AccountEmailService(db, client).change_password(
         auth.user, auth.session.uuid, data.current_password, data.new_password
     )
@@ -300,6 +343,55 @@ async def export_data(
         media_type="application/zip",
         headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
+
+
+# ── two-factor authentication (phase 2d) ─────────────────────────────────────
+
+
+@auth_router.post("/2fa/verify")
+@limiter.limit("10/minute")
+async def verify_two_factor(
+    request: Request,
+    data: TwoFactorVerifyRequest,
+    response: Response,
+    db: DbSession,
+    client: Client,
+) -> TokenResponse:
+    """The second step of signing in: the challenge from /login (or /google) and a code."""
+    user = await TwoFactorService(db, client).finish_challenge(data.challenge, data.code)
+    tokens = AuthService(db, client).start_session(user)
+    await db.commit()
+    return _send_tokens(response, tokens)
+
+
+@me_router.get("/2fa")
+async def two_factor_status(auth: CurrentAuth, db: DbSession, client: Client) -> TwoFactorStatus:
+    left = await TwoFactorService(db, client).backup_codes_left(auth.user)
+    return TwoFactorStatus(enabled=auth.user.two_factor_enabled, backup_codes_left=left)
+
+
+@me_router.post("/2fa/setup")
+async def setup_two_factor(auth: RecentAuth, db: DbSession, client: Client) -> TwoFactorSetup:
+    return TwoFactorSetup(**await TwoFactorService(db, client).setup(auth.user))
+
+
+@me_router.post("/2fa/enable")
+@limiter.limit("10/minute")
+async def enable_two_factor(
+    request: Request, data: CodeRequest, auth: CurrentAuth, db: DbSession, client: Client
+) -> BackupCodes:
+    codes = await TwoFactorService(db, client).enable(auth.user, data.code)
+    return BackupCodes(codes=codes)
+
+
+@me_router.post("/2fa/disable", status_code=status.HTTP_204_NO_CONTENT)
+async def disable_two_factor(auth: RecentAuth, db: DbSession, client: Client) -> None:
+    await TwoFactorService(db, client).disable(auth.user)
+
+
+@me_router.post("/2fa/backup-codes")
+async def new_backup_codes(auth: RecentAuth, db: DbSession, client: Client) -> BackupCodes:
+    return BackupCodes(codes=await TwoFactorService(db, client).new_backup_codes(auth.user))
 
 
 # ── /users ───────────────────────────────────────────────────────────────────

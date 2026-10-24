@@ -101,7 +101,7 @@ export function RegisterForm() {
         locale, // the language they are reading now becomes the account's language
       });
     } catch (err) {
-      setError(errorMessage(err, { 409: t.errors.emailTaken }));
+      setError(errorMessage(err, { 409: t.errors.emailTaken, 422: t.account.breached }));
       setBusy(false);
     }
   }

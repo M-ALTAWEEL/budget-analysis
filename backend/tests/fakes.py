@@ -43,3 +43,13 @@ class FakeEmailSender:
         """The token in the link of a sent email (the last one by default)."""
         text = self.sent[index].text
         return text.split("token=", 1)[1].split()[0]
+
+
+class FakeBreachChecker:
+    """Instead of Have I Been Pwned: only the passwords listed here are "breached"."""
+
+    def __init__(self, breached: dict[str, int] | None = None) -> None:
+        self.breached = breached or {}
+
+    async def times_seen(self, password: str) -> int:
+        return self.breached.get(password, 0)

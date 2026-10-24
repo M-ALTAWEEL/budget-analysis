@@ -136,7 +136,7 @@ export function ResetPasswordForm() {
       setState("saved");
     } catch (err) {
       if ((err as { response?: { status?: number } }).response?.status === 400) setState("invalid");
-      else setError(errorMessage(err));
+      else setError(errorMessage(err, { 422: t.account.breached }));
     } finally {
       setBusy(false);
     }

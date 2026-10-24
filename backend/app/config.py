@@ -64,6 +64,11 @@ class Settings(BaseSettings):
     # The website address used in email links. Empty = the first FRONTEND_URL.
     app_url: str = ""
 
+    # Encrypts the 2FA keys in the database (app/core/secret_box.py). A Fernet key:
+    # python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+    # Empty on staging/production = 2FA can't be turned on there yet.
+    totp_encryption_key: str = ""
+
     # Shared rate-limit counters (Redis). Empty = in memory, fine for one server.
     redis_url: str = ""
 

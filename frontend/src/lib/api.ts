@@ -54,7 +54,14 @@ export function refreshAccessToken(): Promise<string | null> {
   return refreshInFlight;
 }
 
-const AUTH_ENDPOINTS = ["/auth/login", "/auth/register", "/auth/refresh", "/auth/logout"];
+// A 401 from these means "wrong", not "session expired": no refresh-and-retry for them.
+const AUTH_ENDPOINTS = [
+  "/auth/login",
+  "/auth/register",
+  "/auth/refresh",
+  "/auth/logout",
+  "/auth/2fa/verify",
+];
 
 type RetriableConfig = InternalAxiosRequestConfig & { _retried?: boolean };
 

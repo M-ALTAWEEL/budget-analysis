@@ -6,6 +6,7 @@ import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
+import { TwoFactorSection } from "@/components/settings/TwoFactorSection";
 import { Field, FormError } from "@/components/ui/Field";
 import { LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -65,6 +66,7 @@ export function SecuritySection() {
           <ChangePassword />
         </section>
       )}
+      <TwoFactorSection />
       <section aria-labelledby="devices">
         <h2 id="devices" className="mb-1 font-display text-lg font-semibold">
           {t.settings.security.devices}
@@ -100,7 +102,7 @@ function ChangePassword() {
       void queryClient.invalidateQueries({ queryKey: SESSIONS_KEY });
       void queryClient.invalidateQueries({ queryKey: EVENTS_KEY });
     },
-    onError: (err) => setError(errorMessage(err, { 400: t.account.wrongCurrent })),
+    onError: (err) => setError(errorMessage(err, { 400: t.account.wrongCurrent, 422: t.account.breached })),
   });
 
   function handleSubmit(event: React.FormEvent) {

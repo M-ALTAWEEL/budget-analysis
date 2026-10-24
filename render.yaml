@@ -33,6 +33,8 @@ services:
         sync: false # same value as EDGE_SECRET on Vercel (Production)
       - key: EMAIL_BACKEND
         value: none # until a real provider is switched on (phase 8); console is refused here
+      - key: TOTP_ENCRYPTION_KEY
+        sync: false # Fernet key for 2FA secrets; its own value, never the staging one
 
   - type: web
     name: budget-analysis-api-staging
@@ -61,3 +63,5 @@ services:
         sync: false # same value as EDGE_SECRET on Vercel (Preview)
       - key: EMAIL_BACKEND
         value: console # emails (with their links) appear in this service's Logs
+      - key: TOTP_ENCRYPTION_KEY
+        sync: false # Fernet key for 2FA secrets
