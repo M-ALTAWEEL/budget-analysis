@@ -56,7 +56,7 @@ class TwoFactorService:
         secret = totp.new_secret()
         user.totp_secret_enc = secret_box.encrypt(secret)
         await self.session.commit()
-        uri = totp.provisioning_uri(secret, user.email)
+        uri = totp.provisioning_uri(secret, user.email or user.full_name)
         return {
             "secret": secret,
             "otpauth_uri": uri,

@@ -11,6 +11,7 @@ from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.user.model import (
     BackupCode,
     OneTimeToken,
+    PhoneCode,
     RefreshToken,
     SecurityEvent,
     User,
@@ -27,6 +28,7 @@ __all__ = [
     "Expense",
     "GoalContribution",
     "OneTimeToken",
+    "PhoneCode",
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",

@@ -17,7 +17,8 @@ dependencies = [
     "redis>=5.0",  # shared rate-limit counters when there is more than one server
     "httpx>=0.28",
     "sentry-sdk[fastapi]>=2.0",  # error reports, only active when SENTRY_DSN is set
-    "segno>=1.6",  # QR codes for setting up 2FA (pure Python, no other dependencies)
+    "segno>=1.6",
+    "phonenumbers>=8.13",  # phone numbers: validation, E.164, which country  # QR codes for setting up 2FA (pure Python, no other dependencies)
 ]
 
 [project.optional-dependencies]

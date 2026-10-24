@@ -21,7 +21,8 @@ from app.base import BaseModel
 class User(BaseModel):
     __tablename__ = "users"
 
-    email: Mapped[str] = mapped_column(String(255), unique=True)
+    # None for accounts made with a phone number (2e) until they add an email.
+    email: Mapped[str | None] = mapped_column(String(255), unique=True)
     # When we know the person owns the email: Google/Apple said so, or (phase 2b) they
     # clicked our link. Until then a provider sign-in with this email takes the account
     # over instead of joining it (threat S7).
@@ -113,6 +114,19 @@ class OneTimeToken(BaseModel):
     used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # Wrong codes typed against this token (the 2FA step of signing in): 5 and it's dead.
     attempts: Mapped[int] = mapped_column(Integer, server_default="0")
+
+
+class PhoneCode(BaseModel):
+    """A 6-digit sign-in code sent by SMS. Only its HMAC is stored, never the code."""
+
+    __tablename__ = "phone_codes"
+    __table_args__ = (Index("ix_phone_codes_phone_created_at", "phone", "created_at"),)
+
+    phone: Mapped[str] = mapped_column(String(20))  # E.164, e.g. +905321234567
+    code_hash: Mapped[str] = mapped_column(String(64))
+    attempts: Mapped[int] = mapped_column(Integer, server_default="0")  # 5 wrong: dead
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class BackupCode(BaseModel):

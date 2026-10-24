@@ -114,7 +114,7 @@ class AuthService:
             await self._record_failed_sign_in(user)
         if not user.is_active:
             raise HTTPException(status.HTTP_403_FORBIDDEN, ACCOUNT_DISABLED)
-        return await self._finish_sign_in(user)
+        return await self.finish_sign_in(user)
 
     async def google(
         self, identity: GoogleIdentity, data: GoogleSignInRequest
@@ -163,9 +163,9 @@ class AuthService:
                     last_used_at=now,
                 )
             )
-        return await self._finish_sign_in(user)
+        return await self.finish_sign_in(user)
 
-    async def _finish_sign_in(self, user: User) -> IssuedTokens | SecondStepNeeded:
+    async def finish_sign_in(self, user: User) -> IssuedTokens | SecondStepNeeded:
         """The first factor (password or Google) is right. With 2FA on, no session yet."""
         if user.two_factor_enabled:
             await self.session.commit()  # keep what changed (e.g. Google just linked)
@@ -375,7 +375,7 @@ class AccountEmailService:
     # ── verification ─────────────────────────────────────────────────────────
 
     async def start_verification(self, user: User) -> EmailMessage | None:
-        if user.email_verified_at is not None:
+        if user.email is None or user.email_verified_at is not None:
             return None
         raw = await self._new_token(user, "verify_email", self.VERIFY_FOR)
         if raw is None:
@@ -405,7 +405,7 @@ class AccountEmailService:
 
     async def forgot_password(self, email: str) -> EmailMessage | None:
         user = await self.users.get_by_email(email)
-        if user is None or not user.is_active:
+        if user is None or not user.is_active or user.email is None:
             return None
         raw = await self._new_token(user, "reset_password", self.RESET_FOR)
         if raw is None:

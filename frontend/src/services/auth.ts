@@ -24,6 +24,24 @@ export async function login(email: string, password: string): Promise<string | n
   return signedInOrChallenge(data);
 }
 
+export async function sendPhoneCode(phone: string, locale: Locale): Promise<void> {
+  await api.post("/auth/phone/send", { phone, locale });
+}
+
+/** Signs in with the SMS code (the first time, it creates the account). */
+export async function verifyPhoneCode(
+  phone: string,
+  code: string,
+  newAccount: Pick<RegisterInput, "base_currency" | "locale">,
+): Promise<string | null> {
+  const { data } = await api.post<TokenResponse | TwoFactorChallenge>("/auth/phone/verify", {
+    phone,
+    code,
+    ...newAccount,
+  });
+  return signedInOrChallenge(data);
+}
+
 export async function verifyTwoFactor(challenge: string, code: string): Promise<void> {
   const { data } = await api.post<TokenResponse>("/auth/2fa/verify", { challenge, code });
   setAccessToken(data.access_token);
@@ -38,6 +56,8 @@ export interface AuthConfig {
   google_client_id: string | null;
   email_enabled: boolean; // false: no "forgot password" and no "confirm your email" yet
   two_factor_available: boolean; // false: the server can't protect 2FA keys yet
+  phone_enabled: boolean; // false: no SMS here yet, "Continue with phone" is hidden
+  phone_countries: string[]; // ISO codes that can receive codes
 }
 
 /** Which sign-in options the server has turned on. */

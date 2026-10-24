@@ -61,6 +61,8 @@ const AUTH_ENDPOINTS = [
   "/auth/refresh",
   "/auth/logout",
   "/auth/2fa/verify",
+  "/auth/phone/send",
+  "/auth/phone/verify",
 ];
 
 type RetriableConfig = InternalAxiosRequestConfig & { _retried?: boolean };

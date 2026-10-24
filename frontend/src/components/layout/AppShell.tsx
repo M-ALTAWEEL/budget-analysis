@@ -126,7 +126,7 @@ function Sidebar() {
       <div className="mt-auto border-t border-line px-3 pt-4">
         <p className="truncate text-sm font-semibold">{user?.full_name}</p>
         <p className="truncate text-sm text-muted" dir="ltr">
-          {user?.email}
+          {user?.email ?? user?.phone}
         </p>
         <button
           type="button"

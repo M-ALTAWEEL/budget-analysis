@@ -48,7 +48,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | S7 | **Found in phase 2 design:** account pre-hijacking. Someone signs up with the victim's (unverified) email; when the victim later signs in with Google, the accounts are linked and the attacker keeps his password | Link only to verified emails; a verified Google/Apple identity takes over an unverified account (password removed, sessions revoked) | ✅ 2a |
 | S3 | Fake Google / Apple identity | Verify the ID token's signature, audience, issuer and expiry on the server | ✅ Google · 🔜 2: Apple |
 | S4 | Signing up with someone else's email or phone | Email verification; phone OTP | 🔜 2 |
-| S5 | SMS pumping (fake numbers that cost us money) | Limits per number, IP and country; country allow-list; provider fraud guard; CAPTCHA after repeats | 🔜 2 |
+| S5 | SMS pumping (fake numbers that cost us money) | Limits per number, IP and country; country allow-list; provider fraud guard; CAPTCHA after repeats | ✅ 2e: per number (1/min, 5/day), per IP (5/min, 20/day), allow-list, daily cap with alert · 🔜 8: provider fraud guard, CAPTCHA |
 | **T: Tampering** ||||
 | T1 | SQL injection | SQLAlchemy with bound parameters only; no string-built SQL | ✅ |
 | T2 | Editing another user's data (IDOR) | Every query filtered by the current user id; public ids are random UUIDs; 404 for others' items | ✅ personal · 🔜 3: groups |
@@ -99,3 +99,4 @@ the date here.
 | 2026-10-24 | 2b | Email verification, password reset (one-time links, hashed, no enumeration) |
 | 2026-10-24 | 2c | Re-auth for sensitive actions; email change via the new inbox; account deletion; data export |
 | 2026-10-25 | 2d | 2FA (TOTP, encrypted keys, single-use codes, backup codes); breached-password check |
+| 2026-10-25 | 2e | Phone sign-in: HMAC'd codes, attempts, allow-list, per-number/IP limits, daily cap (S5) |

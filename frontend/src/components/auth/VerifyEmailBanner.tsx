@@ -18,7 +18,7 @@ export function VerifyEmailBanner() {
   const [state, setState] = useState<"idle" | "sending" | "sent">("idle");
   const [error, setError] = useState<string | null>(null);
 
-  if (!user || user.email_verified || !config.data?.email_enabled) return null;
+  if (!user || !user.email || user.email_verified || !config.data?.email_enabled) return null;
 
   async function resend() {
     setError(null);

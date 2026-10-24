@@ -184,9 +184,11 @@ function ChangeEmail({ run }: { run: Run }) {
         {t.account.emailTitle}
       </h2>
       <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
-        <p className="text-sm text-muted" dir="ltr">
-          {user?.email}
-        </p>
+        {user?.email && (
+          <p className="text-sm text-muted" dir="ltr">
+            {user.email}
+          </p>
+        )}
         <Field
           label={t.account.newEmail}
           type="email"
@@ -276,8 +278,9 @@ function DeleteSheet({ run, onClose }: { run: Run; onClose: () => void }) {
   const [typed, setTyped] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
-  const email = user?.email ?? "";
-  const matches = typed.trim().toLowerCase() === email.toLowerCase();
+  // Typed to confirm: the email, or the phone number for accounts made with one.
+  const email = user?.email ?? user?.phone ?? "";
+  const matches = typed.trim().replace(/\s/g, "").toLowerCase() === email.toLowerCase();
 
   async function handleSubmit(event: React.FormEvent) {
     event.preventDefault();
@@ -300,7 +303,7 @@ function DeleteSheet({ run, onClose }: { run: Run; onClose: () => void }) {
         <p>{t.account.deleteText}</p>
         <Field
           label={t.account.deleteTypeEmail(email)}
-          type="email"
+          type="text"
           dir="ltr"
           autoComplete="off"
           value={typed}

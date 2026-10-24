@@ -98,10 +98,10 @@ class AccountService:
         await self.session.commit()
         link = f"{settings.public_app_url}/confirm-email-change?token={raw}"
         common = {"name": user.full_name, "locale": user.locale}
-        return [
-            build_email("change_email", to=new_email, link=link, **common),
-            build_email("email_changed", to=user.email, **common),
-        ]
+        messages = [build_email("change_email", to=new_email, link=link, **common)]
+        if user.email:  # a phone-only account adding its first email has no old address
+            messages.append(build_email("email_changed", to=user.email, **common))
+        return messages
 
     async def confirm_email_change(self, raw_token: str) -> None:
         now = datetime.now(UTC)
@@ -123,12 +123,14 @@ class AccountService:
 
     # ── deleting the account ─────────────────────────────────────────────────
 
-    async def delete_account(self, user: User) -> EmailMessage:
+    async def delete_account(self, user: User) -> EmailMessage | None:
         """Immediate and permanent (App Store 5.1.1(v), Google Play, GDPR art. 17, KVKK).
         One DELETE: the database removes every row that belongs to the account (ON DELETE
         CASCADE on every user_id): sessions, identities, budgets, expenses, goals, logs."""
-        goodbye = build_email(
-            "account_deleted", to=user.email, name=user.full_name, locale=user.locale
+        goodbye = (
+            build_email("account_deleted", to=user.email, name=user.full_name, locale=user.locale)
+            if user.email
+            else None
         )
         await self.session.execute(delete(User).where(User.id == user.id))
         await self.session.commit()

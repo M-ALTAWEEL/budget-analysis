@@ -22,7 +22,8 @@ export interface TwoFactorChallenge {
 
 export interface User {
   uuid: string;
-  email: string;
+  email: string | null; // null: made with a phone number, no email added yet
+  phone: string | null; // +905321234567
   email_verified: boolean;
   has_password: boolean; // false: signs in with Google only
   two_factor_enabled: boolean;

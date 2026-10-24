@@ -205,7 +205,11 @@ code has run in production. Every step has a `downgrade`.
   and local only), then Twilio Verify or another provider at activation, WhatsApp first
   where it is cheaper.
 - Phone numbers get reassigned to new owners. A number unused for a year needs a second
-  factor (email link) before it can sign in again.
+  factor (email link) before it can sign in again. **(Not built yet: phase 5 or later.)**
+- **How (2e):** codes are stored as an HMAC (keyed with `SECRET_KEY`), only the newest one
+  works, and the first sign-in creates the account (named after the number; no email).
+  `SMS_BACKEND=console` on staging, `none` in production until activation (the option is
+  hidden). Linking a phone to an existing account comes later.
 
 ### Apple
 - **Server-side checks:**
@@ -293,7 +297,7 @@ GET  /me/export                       DELETE /me
 | **2b** ✅ | `EmailSender` + Mailpit, verification, forgot/reset password, change password | Needed by linking, groups and deletion |
 | **2c** ✅ | Re-auth, **change email** (needs re-auth), delete account, export | Store requirements |
 | **2d** ✅ | Password rules + breached check, 2FA with backup codes | |
-| **2e** | Phone sign-in (console sender) | |
+| **2e** ✅ | Phone sign-in (console sender) | |
 | **2f** | Apple sign-in (tests with local keys) | |
 
 Each step: migration, tests, the 3 languages, staging, PR.
