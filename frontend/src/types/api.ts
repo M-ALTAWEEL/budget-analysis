@@ -17,6 +17,8 @@ export interface TokenResponse {
 export interface User {
   uuid: string;
   email: string;
+  email_verified: boolean;
+  has_password: boolean; // false: signs in with Google only
   full_name: string;
   base_currency: Currency;
   secondary_currency: Currency | null;

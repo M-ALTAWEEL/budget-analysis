@@ -141,7 +141,13 @@ code has run in production. Every step has a `downgrade`.
   - `SmtpEmailSender` sends to **Mailpit** in Docker Compose; you read the messages at
     `localhost:8025`.
   - `ResendEmailSender` comes at activation (phase 8).
-- **Production refuses to start** if the provider is `console`.
+- **Production refuses to start** if the provider is `console` (decided by `DEPLOY_ENV`, since
+  staging also runs with `APP_ENV=production`).
+- **Until activation, production has `EMAIL_BACKEND=none`:** `/auth/config` answers
+  `email_enabled: false`, and the website hides "forgot password" and the "confirm your
+  email" banner. Nothing else changes when a provider is switched on.
+- **Emails are sent after the response** (a background task), so the answer and its timing
+  don't depend on whether an account exists. At most 3 emails of a kind per account per hour.
 - **Templates in en, ar and tr**, in the user's language. They contain the link, why it
   was sent, when it expires, and "if this wasn't you, ignore it".
 - **Tokens:** 32 random bytes, stored as SHA-256, used once, short-lived (see 3).
@@ -276,8 +282,8 @@ GET  /me/export                       DELETE /me
 | Step | What | Why first |
 |---|---|---|
 | **2a** ✅ | S6 (client IP), S7 (linking), `sessions`, `security_events`, "my devices" | Fixes the two holes; everything else creates sessions |
-| **2b** | `EmailSender` + Mailpit, verification, forgot/reset password, change email | Needed by linking, groups and deletion |
-| **2c** | Re-auth, delete account, export | Store requirements |
+| **2b** ✅ | `EmailSender` + Mailpit, verification, forgot/reset password, change password | Needed by linking, groups and deletion |
+| **2c** | Re-auth, **change email** (needs re-auth), delete account, export | Store requirements |
 | **2d** | Password rules + breached check, 2FA with backup codes | |
 | **2e** | Phone sign-in (console sender) | |
 | **2f** | Apple sign-in (tests with local keys) | |

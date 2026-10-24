@@ -9,6 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.email import EmailMessage
+from app.core.email_templates import build_email
 from app.core.google import GoogleIdentity
 from app.core.security import (
     DUMMY_PASSWORD_HASH,
@@ -18,9 +20,10 @@ from app.core.security import (
     hash_token,
     verify_password,
 )
-from app.domain.user.model import SecurityEvent, User, UserIdentity, UserSession
+from app.domain.user.model import OneTimeToken, SecurityEvent, User, UserIdentity, UserSession
 from app.domain.user.repository import (
     IdentityRepository,
+    OneTimeTokenRepository,
     SecurityEventRepository,
     SessionRepository,
     UserRepository,
@@ -338,6 +341,144 @@ class SessionService:
                 country=self.client.country,
             )
         )
+
+
+class AccountEmailService:
+    """Email verification and passwords (phase 2b). Each method that sends returns the
+    message; the router sends it after the response, so the answer and its timing are the
+    same whether or not an email went out (no account enumeration)."""
+
+    VERIFY_FOR = timedelta(hours=24)
+    RESET_FOR = timedelta(minutes=30)
+    PER_HOUR = 3  # emails of one kind per account per hour, so nobody can flood an inbox
+
+    def __init__(self, session: AsyncSession, client: ClientInfo) -> None:
+        self.session = session
+        self.client = client
+        self.users = UserRepository(session)
+        self.tokens = OneTimeTokenRepository(session)
+        self.sessions = SessionRepository(session)
+        self.events = SecurityEventRepository(session)
+
+    # ── verification ─────────────────────────────────────────────────────────
+
+    async def start_verification(self, user: User) -> EmailMessage | None:
+        if user.email_verified_at is not None:
+            return None
+        raw = await self._new_token(user, "verify_email", self.VERIFY_FOR)
+        if raw is None:
+            return None
+        await self.session.commit()
+        return build_email(
+            "verify_email",
+            to=user.email,
+            name=user.full_name,
+            locale=user.locale,
+            link=f"{settings.public_app_url}/verify-email?token={raw}",
+        )
+
+    async def verify_email(self, raw_token: str) -> None:
+        now = datetime.now(UTC)
+        token = await self._usable_token(raw_token, "verify_email", now)
+        user = await self.users.get_by_id(token.user_id)
+        if user is None:
+            raise _invalid_link()
+        if user.email_verified_at is None:
+            user.email_verified_at = now
+            self._event(user.id, "email_verified")
+        await self.tokens.use_all(user.id, "verify_email", now)
+        await self.session.commit()
+
+    # ── passwords ────────────────────────────────────────────────────────────
+
+    async def forgot_password(self, email: str) -> EmailMessage | None:
+        user = await self.users.get_by_email(email)
+        if user is None or not user.is_active:
+            return None
+        raw = await self._new_token(user, "reset_password", self.RESET_FOR)
+        if raw is None:
+            return None
+        await self.session.commit()
+        return build_email(
+            "reset_password",
+            to=user.email,
+            name=user.full_name,
+            locale=user.locale,
+            link=f"{settings.public_app_url}/reset-password?token={raw}",
+        )
+
+    async def reset_password(self, raw_token: str, new_password: str) -> None:
+        now = datetime.now(UTC)
+        token = await self._usable_token(raw_token, "reset_password", now)
+        user = await self.users.get_by_id(token.user_id)
+        if user is None or not user.is_active:
+            raise _invalid_link()
+        user.password_hash = hash_password(new_password)
+        # Opening the link proves the inbox is theirs.
+        user.email_verified_at = user.email_verified_at or now
+        await self.tokens.use_all(user.id, "reset_password", now)
+        # Whoever knew the old password (or holds a session) is out, on every device.
+        await self.sessions.revoke_all(user.id, "password_changed", now)
+        self._event(user.id, "password_reset")
+        await self.session.commit()
+
+    async def change_password(
+        self, user: User, current_session_uuid: str, current: str, new: str
+    ) -> None:
+        if user.password_hash is None:
+            raise HTTPException(
+                status.HTTP_400_BAD_REQUEST,
+                "This account has no password yet. Use “Forgot password” to set one.",
+            )
+        # 400, not 401: a wrong password here must not look like an expired session.
+        if not verify_password(current, user.password_hash):
+            raise HTTPException(status.HTTP_400_BAD_REQUEST, "Your current password is wrong.")
+        now = datetime.now(UTC)
+        user.password_hash = hash_password(new)
+        await self.sessions.revoke_all(
+            user.id, "password_changed", now, keep_uuid=current_session_uuid
+        )
+        self._event(user.id, "password_changed")
+        await self.session.commit()
+
+    # ── helpers ──────────────────────────────────────────────────────────────
+
+    async def _new_token(self, user: User, purpose: str, lifetime: timedelta) -> str | None:
+        now = datetime.now(UTC)
+        recent = await self.tokens.count_since(user.id, purpose, now - timedelta(hours=1))
+        if recent >= self.PER_HOUR:
+            return None  # quietly: the answer to the client stays the same
+        raw = generate_refresh_token()  # 48 random bytes, URL-safe
+        self.tokens.add(
+            OneTimeToken(
+                user_id=user.id,
+                purpose=purpose,
+                token_hash=hash_token(raw),
+                expires_at=now + lifetime,
+            )
+        )
+        return raw
+
+    async def _usable_token(self, raw_token: str, purpose: str, now: datetime) -> OneTimeToken:
+        token = await self.tokens.get_by_hash(hash_token(raw_token), purpose)
+        if token is None or token.used_at is not None or token.expires_at <= now:
+            raise _invalid_link()
+        return token
+
+    def _event(self, user_id: int, event_type: str) -> None:
+        self.events.add(
+            SecurityEvent(
+                user_id=user_id,
+                type=event_type,
+                device=self.client.device,
+                country=self.client.country,
+            )
+        )
+
+
+def _invalid_link() -> HTTPException:
+    # One answer for unknown, used and expired links: nothing to learn from the difference.
+    return HTTPException(status.HTTP_400_BAD_REQUEST, "This link is invalid or has expired.")
 
 
 class UserService:

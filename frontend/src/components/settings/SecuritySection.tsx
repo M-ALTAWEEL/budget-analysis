@@ -4,10 +4,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { LogOut, Monitor, ShieldCheck, Smartphone } from "lucide-react";
 import { useState } from "react";
 
+import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
+import { Field, FormError } from "@/components/ui/Field";
 import { LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
+import { changePassword } from "@/services/auth";
 import {
   listSecurityEvents,
   listSessions,
@@ -51,8 +54,17 @@ function countryName(code: string | null, intl: string): string | null {
 /** Settings → Security: where the account is signed in, and what happened lately. */
 export function SecuritySection() {
   const { t } = useI18n();
+  const { user } = useAuth();
   return (
     <>
+      {user?.has_password && (
+        <section aria-labelledby="password">
+          <h2 id="password" className="mb-3 font-display text-lg font-semibold">
+            {t.account.passwordTitle}
+          </h2>
+          <ChangePassword />
+        </section>
+      )}
       <section aria-labelledby="devices">
         <h2 id="devices" className="mb-1 font-display text-lg font-semibold">
           {t.settings.security.devices}
@@ -67,6 +79,67 @@ export function SecuritySection() {
         <Activity />
       </section>
     </>
+  );
+}
+
+/** Changing the password keeps this device signed in and signs out the others. */
+function ChangePassword() {
+  const { t } = useI18n();
+  const queryClient = useQueryClient();
+  const errorMessage = useErrorMessage();
+  const [current, setCurrent] = useState("");
+  const [next, setNext] = useState("");
+  const [notice, setNotice] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const change = useMutation({
+    mutationFn: () => changePassword(current, next),
+    onSuccess: () => {
+      setCurrent("");
+      setNext("");
+      setNotice(t.account.passwordChanged);
+      void queryClient.invalidateQueries({ queryKey: SESSIONS_KEY });
+      void queryClient.invalidateQueries({ queryKey: EVENTS_KEY });
+    },
+    onError: (err) => setError(errorMessage(err, { 400: t.account.wrongCurrent })),
+  });
+
+  function handleSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    setError(null);
+    setNotice(null);
+    if (next.length < 8) return setError(t.auth.passwordTooShort);
+    change.mutate();
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+      <Field
+        label={t.account.currentPassword}
+        type="password"
+        autoComplete="current-password"
+        value={current}
+        onChange={(e) => setCurrent(e.target.value)}
+        required
+      />
+      <Field
+        label={t.account.newPassword}
+        type="password"
+        autoComplete="new-password"
+        hint={t.auth.passwordHint}
+        value={next}
+        onChange={(e) => setNext(e.target.value)}
+        required
+      />
+      <FormError message={error} />
+      {notice && (
+        <p role="status" className="text-sm text-pine">
+          {notice}
+        </p>
+      )}
+      <Button type="submit" variant="secondary" loading={change.isPending}>
+        {t.account.changePassword}
+      </Button>
+    </form>
   );
 }
 

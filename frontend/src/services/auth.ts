@@ -19,10 +19,40 @@ export async function register(input: RegisterInput): Promise<void> {
   setAccessToken(data.access_token);
 }
 
+export interface AuthConfig {
+  google_client_id: string | null;
+  email_enabled: boolean; // false: no "forgot password" and no "confirm your email" yet
+}
+
 /** Which sign-in options the server has turned on. */
-export async function getAuthConfig(): Promise<{ google_client_id: string | null }> {
-  const { data } = await api.get<{ google_client_id: string | null }>("/auth/config");
+export async function getAuthConfig(): Promise<AuthConfig> {
+  const { data } = await api.get<AuthConfig>("/auth/config");
   return data;
+}
+
+// ── email links and passwords ──────────────────────────────────────────────
+
+export async function sendVerificationEmail(): Promise<void> {
+  await api.post("/auth/verify-email/send");
+}
+
+export async function verifyEmail(token: string): Promise<void> {
+  await api.post("/auth/verify-email", { token });
+}
+
+export async function forgotPassword(email: string): Promise<void> {
+  await api.post("/auth/password/forgot", { email });
+}
+
+export async function resetPassword(token: string, password: string): Promise<void> {
+  await api.post("/auth/password/reset", { token, password });
+}
+
+export async function changePassword(currentPassword: string, newPassword: string): Promise<void> {
+  await api.post("/auth/password/change", {
+    current_password: currentPassword,
+    new_password: newPassword,
+  });
 }
 
 /** `credential` is the ID token Google gave the browser. The server checks it with Google. */

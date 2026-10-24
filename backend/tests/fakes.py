@@ -28,3 +28,18 @@ class FakeFxClient:
         if self.fail:
             raise FxUnavailableError("simulated outage")
         return {quote: rate / USD_RATES[base.value] for quote, rate in USD_RATES.items()}
+
+
+class FakeEmailSender:
+    """Keeps the emails instead of sending them, so tests can open the links."""
+
+    def __init__(self) -> None:
+        self.sent = []
+
+    async def send(self, message) -> None:
+        self.sent.append(message)
+
+    def link_token(self, index: int = -1) -> str:
+        """The token in the link of a sent email (the last one by default)."""
+        text = self.sent[index].text
+        return text.split("token=", 1)[1].split()[0]

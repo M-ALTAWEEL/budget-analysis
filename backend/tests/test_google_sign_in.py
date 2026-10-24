@@ -119,8 +119,7 @@ async def test_a_google_account_has_no_password_to_guess(client):
 
 async def test_config_says_whether_google_is_on(client, monkeypatch):
     monkeypatch.setattr(settings, "google_client_id", "")
-    assert (await client.get(f"{API}/auth/config")).json() == {"google_client_id": None}
+    assert (await client.get(f"{API}/auth/config")).json()["google_client_id"] is None
     monkeypatch.setattr(settings, "google_client_id", "123.apps.googleusercontent.com")
-    assert (await client.get(f"{API}/auth/config")).json() == {
-        "google_client_id": "123.apps.googleusercontent.com"
-    }
+    config = (await client.get(f"{API}/auth/config")).json()
+    assert config["google_client_id"] == "123.apps.googleusercontent.com"

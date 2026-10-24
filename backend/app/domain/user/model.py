@@ -27,6 +27,14 @@ class User(BaseModel):
     locale: Mapped[str] = mapped_column(String(5), server_default="en")
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
 
+    @property
+    def email_verified(self) -> bool:
+        return self.email_verified_at is not None
+
+    @property
+    def has_password(self) -> bool:
+        return self.password_hash is not None
+
 
 class UserIdentity(BaseModel):
     """One row per outside way to sign in (Google now; Apple and phone later)."""
@@ -64,6 +72,23 @@ class UserSession(BaseModel):
     revoked_reason: Mapped[str | None] = mapped_column(String(30))
 
 
+class OneTimeToken(BaseModel):
+    """A link we emailed: confirm the email, reset the password. Only the hash is stored,
+    and it works once, for a short time (docs/design/accounts.md, section 3)."""
+
+    __tablename__ = "one_time_tokens"
+    __table_args__ = (
+        Index("ix_one_time_tokens_user_id_purpose", "user_id", "purpose", "created_at"),
+    )
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
+    purpose: Mapped[str] = mapped_column(String(20))  # 'verify_email' | 'reset_password'
+    token_hash: Mapped[str] = mapped_column(String(64), unique=True)
+    payload: Mapped[str | None] = mapped_column(String(255))  # e.g. the new email (2c)
+    expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    used_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class SecurityEvent(BaseModel):
     """What the user sees under "Security activity". Never holds a password or token."""
 
@@ -72,7 +97,7 @@ class SecurityEvent(BaseModel):
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     # 'sign_in' | 'sign_in_failed' | 'session_revoked' | 'token_reuse' | 'identity_linked'
-    # | 'account_taken_over' (more types arrive with phase 2b–2f)
+    # | 'account_taken_over' | 'email_verified' | 'password_changed' | 'password_reset'
     type: Mapped[str] = mapped_column(String(30))
     device: Mapped[str | None] = mapped_column(String(100))
     country: Mapped[str | None] = mapped_column(String(2))

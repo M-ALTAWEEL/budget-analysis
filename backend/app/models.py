@@ -8,7 +8,14 @@ from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.currency.model import ExchangeRate
 from app.domain.expense.model import Expense
 from app.domain.goal.model import GoalContribution, SavingsGoal
-from app.domain.user.model import RefreshToken, SecurityEvent, User, UserIdentity, UserSession
+from app.domain.user.model import (
+    OneTimeToken,
+    RefreshToken,
+    SecurityEvent,
+    User,
+    UserIdentity,
+    UserSession,
+)
 
 __all__ = [
     "Budget",
@@ -17,6 +24,7 @@ __all__ = [
     "ExchangeRate",
     "Expense",
     "GoalContribution",
+    "OneTimeToken",
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",

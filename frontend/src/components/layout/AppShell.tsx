@@ -17,6 +17,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
+import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { ExpenseSheetProvider, useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { MonthProvider, useMonth } from "@/components/layout/MonthProvider";
 import { Logo } from "@/components/ui/Logo";
@@ -55,6 +56,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <div className="min-h-screen lg:grid lg:grid-cols-[240px_1fr]">
           <Sidebar />
           <main className="mx-auto w-full max-w-3xl px-4 pt-6 pb-44 sm:px-8 lg:pt-10 lg:pb-32">
+            <VerifyEmailBanner />
             <PageFade>{children}</PageFade>
           </main>
         </div>

@@ -31,6 +31,8 @@ services:
         sync: false # optional: error reports
       - key: EDGE_SECRET
         sync: false # same value as EDGE_SECRET on Vercel (Production)
+      - key: EMAIL_BACKEND
+        value: none # until a real provider is switched on (phase 8); console is refused here
 
   - type: web
     name: budget-analysis-api-staging
@@ -57,3 +59,5 @@ services:
         sync: false
       - key: EDGE_SECRET
         sync: false # same value as EDGE_SECRET on Vercel (Preview)
+      - key: EMAIL_BACKEND
+        value: console # emails (with their links) appear in this service's Logs
