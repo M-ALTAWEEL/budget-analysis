@@ -3,14 +3,21 @@
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, MailCheck, TriangleAlert } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
-import { forgotPassword, getAuthConfig, resetPassword, verifyEmail } from "@/services/auth";
+import {
+  confirmEmailChange,
+  forgotPassword,
+  getAuthConfig,
+  getMe,
+  resetPassword,
+  verifyEmail,
+} from "@/services/auth";
 
 const LINK = "font-semibold text-pine underline-offset-4 hover:underline";
 
@@ -185,9 +192,18 @@ function InvalidLink() {
   );
 }
 
-export function VerifyEmailView() {
+/** A page that opens an emailed link: sends the token once, then says how it went. */
+function LinkActionView({
+  send,
+  onDone,
+  text,
+}: {
+  send: (token: string) => Promise<void>;
+  onDone: () => void;
+  text: { working: string; doneTitle: string; done: string; failedTitle: string };
+}) {
   const { t } = useI18n();
-  const { status, user, updateUser } = useAuth();
+  const { status } = useAuth();
   const token = useLinkToken();
   const [state, setState] = useState<"working" | "done" | "invalid">("working");
   const started = useRef(false); // a link works once: never send it twice
@@ -195,27 +211,29 @@ export function VerifyEmailView() {
   useEffect(() => {
     if (!token || started.current) return;
     started.current = true;
-    verifyEmail(token)
+    send(token)
       .then(() => setState("done"))
       .catch(() => setState("invalid"));
-  }, [token]);
+  }, [token, send]);
 
   // No token in the address at all: nothing to send, the link is broken.
   const shown = token === null ? "invalid" : state;
 
-  // If this browser is signed in to the same account, the banner goes away at once.
+  const finished = useRef(false);
   useEffect(() => {
-    if (shown === "done" && user && !user.email_verified) updateUser({ ...user, email_verified: true });
-  }, [shown, user, updateUser]);
+    if (shown !== "done" || finished.current) return;
+    finished.current = true;
+    onDone();
+  }, [shown, onDone]);
 
   return (
     <div className="space-y-4">
-      {shown === "working" && <h1 className="font-display text-3xl font-semibold">{t.account.verifyingTitle}</h1>}
+      {shown === "working" && <h1 className="font-display text-3xl font-semibold">{text.working}</h1>}
       {shown === "done" && (
         <>
-          <h1 className="font-display text-3xl font-semibold">{t.account.verifiedTitle}</h1>
+          <h1 className="font-display text-3xl font-semibold">{text.doneTitle}</h1>
           <Notice icon={CheckCircle2} tone="ok">
-            {t.account.verifiedText}
+            {text.done}
           </Notice>
           <Link href={status === "authenticated" ? "/overview" : "/login"} className={LINK}>
             {t.account.continue}
@@ -224,7 +242,7 @@ export function VerifyEmailView() {
       )}
       {shown === "invalid" && (
         <>
-          <h1 className="font-display text-3xl font-semibold">{t.account.verifyFailedTitle}</h1>
+          <h1 className="font-display text-3xl font-semibold">{text.failedTitle}</h1>
           <Notice icon={TriangleAlert} tone="bad">
             {t.account.linkInvalid}
           </Notice>
@@ -234,5 +252,47 @@ export function VerifyEmailView() {
         </>
       )}
     </div>
+  );
+}
+
+export function VerifyEmailView() {
+  const { t } = useI18n();
+  const { user, updateUser } = useAuth();
+  // If this browser is signed in to the same account, the banner goes away at once.
+  const onDone = useCallback(() => {
+    if (user && !user.email_verified) updateUser({ ...user, email_verified: true });
+  }, [user, updateUser]);
+  return (
+    <LinkActionView
+      send={verifyEmail}
+      onDone={onDone}
+      text={{
+        working: t.account.verifyingTitle,
+        doneTitle: t.account.verifiedTitle,
+        done: t.account.verifiedText,
+        failedTitle: t.account.verifyFailedTitle,
+      }}
+    />
+  );
+}
+
+export function ConfirmEmailChangeView() {
+  const { t } = useI18n();
+  const { status, updateUser } = useAuth();
+  // Signed in here: show the new address everywhere straight away.
+  const onDone = useCallback(() => {
+    if (status === "authenticated") void getMe().then(updateUser).catch(() => undefined);
+  }, [status, updateUser]);
+  return (
+    <LinkActionView
+      send={confirmEmailChange}
+      onDone={onDone}
+      text={{
+        working: t.account.emailChangeWorking,
+        doneTitle: t.account.emailChangedTitle,
+        done: t.account.emailChangedText,
+        failedTitle: t.account.emailChangeFailedTitle,
+      }}
+    />
   );
 }
