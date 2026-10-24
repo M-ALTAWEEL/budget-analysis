@@ -3,7 +3,7 @@
 from datetime import datetime
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
 from app.core.money import Currency
 
@@ -74,6 +74,25 @@ class ChangePasswordRequest(BaseModel):
     new_password: str = Field(min_length=8, max_length=72)
 
     _fits_bcrypt = field_validator("new_password")(_fits_bcrypt_limit)
+
+
+class ReauthRequest(BaseModel):
+    """Prove it's you again: the password, or a fresh Google credential."""
+
+    password: str | None = Field(default=None, min_length=1, max_length=200)
+    credential: str | None = Field(default=None, min_length=1, max_length=4096)
+
+    @model_validator(mode="after")
+    def exactly_one(self) -> "ReauthRequest":
+        if (self.password is None) == (self.credential is None):
+            raise ValueError("Send either a password or a Google credential.")
+        return self
+
+
+class ChangeEmailRequest(BaseModel):
+    new_email: EmailStr
+
+    _lower_email = field_validator("new_email")(_normalize_email)
 
 
 class Message(BaseModel):

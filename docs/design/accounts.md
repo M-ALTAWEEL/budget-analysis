@@ -238,10 +238,15 @@ Some actions need a sign-in within the last **10 minutes**:
 
 Otherwise the app asks for the password (or a phone code, or Google / Apple again) first.
 
+**How (2c):** `sessions.reauthenticated_at`. The API answers `403 reauth_required`; the
+website shows "Confirm it's you" (password, or the Google button for Google-only accounts),
+calls `POST /auth/reauth`, then repeats the action. It counts for **this device only**.
+
 ## 10. Account deletion and data export
 
 - **Deletion:**
-  - Settings → Delete account, then a recent sign-in, then type "DELETE" (in the user's language).
+  - Settings → Delete account, then a recent sign-in, then **type the account's email**
+    (the same in every language, and harder to type by accident than a word).
   - Then: sessions revoked; Apple token revoked; groups keep a "Deleted user" (see
     groups.md 8.4); every personal row deleted (CASCADE); email sent.
   - **Immediate and permanent.** No 30-day wait: simpler, and the stores accept it when
@@ -283,7 +288,7 @@ GET  /me/export                       DELETE /me
 |---|---|---|
 | **2a** ✅ | S6 (client IP), S7 (linking), `sessions`, `security_events`, "my devices" | Fixes the two holes; everything else creates sessions |
 | **2b** ✅ | `EmailSender` + Mailpit, verification, forgot/reset password, change password | Needed by linking, groups and deletion |
-| **2c** | Re-auth, **change email** (needs re-auth), delete account, export | Store requirements |
+| **2c** ✅ | Re-auth, **change email** (needs re-auth), delete account, export | Store requirements |
 | **2d** | Password rules + breached check, 2FA with backup codes | |
 | **2e** | Phone sign-in (console sender) | |
 | **2f** | Apple sign-in (tests with local keys) | |
