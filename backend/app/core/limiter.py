@@ -7,12 +7,12 @@ If Redis stops answering, the limiter falls back to memory instead of failing re
 """
 
 from slowapi import Limiter
-from slowapi.util import get_remote_address
 
 from app.config import settings
+from app.core.client_ip import client_ip
 
 limiter = Limiter(
-    key_func=get_remote_address,  # one counter per client IP address
+    key_func=client_ip,  # one counter per visitor IP; see app/core/client_ip.py (S6)
     storage_uri=settings.redis_url or "memory://",
     in_memory_fallback_enabled=True,
 )

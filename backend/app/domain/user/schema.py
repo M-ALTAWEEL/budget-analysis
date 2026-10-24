@@ -89,3 +89,27 @@ class UserUpdate(BaseModel):
         if value is None:
             raise ValueError("This field cannot be null.")
         return value
+
+
+class SessionRead(BaseModel):
+    """One signed-in device in Settings → Security. No token, hash or IP."""
+
+    uuid: str
+    device: str
+    country: str | None
+    created_at: datetime
+    last_used_at: datetime
+    current: bool  # the device making this request
+
+
+class SecurityEventRead(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    type: str
+    device: str | None
+    country: str | None
+    created_at: datetime
+
+
+class RevokedCount(BaseModel):
+    revoked: int

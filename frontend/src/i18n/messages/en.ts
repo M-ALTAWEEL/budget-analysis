@@ -292,6 +292,28 @@ export const en = {
     none: "None",
     manageCategories: "Manage categories",
     version: "Version",
+    security: {
+      devices: "Signed-in devices",
+      devicesHint: "Everywhere your account is open. Sign out of any device you don't recognise.",
+      thisDevice: "This device",
+      lastActive: (when: string) => `Last active ${when}`,
+      signOut: "Sign out",
+      signOutOthers: "Sign out of all other devices",
+      signedOutOthers: (count: number) =>
+        count === 1 ? "Signed out of 1 other device." : `Signed out of ${count} other devices.`,
+      unknownDevice: "Unknown device",
+      activity: "Recent security activity",
+      noActivity: "Nothing yet.",
+      events: {
+        sign_in: "Signed in",
+        sign_in_failed: "Failed sign-in attempt",
+        session_revoked: "A device was signed out",
+        token_reuse: "A copied session was detected and ended",
+        identity_linked: "Google connected to your account",
+        account_taken_over: "Account secured with Google; the old password was removed",
+      } as Record<string, string>,
+      otherEvent: "Security change",
+    },
   },
 
   landing: {

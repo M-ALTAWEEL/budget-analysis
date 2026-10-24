@@ -25,7 +25,16 @@ class Settings(BaseSettings):
     secret_key: str = DEV_SECRET_KEY
     jwt_algorithm: str = "HS256"
     access_token_minutes: int = 15
-    refresh_token_days: int = 7
+    # A session ends after 30 days without use, and 90 days after sign-in whatever happens.
+    session_idle_days: int = 30
+    session_absolute_days: int = 90
+    # Two tabs refreshing at the same moment: the token just replaced still works this long.
+    refresh_grace_seconds: int = 30
+
+    # Shared secret between the website's server (Next.js) and this API. With it, the API
+    # trusts the visitor IP and country the website forwards (X-Client-IP). Empty = never
+    # trusted (local runs). Different value per environment; see docs/design/accounts.md 2.2.
+    edge_secret: str = ""
 
     # "Sign in with Google": the OAuth client ID from Google Cloud Console.
     # Empty = the Google button is hidden and /auth/google answers 503.

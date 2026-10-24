@@ -49,3 +49,14 @@ Vercel ← Settings ← **Environment Variables** ← `API_ORIGIN`:
 
 ### 5. Sentry (تقارير الأخطاء)
 sentry.io ← حساب مجاني ← **Create Project** ← **FastAPI** ← انسخ الـ **DSN** ← حطّه بـ `SENTRY_DSN` بالخدمتين على Render. الأخطاء بتنفصل لحالها: `production` و `staging`.
+
+### 6. `EDGE_SECRET` (من المرحلة 2a)
+سرّ مشترك بين الموقع (Vercel) والـ API (Render)، عشان الـ API يعرف IP الزائر الحقيقي (التهديد S6).
+**سرّين مختلفين**، واحد لكل بيئة. كل واحد بينحط بمكانين **بنفس القيمة**:
+
+| السرّ | Vercel (Environment Variables) | Render |
+|---|---|---|
+| الأول | `EDGE_SECRET` ← **Production** | `budgetbuddy-api` |
+| الثاني | `EDGE_SECRET` ← **Preview** | `budget-analysis-api-staging` |
+
+بتعمل السرّ بأمر: `python -c "import secrets; print(secrets.token_urlsafe(32))"`. ما بينكتب بالشات ولا بالكود.

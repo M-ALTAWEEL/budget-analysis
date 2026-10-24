@@ -289,6 +289,27 @@ export const tr: Messages = {
     none: "Yok",
     manageCategories: "Kategorileri yönet",
     version: "Sürüm",
+    security: {
+      devices: "Oturum açık cihazlar",
+      devicesHint: "Hesabının açık olduğu her yer. Tanımadığın cihazlardan çıkış yap.",
+      thisDevice: "Bu cihaz",
+      lastActive: (when: string) => `Son etkinlik ${when}`,
+      signOut: "Çıkış yap",
+      signOutOthers: "Diğer tüm cihazlardan çıkış yap",
+      signedOutOthers: (count: number) => `${count} cihazdan çıkış yapıldı.`,
+      unknownDevice: "Bilinmeyen cihaz",
+      activity: "Son güvenlik etkinliği",
+      noActivity: "Henüz bir şey yok.",
+      events: {
+        sign_in: "Giriş yapıldı",
+        sign_in_failed: "Başarısız giriş denemesi",
+        session_revoked: "Bir cihazdan çıkış yapıldı",
+        token_reuse: "Kopyalanmış bir oturum fark edildi ve sonlandırıldı",
+        identity_linked: "Google hesabına bağlandı",
+        account_taken_over: "Hesap Google ile güvenceye alındı; eski şifre kaldırıldı",
+      } as Record<string, string>,
+      otherEvent: "Güvenlik değişikliği",
+    },
   },
 
   landing: {

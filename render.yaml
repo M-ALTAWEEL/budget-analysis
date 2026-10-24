@@ -29,6 +29,8 @@ services:
         sync: false
       - key: SENTRY_DSN
         sync: false # optional: error reports
+      - key: EDGE_SECRET
+        sync: false # same value as EDGE_SECRET on Vercel (Production)
 
   - type: web
     name: budget-analysis-api-staging
@@ -53,3 +55,5 @@ services:
         sync: false
       - key: SENTRY_DSN
         sync: false
+      - key: EDGE_SECRET
+        sync: false # same value as EDGE_SECRET on Vercel (Preview)

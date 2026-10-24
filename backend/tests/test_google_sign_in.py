@@ -1,13 +1,24 @@
 """Sign in with Google. Google itself is replaced by a fake verifier: the real one checks
 Google's signature, which no test can produce. What we test is what WE decide."""
 
+from datetime import UTC, datetime
+
 import pytest
 from fastapi import HTTPException, status
+from sqlalchemy import select
 
 from app.config import settings
 from app.core.google import GoogleIdentity, get_google_verifier
+from app.domain.user.model import User
 from app.main import app
 from tests.helpers import API
+
+MOHAMMED_SIGNUP = {
+    "email": "mohammed@example.com",
+    "password": "correct-horse-42",
+    "full_name": "Mo",
+}
+MOHAMMED_LOGIN = {"email": "mohammed@example.com", "password": "correct-horse-42"}
 
 # Each fake "credential" is just the key of an identity below.
 PEOPLE = {
@@ -56,20 +67,38 @@ async def test_the_next_sign_in_is_the_same_account_even_if_the_email_changed(cl
     assert again["uuid"] == first["uuid"]
 
 
-async def test_a_password_account_with_the_same_email_is_linked_not_duplicated(client):
-    registered = await client.post(
-        f"{API}/auth/register",
-        json={"email": "mohammed@example.com", "password": "correct-horse-42", "full_name": "Mo"},
-    )
+async def test_a_verified_password_account_is_linked_and_keeps_its_password(client, db_session):
+    registered = await client.post(f"{API}/auth/register", json=MOHAMMED_SIGNUP)
+    user = await db_session.scalar(select(User).where(User.email == "mohammed@example.com"))
+    user.email_verified_at = datetime.now(UTC)  # (phase 2b: by clicking the email link)
+    await db_session.flush()
+
     by_google = await me(client, await google(client, "mohammed"))
     assert by_google["uuid"] == (await me(client, registered))["uuid"]
-
-    # ...and the password still works.
-    login = await client.post(
-        f"{API}/auth/login",
-        json={"email": "mohammed@example.com", "password": "correct-horse-42"},
-    )
+    login = await client.post(f"{API}/auth/login", json=MOHAMMED_LOGIN)
     assert login.status_code == 200
+
+
+async def test_s7_an_unverified_account_is_taken_over_by_the_real_owner(client):
+    """Account pre-hijacking: an attacker signs up first with the victim's email."""
+    attacker = await client.post(f"{API}/auth/register", json=MOHAMMED_SIGNUP)
+    attacker_refresh = attacker.cookies["refresh_token"]
+    account_uuid = (await me(client, attacker))["uuid"]
+    client.cookies.clear()
+
+    victim = await google(client, "mohammed")
+    assert (await me(client, victim))["uuid"] == account_uuid  # same account, new owner
+    client.cookies.clear()
+
+    # The attacker's password is gone...
+    assert (await client.post(f"{API}/auth/login", json=MOHAMMED_LOGIN)).status_code == 401
+    # ...and so are his sessions, refresh token and access token alike.
+    headers = {"Cookie": f"refresh_token={attacker_refresh}"}
+    assert (await client.post(f"{API}/auth/refresh", headers=headers)).status_code == 401
+    attacker_auth = {"Authorization": f"Bearer {attacker.json()['access_token']}"}
+    assert (await client.get(f"{API}/users/me", headers=attacker_auth)).status_code == 401
+    # The real owner is still in.
+    assert (await me(client, victim))["email"] == "mohammed@example.com"
 
 
 async def test_an_unverified_google_email_is_refused(client):

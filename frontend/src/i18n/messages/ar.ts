@@ -303,6 +303,32 @@ export const ar: Messages = {
     none: "بدون",
     manageCategories: "إدارة الفئات",
     version: "الإصدار",
+    security: {
+      devices: "الأجهزة المسجّل دخولها",
+      devicesHint: "كل الأماكن التي حسابك مفتوح فيها. سجّل الخروج من أي جهاز لا تعرفه.",
+      thisDevice: "هذا الجهاز",
+      lastActive: (when: string) => `آخر نشاط ${when}`,
+      signOut: "تسجيل الخروج",
+      signOutOthers: "تسجيل الخروج من كل الأجهزة الأخرى",
+      signedOutOthers: (count: number) =>
+        count === 1
+          ? "تم تسجيل الخروج من جهاز واحد آخر."
+          : count === 2
+            ? "تم تسجيل الخروج من جهازين آخرين."
+            : `تم تسجيل الخروج من ${count} أجهزة أخرى.`,
+      unknownDevice: "جهاز غير معروف",
+      activity: "النشاط الأمني الأخير",
+      noActivity: "لا يوجد شيء بعد.",
+      events: {
+        sign_in: "تسجيل دخول",
+        sign_in_failed: "محاولة دخول فاشلة",
+        session_revoked: "تم تسجيل خروج جهاز",
+        token_reuse: "تم اكتشاف جلسة منسوخة وإنهاؤها",
+        identity_linked: "تم ربط Google بحسابك",
+        account_taken_over: "تم تأمين الحساب عبر Google وحذف كلمة السر القديمة",
+      } as Record<string, string>,
+      otherEvent: "تغيير أمني",
+    },
   },
 
   landing: {
