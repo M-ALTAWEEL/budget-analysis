@@ -1,12 +1,13 @@
 """Shapes of the data that enters and leaves the groups API. Members appear by display
 name and role only: never an email, phone number or anything from a personal budget."""
 
-from datetime import datetime
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 from typing import Literal
 
-from pydantic import BaseModel, ConfigDict, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.core.money import Currency
+from app.core.money import Currency, PositiveMoney
 
 
 class GroupCreate(BaseModel):
@@ -79,3 +80,85 @@ class InvitePreview(BaseModel):
 
 class RoleUpdate(BaseModel):
     role: Literal["admin", "member"]
+
+
+# ── expenses (phase 3b) ──────────────────────────────────────────────────────
+
+SplitMethod = Literal["equal", "exact", "percent", "shares"]
+# The default categories: when a share is copied into someone's budget (3c), it lands in
+# their own category with the same slug.
+CategorySlug = Literal[
+    "food", "transport", "study", "entertainment", "shopping", "health", "bills", "other"
+]
+
+
+class ShareInput(BaseModel):
+    member: str  # the member's uuid
+    # The percent, the number of shares, or the exact amount. Not sent for "equal".
+    value: Decimal | None = Field(default=None, gt=0, max_digits=14, decimal_places=4)
+
+
+class GroupExpenseInput(BaseModel):
+    """Used to add an expense and to change one (the whole expense is sent again)."""
+
+    model_config = ConfigDict(str_strip_whitespace=True)
+
+    description: str = Field(min_length=1, max_length=200)
+    category: CategorySlug = "other"
+    amount: PositiveMoney
+    currency: Currency | None = None  # what it was paid in; default: the group's currency
+    paid_by: str | None = None  # a member's uuid; default: me
+    spent_at: date = Field(default_factory=date.today)
+    split_method: SplitMethod = "equal"
+    shares: list[ShareInput] = Field(min_length=1, max_length=100)
+
+    @field_validator("spent_at")
+    @classmethod
+    def not_in_future(cls, value: date) -> date:
+        # One day of tolerance: the person's "today" may be ahead of the server's.
+        if value > date.today() + timedelta(days=1):
+            raise ValueError("Expense date cannot be in the future.")
+        return value
+
+    @model_validator(mode="after")
+    def shares_make_sense(self):
+        members = [share.member for share in self.shares]
+        if len(set(members)) != len(members):
+            raise ValueError("Each member can appear only once.")
+        values = [share.value for share in self.shares]
+        if self.split_method == "equal":
+            return self
+        if any(v is None for v in values):
+            raise ValueError("Every share needs a value for this split.")
+        if self.split_method == "percent" and sum(values) != 100:
+            raise ValueError("The percentages must add up to 100.")
+        if self.split_method == "exact" and sum(values) != self.amount:
+            raise ValueError("The amounts must add up to the total.")
+        return self
+
+
+class MemberRef(BaseModel):
+    uuid: str
+    display_name: str
+
+
+class ShareRead(BaseModel):
+    member: MemberRef
+    amount: Decimal  # in the group's currency
+    weight: Decimal | None
+
+
+class GroupExpenseRead(BaseModel):
+    uuid: str
+    description: str
+    category: str
+    amount: Decimal  # in the group's currency
+    original_amount: Decimal
+    original_currency: Currency
+    split_method: SplitMethod
+    spent_at: date
+    paid_by: MemberRef
+    shares: list[ShareRead]
+    my_share: Decimal | None  # None: I'm not part of it
+    can_edit: bool
+    created_at: datetime

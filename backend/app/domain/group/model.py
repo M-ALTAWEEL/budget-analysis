@@ -1,21 +1,26 @@
 """Tables for groups (shared expenses). Design: docs/design/groups.md, section 3.
 
 Group tables never join personal ones, and personal tables never join group ones: the
-only bridge (a member's share copied into their own budget) comes in phase 3c."""
+only bridge (a member's share copied into their own budget) comes in phase 3c.
+Phase 3a: groups, members, invites. Phase 3b: expenses and their shares."""
 
-from datetime import datetime
+from datetime import date, datetime
+from decimal import Decimal
 
 from sqlalchemy import (
     Boolean,
     CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
+    Index,
     Integer,
+    Numeric,
     String,
     UniqueConstraint,
     true,
 )
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.base import BaseModel
 
@@ -67,3 +72,70 @@ class GroupInvite(BaseModel):
     max_uses: Mapped[int | None] = mapped_column(Integer)
     uses: Mapped[int] = mapped_column(Integer, server_default="0")
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+SPLIT_METHODS = ("equal", "exact", "percent", "shares")
+SHARE_STATUSES = ("pending", "added", "dismissed")
+
+
+class GroupExpense(BaseModel):
+    """Something one member paid for the group (phase 3b). `amount` is in the group's
+    currency; `original_amount` and `original_currency` are what was actually paid."""
+
+    __tablename__ = "group_expenses"
+    __table_args__ = (
+        Index("ix_group_expenses_group_id_spent_at", "group_id", "spent_at"),
+        CheckConstraint("amount > 0", name="amount_positive"),
+        CheckConstraint(
+            "split_method IN ('equal', 'exact', 'percent', 'shares')", name="split_method_known"
+        ),
+    )
+
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id", ondelete="CASCADE"))
+    paid_by: Mapped[int] = mapped_column(ForeignKey("group_members.id", ondelete="CASCADE"))
+    created_by: Mapped[int | None] = mapped_column(
+        ForeignKey("group_members.id", ondelete="SET NULL")
+    )
+    description: Mapped[str] = mapped_column(String(200))
+    category_slug: Mapped[str] = mapped_column(String(30))  # one of the default categories
+    amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    original_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    original_currency: Mapped[str] = mapped_column(String(3))
+    fx_rate: Mapped[Decimal] = mapped_column(Numeric(18, 8))  # snapshot, like personal ones
+    split_method: Mapped[str] = mapped_column(String(10))
+    spent_at: Mapped[date] = mapped_column(Date)
+    # Soft delete: balances and history must be explainable later.
+    deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+    shares: Mapped[list["GroupExpenseShare"]] = relationship(
+        lazy="selectin",
+        cascade="all, delete-orphan",
+        order_by="GroupExpenseShare.id",
+    )
+
+
+class GroupExpenseShare(BaseModel):
+    """One member's part of a group expense. The shares of an expense always add up to
+    its amount exactly (docs/design/groups.md, section 4)."""
+
+    __tablename__ = "group_expense_shares"
+    __table_args__ = (
+        UniqueConstraint("group_expense_id", "member_id"),
+        CheckConstraint("amount >= 0", name="amount_not_negative"),
+        CheckConstraint("status IN ('pending', 'added', 'dismissed')", name="status_known"),
+    )
+
+    group_expense_id: Mapped[int] = mapped_column(
+        ForeignKey("group_expenses.id", ondelete="CASCADE"), index=True
+    )
+    member_id: Mapped[int] = mapped_column(
+        ForeignKey("group_members.id", ondelete="CASCADE"), index=True
+    )
+    amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    # What was typed: the percent, the number of shares, or the exact amount. NULL: equal.
+    weight: Mapped[Decimal | None] = mapped_column(Numeric(14, 4))
+    # Phase 3c: whether the member's share was copied into their own budget.
+    status: Mapped[str] = mapped_column(String(10), server_default="pending")
+    personal_expense_id: Mapped[int | None] = mapped_column(
+        ForeignKey("expenses.id", ondelete="SET NULL"), unique=True
+    )

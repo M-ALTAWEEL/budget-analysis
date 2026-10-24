@@ -110,3 +110,104 @@ export async function acceptInvite(token: string): Promise<GroupDetail> {
   const { data } = await api.post<GroupDetail>(`/invites/${encodeURIComponent(token)}/accept`);
   return data;
 }
+
+// ── expenses (phase 3b) ──────────────────────────────────────────────────────
+
+export type SplitMethod = "equal" | "exact" | "percent" | "shares";
+
+/** The default categories a group expense can have (same slugs as personal ones, so a
+ *  share copied into someone's budget lands in their own matching category). */
+export const GROUP_CATEGORIES = [
+  { slug: "food", icon: "utensils", color: "#F97316" },
+  { slug: "transport", icon: "bus", color: "#3B82F6" },
+  { slug: "study", icon: "book-open", color: "#8B5CF6" },
+  { slug: "entertainment", icon: "gamepad-2", color: "#EC4899" },
+  { slug: "shopping", icon: "shopping-bag", color: "#14B8A6" },
+  { slug: "health", icon: "heart-pulse", color: "#EF4444" },
+  { slug: "bills", icon: "receipt", color: "#EAB308" },
+  { slug: "other", icon: "circle-ellipsis", color: "#64748B" },
+] as const;
+
+export type GroupCategory = (typeof GROUP_CATEGORIES)[number]["slug"];
+
+export interface MemberRef {
+  uuid: string;
+  display_name: string;
+}
+
+export interface GroupExpense {
+  uuid: string;
+  description: string;
+  category: GroupCategory;
+  amount: string; // in the group's currency
+  original_amount: string;
+  original_currency: Currency;
+  split_method: SplitMethod;
+  spent_at: string;
+  paid_by: MemberRef;
+  shares: { member: MemberRef; amount: string; weight: string | null }[];
+  my_share: string | null;
+  can_edit: boolean;
+  created_at: string;
+}
+
+export interface GroupExpenseInput {
+  description: string;
+  category: GroupCategory;
+  amount: string;
+  currency: Currency;
+  paid_by: string;
+  spent_at: string;
+  split_method: SplitMethod;
+  shares: { member: string; value?: string }[];
+}
+
+export const EXPENSES_PAGE = 50;
+
+export async function listGroupExpenses(groupUuid: string, offset = 0): Promise<GroupExpense[]> {
+  const { data } = await api.get<GroupExpense[]>(
+    `/groups/${encodeURIComponent(groupUuid)}/expenses`,
+    { params: { limit: EXPENSES_PAGE, offset } },
+  );
+  return data;
+}
+
+export async function saveGroupExpense(
+  groupUuid: string,
+  input: GroupExpenseInput,
+  expenseUuid?: string,
+): Promise<GroupExpense> {
+  const base = `/groups/${encodeURIComponent(groupUuid)}/expenses`;
+  const { data } = expenseUuid
+    ? await api.put<GroupExpense>(`${base}/${encodeURIComponent(expenseUuid)}`, input)
+    : await api.post<GroupExpense>(base, input);
+  return data;
+}
+
+export async function deleteGroupExpense(groupUuid: string, expenseUuid: string): Promise<void> {
+  await api.delete(
+    `/groups/${encodeURIComponent(groupUuid)}/expenses/${encodeURIComponent(expenseUuid)}`,
+  );
+}
+
+/**
+ * A preview of how the server will split (the same largest remainder method as
+ * backend/app/domain/group/split.py). Only for showing: the server's answer is the truth.
+ */
+export function previewSplit(total: number, weights: number[]): number[] {
+  const cents = Math.round(total * 100);
+  const sum = weights.reduce((a, b) => a + b, 0);
+  if (!(cents > 0) || !(sum > 0) || weights.some((w) => !(w > 0))) return weights.map(() => 0);
+  const exact = weights.map((w) => (cents * w) / sum);
+  const parts = exact.map(Math.floor);
+  let left = cents - parts.reduce((a, b) => a + b, 0);
+  const order = exact
+    .map((x, i) => ({ i, rest: x - parts[i] }))
+    .sort((a, b) => b.rest - a.rest || a.i - b.i);
+  for (const { i } of order) {
+    if (left <= 0) break;
+    parts[i] += 1;
+    left -= 1;
+  }
+  return parts.map((p) => p / 100);
+}
