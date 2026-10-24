@@ -2,7 +2,7 @@
 Design: docs/design/groups.md, sections 7 and 8.
 
 Every query that reads a group goes through the current user's own active membership
-(`_membership`), in the query itself: a group someone isn't in simply doesn't exist for
+(`membership`), in the query itself: a group someone isn't in simply doesn't exist for
 them (404, never 403), so even its existence is never confirmed."""
 
 from datetime import UTC, datetime, timedelta
@@ -92,7 +92,7 @@ class GroupService:
         return [self._summary(group, role, n) for group, role, n in rows]
 
     async def detail(self, user: User, group_uuid: str) -> GroupDetail:
-        group, me = await self._membership(user, group_uuid)
+        group, me = await self.membership(user, group_uuid)
         members = (
             await self.session.scalars(
                 select(GroupMember)
@@ -117,7 +117,7 @@ class GroupService:
         )
 
     async def update(self, user: User, group_uuid: str, data: GroupUpdate) -> GroupDetail:
-        group, me = await self._membership(user, group_uuid, lock=True)
+        group, me = await self.membership(user, group_uuid, lock=True)
         self._require(me, "owner")
         changes = data.model_dump(exclude_unset=True)
         if "member_limit" in changes:
@@ -134,7 +134,7 @@ class GroupService:
     # ── invite links ─────────────────────────────────────────────────────────
 
     async def create_invite(self, user: User, group_uuid: str, data: InviteCreate) -> InviteRead:
-        group, me = await self._membership(user, group_uuid)
+        group, me = await self.membership(user, group_uuid)
         self._require(me, "owner", "admin")
         raw = generate_refresh_token()
         invite = GroupInvite(
@@ -157,7 +157,7 @@ class GroupService:
         )
 
     async def list_invites(self, user: User, group_uuid: str) -> list[InviteRead]:
-        group, me = await self._membership(user, group_uuid)
+        group, me = await self.membership(user, group_uuid)
         self._require(me, "owner", "admin")
         invites = (
             await self.session.scalars(
@@ -177,7 +177,7 @@ class GroupService:
         ]
 
     async def revoke_invite(self, user: User, group_uuid: str, invite_uuid: str) -> None:
-        group, me = await self._membership(user, group_uuid)
+        group, me = await self.membership(user, group_uuid)
         self._require(me, "owner", "admin")
         invite = await self.session.scalar(
             select(GroupInvite).where(
@@ -228,7 +228,7 @@ class GroupService:
     async def remove_member(self, user: User, group_uuid: str, member_uuid: str) -> None:
         """Leave (your own uuid) or remove someone. History stays, marked "left".
         (Phase 3d adds: leaving needs a zero balance.)"""
-        group, me = await self._membership(user, group_uuid, lock=True)
+        group, me = await self.membership(user, group_uuid, lock=True)
         target = await self.session.scalar(
             select(GroupMember).where(
                 GroupMember.group_id == group.id,
@@ -246,7 +246,7 @@ class GroupService:
         await self.session.commit()
 
     async def set_role(self, user: User, group_uuid: str, member_uuid: str, role: str) -> None:
-        group, me = await self._membership(user, group_uuid)
+        group, me = await self.membership(user, group_uuid)
         self._require(me, "owner")
         target = await self.session.scalar(
             select(GroupMember).where(
@@ -298,9 +298,11 @@ class GroupService:
 
     # ── helpers ──────────────────────────────────────────────────────────────
 
-    async def _membership(
+    async def membership(
         self, user: User, group_uuid: str, lock: bool = False
     ) -> tuple[Group, GroupMember]:
+        """The group and my active membership in it, or 404. Used by the other group
+        services too (expenses), so every one of them checks membership the same way."""
         query = (
             select(Group, GroupMember)
             .join(GroupMember, GroupMember.group_id == Group.id)

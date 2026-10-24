@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Check, Copy, Crown, LogOut, Share2, Shield, UserMinus, Users } from "lucide-react";
 import { useState } from "react";
 
+import { GroupExpenses } from "@/components/groups/GroupExpenses";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
 import { LoadError } from "@/components/ui/LoadError";
@@ -26,7 +27,7 @@ import {
 
 export const groupKey = (uuid: string) => ["groups", uuid] as const;
 
-/** One group: members, invite links, settings, leaving. */
+/** One group: expenses, members, invite links, settings, leaving. */
 export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }) {
   const { t } = useI18n();
   const errorMessage = useErrorMessage();
@@ -54,6 +55,7 @@ export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }
         </p>
       </header>
       <div className="space-y-10">
+        <GroupExpenses group={g} />
         <Members group={g} />
         {admin && <Invites group={g} />}
         {g.my_role === "owner" && <GroupSettings group={g} />}

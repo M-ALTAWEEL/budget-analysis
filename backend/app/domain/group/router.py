@@ -1,12 +1,19 @@
-"""HTTP endpoints for groups (/groups) and invite links (/invites). Phase 3a."""
+"""HTTP endpoints for groups (/groups), their expenses, and invite links (/invites).
+Phase 3a: groups, members, invites. Phase 3b: expenses."""
 
-from fastapi import APIRouter, Request, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, Query, Request, status
 
 from app.core.limiter import limiter
 from app.dependencies import CurrentUser, DbSession
+from app.domain.currency.client import ExchangeRateClient, get_fx_client
+from app.domain.group.expenses import GroupExpenseService
 from app.domain.group.schema import (
     GroupCreate,
     GroupDetail,
+    GroupExpenseInput,
+    GroupExpenseRead,
     GroupSummary,
     GroupUpdate,
     InviteCreate,
@@ -18,6 +25,7 @@ from app.domain.group.service import GroupService
 from app.domain.user.router import Email
 
 router = APIRouter(prefix="/groups", tags=["groups"])
+FxClient = Annotated[ExchangeRateClient, Depends(get_fx_client)]
 invites_router = APIRouter(prefix="/invites", tags=["groups"])
 
 
@@ -80,6 +88,47 @@ async def set_role(
     group_uuid: str, member_uuid: str, data: RoleUpdate, user: CurrentUser, db: DbSession
 ) -> None:
     await GroupService(db).set_role(user, group_uuid, member_uuid, data.role)
+
+
+# ── expenses (phase 3b) ──────────────────────────────────────────────────────
+
+
+@router.get("/{group_uuid}/expenses")
+async def list_group_expenses(
+    group_uuid: str,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+    limit: Annotated[int, Query(ge=1, le=100)] = 50,
+    offset: Annotated[int, Query(ge=0)] = 0,
+) -> list[GroupExpenseRead]:
+    return await GroupExpenseService(db, fx).list(user, group_uuid, limit, offset)
+
+
+@router.post("/{group_uuid}/expenses", status_code=status.HTTP_201_CREATED)
+async def add_group_expense(
+    group_uuid: str, data: GroupExpenseInput, user: CurrentUser, db: DbSession, fx: FxClient
+) -> GroupExpenseRead:
+    return await GroupExpenseService(db, fx).create(user, group_uuid, data)
+
+
+@router.put("/{group_uuid}/expenses/{expense_uuid}")
+async def change_group_expense(
+    group_uuid: str,
+    expense_uuid: str,
+    data: GroupExpenseInput,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+) -> GroupExpenseRead:
+    return await GroupExpenseService(db, fx).update(user, group_uuid, expense_uuid, data)
+
+
+@router.delete("/{group_uuid}/expenses/{expense_uuid}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_group_expense(
+    group_uuid: str, expense_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient
+) -> None:
+    await GroupExpenseService(db, fx).delete(user, group_uuid, expense_uuid)
 
 
 @invites_router.get("/{token}")
