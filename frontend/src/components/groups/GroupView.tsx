@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowLeft, Check, Copy, Crown, LogOut, Share2, Shield, UserMinus, Users } from "lucide-react";
 import { useState } from "react";
 
+import { ByUsername } from "@/components/groups/ByUsername";
 import { GroupExpenses } from "@/components/groups/GroupExpenses";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
@@ -259,6 +260,8 @@ function Invites({ group }: { group: GroupDetail }) {
           </div>
         )}
         <FormError message={error} />
+        <hr className="border-line" />
+        <ByUsername group={group} />
       </div>
     </section>
   );

@@ -453,7 +453,10 @@ async def read_me(user: CurrentUser, db: DbSession) -> UserRead:
 
 
 @users_router.patch("/me")
-async def update_me(data: UserUpdate, user: CurrentUser, db: DbSession) -> UserRead:
+@limiter.limit("30/minute")  # also slows down guessing which usernames are taken
+async def update_me(
+    request: Request, data: UserUpdate, user: CurrentUser, db: DbSession
+) -> UserRead:
     updated = await UserService(db).update_profile(user, data)
     return await _user_read(db, updated)
 

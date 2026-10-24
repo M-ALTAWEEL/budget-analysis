@@ -33,6 +33,9 @@ class User(BaseModel):
     # of the code keeps working if we roll back; dropped by a later migration.
     google_sub: Mapped[str | None] = mapped_column(String(255), unique=True)
     full_name: Mapped[str] = mapped_column(String(100))
+    # Optional, chosen in Settings, so friends can add you to a group (phase 3c). Always
+    # stored in lower case, so "Sara" and "sara" can never be two different people.
+    username: Mapped[str | None] = mapped_column(String(20), unique=True)
     base_currency: Mapped[str] = mapped_column(String(3), server_default="TRY")
     secondary_currency: Mapped[str | None] = mapped_column(String(3))
     locale: Mapped[str] = mapped_column(String(5), server_default="en")

@@ -226,6 +226,7 @@ class AccountService:
                 "email": user.email,
                 "email_verified": user.email_verified,
                 "full_name": user.full_name,
+                "username": user.username,
                 "base_currency": user.base_currency,
                 "secondary_currency": user.secondary_currency,
                 "language": user.locale,

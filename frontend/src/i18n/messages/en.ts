@@ -198,6 +198,20 @@ export const en = {
     otherCurrency: "Paid in another currency: it's converted to the group's currency at today's rate.",
     showMore: "Show more",
     edit: "Change",
+    byUsername: "Add by username",
+    byUsernameText: "They get an invitation on their Groups page and join when they accept.",
+    usernamePlaceholder: "@username",
+    send: "Send",
+    sentTo: (name: string) => `Invitation sent to ${name}.`,
+    noSuchUser: "No one has this username.",
+    alreadyMember: "They're already in this group.",
+    declinedRecently: "They said no recently. You can ask again later.",
+    waiting: "Waiting for an answer",
+    cancel: "Cancel",
+    invitations: "Invitations",
+    invitedYou: (name: string) => `${name} invited you`,
+    accept: "Join",
+    decline: "No thanks",
   },
 
   currencies: {
@@ -428,6 +442,18 @@ export const en = {
     tooMuch: "You can't take out more than is saved in this goal.",
     removeOrder: "Remove the withdrawals made after it first.",
     futureDate: "The date can't be in the future.",
+  },
+
+  profile: {
+    title: "Profile",
+    name: "Your name",
+    nameHint: "What the people in your groups see.",
+    username: "Username",
+    usernameHint: "Friends can add you to a group with it. 3–20 letters, numbers, dots or underscores.",
+    usernameRule: "Username: use 3 to 20 letters, numbers, dots or underscores, starting with a letter.",
+    usernameTaken: "This username is taken. Try another one.",
+    save: "Save",
+    saved: "Saved",
   },
 
   settings: {

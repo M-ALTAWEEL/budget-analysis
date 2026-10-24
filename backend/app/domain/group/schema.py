@@ -162,3 +162,30 @@ class GroupExpenseRead(BaseModel):
     my_share: Decimal | None  # None: I'm not part of it
     can_edit: bool
     created_at: datetime
+
+
+# ── invitations by username (phase 3c) ───────────────────────────────────────
+
+
+class UsernameInvite(BaseModel):
+    username: str = Field(min_length=1, max_length=21)  # "@" allowed in front
+
+
+class SentRequestRead(BaseModel):
+    """An invitation the group sent, as its admins see it."""
+
+    uuid: str
+    username: str | None
+    display_name: str
+    created_at: datetime
+
+
+class ReceivedRequestRead(BaseModel):
+    """An invitation I received, as I see it on my Groups page."""
+
+    uuid: str
+    group_name: str
+    member_count: int
+    member_limit: int
+    invited_by: str | None  # the inviter's display name
+    created_at: datetime

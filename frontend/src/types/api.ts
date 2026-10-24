@@ -28,6 +28,7 @@ export interface User {
   has_password: boolean; // false: signs in with Google only
   two_factor_enabled: boolean;
   full_name: string;
+  username: string | null; // chosen in Settings, so friends can invite you to a group
   base_currency: Currency;
   secondary_currency: Currency | null;
   locale: Locale;

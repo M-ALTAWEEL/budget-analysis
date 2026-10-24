@@ -1,5 +1,6 @@
 """Shapes of the data that enters and leaves the user/auth API."""
 
+import re
 from datetime import datetime
 from typing import Literal
 
@@ -169,6 +170,7 @@ class UserRead(BaseModel):
     has_password: bool  # false for Google-only accounts: they set one via "forgot password"
     two_factor_enabled: bool
     full_name: str
+    username: str | None = None
     base_currency: Currency
     secondary_currency: Currency | None
     locale: Locale
@@ -181,9 +183,15 @@ class UserUpdate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     full_name: str | None = Field(default=None, min_length=1, max_length=100)
+    username: str | None = None  # null removes it
     base_currency: Currency | None = None
     secondary_currency: Currency | None = None  # null clears it
     locale: Locale | None = None
+
+    @field_validator("username")
+    @classmethod
+    def valid_username(cls, value: str | None) -> str | None:
+        return normalize_username(value) if value is not None else None
 
     @field_validator("full_name", "base_currency", "locale")
     @classmethod
@@ -215,3 +223,60 @@ class SecurityEventRead(BaseModel):
 
 class RevokedCount(BaseModel):
     revoked: int
+
+
+# ── usernames (phase 3c) ─────────────────────────────────────────────────────
+
+# 3 to 20 characters: lower-case letters, digits, "." and "_", starting with a letter, and
+# no "." or "_" at the end or twice in a row (so "sara..k" and "sara_" can't look alike).
+USERNAME_PATTERN = re.compile(r"^[a-z](?:[a-z0-9]|[._](?=[a-z0-9])){2,19}$")
+# Names that could be mistaken for us.
+RESERVED_USERNAMES = frozenset(
+    {
+        "admin",
+        "administrator",
+        "root",
+        "system",
+        "support",
+        "help",
+        "security",
+        "official",
+        "staff",
+        "team",
+        "moderator",
+        "budget",
+        "budgetanalysis",
+        "budget_analysis",
+        "budget.analysis",
+        "budgetbuddy",
+        "anthropic",
+        "claude",
+        "api",
+        "www",
+        "mail",
+        "null",
+        "undefined",
+        "me",
+        "you",
+        "settings",
+        "login",
+        "register",
+        "groups",
+        "invite",
+        "join",
+        "deleted",
+        "deleted_user",
+    }
+)
+
+
+def normalize_username(value: str) -> str:
+    """ "@Sara.K " -> "sara.k". Raises ValueError when it isn't allowed."""
+    name = value.strip().removeprefix("@").lower()
+    if not USERNAME_PATTERN.fullmatch(name):
+        raise ValueError(
+            "Use 3 to 20 letters, numbers, dots or underscores, starting with a letter."
+        )
+    if name in RESERVED_USERNAMES:
+        raise ValueError("This username isn't available.")
+    return name

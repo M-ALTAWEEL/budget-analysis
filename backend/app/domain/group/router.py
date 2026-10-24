@@ -1,5 +1,6 @@
-"""HTTP endpoints for groups (/groups), their expenses, and invite links (/invites).
-Phase 3a: groups, members, invites. Phase 3b: expenses."""
+"""HTTP endpoints for groups (/groups), their expenses, invite links (/invites) and
+invitations by username (/me/group-requests).
+Phase 3a: groups, members, invites. Phase 3b: expenses. Phase 3c: usernames."""
 
 from typing import Annotated
 
@@ -9,6 +10,7 @@ from app.core.limiter import limiter
 from app.dependencies import CurrentUser, DbSession
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
 from app.domain.group.expenses import GroupExpenseService
+from app.domain.group.requests import GroupRequestService
 from app.domain.group.schema import (
     GroupCreate,
     GroupDetail,
@@ -19,7 +21,10 @@ from app.domain.group.schema import (
     InviteCreate,
     InvitePreview,
     InviteRead,
+    ReceivedRequestRead,
     RoleUpdate,
+    SentRequestRead,
+    UsernameInvite,
 )
 from app.domain.group.service import GroupService
 from app.domain.user.router import Email
@@ -27,6 +32,7 @@ from app.domain.user.router import Email
 router = APIRouter(prefix="/groups", tags=["groups"])
 FxClient = Annotated[ExchangeRateClient, Depends(get_fx_client)]
 invites_router = APIRouter(prefix="/invites", tags=["groups"])
+my_requests_router = APIRouter(prefix="/me/group-requests", tags=["groups"])
 
 
 @router.get("")
@@ -147,3 +153,48 @@ async def accept_invite(
     groups = GroupService(db)
     await groups.ensure_verified(user, required=email is not None)
     return await groups.accept(user, token)
+
+
+# ── invitations by username (phase 3c) ───────────────────────────────────────
+
+
+@router.post("/{group_uuid}/requests", status_code=status.HTTP_201_CREATED)
+@limiter.limit("30/hour")
+async def invite_by_username(
+    request: Request, group_uuid: str, data: UsernameInvite, user: CurrentUser, db: DbSession
+) -> SentRequestRead:
+    """Send an invitation to someone by their username. They have to accept it."""
+    return await GroupRequestService(db).invite(user, group_uuid, data.username)
+
+
+@router.get("/{group_uuid}/requests")
+async def list_sent_requests(
+    group_uuid: str, user: CurrentUser, db: DbSession
+) -> list[SentRequestRead]:
+    return await GroupRequestService(db).list_sent(user, group_uuid)
+
+
+@router.delete("/{group_uuid}/requests/{request_uuid}", status_code=status.HTTP_204_NO_CONTENT)
+async def cancel_request(
+    group_uuid: str, request_uuid: str, user: CurrentUser, db: DbSession
+) -> None:
+    await GroupRequestService(db).cancel(user, group_uuid, request_uuid)
+
+
+@my_requests_router.get("")
+async def list_my_requests(user: CurrentUser, db: DbSession) -> list[ReceivedRequestRead]:
+    return await GroupRequestService(db).list_received(user)
+
+
+@my_requests_router.post("/{request_uuid}/accept")
+@limiter.limit("20/hour")
+async def accept_request(
+    request: Request, request_uuid: str, user: CurrentUser, db: DbSession, email: Email
+) -> dict[str, str]:
+    await GroupService(db).ensure_verified(user, required=email is not None)
+    return {"group_uuid": await GroupRequestService(db).accept(user, request_uuid)}
+
+
+@my_requests_router.post("/{request_uuid}/decline", status_code=status.HTTP_204_NO_CONTENT)
+async def decline_request(request_uuid: str, user: CurrentUser, db: DbSession) -> None:
+    await GroupRequestService(db).decline(user, request_uuid)
