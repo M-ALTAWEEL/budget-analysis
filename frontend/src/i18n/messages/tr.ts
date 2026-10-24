@@ -45,6 +45,7 @@ export const tr: Messages = {
     createOne: "Hesap oluştur",
     haveAccount: "Zaten hesabın var mı?",
     or: "veya",
+    agreeLead: "Devam ederek şunları kabul edersin:",
   },
 
   account: {
@@ -449,6 +450,7 @@ export const tr: Messages = {
     footer: "Budget Analysis, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
     privacy: "Gizlilik",
+    terms: "Kullanım koşulları",
   },
 
   assistant: {

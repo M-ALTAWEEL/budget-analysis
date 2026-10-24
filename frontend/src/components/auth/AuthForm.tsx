@@ -74,6 +74,7 @@ export function LoginForm() {
           {t.auth.createOne}
         </Link>
       </p>
+      <Agreement />
     </form>
   );
 }
@@ -159,6 +160,24 @@ export function RegisterForm() {
           {t.auth.logIn}
         </Link>
       </p>
+      <Agreement />
     </form>
+  );
+}
+
+/** Creating an account (by any route) accepts the terms and the privacy policy. */
+function Agreement() {
+  const { t } = useI18n();
+  return (
+    <p className="text-xs text-muted">
+      {t.auth.agreeLead}{" "}
+      <Link href="/terms" className="underline underline-offset-2 hover:text-ink">
+        {t.landing.terms}
+      </Link>
+      {" · "}
+      <Link href="/privacy" className="underline underline-offset-2 hover:text-ink">
+        {t.landing.privacy}
+      </Link>
+    </p>
   );
 }

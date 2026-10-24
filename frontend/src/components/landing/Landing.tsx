@@ -127,6 +127,9 @@ export function Landing() {
             <Link href="/privacy" className="font-semibold text-ink hover:underline">
               {t.landing.privacy}
             </Link>
+            <Link href="/terms" className="font-semibold text-ink hover:underline">
+              {t.landing.terms}
+            </Link>
             <a href={REPO_URL} className="inline-flex items-center gap-2 font-semibold text-ink hover:underline">
               <FolderGit2 className="size-4" aria-hidden />
               {t.landing.source}

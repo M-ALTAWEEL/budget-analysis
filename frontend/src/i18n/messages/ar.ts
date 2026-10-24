@@ -56,6 +56,7 @@ export const ar: Messages = {
     createOne: "أنشئ حسابًا",
     haveAccount: "لديك حساب؟",
     or: "أو",
+    agreeLead: "بالمتابعة، أنت توافق على:",
   },
 
   account: {
@@ -468,6 +469,7 @@ export const ar: Messages = {
     footer: "Budget Analysis مشروع من أعمال محمد الطويل.",
     source: "الكود المصدري على GitHub",
     privacy: "الخصوصية",
+    terms: "شروط الاستخدام",
   },
 
   assistant: {
