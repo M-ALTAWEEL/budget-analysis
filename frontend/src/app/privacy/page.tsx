@@ -1,65 +1,93 @@
 "use client";
 
-import Link from "next/link";
-
-import { LanguageMenu } from "@/components/settings/LanguageMenu";
-import { ThemeButton } from "@/components/settings/ThemeButton";
-import { Logo } from "@/components/ui/Logo";
-import { useI18n } from "@/i18n/I18nProvider";
+import { LegalPage, type LegalDocument } from "@/components/legal/LegalPage";
 import type { Locale } from "@/i18n/config";
 
-const REPO_ISSUES = "https://github.com/M-ALTAWEEL/budget-analysis/issues";
-const LINKEDIN = "https://www.linkedin.com/in/mouhammed-altaweel";
-
-interface Policy {
-  title: string;
-  updated: string;
-  intro: string;
-  sections: { heading: string; body: string[] }[];
-  contact: string;
-  back: string;
-}
-
-// Plain words, kept short: what is stored, why, where, and how to have it deleted.
-const POLICY: Record<Locale, Policy> = {
+// Plain words: what is stored, why, who else handles it, for how long, and your rights
+// (GDPR, Turkey's KVKK, and the App Store / Google Play rules). Update the date and
+// docs/security/THREAT_MODEL.md whenever what we collect changes.
+const POLICY: Record<Locale, LegalDocument> = {
   en: {
     title: "Privacy policy",
-    updated: "Last updated 19 October 2026",
+    updated: "Last updated 25 October 2026",
     intro:
-      "Budget Analysis is a student portfolio project by Mouhammed Altaweel. This page says what it stores about you and why.",
+      "Budget Analysis is run by Mouhammed Altaweel. This page explains what it stores about you, why, who else handles it, for how long, and how you can see, download or delete it.",
     sections: [
       {
-        heading: "What is stored",
+        heading: "Your account",
         body: [
-          "Your name and email address, and your password as a bcrypt hash (the password itself is never stored).",
-          "What you enter: budgets, expenses and their descriptions, categories, savings goals, your language and currencies.",
+          "Your name, and your email address or phone number (whichever you sign in with). If you use a password, only a bcrypt hash of it is stored, never the password itself.",
+          "Your settings: language, currencies, colour and theme.",
         ],
       },
       {
-        heading: "Sign in with Google",
+        heading: "What you enter",
         body: [
-          "If you use Google, Budget Analysis receives only your name, email address and Google's account id. It never sees your Google password and cannot read your Gmail, Drive or anything else.",
+          "Budgets, expenses and their descriptions, categories and savings goals. They are used only to show you your budget, sort expenses into categories and give you tips. They are never read by a person.",
+        ],
+      },
+      {
+        heading: "Security data",
+        body: [
+          "For each signed-in device: a short name such as “Chrome on Windows”, the country and the time it was last used. Your IP address is used for a moment to limit sign-in attempts and find the country, and it is not saved in our database.",
+          "A security activity log (sign-ins, failed attempts, password and two-factor changes), shown to you in Settings.",
+          "If you turn on two-factor authentication: its key, encrypted, and your backup codes, as hashes only.",
+          "Links we email you and codes we text you are stored only as hashes, and stop working after minutes or hours.",
+        ],
+      },
+      {
+        heading: "Signing in with Google or a phone number",
+        body: [
+          "With Google, we receive only your name, email address and Google's id for your account. We never see your Google password and cannot read your Gmail, Drive or anything else.",
+          "With a phone number, the number is used only to send you sign-in codes. It is never used for marketing.",
+        ],
+      },
+      {
+        heading: "Who else handles your data",
+        body: [
+          "Vercel runs the website, Render runs the server and Neon keeps the database, in Frankfurt (EU). They process data only to run Budget Analysis.",
+          "Sentry receives error reports (in the EU), set up not to include personal data.",
+          "When you choose a password, Have I Been Pwned receives the first 5 characters of a fingerprint (hash) of it, never the password, so we can warn you if it appeared in a known data breach.",
+          "Exchange rates come from a public rates service, and none of your data is sent to it.",
+          "When email and SMS are switched on, an email provider and an SMS provider receive only the address or number and the message we send you.",
         ],
       },
       {
         heading: "Cookies and browser storage",
         body: [
-          "One cookie keeps you signed in. Your browser also remembers your language and light or dark theme. There are no advertising or tracking cookies.",
+          "One cookie keeps you signed in. Your browser also remembers your language and theme. There are no advertising or tracking cookies.",
         ],
       },
       {
-        heading: "Where it is kept",
+        heading: "How long it is kept",
         body: [
-          "The website runs on Vercel, the server on Render and the database on Neon, in Frankfurt (EU). Exchange rates come from a public rates service; none of your data is sent to it.",
+          "Your data is kept while your account exists. Signed-out devices and used codes are kept only as long as needed for security. Our hosting providers keep technical server logs briefly.",
         ],
+      },
+      {
+        heading: "Your rights",
+        body: [
+          "See and download everything: Settings → Your data → Download my data (a ZIP file).",
+          "Correct it: change your details in Settings.",
+          "Delete it: Settings → Your data → Delete my account. Your account and all its data are deleted at once and permanently.",
+          "For any other question or request, use the contact links below.",
+        ],
+      },
+      {
+        heading: "Age",
+        body: ["Budget Analysis is meant for people aged 16 and over."],
       },
       {
         heading: "What is never done",
-        body: ["Your data is not sold, shared with advertisers or used for anything other than showing it to you."],
+        body: [
+          "Your data is not sold, not shared with advertisers, and not used for anything other than running Budget Analysis for you.",
+        ],
       },
       {
-        heading: "Deleting your data",
-        body: ["To have your account and all its data deleted, ask through the contact links below."],
+        heading: "Changes",
+        body: [
+          "If this policy changes, this page and its date will be updated. Important changes will also be shown in the app.",
+        ],
       },
     ],
     contact: "Contact",
@@ -67,20 +95,47 @@ const POLICY: Record<Locale, Policy> = {
   },
   ar: {
     title: "سياسة الخصوصية",
-    updated: "آخر تحديث: 19 أكتوبر 2026",
-    intro: "Budget Analysis مشروع طالب من أعمال محمد الطويل. توضّح هذه الصفحة ما يحفظه الموقع عنك ولماذا.",
+    updated: "آخر تحديث: 25 أكتوبر 2026",
+    intro:
+      "يدير Budget Analysis محمد الطويل. توضّح هذه الصفحة ما يحفظه Budget Analysis عنك، ولماذا، ومن يتعامل معه غيرنا، وإلى متى، وكيف تطّلع عليه أو تنزّله أو تحذفه.",
     sections: [
       {
-        heading: "ما الذي يُحفظ",
+        heading: "حسابك",
         body: [
-          "اسمك وبريدك الإلكتروني، وكلمة المرور مشفّرة بـ bcrypt (كلمة المرور نفسها لا تُحفظ أبداً).",
-          "ما تُدخله: الميزانيات والمصاريف ووصفها، والفئات، وأهداف الادخار، ولغتك وعملاتك.",
+          "اسمك، وبريدك الإلكتروني أو رقم هاتفك (أيّهما تستخدم للدخول). إذا استخدمت كلمة مرور، نحفظ تشفيرها بـ bcrypt فقط، ولا نحفظ كلمة المرور نفسها أبداً.",
+          "إعداداتك: اللغة والعملات واللون والوضع الفاتح أو الداكن.",
         ],
       },
       {
-        heading: "الدخول بحساب Google",
+        heading: "ما تُدخله",
         body: [
-          "إذا استخدمت Google، يصل إلى Budget Analysis اسمك وبريدك ورقم حسابك في Google فقط. لا يرى كلمة مرور Google، ولا يستطيع قراءة بريدك أو ملفاتك أو أي شيء آخر.",
+          "الميزانيات والمصاريف ووصفها والفئات وأهداف الادخار. تُستخدم فقط لعرض ميزانيتك وتصنيف مصاريفك وتقديم النصائح لك، ولا يقرؤها أي شخص.",
+        ],
+      },
+      {
+        heading: "بيانات الأمان",
+        body: [
+          "لكل جهاز مسجّل دخوله: اسم قصير مثل «Chrome on Windows»، والدولة، وآخر وقت استُخدم فيه. يُستخدم عنوان IP لحظياً للحدّ من محاولات الدخول ومعرفة الدولة، ولا يُحفظ في قاعدة بياناتنا.",
+          "سجل النشاط الأمني (تسجيلات الدخول، والمحاولات الفاشلة، وتغييرات كلمة المرور والمصادقة الثنائية)، ويظهر لك في الإعدادات.",
+          "إذا فعّلت المصادقة الثنائية: مفتاحها مشفّراً، ورموزك الاحتياطية مشفّرة فقط.",
+          "الروابط التي نرسلها بالبريد والرموز التي نرسلها برسالة نصية تُحفظ مشفّرة فقط، وتتوقف عن العمل بعد دقائق أو ساعات.",
+        ],
+      },
+      {
+        heading: "الدخول بـ Google أو برقم الهاتف",
+        body: [
+          "مع Google، نستلم اسمك وبريدك ورقم حسابك في Google فقط. لا نرى كلمة مرور Google، ولا نستطيع قراءة بريدك أو ملفاتك أو أي شيء آخر.",
+          "مع رقم الهاتف، يُستخدم الرقم فقط لإرسال رموز الدخول، ولا يُستخدم للتسويق أبداً.",
+        ],
+      },
+      {
+        heading: "من يتعامل مع بياناتك غيرنا",
+        body: [
+          "Vercel يشغّل الموقع، وRender يشغّل الخادم، وNeon يحفظ قاعدة البيانات في فرانكفورت (الاتحاد الأوروبي). يعالجون البيانات فقط لتشغيل Budget Analysis.",
+          "Sentry يستلم تقارير الأخطاء (في الاتحاد الأوروبي)، وهو مضبوط بحيث لا تتضمن بيانات شخصية.",
+          "عندما تختار كلمة مرور، تستلم خدمة Have I Been Pwned أول 5 أحرف من بصمتها المشفّرة (hash) فقط، لا كلمة المرور، لنحذّرك إذا ظهرت في تسريب بيانات معروف.",
+          "أسعار الصرف تأتي من خدمة عامة، ولا يُرسل إليها شيء من بياناتك.",
+          "عند تفعيل البريد والرسائل النصية، يستلم مزوّد البريد ومزوّد الرسائل العنوانَ أو الرقمَ والرسالةَ التي نرسلها لك فقط.",
         ],
       },
       {
@@ -90,18 +145,35 @@ const POLICY: Record<Locale, Policy> = {
         ],
       },
       {
-        heading: "أين تُحفظ البيانات",
+        heading: "مدة الحفظ",
         body: [
-          "الموقع على Vercel، والخادم على Render، وقاعدة البيانات على Neon في فرانكفورت (الاتحاد الأوروبي). أسعار الصرف تأتي من خدمة عامة، ولا يُرسل إليها شيء من بياناتك.",
+          "تُحفظ بياناتك ما دام حسابك موجوداً. الأجهزة التي سُجّل خروجها والرموز المستخدمة تُحفظ فقط بالقدر اللازم للأمان. ويحتفظ مزوّدو الاستضافة بسجلات الخادم التقنية لفترة قصيرة.",
         ],
       },
       {
-        heading: "ما لا يحدث أبداً",
-        body: ["بياناتك لا تُباع، ولا تُشارك مع المعلنين، ولا تُستخدم إلا لعرضها لك."],
+        heading: "حقوقك",
+        body: [
+          "الاطّلاع على كل شيء وتنزيله: الإعدادات ← بياناتك ← تنزيل بياناتي (ملف ZIP).",
+          "تصحيحه: غيّر بياناتك من الإعدادات.",
+          "حذفه: الإعدادات ← بياناتك ← حذف حسابي. يُحذف حسابك وكل بياناته فوراً ونهائياً.",
+          "لأي سؤال أو طلب آخر، استخدم روابط التواصل أدناه.",
+        ],
       },
       {
-        heading: "حذف بياناتك",
-        body: ["لحذف حسابك وكل بياناته، اطلب ذلك عبر روابط التواصل أدناه."],
+        heading: "العمر",
+        body: ["Budget Analysis مخصّص لمن هم في سن 16 عاماً فما فوق."],
+      },
+      {
+        heading: "ما لا يحدث أبداً",
+        body: [
+          "بياناتك لا تُباع، ولا تُشارك مع المعلنين، ولا تُستخدم لأي شيء غير تشغيل Budget Analysis لك.",
+        ],
+      },
+      {
+        heading: "التغييرات",
+        body: [
+          "إذا تغيّرت هذه السياسة، تُحدَّث هذه الصفحة وتاريخها. وتظهر التغييرات المهمة في التطبيق أيضاً.",
+        ],
       },
     ],
     contact: "تواصل",
@@ -109,42 +181,85 @@ const POLICY: Record<Locale, Policy> = {
   },
   tr: {
     title: "Gizlilik politikası",
-    updated: "Son güncelleme: 19 Ekim 2026",
+    updated: "Son güncelleme: 25 Ekim 2026",
     intro:
-      "Budget Analysis, Mouhammed Altaweel'in bir öğrenci portfolyo projesidir. Bu sayfa senin hakkında neyin, neden saklandığını anlatır.",
+      "Budget Analysis'i Mouhammed Altaweel yürütür. Bu sayfa senin hakkında neyin saklandığını, neden, başka kimlerin işlediğini, ne kadar süre tutulduğunu ve onu nasıl görebileceğini, indirebileceğini veya silebileceğini anlatır.",
     sections: [
       {
-        heading: "Neler saklanır",
+        heading: "Hesabın",
         body: [
-          "Adın ve e-posta adresin; şifren bcrypt ile şifrelenmiş olarak (şifrenin kendisi asla saklanmaz).",
-          "Girdiklerin: bütçeler, harcamalar ve açıklamaları, kategoriler, birikim hedefleri, dilin ve para birimlerin.",
+          "Adın ve e-posta adresin ya da telefon numaran (hangisiyle giriş yapıyorsan). Şifre kullanırsan yalnızca bcrypt özeti saklanır; şifrenin kendisi asla saklanmaz.",
+          "Ayarların: dil, para birimleri, renk ve tema.",
         ],
       },
       {
-        heading: "Google ile giriş",
+        heading: "Girdiklerin",
         body: [
-          "Google kullanırsan Budget Analysis yalnızca adını, e-posta adresini ve Google hesap kimliğini alır. Google şifreni görmez; Gmail'ini, Drive'ını veya başka bir şeyi okuyamaz.",
+          "Bütçeler, harcamalar ve açıklamaları, kategoriler ve birikim hedefleri. Yalnızca bütçeni göstermek, harcamalarını kategorilere ayırmak ve sana öneriler vermek için kullanılır. Hiçbir kişi tarafından okunmaz.",
+        ],
+      },
+      {
+        heading: "Güvenlik verileri",
+        body: [
+          "Oturum açık her cihaz için: “Chrome on Windows” gibi kısa bir ad, ülke ve son kullanım zamanı. IP adresin giriş denemelerini sınırlamak ve ülkeyi bulmak için anlık kullanılır ve veritabanımıza kaydedilmez.",
+          "Ayarlar'da sana gösterilen bir güvenlik etkinliği kaydı (girişler, başarısız denemeler, şifre ve iki adımlı doğrulama değişiklikleri).",
+          "İki adımlı doğrulamayı açarsan: anahtarı şifrelenmiş olarak ve yedek kodların yalnızca özet (hash) olarak.",
+          "E-postayla gönderdiğimiz bağlantılar ve SMS ile gönderdiğimiz kodlar yalnızca özet olarak saklanır ve dakikalar ya da saatler sonra geçersiz olur.",
+        ],
+      },
+      {
+        heading: "Google veya telefon numarasıyla giriş",
+        body: [
+          "Google ile yalnızca adını, e-posta adresini ve Google hesap kimliğini alırız. Google şifreni asla görmeyiz; Gmail'ini, Drive'ını veya başka bir şeyi okuyamayız.",
+          "Telefon numarası yalnızca sana giriş kodu göndermek için kullanılır. Asla pazarlama için kullanılmaz.",
+        ],
+      },
+      {
+        heading: "Verilerini başka kimler işler",
+        body: [
+          "Siteyi Vercel, sunucuyu Render çalıştırır; veritabanı Neon'da, Frankfurt'ta (AB) tutulur. Verileri yalnızca Budget Analysis'i çalıştırmak için işlerler.",
+          "Sentry hata raporlarını alır (AB'de) ve kişisel veri içermeyecek şekilde ayarlanmıştır.",
+          "Bir şifre seçtiğinde Have I Been Pwned, şifrenin değil, özetinin (hash) yalnızca ilk 5 karakterini alır; böylece şifren bilinen bir veri sızıntısında görüldüyse seni uyarabiliriz.",
+          "Döviz kurları herkese açık bir servisten gelir ve ona hiçbir verin gönderilmez.",
+          "E-posta ve SMS açıldığında, e-posta ve SMS sağlayıcıları yalnızca adresi veya numarayı ve sana gönderdiğimiz mesajı alır.",
         ],
       },
       {
         heading: "Çerezler ve tarayıcı depolama",
         body: [
-          "Tek bir çerez oturumunu açık tutar. Tarayıcın ayrıca dilini ve açık/koyu temayı hatırlar. Reklam veya takip çerezi yoktur.",
+          "Tek bir çerez oturumunu açık tutar. Tarayıcın ayrıca dilini ve temanı hatırlar. Reklam veya takip çerezi yoktur.",
         ],
       },
       {
-        heading: "Veriler nerede tutulur",
+        heading: "Ne kadar süre saklanır",
         body: [
-          "Site Vercel'de, sunucu Render'da, veritabanı Neon'da, Frankfurt'ta (AB) çalışır. Döviz kurları herkese açık bir servisten gelir; ona hiçbir verin gönderilmez.",
+          "Verilerin hesabın var olduğu sürece saklanır. Çıkış yapılmış cihazlar ve kullanılmış kodlar yalnızca güvenlik için gerektiği kadar tutulur. Barındırma sağlayıcılarımız teknik sunucu kayıtlarını kısa süre tutar.",
         ],
+      },
+      {
+        heading: "Hakların",
+        body: [
+          "Her şeyi görmek ve indirmek: Ayarlar → Verilerin → Verilerimi indir (ZIP dosyası).",
+          "Düzeltmek: bilgilerini Ayarlar'dan değiştir.",
+          "Silmek: Ayarlar → Verilerin → Hesabımı sil. Hesabın ve tüm verilerin hemen ve kalıcı olarak silinir.",
+          "Diğer her soru veya istek için aşağıdaki iletişim bağlantılarını kullan.",
+        ],
+      },
+      {
+        heading: "Yaş",
+        body: ["Budget Analysis 16 yaş ve üzeri kişiler içindir."],
       },
       {
         heading: "Asla yapılmayanlar",
-        body: ["Verilerin satılmaz, reklamcılarla paylaşılmaz ve sana göstermek dışında hiçbir şey için kullanılmaz."],
+        body: [
+          "Verilerin satılmaz, reklamcılarla paylaşılmaz ve Budget Analysis'i senin için çalıştırmak dışında hiçbir şey için kullanılmaz.",
+        ],
       },
       {
-        heading: "Verilerini silmek",
-        body: ["Hesabının ve tüm verilerinin silinmesi için aşağıdaki iletişim bağlantılarından iste."],
+        heading: "Değişiklikler",
+        body: [
+          "Bu politika değişirse bu sayfa ve tarihi güncellenir. Önemli değişiklikler uygulamada da gösterilir.",
+        ],
       },
     ],
     contact: "İletişim",
@@ -153,56 +268,5 @@ const POLICY: Record<Locale, Policy> = {
 };
 
 export default function PrivacyPage() {
-  const { locale } = useI18n();
-  const policy = POLICY[locale];
-  return (
-    <div className="min-h-screen">
-      <header className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-5 sm:px-8">
-        <Link href="/" aria-label="Budget Analysis">
-          <Logo />
-        </Link>
-        <div className="flex items-center gap-2">
-          <LanguageMenu />
-          <ThemeButton />
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-3xl px-4 pt-8 pb-24 sm:px-8">
-        <h1 className="font-display text-4xl font-semibold">{policy.title}</h1>
-        <p className="mt-2 text-sm text-muted">{policy.updated}</p>
-        <p className="mt-8 max-w-prose text-[17px] leading-relaxed">{policy.intro}</p>
-
-        {policy.sections.map((section) => (
-          <section key={section.heading} className="mt-10">
-            <h2 className="font-display text-xl font-semibold">{section.heading}</h2>
-            {section.body.map((paragraph) => (
-              <p key={paragraph} className="mt-3 max-w-prose text-[17px] leading-relaxed text-muted">
-                {paragraph}
-              </p>
-            ))}
-          </section>
-        ))}
-
-        <section className="mt-10">
-          <h2 className="font-display text-xl font-semibold">{policy.contact}</h2>
-          <ul className="mt-3 space-y-2 text-[17px]">
-            <li>
-              <a href={REPO_ISSUES} className="font-semibold text-pine hover:underline">
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href={LINKEDIN} className="font-semibold text-pine hover:underline">
-                LinkedIn
-              </a>
-            </li>
-          </ul>
-        </section>
-
-        <Link href="/" className="mt-14 inline-block font-semibold text-pine hover:underline">
-          {policy.back}
-        </Link>
-      </main>
-    </div>
-  );
+  return <LegalPage documents={POLICY} />;
 }

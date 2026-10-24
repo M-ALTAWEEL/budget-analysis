@@ -43,6 +43,7 @@ export const en = {
     createOne: "Create an account",
     haveAccount: "Already have an account?",
     or: "or",
+    agreeLead: "By continuing, you agree to:",
   },
 
   account: {
@@ -453,6 +454,7 @@ export const en = {
     footer: "Budget Analysis is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
     privacy: "Privacy",
+    terms: "Terms of use",
   },
 
   assistant: {

@@ -80,7 +80,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | Delete the account from inside the app | App Store 5.1.1(v), Google Play | ✅ 2c (web) · 6: in the apps |
 | Sign in with Apple next to Google | App Store 4.8 | 2 |
 | Export your data | GDPR art. 20, KVKK | ✅ 2c |
-| Privacy policy + terms of service | Both stores, all privacy laws | 2 |
+| Privacy policy + terms of service | Both stores, all privacy laws | ✅ 2g (`/privacy`, `/terms`, 3 languages) · 🔍 lawyer review before launch |
 | Privacy labels / Data safety form | App Store Connect, Google Play Console | 6 |
 | Payments for digital features through the store | App Store 3.1.1, Google Play Billing | 7 |
 
