@@ -25,6 +25,7 @@ class EmailMessage:
     subject: str
     text: str
     html: str
+    link: str | None = None  # the one link in the email, logged alone by the console sender
 
 
 class EmailSender(Protocol):
@@ -39,8 +40,12 @@ def mask_address(address: str) -> str:
 
 class ConsoleEmailSender:
     async def send(self, message: EmailMessage) -> None:
+        # One short line, with the link by itself so it can be copied from the log as is.
         logger.info(
-            "email to=%s subject=%s\n%s", mask_address(message.to), message.subject, message.text
+            "email to=%s subject=%s link=%s",
+            mask_address(message.to),
+            message.subject,
+            message.link or "-",
         )
 
 

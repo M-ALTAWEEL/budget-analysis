@@ -102,4 +102,4 @@ def build_email(purpose: Purpose, *, to: str, name: str, locale: str, link: str)
   <p style="color:#5b6660;font-size:14px">Budget Analysis</p>
 </body>
 </html>"""
-    return EmailMessage(to=to, subject=copy.subject, text=text, html=html)
+    return EmailMessage(to=to, subject=copy.subject, text=text, html=html, link=link)
