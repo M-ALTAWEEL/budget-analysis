@@ -3,10 +3,10 @@ No business rules here."""
 
 from datetime import datetime
 
-from sqlalchemy import select, update
+from sqlalchemy import func, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.domain.user.model import SecurityEvent, User, UserIdentity, UserSession
+from app.domain.user.model import OneTimeToken, SecurityEvent, User, UserIdentity, UserSession
 
 
 class UserRepository:
@@ -132,3 +132,41 @@ class SecurityEventRepository:
             .limit(limit)
         )
         return list(result)
+
+
+class OneTimeTokenRepository:
+    def __init__(self, session: AsyncSession) -> None:
+        self.session = session
+
+    def add(self, token: OneTimeToken) -> None:
+        self.session.add(token)
+
+    async def get_by_hash(self, token_hash: str, purpose: str) -> OneTimeToken | None:
+        return await self.session.scalar(
+            select(OneTimeToken).where(
+                OneTimeToken.token_hash == token_hash, OneTimeToken.purpose == purpose
+            )
+        )
+
+    async def count_since(self, user_id: int, purpose: str, since: datetime) -> int:
+        return await self.session.scalar(
+            select(func.count())
+            .select_from(OneTimeToken)
+            .where(
+                OneTimeToken.user_id == user_id,
+                OneTimeToken.purpose == purpose,
+                OneTimeToken.created_at >= since,
+            )
+        )
+
+    async def use_all(self, user_id: int, purpose: str, now: datetime) -> None:
+        """Every unused link of this kind stops working (the one just used, and older ones)."""
+        await self.session.execute(
+            update(OneTimeToken)
+            .where(
+                OneTimeToken.user_id == user_id,
+                OneTimeToken.purpose == purpose,
+                OneTimeToken.used_at.is_(None),
+            )
+            .values(used_at=now)
+        )

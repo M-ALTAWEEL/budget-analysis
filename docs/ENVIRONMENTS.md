@@ -60,3 +60,14 @@ sentry.io ← حساب مجاني ← **Create Project** ← **FastAPI** ← ا�
 | الثاني | `EDGE_SECRET` ← **Preview** | `budget-analysis-api-staging` |
 
 بتعمل السرّ بأمر: `python -c "import secrets; print(secrets.token_urlsafe(32))"`. ما بينكتب بالشات ولا بالكود.
+
+### 7. الإيميلات (من المرحلة 2b)
+`EMAIL_BACKEND` بيقرر وين بتروح الإيميلات:
+
+| البيئة | القيمة | يعني |
+|---|---|---|
+| جهازك | `smtp` | بتوصل لـ **Mailpit**: `docker compose up -d mailpit` وبتقراها على http://localhost:8025 |
+| staging | `console` | بتنكتب بالـ **Logs** تبع خدمة الـ staging على Render (مع الرابط) |
+| production | `none` | الإيميلات مطفية لحد التفعيل (المرحلة 8). "نسيت كلمة السر" ما بيظهر |
+
+الـ production **بيرفض يشتغل** إذا حطيت `console`، لأنه روابط تغيير كلمة السر بتصير بالـ logs.

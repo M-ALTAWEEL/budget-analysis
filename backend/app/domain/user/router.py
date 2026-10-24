@@ -2,31 +2,55 @@
 
 from typing import Annotated
 
-from fastapi import APIRouter, Cookie, Depends, Request, Response, status
+from fastapi import (
+    APIRouter,
+    BackgroundTasks,
+    Cookie,
+    Depends,
+    HTTPException,
+    Request,
+    Response,
+    status,
+)
 
 from app.config import settings
+from app.core.email import EmailSender, get_email_sender, send_safely
 from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
 from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession
 from app.domain.user.schema import (
     AuthConfig,
+    ChangePasswordRequest,
+    ForgotPasswordRequest,
     GoogleSignInRequest,
     LoginRequest,
+    Message,
     RegisterRequest,
+    ResetPasswordRequest,
     RevokedCount,
     SecurityEventRead,
     SessionRead,
+    TokenRequest,
     TokenResponse,
     UserRead,
     UserUpdate,
 )
-from app.domain.user.service import AuthService, IssuedTokens, SessionService, UserService
+from app.domain.user.service import (
+    AccountEmailService,
+    AuthService,
+    IssuedTokens,
+    SessionService,
+    UserService,
+)
 
 REFRESH_COOKIE = "refresh_token"
 REFRESH_COOKIE_PATH = f"{settings.api_prefix}/auth"
 
 auth_router = APIRouter(prefix="/auth", tags=["auth"])
 users_router = APIRouter(prefix="/users", tags=["users"])
+
+Email = Annotated[EmailSender | None, Depends(get_email_sender)]
+EMAIL_ON_ITS_WAY = "If an account exists for this email, we sent a link to it."
 me_router = APIRouter(prefix="/me", tags=["me"])
 
 
@@ -53,9 +77,20 @@ def _send_tokens(response: Response, tokens: IssuedTokens) -> TokenResponse:
 
 @auth_router.post("/register", status_code=status.HTTP_201_CREATED)
 async def register(
-    data: RegisterRequest, response: Response, db: DbSession, client: Client
+    data: RegisterRequest,
+    response: Response,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
 ) -> TokenResponse:
-    tokens = await AuthService(db, client).register(data)
+    auth = AuthService(db, client)
+    tokens = await auth.register(data)
+    if email is not None:
+        user = await auth.users.get_by_email(data.email)
+        message = await AccountEmailService(db, client).start_verification(user)
+        if message is not None:
+            background.add_task(send_safely, email, message)
     return _send_tokens(response, tokens)
 
 
@@ -73,9 +108,11 @@ async def login(
 
 
 @auth_router.get("/config")
-async def auth_config() -> AuthConfig:
+async def auth_config(email: Email) -> AuthConfig:
     """Which sign-in options are on. One place for the client ID: the backend's .env."""
-    return AuthConfig(google_client_id=settings.google_client_id or None)
+    return AuthConfig(
+        google_client_id=settings.google_client_id or None, email_enabled=email is not None
+    )
 
 
 @auth_router.post("/google")
@@ -113,6 +150,74 @@ async def logout(
 ) -> None:
     await AuthService(db, client).logout(refresh_token)
     response.delete_cookie(REFRESH_COOKIE, path=REFRESH_COOKIE_PATH)
+
+
+# ── email links and passwords (phase 2b) ────────────────────────────────────
+
+
+def _require(email: EmailSender | None) -> EmailSender:
+    if email is None:
+        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "Email is not available yet.")
+    return email
+
+
+@auth_router.post("/verify-email/send", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("5/hour")
+async def send_verification_email(
+    request: Request,  # required by the rate limiter
+    auth: CurrentAuth,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
+) -> Message:
+    sender = _require(email)
+    message = await AccountEmailService(db, client).start_verification(auth.user)
+    if message is not None:
+        background.add_task(send_safely, sender, message)
+    return Message(detail="If your email still needs confirming, we sent a link to it.")
+
+
+@auth_router.post("/verify-email", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("20/hour")
+async def verify_email(request: Request, data: TokenRequest, db: DbSession, client: Client) -> None:
+    await AccountEmailService(db, client).verify_email(data.token)
+
+
+@auth_router.post("/password/forgot", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("5/hour")
+async def forgot_password(
+    request: Request,
+    data: ForgotPasswordRequest,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
+) -> Message:
+    sender = _require(email)
+    message = await AccountEmailService(db, client).forgot_password(data.email)
+    if message is not None:
+        background.add_task(send_safely, sender, message)
+    # The same words whether or not the account exists (no account enumeration).
+    return Message(detail=EMAIL_ON_ITS_WAY)
+
+
+@auth_router.post("/password/reset", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("10/hour")
+async def reset_password(
+    request: Request, data: ResetPasswordRequest, db: DbSession, client: Client
+) -> None:
+    await AccountEmailService(db, client).reset_password(data.token, data.password)
+
+
+@auth_router.post("/password/change", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("10/hour")
+async def change_password(
+    request: Request, data: ChangePasswordRequest, auth: CurrentAuth, db: DbSession, client: Client
+) -> None:
+    await AccountEmailService(db, client).change_password(
+        auth.user, auth.session.uuid, data.current_password, data.new_password
+    )
 
 
 # ── /users ───────────────────────────────────────────────────────────────────

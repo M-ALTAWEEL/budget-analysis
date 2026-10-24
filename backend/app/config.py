@@ -1,6 +1,7 @@
 """Application settings, read once from environment variables / the .env file."""
 
 from functools import lru_cache
+from typing import Literal
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 from pydantic import AliasChoices, Field, field_validator, model_validator
@@ -54,6 +55,15 @@ class Settings(BaseSettings):
     sentry_dsn: str = ""
     sentry_traces_sample_rate: float = 0.1  # 10% of requests timed, enough to see slow ones
 
+    # Email (app/core/email.py): "none" (off; the features that need it are hidden),
+    # "console" (written to the log; staging only) or "smtp" (Mailpit locally).
+    email_backend: Literal["none", "console", "smtp"] = "none"
+    smtp_host: str = "localhost"
+    smtp_port: int = 1025
+    email_from: str = "Budget Analysis <no-reply@budgetanalysis.app>"
+    # The website address used in email links. Empty = the first FRONTEND_URL.
+    app_url: str = ""
+
     # Shared rate-limit counters (Redis). Empty = in memory, fine for one server.
     redis_url: str = ""
 
@@ -85,11 +95,19 @@ class Settings(BaseSettings):
             raise ValueError("SECRET_KEY must be at least 32 characters long.")
         if self.is_production and self.secret_key == DEV_SECRET_KEY:
             raise ValueError("SECRET_KEY must be set to a private random value in production.")
+        # deploy_env, not app_env: staging runs with APP_ENV=production but may log emails.
+        if self.deploy_env == "production" and self.email_backend == "console":
+            # The log would hold password-reset links: anyone who reads logs could use them.
+            raise ValueError("EMAIL_BACKEND=console is not allowed in production.")
         return self
 
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.frontend_url.split(",") if origin.strip()]
+
+    @property
+    def public_app_url(self) -> str:
+        return (self.app_url or self.cors_origins[0]).rstrip("/")
 
     @property
     def is_production(self) -> bool:

@@ -26,6 +26,14 @@ services:
       timeout: 3s
       retries: 10
 
+  # A fake mail server: every email the API sends lands here, nothing leaves your computer.
+  # Read them at http://localhost:8025 (backend/.env: EMAIL_BACKEND=smtp).
+  mailpit:
+    image: axllent/mailpit:v1.27
+    ports:
+      - "8025:8025" # the inbox, in the browser
+      - "1025:1025" # SMTP, where the API sends
+
   api:
     build: ./backend
     env_file: ./backend/.env
@@ -33,6 +41,7 @@ services:
       # Inside Docker the database host is the service name "db", not localhost.
       DATABASE_URL: postgresql+asyncpg://budgetbuddy:budgetbuddy@db:5432/budgetbuddy
       REDIS_URL: redis://redis:6379/0
+      SMTP_HOST: mailpit
       # File-change events do not cross from Windows into the container, so poll instead.
       WATCHFILES_FORCE_POLLING: "true"
     ports:

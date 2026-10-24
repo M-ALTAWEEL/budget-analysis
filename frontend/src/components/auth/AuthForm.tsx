@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 
+import { useAuthConfig } from "@/components/auth/AccountForms";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { Button } from "@/components/ui/Button";
@@ -13,6 +14,7 @@ import { CURRENCIES, type Currency } from "@/types/api";
 
 export function LoginForm() {
   const { login } = useAuth();
+  const config = useAuthConfig();
   const { t } = useI18n();
   const errorMessage = useErrorMessage();
   const [email, setEmail] = useState("");
@@ -53,6 +55,13 @@ export function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
+      {config.data?.email_enabled && (
+        <p className="-mt-2 text-end text-sm">
+          <Link href="/forgot-password" className="font-semibold text-pine underline-offset-4 hover:underline">
+            {t.account.forgotLink}
+          </Link>
+        </p>
+      )}
       <FormError message={error} />
       <Button type="submit" loading={busy} className="w-full">
         {t.auth.logIn}

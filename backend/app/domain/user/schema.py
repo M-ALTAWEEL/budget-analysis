@@ -14,6 +14,14 @@ def _normalize_email(value: str) -> str:
     return value.strip().lower()
 
 
+def _fits_bcrypt_limit(value: str) -> str:
+    # bcrypt only reads the first 72 *bytes*. Arabic letters take 2 bytes each,
+    # so the character limit alone is not enough.
+    if len(value.encode("utf-8")) > 72:
+        raise ValueError("Password is too long (max 72 bytes).")
+    return value
+
+
 class RegisterRequest(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
@@ -25,14 +33,7 @@ class RegisterRequest(BaseModel):
 
     _lower_email = field_validator("email")(_normalize_email)
 
-    @field_validator("password")
-    @classmethod
-    def fits_bcrypt_limit(cls, value: str) -> str:
-        # bcrypt only reads the first 72 *bytes*. Arabic letters take 2 bytes each,
-        # so the character limit alone is not enough.
-        if len(value.encode("utf-8")) > 72:
-            raise ValueError("Password is too long (max 72 bytes).")
-        return value
+    _fits_bcrypt = field_validator("password")(_fits_bcrypt_limit)
 
 
 class GoogleSignInRequest(BaseModel):
@@ -46,6 +47,37 @@ class AuthConfig(BaseModel):
     """Public settings the sign-in page needs. The client ID is not a secret."""
 
     google_client_id: str | None
+    email_enabled: bool  # false: hide "forgot password" and "verify your email"
+
+
+class TokenRequest(BaseModel):
+    """The token from an emailed link."""
+
+    token: str = Field(min_length=10, max_length=200)
+
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+    _lower_email = field_validator("email")(_normalize_email)
+
+
+class ResetPasswordRequest(BaseModel):
+    token: str = Field(min_length=10, max_length=200)
+    password: str = Field(min_length=8, max_length=72)
+
+    _fits_bcrypt = field_validator("password")(_fits_bcrypt_limit)
+
+
+class ChangePasswordRequest(BaseModel):
+    current_password: str = Field(min_length=1, max_length=200)
+    new_password: str = Field(min_length=8, max_length=72)
+
+    _fits_bcrypt = field_validator("new_password")(_fits_bcrypt_limit)
+
+
+class Message(BaseModel):
+    detail: str
 
 
 class LoginRequest(BaseModel):
@@ -66,6 +98,8 @@ class UserRead(BaseModel):
 
     uuid: str
     email: str
+    email_verified: bool
+    has_password: bool  # false for Google-only accounts: they set one via "forgot password"
     full_name: str
     base_currency: Currency
     secondary_currency: Currency | None
