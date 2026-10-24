@@ -52,7 +52,16 @@ function loadGoogleScript(): Promise<void> {
  * email and password always work.
  * `currency` is only used if this creates a new account.
  */
-export function GoogleButton({ currency = "TRY" }: { currency?: Currency }) {
+export function GoogleButton({
+  currency = "TRY",
+  onCredential,
+  divider = true,
+}: {
+  currency?: Currency;
+  /** Use the credential for something else than signing in (e.g. "is it you?"). */
+  onCredential?: (credential: string) => Promise<void>;
+  divider?: boolean;
+}) {
   const config = useQuery({ queryKey: ["auth-config"], queryFn: getAuthConfig, staleTime: Infinity });
   const clientId = config.data?.google_client_id;
   const { loginWithGoogle } = useAuth();
@@ -64,9 +73,9 @@ export function GoogleButton({ currency = "TRY" }: { currency?: Currency }) {
   const [error, setError] = useState<string | null>(null);
 
   // Google calls back once; it must use the currency and language chosen by then.
-  const latest = useRef({ currency, locale, loginWithGoogle, errorMessage });
+  const latest = useRef({ currency, locale, loginWithGoogle, errorMessage, onCredential });
   useEffect(() => {
-    latest.current = { currency, locale, loginWithGoogle, errorMessage };
+    latest.current = { currency, locale, loginWithGoogle, errorMessage, onCredential };
   });
 
   useEffect(() => {
@@ -81,9 +90,10 @@ export function GoogleButton({ currency = "TRY" }: { currency?: Currency }) {
           client_id: clientId,
           callback: async ({ credential }) => {
             setError(null);
-            const { currency, locale, loginWithGoogle, errorMessage } = latest.current;
+            const { currency, locale, loginWithGoogle, errorMessage, onCredential } = latest.current;
             try {
-              await loginWithGoogle(credential, { base_currency: currency, locale });
+              if (onCredential) await onCredential(credential);
+              else await loginWithGoogle(credential, { base_currency: currency, locale });
             } catch (err) {
               setError(errorMessage(err));
             }
@@ -115,11 +125,13 @@ export function GoogleButton({ currency = "TRY" }: { currency?: Currency }) {
     <div className={ready ? "" : "invisible h-0 overflow-hidden"}>
       <div ref={boxRef} className="flex min-h-11 w-full justify-center" />
       <FormError message={error} />
-      <div className="my-5 flex items-center gap-3 text-sm text-muted" aria-hidden>
-        <span className="h-px flex-1 bg-line" />
-        {t.auth.or}
-        <span className="h-px flex-1 bg-line" />
-      </div>
+      {divider && (
+        <div className="my-5 flex items-center gap-3 text-sm text-muted" aria-hidden>
+          <span className="h-px flex-1 bg-line" />
+          {t.auth.or}
+          <span className="h-px flex-1 bg-line" />
+        </div>
+      )}
     </div>
   );
 }

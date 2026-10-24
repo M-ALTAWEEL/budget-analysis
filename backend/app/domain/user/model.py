@@ -70,6 +70,9 @@ class UserSession(BaseModel):
     revoked_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     # 'logout' | 'logout_all' | 'reuse' | 'signed_out_remotely' | 'account_taken_over'
     revoked_reason: Mapped[str | None] = mapped_column(String(30))
+    # When the person last proved it's them again (password or Google) on this device.
+    # Sensitive actions need this, or the sign-in itself, within 10 minutes (section 9).
+    reauthenticated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
 
 
 class OneTimeToken(BaseModel):
@@ -82,7 +85,8 @@ class OneTimeToken(BaseModel):
     )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
-    purpose: Mapped[str] = mapped_column(String(20))  # 'verify_email' | 'reset_password'
+    # 'verify_email' | 'reset_password' | 'change_email'
+    purpose: Mapped[str] = mapped_column(String(20))
     token_hash: Mapped[str] = mapped_column(String(64), unique=True)
     payload: Mapped[str | None] = mapped_column(String(255))  # e.g. the new email (2c)
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
@@ -98,6 +102,7 @@ class SecurityEvent(BaseModel):
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     # 'sign_in' | 'sign_in_failed' | 'session_revoked' | 'token_reuse' | 'identity_linked'
     # | 'account_taken_over' | 'email_verified' | 'password_changed' | 'password_reset'
+    # | 'reauthenticated' | 'email_changed' | 'data_exported'
     type: Mapped[str] = mapped_column(String(30))
     device: Mapped[str | None] = mapped_column(String(100))
     country: Mapped[str | None] = mapped_column(String(2))

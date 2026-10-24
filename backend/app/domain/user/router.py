@@ -1,5 +1,6 @@
 """HTTP endpoints for authentication (/auth) and the current user's profile (/users)."""
 
+from datetime import UTC, datetime
 from typing import Annotated
 
 from fastapi import (
@@ -17,14 +18,17 @@ from app.config import settings
 from app.core.email import EmailSender, get_email_sender, send_safely
 from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
-from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession
+from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession, RecentAuth
+from app.domain.user.account import AccountService
 from app.domain.user.schema import (
     AuthConfig,
+    ChangeEmailRequest,
     ChangePasswordRequest,
     ForgotPasswordRequest,
     GoogleSignInRequest,
     LoginRequest,
     Message,
+    ReauthRequest,
     RegisterRequest,
     ResetPasswordRequest,
     RevokedCount,
@@ -217,6 +221,84 @@ async def change_password(
 ) -> None:
     await AccountEmailService(db, client).change_password(
         auth.user, auth.session.uuid, data.current_password, data.new_password
+    )
+
+
+# ── sensitive actions (phase 2c) ─────────────────────────────────────────────
+
+
+@auth_router.post("/reauth", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("10/minute")
+async def reauthenticate(
+    request: Request,
+    data: ReauthRequest,
+    auth: CurrentAuth,
+    db: DbSession,
+    client: Client,
+    google: Annotated[GoogleVerifier, Depends(get_google_verifier)],
+) -> None:
+    """Prove it's you again on this device. Sensitive actions then work for 10 minutes."""
+    service = AccountService(db, client)
+    if data.password is not None:
+        await service.reauth_with_password(auth.user, auth.session, data.password)
+    else:
+        identity = await google.verify(data.credential)
+        await service.reauth_with_google(auth.user, auth.session, identity)
+
+
+@auth_router.post("/email/change", status_code=status.HTTP_202_ACCEPTED)
+@limiter.limit("5/hour")
+async def change_email(
+    request: Request,
+    data: ChangeEmailRequest,
+    auth: RecentAuth,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
+) -> Message:
+    sender = _require(email)
+    for message in await AccountService(db, client).start_email_change(auth.user, data.new_email):
+        background.add_task(send_safely, sender, message)
+    return Message(detail="If that address can be used, we sent a link to it.")
+
+
+@auth_router.post("/email/confirm", status_code=status.HTTP_204_NO_CONTENT)
+@limiter.limit("20/hour")
+async def confirm_email_change(
+    request: Request, data: TokenRequest, db: DbSession, client: Client
+) -> None:
+    await AccountService(db, client).confirm_email_change(data.token)
+
+
+@me_router.delete("", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_account(
+    response: Response,
+    auth: RecentAuth,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
+) -> None:
+    """Deletes the account and everything in it, now (App Store 5.1.1(v), Google Play)."""
+    goodbye = await AccountService(db, client).delete_account(auth.user)
+    if email is not None:
+        background.add_task(send_safely, email, goodbye)
+    response.delete_cookie(REFRESH_COOKIE, path=REFRESH_COOKIE_PATH)
+
+
+@me_router.get("/export")
+@limiter.limit("10/hour")
+async def export_data(
+    request: Request, auth: RecentAuth, db: DbSession, client: Client
+) -> Response:
+    """Everything we hold about you, as a ZIP made now and not kept anywhere."""
+    archive = await AccountService(db, client).export(auth.user)
+    filename = f"budget-analysis-{datetime.now(UTC).date().isoformat()}.zip"
+    return Response(
+        content=archive,
+        media_type="application/zip",
+        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
     )
 
 

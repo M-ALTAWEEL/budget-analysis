@@ -1,7 +1,7 @@
 """Shared FastAPI dependencies. The single authentication boundary of the API."""
 
 from dataclasses import dataclass
-from datetime import UTC, datetime
+from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Request, status
@@ -58,6 +58,22 @@ async def get_current_user(auth: Annotated[Auth, Depends(get_current_auth)]) -> 
     return auth.user
 
 
+RECENT_AUTH = timedelta(minutes=10)
+REAUTH_REQUIRED = "reauth_required"  # the website reads this word and asks "is it you?"
+
+
+async def get_recent_auth(auth: Annotated[Auth, Depends(get_current_auth)]) -> Auth:
+    """For sensitive actions (docs/design/accounts.md, section 9): the person signed in, or
+    proved it's them again, on this device within the last 10 minutes. A session copied
+    from someone's browser, or a laptop left open, is not enough to delete the account."""
+    proved_at = max(
+        auth.session.created_at, auth.session.reauthenticated_at or datetime.min.replace(tzinfo=UTC)
+    )
+    if datetime.now(UTC) - proved_at > RECENT_AUTH:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, REAUTH_REQUIRED)
+    return auth
+
+
 def get_client_info(request: Request) -> ClientInfo:
     return ClientInfo(
         device=describe_device(request.headers.get("user-agent"), request.headers.get("x-client")),
@@ -66,5 +82,6 @@ def get_client_info(request: Request) -> ClientInfo:
 
 
 CurrentAuth = Annotated[Auth, Depends(get_current_auth)]
+RecentAuth = Annotated[Auth, Depends(get_recent_auth)]
 CurrentUser = Annotated[User, Depends(get_current_user)]
 Client = Annotated[ClientInfo, Depends(get_client_info)]

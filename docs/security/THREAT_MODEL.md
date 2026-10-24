@@ -77,9 +77,9 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 
 | Requirement | Where it comes from | Phase |
 |---|---|---|
-| Delete the account from inside the app | App Store 5.1.1(v), Google Play | 2 |
+| Delete the account from inside the app | App Store 5.1.1(v), Google Play | ✅ 2c (web) · 6: in the apps |
 | Sign in with Apple next to Google | App Store 4.8 | 2 |
-| Export your data | GDPR art. 20, KVKK | 2 |
+| Export your data | GDPR art. 20, KVKK | ✅ 2c |
 | Privacy policy + terms of service | Both stores, all privacy laws | 2 |
 | Privacy labels / Data safety form | App Store Connect, Google Play Console | 6 |
 | Payments for digital features through the store | App Store 3.1.1, Google Play Billing | 7 |
@@ -96,3 +96,5 @@ the date here.
 | 2026-10-24 | 1 | Security headers, CSP, CodeQL, Dependabot, dependency audit, Redis-ready limiter; found S6 |
 | 2026-10-24 | 2 | Accounts design: found S7 (pre-hijacking), planned fix for S6 |
 | 2026-10-24 | 2a | S6 and S7 fixed; sessions in the database with immediate sign-out; security log |
+| 2026-10-24 | 2b | Email verification, password reset (one-time links, hashed, no enumeration) |
+| 2026-10-24 | 2c | Re-auth for sensitive actions; email change via the new inbox; account deletion; data export |

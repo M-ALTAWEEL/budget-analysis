@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
+import { AccountActions } from "@/components/settings/AccountActions";
 import { SecuritySection } from "@/components/settings/SecuritySection";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
 import { Button } from "@/components/ui/Button";
@@ -137,6 +138,8 @@ export default function SettingsPage() {
         </section>
 
         <SecuritySection />
+
+        <AccountActions />
 
         <Versions />
       </div>

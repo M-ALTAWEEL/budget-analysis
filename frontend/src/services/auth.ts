@@ -83,3 +83,36 @@ export async function updateMe(
   const { data } = await api.patch<User>("/users/me", changes);
   return data;
 }
+
+// ── sensitive actions (they need a recent sign-in, see isReauthRequired) ───
+
+/** True when the server wants "is it you?" first (403 reauth_required). */
+export function isReauthRequired(error: unknown): boolean {
+  const response = (error as { response?: { status?: number; data?: unknown } }).response;
+  if (response?.status !== 403) return false;
+  const data = response.data;
+  // A download asks for a Blob, so the JSON body arrives as one: 403 is enough there.
+  return data instanceof Blob || (data as { detail?: unknown })?.detail === "reauth_required";
+}
+
+export async function reauthenticate(proof: { password: string } | { credential: string }): Promise<void> {
+  await api.post("/auth/reauth", proof);
+}
+
+export async function changeEmail(newEmail: string): Promise<void> {
+  await api.post("/auth/email/change", { new_email: newEmail });
+}
+
+export async function confirmEmailChange(token: string): Promise<void> {
+  await api.post("/auth/email/confirm", { token });
+}
+
+export async function deleteAccount(): Promise<void> {
+  await api.delete("/me");
+}
+
+/** Everything the account holds, as a ZIP (made on the server now, not stored there). */
+export async function exportData(): Promise<Blob> {
+  const { data } = await api.get<Blob>("/me/export", { responseType: "blob" });
+  return data;
+}
