@@ -8,6 +8,7 @@ from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.currency.model import ExchangeRate
 from app.domain.expense.model import Expense
 from app.domain.goal.model import GoalContribution, SavingsGoal
+from app.domain.group.model import Group, GroupInvite, GroupMember
 from app.domain.user.model import (
     BackupCode,
     OneTimeToken,
@@ -27,6 +28,9 @@ __all__ = [
     "ExchangeRate",
     "Expense",
     "GoalContribution",
+    "Group",
+    "GroupInvite",
+    "GroupMember",
     "OneTimeToken",
     "PhoneCode",
     "RefreshToken",

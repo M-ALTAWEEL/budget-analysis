@@ -10,6 +10,7 @@ import {
   Settings,
   Shapes,
   Target,
+  Users,
 } from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
@@ -31,12 +32,13 @@ const NAV = [
   { href: "/expenses", label: (t: Messages) => t.nav.expenses, icon: ReceiptText },
   { href: "/budget", label: (t: Messages) => t.nav.budget, icon: Target },
   { href: "/goals", label: (t: Messages) => t.nav.goals, icon: PiggyBank },
+  { href: "/groups", label: (t: Messages) => t.nav.groups, icon: Users },
   { href: "/assistant", label: (t: Messages) => t.nav.assistant, icon: MessageCircle },
   { href: "/categories", label: (t: Messages) => t.nav.categories, icon: Shapes },
   { href: "/settings", label: (t: Messages) => t.nav.settings, icon: Settings },
 ];
 
-// Phones get six tabs. Categories is reached from Settings and the Budget page.
+// Phones get seven tabs. Categories is reached from Settings and the Budget page.
 const PHONE_NAV = NAV.filter((item) => item.href !== "/categories");
 
 /** Signed-in area: redirects to /login when there is no session. */
@@ -147,7 +149,7 @@ function BottomNav() {
   const { t } = useI18n();
   return (
     <nav
-      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-6 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
+      className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-7 border-t border-line bg-surface pb-[env(safe-area-inset-bottom)] lg:hidden"
       aria-label={t.nav.main}
     >
       {PHONE_NAV.map(({ href, label, icon: Icon }) => {
@@ -157,7 +159,7 @@ function BottomNav() {
             key={href}
             href={href}
             aria-current={active ? "page" : undefined}
-            className={`relative flex min-w-0 flex-col items-center gap-1 px-1 py-2.5 text-[11px] leading-tight ${
+            className={`relative flex min-w-0 flex-col items-center gap-1 px-0.5 py-2.5 text-[10px] leading-tight ${
               active ? "font-semibold text-pine" : "text-muted"
             }`}
           >
