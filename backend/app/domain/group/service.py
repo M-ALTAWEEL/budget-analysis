@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.core.security import generate_refresh_token, hash_token
+from app.domain.group.ledger import member_net
 from app.domain.group.model import Group, GroupInvite, GroupMember, GroupRequest
 from app.domain.group.schema import (
     GroupCreate,
@@ -242,7 +243,8 @@ class GroupService:
 
     async def remove_member(self, user: User, group_uuid: str, member_uuid: str) -> None:
         """Leave (your own uuid) or remove someone. History stays, marked "left".
-        (Phase 3d adds: leaving needs a zero balance.)"""
+        Leaving yourself needs a zero balance (8.1); an admin can still remove someone who
+        owes or is owed: their balance stays in the group under their name (8.2)."""
         group, me = await self.membership(user, group_uuid, lock=True)
         target = await self.session.scalar(
             select(GroupMember).where(
@@ -257,6 +259,10 @@ class GroupService:
             self.require(me, "owner", "admin")
             if me.role == "admin" and target.role != "member":
                 raise HTTPException(status.HTTP_403_FORBIDDEN, "Only the owner can do that.")
+        elif await member_net(self.session, group.id, me.id) != 0:
+            raise HTTPException(
+                status.HTTP_409_CONFLICT, "Settle up before leaving: your balance isn't zero."
+            )
         await self._leave(group, target)
         await self.session.commit()
 

@@ -148,6 +148,8 @@ export interface GroupExpense {
   paid_by: MemberRef;
   shares: { member: MemberRef; amount: string; weight: string | null }[];
   my_share: string | null;
+  paid_back: string[]; // members (uuids) who marked their share as paid back
+  added_by: MemberRef | null;
   can_edit: boolean;
   created_at: string;
 }
@@ -300,4 +302,64 @@ export async function addShare(shareUuid: string): Promise<void> {
 
 export async function dismissShare(shareUuid: string): Promise<void> {
   await api.post(`/me/group-shares/${encodeURIComponent(shareUuid)}/dismiss`);
+}
+
+// ── balances, paying back, the chat (phase 3e) ───────────────────────────────
+
+export interface Settlement {
+  uuid: string;
+  from_member: MemberRef;
+  to_member: MemberRef;
+  amount: string;
+  expense_uuid: string | null;
+  expense_description: string | null;
+  by: MemberRef | null;
+  can_delete: boolean;
+  created_at: string;
+}
+
+export interface Balances {
+  currency: Currency;
+  debts: { from_member: MemberRef; to_member: MemberRef; amount: string }[];
+  members: { member: MemberRef; net: string }[];
+  my_net: string;
+}
+
+export interface ActivityItem {
+  kind: "expense" | "settlement";
+  at: string; // the server's time when it was written down
+  by: MemberRef | null;
+  expense: GroupExpense | null;
+  settlement: Settlement | null;
+}
+
+export const ACTIVITY_PAGE = 30;
+
+export async function getBalances(groupUuid: string): Promise<Balances> {
+  const { data } = await api.get<Balances>(`/groups/${encodeURIComponent(groupUuid)}/balances`);
+  return data;
+}
+
+export async function listActivity(groupUuid: string, before?: string): Promise<ActivityItem[]> {
+  const { data } = await api.get<ActivityItem[]>(`/groups/${encodeURIComponent(groupUuid)}/activity`, {
+    params: { limit: ACTIVITY_PAGE, ...(before ? { before } : {}) },
+  });
+  return data;
+}
+
+export async function recordSettlement(
+  groupUuid: string,
+  input: { expense?: string; to?: string; from_member?: string; amount?: string },
+): Promise<Settlement> {
+  const { data } = await api.post<Settlement>(
+    `/groups/${encodeURIComponent(groupUuid)}/settlements`,
+    input,
+  );
+  return data;
+}
+
+export async function deleteSettlement(groupUuid: string, settlementUuid: string): Promise<void> {
+  await api.delete(
+    `/groups/${encodeURIComponent(groupUuid)}/settlements/${encodeURIComponent(settlementUuid)}`,
+  );
 }

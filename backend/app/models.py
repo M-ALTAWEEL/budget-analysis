@@ -15,6 +15,7 @@ from app.domain.group.model import (
     GroupInvite,
     GroupMember,
     GroupRequest,
+    GroupSettlement,
 )
 from app.domain.user.model import (
     BackupCode,
@@ -41,6 +42,7 @@ __all__ = [
     "GroupInvite",
     "GroupMember",
     "GroupRequest",
+    "GroupSettlement",
     "OneTimeToken",
     "PhoneCode",
     "RefreshToken",

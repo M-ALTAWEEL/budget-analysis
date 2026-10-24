@@ -213,7 +213,7 @@ async def test_a_deleted_expense_disappears_but_the_row_stays(client, db_session
 
 
 async def test_someone_who_left_keeps_their_part_of_old_expenses(client):
-    (sara, ali, _), uuids, group = await flat(client)
+    (sara, _, _), uuids, group = await flat(client)
     added = await add(
         client,
         sara,
@@ -222,7 +222,8 @@ async def test_someone_who_left_keeps_their_part_of_old_expenses(client):
         amount="30",
         shares=[{"member": u} for u in uuids],
     )
-    await client.delete(f"{API}/groups/{group}/members/{uuids[1]}", headers=ali)
+    # Removed by the owner (leaving by himself needs a zero balance: phase 3e).
+    await client.delete(f"{API}/groups/{group}/members/{uuids[1]}", headers=sara)
 
     listed = (await client.get(url(group), headers=sara)).json()
     assert amounts(listed[0]) == ["10.00", "10.00", "10.00"]
