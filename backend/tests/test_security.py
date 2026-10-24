@@ -33,12 +33,24 @@ def test_verify_password_handles_garbage_hash():
 
 
 def test_access_token_round_trip():
-    token = create_access_token("user-uuid-123")
-    assert decode_access_token(token) == "user-uuid-123"
+    token = create_access_token("user-uuid-123", "session-uuid-9")
+    claims = decode_access_token(token)
+    assert claims.user_uuid == "user-uuid-123"
+    assert claims.session_uuid == "session-uuid-9"
+
+
+def test_access_token_without_a_session_is_rejected():
+    # Tokens made before sessions existed carry no "sid": the client must refresh.
+    old = jwt.encode(
+        {"sub": "user", "type": "access", "exp": datetime.now(UTC) + timedelta(minutes=5)},
+        settings.secret_key,
+        algorithm=settings.jwt_algorithm,
+    )
+    assert decode_access_token(old) is None
 
 
 def test_tampered_token_is_rejected():
-    token = create_access_token("user-uuid-123")
+    token = create_access_token("user-uuid-123", "sid")
     tampered = token[:-2] + ("aa" if token[-2:] != "aa" else "bb")
     assert decode_access_token(tampered) is None
 

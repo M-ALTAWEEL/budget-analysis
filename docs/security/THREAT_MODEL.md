@@ -44,7 +44,8 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | **S: Spoofing** ||||
 | S1 | Password guessing / credential stuffing | bcrypt; login rate limit; breached-password check; 2FA | ✅ bcrypt + limit · 🔜 2: HIBP, 2FA |
 | S2 | Rate limit bypassed across server instances | Shared limiter in Redis, per IP **and** per account | ✅ Redis support (phase 1) · 🔜 2: per account |
-| S6 | **Found in phase 1:** the client IP is read from `X-Forwarded-For`, which a client can fake, so the IP rate limit can be bypassed | Trust only the IP set by our own proxy (Vercel), and send a secret header from the proxy so the API refuses direct calls; limits per account as well | 🔜 2 |
+| S6 | **Found in phase 1:** the client IP is read from `X-Forwarded-For`, which a client can fake, so the IP rate limit can be bypassed | The website's server sends the visitor's IP with a secret header (`X-Edge-Secret`), trusted only when it matches; otherwise the last `X-Forwarded-For` entry (added by Render), never the first; uvicorn no longer decides the IP. Limits per account as well | ✅ 2a (`app/core/client_ip.py`, `frontend/src/proxy.ts`) · 🔜 2d: per account |
+| S7 | **Found in phase 2 design:** account pre-hijacking. Someone signs up with the victim's (unverified) email; when the victim later signs in with Google, the accounts are linked and the attacker keeps his password | Link only to verified emails; a verified Google/Apple identity takes over an unverified account (password removed, sessions revoked) | ✅ 2a |
 | S3 | Fake Google / Apple identity | Verify the ID token's signature, audience, issuer and expiry on the server | ✅ Google · 🔜 2: Apple |
 | S4 | Signing up with someone else's email or phone | Email verification; phone OTP | 🔜 2 |
 | S5 | SMS pumping (fake numbers that cost us money) | Limits per number, IP and country; country allow-list; provider fraud guard; CAPTCHA after repeats | 🔜 2 |
@@ -55,7 +56,7 @@ Status: ✅ done · 🔜 planned (phase) · 🔍 to check in phase 5
 | T5 | **Found by CodeQL (alert #1):** server-side request forgery: the exchange-rate URL contained the currency from the request | The currency is validated to six values, and the URL is now built from our own table, never from request text | ✅ phase 1 |
 | T4 | Amount tricks (negative, too many decimals, splits that don't add up) | Pydantic validation; Decimal only; DB CHECK constraints; shares must sum exactly | ✅ personal · 🔜 3 |
 | **R: Repudiation** ||||
-| R1 | "I never changed that" | Security log for sign-ins, password and 2FA changes; group history with author and soft delete | 🔜 2, 3 |
+| R1 | "I never changed that" | Security log for sign-ins, password and 2FA changes; group history with author and soft delete | ✅ 2a: sign-ins, failed attempts, devices · 🔜 2b–2f, 3 |
 | **I: Information disclosure** ||||
 | I1 | Session token stolen by XSS | Access token in memory only; refresh token in an `httpOnly`, `Secure`, `SameSite=Lax` cookie; CSP | ✅ cookies, CSP (phase 1) · 🔜 5: nonce-based CSP without `'unsafe-inline'` |
 | I2 | Group members seeing personal data | Group and personal queries never join; responses carry display names only; privacy tests | 🔜 3 |
@@ -93,3 +94,5 @@ the date here.
 | 2026-10-23 | 0 | First version |
 | 2026-10-24 | 1 | CodeQL alert #1 (SSRF) fixed: T5 |
 | 2026-10-24 | 1 | Security headers, CSP, CodeQL, Dependabot, dependency audit, Redis-ready limiter; found S6 |
+| 2026-10-24 | 2 | Accounts design: found S7 (pre-hijacking), planned fix for S6 |
+| 2026-10-24 | 2a | S6 and S7 fixed; sessions in the database with immediate sign-out; security log |

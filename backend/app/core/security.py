@@ -2,6 +2,7 @@
 
 import hashlib
 import secrets
+from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 
 import bcrypt
@@ -33,10 +34,19 @@ DUMMY_PASSWORD_HASH = hash_password(secrets.token_urlsafe(16))
 # ── Access tokens (JWT) ──────────────────────────────────────────────────────
 
 
-def create_access_token(user_uuid: str) -> str:
+@dataclass(frozen=True)
+class AccessClaims:
+    user_uuid: str
+    session_uuid: str
+
+
+def create_access_token(user_uuid: str, session_uuid: str) -> str:
+    """`sid` ties the token to one session, so signing that session out stops this token
+    on the very next request instead of up to 15 minutes later."""
     now = datetime.now(UTC)
     payload = {
         "sub": user_uuid,
+        "sid": session_uuid,
         "type": "access",
         "iat": now,
         "exp": now + timedelta(minutes=settings.access_token_minutes),
@@ -44,20 +54,21 @@ def create_access_token(user_uuid: str) -> str:
     return jwt.encode(payload, settings.secret_key, algorithm=settings.jwt_algorithm)
 
 
-def decode_access_token(token: str) -> str | None:
-    """Return the user uuid, or None if the token is invalid, tampered with or expired."""
+def decode_access_token(token: str) -> AccessClaims | None:
+    """None if the token is invalid, tampered with, expired, or from before sessions
+    existed (no `sid`): the client then refreshes and gets a new one."""
     try:
         payload = jwt.decode(
             token,
             settings.secret_key,
             algorithms=[settings.jwt_algorithm],
-            options={"require": ["sub", "exp", "type"]},
+            options={"require": ["sub", "sid", "exp", "type"]},
         )
     except jwt.PyJWTError:
         return None
     if payload.get("type") != "access":
         return None
-    return payload["sub"]
+    return AccessClaims(user_uuid=payload["sub"], session_uuid=payload["sid"])
 
 
 # ── Refresh tokens ───────────────────────────────────────────────────────────

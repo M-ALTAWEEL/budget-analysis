@@ -1,9 +1,12 @@
 """API tests for /auth and /users/me, against a real PostgreSQL test database."""
 
+from datetime import timedelta
+
 from sqlalchemy import select
 
 from app.core.limiter import limiter
-from app.domain.user.model import RefreshToken, User
+from app.core.security import hash_token
+from app.domain.user.model import User, UserSession
 
 API = "/api/v1"
 PASSWORD = "correct-horse-42"
@@ -157,12 +160,28 @@ async def test_refresh_issues_new_tokens_and_rotates(client, db_session):
     new_refresh = response.cookies["refresh_token"]
     assert new_refresh != old_refresh
 
-    tokens = (await db_session.scalars(select(RefreshToken))).all()
-    assert len(tokens) == 2
-    assert sum(token.revoked_at is None for token in tokens) == 1  # only the new one is active
+    sessions = (await db_session.scalars(select(UserSession))).all()
+    assert len(sessions) == 1  # same device, same session: only the token changed
+    assert sessions[0].refresh_hash == hash_token(new_refresh)
+    assert sessions[0].previous_hash == hash_token(old_refresh)
 
 
-async def test_reusing_an_old_refresh_token_ends_all_sessions(client, db_session):
+async def test_two_tabs_refreshing_at_once_both_work(client):
+    registered = await register(client)
+    old_refresh = registered.cookies["refresh_token"]
+    client.cookies.clear()
+
+    first = await client.post(f"{API}/auth/refresh", headers=cookie_header(old_refresh))
+    client.cookies.clear()
+    second = await client.post(f"{API}/auth/refresh", headers=cookie_header(old_refresh))
+    assert first.status_code == second.status_code == 200
+    # The second tab gets an access token but keeps the cookie the first tab received.
+    assert "set-cookie" not in second.headers
+    me = await client.get(f"{API}/users/me", headers=auth_header(second))
+    assert me.status_code == 200
+
+
+async def test_reusing_an_old_refresh_token_later_ends_that_session(client, db_session):
     registered = await register(client)
     old_refresh = registered.cookies["refresh_token"]
     client.cookies.clear()
@@ -171,13 +190,17 @@ async def test_reusing_an_old_refresh_token_ends_all_sessions(client, db_session
     new_refresh = rotated.cookies["refresh_token"]
     client.cookies.clear()
 
-    # Someone replays the old token (e.g. it was stolen).
+    # A minute later, someone replays the old token (e.g. it was copied).
+    user_session = await db_session.scalar(select(UserSession))
+    user_session.rotated_at -= timedelta(minutes=1)
+    await db_session.flush()
     replay = await client.post(f"{API}/auth/refresh", headers=cookie_header(old_refresh))
     assert replay.status_code == 401
 
-    # As a precaution, the legitimate new token is now revoked too.
+    # As a precaution, that session is over, for the thief and for the owner alike.
     after = await client.post(f"{API}/auth/refresh", headers=cookie_header(new_refresh))
     assert after.status_code == 401
+    assert (await client.get(f"{API}/users/me", headers=auth_header(rotated))).status_code == 401
 
 
 async def test_refresh_without_cookie_is_rejected(client):
@@ -194,3 +217,5 @@ async def test_logout_revokes_the_refresh_token(client):
 
     response = await client.post(f"{API}/auth/refresh", headers=cookie_header(refresh_token))
     assert response.status_code == 401
+    # ...and the access token of that session stops working at once, not 15 minutes later.
+    assert (await client.get(f"{API}/users/me", headers=auth_header(registered))).status_code == 401
