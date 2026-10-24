@@ -1,18 +1,37 @@
-# Render's free plan puts the API to sleep after 15 minutes without visitors, and waking
-# it takes about a minute. This pings it every 14 minutes so visitors don't wait.
-# (31 days x 24 h = 744 h, inside the free plan's 750 instance hours a month.)
-# Set the repository variable API_URL (Settings > Secrets and variables > Actions >
-# Variables) to the Render address, e.g. https://budgetbuddy-api.onrender.com
-name: Keep API awake
+# Two jobs in one, every 14 minutes:
+# 1. Keep the API awake: Render's free plan puts it to sleep after 15 minutes without
+#    visitors, and waking it takes about a minute. (31 days x 24 h = 744 h, inside the
+#    free plan's 750 instance hours a month.)
+# 2. Uptime alert: if the API or the website does not answer, this run fails, and GitHub
+#    emails you about the failed run. Free, with no other service to sign up for.
+#
+# Repository variables (Settings > Secrets and variables > Actions > Variables):
+#   API_URL   the Render address, e.g. https://budgetbuddy-api-p1a3.onrender.com
+#   SITE_URL  the website,        e.g. https://budgetanalysis.vercel.app
+name: Uptime and keep awake
 
 on:
   schedule:
     - cron: "*/14 * * * *"
   workflow_dispatch:
 
+permissions: {} # needs nothing from the repository
+
 jobs:
-  ping:
+  check:
     runs-on: ubuntu-latest
     if: ${{ vars.API_URL != '' }}
     steps:
-      - run: curl --fail --silent --show-error --max-time 90 "${{ vars.API_URL }}/api/v1/ping"
+      # --retry: a server waking up can take a minute; only a real outage fails three times.
+      - name: API answers
+        run: >
+          curl --fail --silent --show-error --max-time 90
+          --retry 2 --retry-delay 20 --retry-all-errors
+          "${{ vars.API_URL }}/api/v1/ping"
+
+      - name: Website answers
+        if: ${{ vars.SITE_URL != '' }}
+        run: >
+          curl --fail --silent --show-error --output /dev/null --max-time 60
+          --retry 2 --retry-delay 20 --retry-all-errors
+          "${{ vars.SITE_URL }}"
