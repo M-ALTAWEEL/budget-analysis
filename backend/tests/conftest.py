@@ -23,6 +23,7 @@ from app.database import get_db
 from app.domain.budget.defaults import DEFAULT_CATEGORIES
 from app.domain.budget.model import Category
 from app.domain.currency.client import get_fx_client
+from app.domain.currency.service import forget_rates
 from app.main import app
 from tests.fakes import FakeBreachChecker, FakeFxClient
 
@@ -88,6 +89,14 @@ async def db_session():
         await transaction.rollback()
         await connection.close()
         await engine.dispose()
+
+
+@pytest.fixture(autouse=True)
+def _no_remembered_rates():
+    """Rates a process remembers (phase 4) must not leak from one test into the next."""
+    forget_rates()
+    yield
+    forget_rates()
 
 
 @pytest.fixture

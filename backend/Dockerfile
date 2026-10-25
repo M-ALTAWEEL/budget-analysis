@@ -29,4 +29,8 @@ EXPOSE 8000
 # No --proxy-headers: uvicorn would take the FIRST X-Forwarded-For entry, which the client
 # writes itself. app/core/client_ip.py decides the visitor's IP instead (threat S6).
 # --no-access-log: app/core/observability.py logs each request once, as JSON.
-CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --no-access-log"]
+# WEB_CONCURRENCY: how many server processes (phase 4). One process answers one request
+# at a time on the CPU; with more CPUs, more processes answer more people at once. Keep it
+# at the number of CPUs the host gives (Render's free plan: 1). With more than one, set
+# REDIS_URL too: rate-limit counters kept in each process's memory would multiply the limits.
+CMD ["sh", "-c", "alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000} --no-access-log --workers ${WEB_CONCURRENCY:-1}"]

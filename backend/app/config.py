@@ -18,6 +18,11 @@ class Settings(BaseSettings):
     api_prefix: str = "/api/v1"
 
     database_url: str = "postgresql+asyncpg://budgetbuddy:budgetbuddy@localhost:5432/budgetbuddy"
+    # Connections kept open per server process, and how many more it may open at a busy
+    # moment (phase 4). With N processes the database sees up to N x (size + overflow):
+    # keep that under the database's own limit (Neon free: about 100).
+    db_pool_size: int = 5
+    db_max_overflow: int = 10
 
     # Comma-separated list of origins allowed to call the API from a browser.
     frontend_url: str = "http://localhost:3000"
