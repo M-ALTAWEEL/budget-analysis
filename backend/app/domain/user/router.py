@@ -18,6 +18,7 @@ from app.config import settings
 from app.core import secret_box, sms
 from app.core.breached import BreachChecker, get_breach_checker
 from app.core.email import EmailSender, get_email_sender, send_safely
+from app.core.email_templates import build_email
 from app.core.google import GoogleVerifier, get_google_verifier
 from app.core.limiter import limiter
 from app.dependencies import Client, CurrentAuth, CurrentUser, DbSession, RecentAuth
@@ -248,13 +249,28 @@ async def forgot_password(
     return Message(detail=EMAIL_ON_ITS_WAY)
 
 
+def _notify(background: BackgroundTasks, sender: EmailSender | None, user, purpose) -> None:
+    """A notice by email when how someone signs in changes (ASVS 2.2.3), so they hear
+    about it at once if it wasn't them. Nothing when email is off or there's no email."""
+    if sender is not None and user.email:
+        message = build_email(purpose, to=user.email, name=user.full_name, locale=user.locale)
+        background.add_task(send_safely, sender, message)
+
+
 @auth_router.post("/password/reset", status_code=status.HTTP_204_NO_CONTENT)
 @limiter.limit("10/hour")
 async def reset_password(
-    request: Request, data: ResetPasswordRequest, db: DbSession, client: Client, breach: Breach
+    request: Request,
+    data: ResetPasswordRequest,
+    db: DbSession,
+    client: Client,
+    breach: Breach,
+    email: Email,
+    background: BackgroundTasks,
 ) -> None:
     await _ensure_not_breached(breach, data.password)
-    await AccountEmailService(db, client).reset_password(data.token, data.password)
+    user = await AccountEmailService(db, client).reset_password(data.token, data.password)
+    _notify(background, email, user, "password_changed")
 
 
 @auth_router.post("/password/change", status_code=status.HTTP_204_NO_CONTENT)
@@ -266,11 +282,14 @@ async def change_password(
     db: DbSession,
     client: Client,
     breach: Breach,
+    email: Email,
+    background: BackgroundTasks,
 ) -> None:
     await _ensure_not_breached(breach, data.new_password)
     await AccountEmailService(db, client).change_password(
         auth.user, auth.session.uuid, data.current_password, data.new_password
     )
+    _notify(background, email, auth.user, "password_changed")
 
 
 # ── sensitive actions (phase 2c) ─────────────────────────────────────────────
@@ -422,15 +441,25 @@ async def setup_two_factor(auth: RecentAuth, db: DbSession, client: Client) -> T
 @me_router.post("/2fa/enable")
 @limiter.limit("10/minute")
 async def enable_two_factor(
-    request: Request, data: CodeRequest, auth: CurrentAuth, db: DbSession, client: Client
+    request: Request,
+    data: CodeRequest,
+    auth: CurrentAuth,
+    db: DbSession,
+    client: Client,
+    email: Email,
+    background: BackgroundTasks,
 ) -> BackupCodes:
     codes = await TwoFactorService(db, client).enable(auth.user, data.code)
+    _notify(background, email, auth.user, "two_factor_on")
     return BackupCodes(codes=codes)
 
 
 @me_router.post("/2fa/disable", status_code=status.HTTP_204_NO_CONTENT)
-async def disable_two_factor(auth: RecentAuth, db: DbSession, client: Client) -> None:
+async def disable_two_factor(
+    auth: RecentAuth, db: DbSession, client: Client, email: Email, background: BackgroundTasks
+) -> None:
     await TwoFactorService(db, client).disable(auth.user)
+    _notify(background, email, auth.user, "two_factor_off")
 
 
 @me_router.post("/2fa/backup-codes")

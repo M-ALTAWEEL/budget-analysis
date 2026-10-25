@@ -10,6 +10,8 @@ from sqlalchemy import text
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.body_limit import BodySizeLimitMiddleware
+from app.core.default_limit import DefaultRateLimitMiddleware
 from app.core.limiter import limiter
 from app.core.observability import RequestContextMiddleware, setup_logging, setup_sentry
 from app.database import get_db
@@ -33,6 +35,9 @@ def create_app() -> FastAPI:
         # Hide the interactive docs in production.
         docs_url=None if settings.is_production else "/docs",
         redoc_url=None,
+        # The full list of endpoints and fields helps an attacker more than anyone else
+        # (phase 5). Only outside production, with /docs.
+        openapi_url=None if settings.is_production else "/openapi.json",
     )
 
     # Rate limiting: too many requests -> 429 Too Many Requests.
@@ -57,6 +62,12 @@ def create_app() -> FastAPI:
             headers.setdefault("Strict-Transport-Security", "max-age=63072000; includeSubDomains")
         return response
 
+    # A limit on every endpoint, per visitor (threat D1): the default from settings, or
+    # the endpoint's own. Then no body over 1 MB. Both inside the request log, so a
+    # refused request is logged too.
+    app.add_middleware(DefaultRateLimitMiddleware)
+    app.add_middleware(BodySizeLimitMiddleware)
+
     # Wraps the routes and the headers above: it times every request, errors included.
     app.add_middleware(RequestContextMiddleware)
 
@@ -69,6 +80,7 @@ def create_app() -> FastAPI:
     )
 
     @app.get(f"{settings.api_prefix}/ping", tags=["system"])
+    @limiter.exempt  # the host's health checks call it every few seconds
     async def ping() -> dict:
         """Is the server up? No database query: the host's health checks and the
         keep-awake job call this often, and must not keep the (free) database awake."""

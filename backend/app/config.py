@@ -21,6 +21,10 @@ class Settings(BaseSettings):
     # Connections kept open per server process, and how many more it may open at a busy
     # moment (phase 4). With N processes the database sees up to N x (size + overflow):
     # keep that under the database's own limit (Neon free: about 100).
+    # Every endpoint without its own limit: at most this many requests per visitor IP
+    # (threat D1, phase 5). A person on the website makes a few a minute; load tests on
+    # one computer raise it (loadtest/compose.load.yml).
+    rate_limit_default: str = "300/minute"
     db_pool_size: int = 5
     db_max_overflow: int = 10
 
