@@ -13,6 +13,8 @@ import logging
 import re
 import time
 import uuid
+from contextvars import ContextVar
+from dataclasses import dataclass
 from datetime import UTC, datetime
 
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
@@ -26,6 +28,36 @@ QUIET_PATHS = {f"{settings.api_prefix}/ping"}
 
 # Accept a request id from the caller only if it looks like one: never log arbitrary text.
 _SAFE_ID = re.compile(r"^[A-Za-z0-9-]{8,64}$")
+
+
+@dataclass
+class DbStats:
+    """How much of one request was spent in the database (phase 4). A request that
+    runs 20 queries where 3 would do, or waits on one slow query, shows up in its log
+    line and in the Server-Timing header."""
+
+    queries: int = 0
+    seconds: float = 0.0
+
+
+_db_stats: ContextVar[DbStats | None] = ContextVar("db_stats", default=None)
+
+
+def track_queries(sync_engine) -> None:
+    """Count every SQL statement and its time, for the request that ran it."""
+    from sqlalchemy import event
+
+    @event.listens_for(sync_engine, "before_cursor_execute")
+    def _start(conn, cursor, statement, parameters, context, executemany):
+        conn.info.setdefault("query_start", []).append(time.perf_counter())
+
+    @event.listens_for(sync_engine, "after_cursor_execute")
+    def _end(conn, cursor, statement, parameters, context, executemany):
+        started = conn.info["query_start"].pop()
+        stats = _db_stats.get()
+        if stats is not None:  # outside a request (migrations, scripts): nothing to add to
+            stats.queries += 1
+            stats.seconds += time.perf_counter() - started
 
 
 class JsonFormatter(logging.Formatter):
@@ -69,12 +101,20 @@ class RequestContextMiddleware:
         scope.setdefault("state", {})["request_id"] = request_id
         start = time.perf_counter()
         status = 500  # if the app crashes before answering
+        db = DbStats()
+        token = _db_stats.set(db)
 
         async def send_with_id(message: Message) -> None:
             nonlocal status
             if message["type"] == "http.response.start":
                 status = message["status"]
-                message.setdefault("headers", []).append((b"x-request-id", request_id.encode()))
+                headers = message.setdefault("headers", [])
+                headers.append((b"x-request-id", request_id.encode()))
+                # Shown in the browser's Network tab (Timing): time in the database, and
+                # in total. Durations only: nothing about the data.
+                total = (time.perf_counter() - start) * 1000
+                timing = f'db;dur={db.seconds * 1000:.1f};desc="{db.queries} queries"'
+                headers.append((b"server-timing", f"{timing}, app;dur={total:.1f}".encode()))
             await send(message)
 
         try:
@@ -91,9 +131,12 @@ class RequestContextMiddleware:
                             "path": path,
                             "status": status,
                             "duration_ms": round((time.perf_counter() - start) * 1000, 1),
+                            "db_queries": db.queries,
+                            "db_ms": round(db.seconds * 1000, 1),
                         }
                     },
                 )
+            _db_stats.reset(token)
 
 
 def setup_sentry() -> None:

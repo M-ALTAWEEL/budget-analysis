@@ -77,3 +77,21 @@ def test_the_rates_url_only_ever_contains_our_own_currency_codes():
     client = ExchangeRateClient("https://rates.example/v6/latest/", timeout=1)
     assert client.rates_url(Currency.TRY) == "https://rates.example/v6/latest/TRY"
     assert {client.rates_url(c).rsplit("/", 1)[1] for c in Currency} == {c.value for c in Currency}
+
+
+async def test_a_process_remembers_fresh_rates_without_asking_the_database(db_session):
+    fx = FakeFxClient()
+    await CurrencyService(db_session, fx).get_rates(Currency.USD)
+    # A new service (a new request) in the same process: no provider call, no query.
+    queries = []
+    from sqlalchemy import event
+
+    sync = db_session.sync_session.get_bind()
+    listener = lambda *args: queries.append(args)  # noqa: E731
+    event.listen(sync, "before_cursor_execute", listener)
+    try:
+        rates = await CurrencyService(db_session, fx).get_rates(Currency.USD)
+    finally:
+        event.remove(sync, "before_cursor_execute", listener)
+    assert rates["TRY"] == Decimal("34.00000000")
+    assert fx.calls == 1 and queries == []

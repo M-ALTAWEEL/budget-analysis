@@ -1,0 +1,10 @@
+# Runs the local API like production for a load test: no auto-reload, no Sentry, and
+# WORKERS processes (default 1). Use together with the main file:
+#   docker compose -f docker-compose.yml -f loadtest/compose.load.yml up -d api
+services:
+  api:
+    environment:
+      SENTRY_DSN: ""
+    command: >
+      sh -c "alembic upgrade head &&
+      uvicorn app.main:app --host 0.0.0.0 --port 8000 --no-access-log --workers ${WORKERS:-1}"

@@ -32,3 +32,10 @@ def test_log_lines_are_json_with_the_request_fields():
     line = json.loads(JsonFormatter().format(record))
     assert line["message"] == "request"
     assert (line["path"], line["status"], line["request_id"]) == ("/api/v1/expenses", 200, "r1")
+
+
+async def test_every_answer_says_how_long_it_took_and_how_much_was_the_database(client):
+    timing = (await client.get(f"{API}/version")).headers["Server-Timing"]
+    db, app = timing.split(", ")
+    assert db.startswith("db;dur=") and 'desc="' in db and db.endswith(' queries"')
+    assert app.startswith("app;dur=")

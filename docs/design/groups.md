@@ -1,6 +1,6 @@
 # Design: Groups (shared expenses)
 
-Status: approved for phase 3 · Owner: Mouhammed Altaweel · October 2026
+Status: built in phase 3 (see section 11 for what changed while building) · Owner: Mouhammed Altaweel · October 2026
 
 ## 1. The problem
 
@@ -219,3 +219,17 @@ POST   /me/group-shares/{uuid}/add | /dismiss
   or budget fields.
 - Member limit: concurrent joins never exceed it.
 - Leaving with a balance is refused; account deletion keeps other members' balances.
+
+## 11. As built (phase 3, October 2026)
+
+What was built in 3a to 3e, and where it differs from the plan above.
+
+| Part | Built | Different from the plan |
+|---|---|---|
+| 3a | Groups, members, roles, invite links with QR, leaving and handing over | — |
+| 3b | Expenses, four split methods, other currencies | `group_expense_shares.weight` is `numeric(14,4)`: an exact amount can be larger than `numeric(9,4)` holds |
+| 3c | **Usernames** (not in the plan): unique, stored in lower case, some names reserved. Admins invite by username; the person **accepts or declines** (`group_requests`), and a group can't ask again for 30 days after a no | Added at the owner's request |
+| 3d | Each member's share copied into their own budget | A waiting share isn't added the moment its month gets a budget: the person sees it and taps "Add" or "Add all" (no hidden writes inside a budget request) |
+| 3e | Balances **between each pair of people** (not simplified), "I paid my share" per expense, any payment between two members, and the group's chat: every expense and payment in order, with the server's date and time | Simplifying debts (A→B→C becomes A→C) is left out: the owner wanted to see each person's debt to each person. Leaving needs a zero balance (8.1) |
+
+Not built yet: notifications (phase 6, with mobile push).

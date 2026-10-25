@@ -33,3 +33,7 @@ Thumbs.db
 
 # Private notes, kept on this computer only
 docs/LEARNING_LOG.md
+
+# Load tests (phase 4): fresh tokens and raw results stay on this computer
+loadtest/tokens.json
+loadtest/results/
