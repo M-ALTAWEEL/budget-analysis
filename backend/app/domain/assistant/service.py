@@ -10,7 +10,6 @@ Everything runs inside the app, with no paid AI service:
    model never makes a number up: it only chooses which calculation to run.
 """
 
-from calendar import monthrange
 from datetime import date, timedelta
 from decimal import Decimal
 from functools import lru_cache
@@ -18,7 +17,7 @@ from pathlib import Path
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dates import month_start, next_month
+from app.core.dates import BudgetCalendar
 from app.core.money import to_money
 from app.domain.assistant.schema import Answer, CategoryTotal
 from app.domain.budget.model import Budget
@@ -80,7 +79,7 @@ class Assistant:
     # ── one method per intent ────────────────────────────────────────────────
 
     async def _spent(self, user: User, question: str, today: date, answer: Answer) -> Answer:
-        period = find_period(question, today)
+        period = find_period(question, today, calendar=BudgetCalendar.of(user))
         category = await self._category_in(user, question)
         amount, count = await self.expenses.total_in_range(
             user.id, period.start, period.end, category.id if category else None
@@ -93,11 +92,13 @@ class Assistant:
         return answer
 
     async def _remaining(self, user: User, question: str, today: date, answer: Answer) -> Answer:
-        month = month_start(today)
+        calendar = BudgetCalendar.of(user)
+        month = calendar.month_of(today)
         budget = await self.budgets.get_for_month(user.id, month)
         if budget is None:
             return _no_budget(answer)
-        days_left = monthrange(today.year, today.month)[1] - today.day + 1  # today included
+        start, end = calendar.visible(month)
+        days_left = (end - today).days  # today included
 
         total, only = budget.total_amount, None
         category = await self._category_in(user, question)
@@ -108,7 +109,7 @@ class Assistant:
             if limit is not None:
                 total, only = limit.limit_amount, category.id
                 answer.category = await self._read(category)
-        spent, _ = await self.expenses.total_in_range(user.id, month, next_month(month), only)
+        spent, _ = await self.expenses.total_in_range(user.id, start, end, only)
 
         remaining = to_money(total - spent)
         answer.period = "this_month"
@@ -121,7 +122,7 @@ class Assistant:
         return answer
 
     async def _top(self, user: User, question: str, today: date, answer: Answer) -> Answer:
-        period = find_period(question, today)
+        period = find_period(question, today, calendar=BudgetCalendar.of(user))
         by_category = await self.expenses.total_by_category(user.id, period.start, period.end)
         biggest = sorted(by_category.items(), key=lambda kv: kv[1], reverse=True)[:TOP_CATEGORIES]
         found = {c.id: c for c in await self.categories.list_by_ids([cid for cid, _ in biggest])}
@@ -136,7 +137,8 @@ class Assistant:
         return answer
 
     async def _forecast(self, user: User, question: str, today: date, answer: Answer) -> Answer:
-        month = month_start(today)
+        calendar = BudgetCalendar.of(user)
+        month = calendar.month_of(today)
         budget = await self.budgets.get_for_month(user.id, month)
         if budget is None:
             return _no_budget(answer)
@@ -145,7 +147,7 @@ class Assistant:
         answer.currency = budget.currency
         answer.total = budget.total_amount
         answer.amount = to_money(sum((d.spent for d in daily.days), Decimal("0")))
-        answer.through_day = today.day
+        answer.through_day = (today - calendar.bounds(month)[0]).days + 1
         if daily.forecast is not None:  # None before day 7: too early to say
             answer.forecast = daily.forecast.total
         return answer
@@ -153,20 +155,28 @@ class Assistant:
     async def _compare(self, user: User, question: str, today: date, answer: Answer) -> Answer:
         """This month against last month ON THE SAME DAYS: on the 10th, the first 10 days
         of each. Comparing 10 days with a whole month would always look like saving."""
-        this_start = month_start(today)
-        last_start = month_start(this_start - timedelta(days=1))
-        days_in_last = monthrange(last_start.year, last_start.month)[1]
-        through = min(today.day, days_in_last)
+        calendar = BudgetCalendar.of(user)
+        this_month = calendar.month_of(today)
+        this_start, _ = calendar.bounds(this_month)
+        last_month = calendar.month_of(this_start - timedelta(days=1))
+        last_start, last_end = calendar.bounds(last_month)
+        day_number = (today - this_start).days + 1
+        through = min(day_number, (last_end - last_start).days)
 
-        now, _ = await self.expenses.total_in_range(user.id, this_start, today + timedelta(days=1))
-        before, _ = await self.expenses.total_in_range(
-            user.id, last_start, last_start + timedelta(days=through)
+        now, _ = await self.expenses.total_in_range(
+            user.id, calendar.clamp(this_start), today + timedelta(days=1)
         )
+        if calendar.hidden(last_month):
+            before = Decimal("0")  # started fresh: nothing to compare with
+        else:
+            before, _ = await self.expenses.total_in_range(
+                user.id, calendar.clamp(last_start), last_start + timedelta(days=through)
+            )
         answer.period = "this_month"
         answer.currency = await self._currency(user, this_start)
         answer.amount = to_money(now)
         answer.previous = to_money(before)
-        answer.through_day = today.day
+        answer.through_day = day_number
         return answer
 
     async def _goals(self, user: User, question: str, today: date, answer: Answer) -> Answer:
@@ -187,7 +197,8 @@ class Assistant:
 
     async def _currency(self, user: User, day: date) -> str:
         """Amounts are stored in the currency of their month's budget."""
-        budget: Budget | None = await self.budgets.get_for_month(user.id, month_start(day))
+        month = BudgetCalendar.of(user).month_of(day)
+        budget: Budget | None = await self.budgets.get_for_month(user.id, month)
         return budget.currency if budget else user.base_currency
 
 

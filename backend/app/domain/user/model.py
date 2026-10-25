@@ -1,10 +1,12 @@
 """Database tables owned by the user domain. Design: docs/design/accounts.md, section 3."""
 
-from datetime import datetime
+from datetime import date, datetime
 
 from sqlalchemy import (
     BigInteger,
     Boolean,
+    CheckConstraint,
+    Date,
     DateTime,
     ForeignKey,
     Index,
@@ -20,6 +22,9 @@ from app.base import BaseModel
 
 class User(BaseModel):
     __tablename__ = "users"
+    __table_args__ = (
+        CheckConstraint("month_start_day BETWEEN 1 AND 28", name="month_start_day_range"),
+    )
 
     # None for accounts made with a phone number (2e) until they add an email.
     email: Mapped[str | None] = mapped_column(String(255), unique=True)
@@ -39,6 +44,11 @@ class User(BaseModel):
     base_currency: Mapped[str] = mapped_column(String(3), server_default="TRY")
     secondary_currency: Mapped[str | None] = mapped_column(String(3))
     locale: Mapped[str] = mapped_column(String(5), server_default="en")
+    # The day the budget month starts (allowance day), 1–28. 1 = calendar months.
+    month_start_day: Mapped[int] = mapped_column(Integer, server_default="1")
+    # "Start fresh": spending before this day is hidden from months, charts and
+    # comparisons. Nothing is deleted; clearing it brings the history back.
+    fresh_start_on: Mapped[date | None] = mapped_column(Date)
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
     # Two-factor authentication (2d). The key is encrypted (app/core/secret_box.py); it
     # exists but is not enabled while the person is still scanning the QR code.

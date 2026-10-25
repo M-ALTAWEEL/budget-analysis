@@ -35,7 +35,7 @@ async def test_register_returns_access_token_and_sets_refresh_cookie(client):
     body = response.json()
     assert body["token_type"] == "bearer"
     assert body["expires_in"] == 15 * 60
-    assert "refresh_token" not in body  # never in the body, only in the cookie
+    assert body.get("refresh_token") is None  # the website: never in the body, only the cookie
     set_cookie = response.headers["set-cookie"].lower()
     assert "refresh_token=" in set_cookie
     assert "httponly" in set_cookie

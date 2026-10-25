@@ -6,7 +6,7 @@ from decimal import Decimal
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dates import format_month, month_start, next_month
+from app.core.dates import BudgetCalendar, format_month
 from app.core.money import Currency, to_money
 from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
@@ -152,7 +152,8 @@ class BudgetService:
 
     async def summary(self, user: User, month: date) -> BudgetSummary:
         budget = await self._budget_or_404(user, month)
-        spent_by_category = await self.expenses.total_by_category(user.id, month, next_month(month))
+        start, end = BudgetCalendar.of(user).visible(month)
+        spent_by_category = await self.expenses.total_by_category(user.id, start, end)
 
         rows: list[CategorySpending] = []
         planned_ids = set()
@@ -192,8 +193,10 @@ class BudgetService:
 
     async def daily(self, user: User, month: date, today: date | None = None) -> DailySpending:
         budget = await self._budget_or_404(user, month)
-        end = next_month(month)
-        rows = await self.expenses.total_by_day_and_category(user.id, month, end)
+        calendar = BudgetCalendar.of(user)
+        first, end = calendar.bounds(month)
+        visible_from, _ = calendar.visible(month)
+        rows = await self.expenses.total_by_day_and_category(user.id, visible_from, end)
         categories = await self.categories.list_by_ids(list({row[1] for row in rows}))
         uuid_of = {category.id: category.uuid for category in categories}
 
@@ -203,7 +206,7 @@ class BudgetService:
 
         # Fill the gaps: a chart needs every day, including the ones with nothing spent.
         days: list[DaySpending] = []
-        day = month
+        day = first
         while day < end:
             spent_that_day = by_day.get(day, {})
             days.append(
@@ -227,14 +230,15 @@ class BudgetService:
     async def tips(self, user: User, month: date, today: date | None = None) -> Tips:
         today = today or date.today()
         budget = await self._budget_or_404(user, month)
+        calendar = BudgetCalendar.of(user)
 
-        rows = await self.expenses.in_range(user.id, month, next_month(month))
+        rows = await self.expenses.in_range(user.id, *calendar.visible(month))
         repeated = repeated_purchases(rows)
         categories = await self.categories.list_by_ids([r.category_id for r in repeated])
         by_id = {c.id: CategoryRead.model_validate(c) for c in categories}
 
         weekday = None
-        if month_start(today) == month:
+        if calendar.month_of(today) == month:
             found = busiest_weekday(await self._last_weeks(user, budget.currency, today))
             if found:
                 weekday = WeekdayPatternRead(
@@ -261,7 +265,8 @@ class BudgetService:
         """Spending per day over the last `weeks` full days before today, starting from the
         first expense (a new student has fewer days). Months budgeted in another currency
         are left out: their amounts cannot be added to this month's."""
-        start = today - timedelta(weeks=weeks)
+        calendar = BudgetCalendar.of(user)
+        start = calendar.clamp(today - timedelta(weeks=weeks))
         rows = await self.expenses.total_by_day_and_category(user.id, start, today)
         if not rows:
             return {}
@@ -273,7 +278,7 @@ class BudgetService:
         days: dict[date, float] = {}
         day = min(spent)
         while day < today:
-            first = month_start(day)
+            first = calendar.month_of(day)
             if first not in same_currency:
                 budget = await self.budgets.get_for_month(user.id, first)
                 same_currency[first] = budget is not None and budget.currency == currency
@@ -284,7 +289,9 @@ class BudgetService:
 
     async def _budget_or_404(self, user: User, month: date) -> Budget:
         budget = await self.budgets.get_for_month(user.id, month)
-        if budget is None:
+        if budget is None or BudgetCalendar.of(user).hidden(month):
+            # Hidden by a fresh start: the same answer as "no budget", so the old month
+            # is neither shown nor compared with.
             raise HTTPException(
                 status.HTTP_404_NOT_FOUND, f"No budget set for {format_month(month)} yet."
             )
@@ -294,10 +301,12 @@ class BudgetService:
 def month_forecast(days: list[DaySpending], month: date, today: date) -> SpendingForecast | None:
     """Only the current month has a future to forecast. Days up to and including today
     count as "so far" (today may not be finished, but leaving it out would ignore money
-    that is already spent)."""
-    if month_start(today) != month:
+    that is already spent). The month may start on any day (the allowance day)."""
+    # `days` is the whole budget month (from the start day): today must fall inside it.
+    if not days or not days[0].day <= today <= days[-1].day:
         return None
-    found = forecast_month([day.spent for day in days[: today.day]], len(days))
+    so_far = (today - days[0].day).days + 1
+    found = forecast_month([day.spent for day in days[:so_far]], len(days))
     if found is None:
         return None
     return SpendingForecast(

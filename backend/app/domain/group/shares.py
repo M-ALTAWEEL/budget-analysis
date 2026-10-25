@@ -11,17 +11,20 @@ each of them spends 100: that 100 is what lands in each person's own budget.
   group never touches it again. Moving it to another category doesn't count as that.
 - A share of 0 makes no copy."""
 
+from datetime import date
+
 from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dates import format_month, month_start
+from app.core.dates import BudgetCalendar, format_month
 from app.core.money import Currency
 from app.domain.budget.model import Budget, Category
 from app.domain.currency.service import CurrencyService
 from app.domain.expense.model import Expense
 from app.domain.group.model import Group, GroupExpense, GroupExpenseShare, GroupMember
 from app.domain.group.schema import AddAllResult, PendingShareRead
+from app.domain.user.model import User
 
 DESCRIPTION_MAX = 200
 
@@ -133,7 +136,8 @@ class ShareCopies:
     async def _budget(self, user_id: int, expense: GroupExpense) -> Budget | None:
         return await self.session.scalar(
             select(Budget).where(
-                Budget.user_id == user_id, Budget.month == month_start(expense.spent_at)
+                Budget.user_id == user_id,
+                Budget.month == await _budget_month(self.session, user_id, expense.spent_at),
             )
         )
 
@@ -165,8 +169,14 @@ def _description(expense: GroupExpense, group: Group) -> str:
     return text if len(text) <= DESCRIPTION_MAX else text[: DESCRIPTION_MAX - 1] + "…"
 
 
+async def _budget_month(session: AsyncSession, user_id: int, day: date) -> date:
+    """The member's budget month for that day: their month may start on another day."""
+    user = await session.get(User, user_id)
+    return BudgetCalendar.of(user).month_of(day)
+
+
 def _need_budget(expense: GroupExpense) -> HTTPException:
-    month = month_start(expense.spent_at)
+    month = expense.spent_at.replace(day=1)
     return HTTPException(
         status.HTTP_409_CONFLICT,
         f"Set a budget for {format_month(month)} before adding expenses to it.",

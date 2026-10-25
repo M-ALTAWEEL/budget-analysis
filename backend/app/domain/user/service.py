@@ -44,6 +44,9 @@ class ClientInfo:
 
     device: str
     country: str | None = None
+    # The iPhone or Android app (phase 6): it gets its refresh token in the answer and
+    # keeps it in the phone's secure storage, since an app has no cookie jar for us.
+    native: bool = False
 
 
 @dataclass(frozen=True)

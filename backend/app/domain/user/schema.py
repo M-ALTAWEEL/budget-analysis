@@ -1,7 +1,7 @@
 """Shapes of the data that enters and leaves the user/auth API."""
 
 import re
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
@@ -158,6 +158,14 @@ class TokenResponse(BaseModel):
     access_token: str
     token_type: str = "bearer"
     expires_in: int  # seconds until the access token expires
+    # Only for the phone apps (phase 6); the website gets it as an httpOnly cookie.
+    refresh_token: str | None = None
+
+
+class RefreshRequest(BaseModel):
+    """The phone apps send their refresh token here; the website sends its cookie."""
+
+    refresh_token: str | None = Field(default=None, max_length=200)
 
 
 class UserRead(BaseModel):
@@ -174,6 +182,8 @@ class UserRead(BaseModel):
     base_currency: Currency
     secondary_currency: Currency | None
     locale: Locale
+    month_start_day: int = 1
+    fresh_start_on: date | None = None
     created_at: datetime
 
 
@@ -187,13 +197,24 @@ class UserUpdate(BaseModel):
     base_currency: Currency | None = None
     secondary_currency: Currency | None = None  # null clears it
     locale: Locale | None = None
+    month_start_day: int | None = Field(default=None, ge=1, le=28)
+    fresh_start_on: date | None = None  # null shows the old months again
 
     @field_validator("username")
     @classmethod
     def valid_username(cls, value: str | None) -> str | None:
         return normalize_username(value) if value is not None else None
 
-    @field_validator("full_name", "base_currency", "locale")
+    @field_validator("fresh_start_on")
+    @classmethod
+    def not_in_future(cls, value: date | None) -> date | None:
+        # A fresh start from a day that hasn't come yet would hide nothing, and later
+        # hide expenses without the student doing anything.
+        if value is not None and value > date.today() + timedelta(days=1):
+            raise ValueError("A fresh start cannot be in the future.")
+        return value
+
+    @field_validator("full_name", "base_currency", "locale", "month_start_day")
     @classmethod
     def not_null(cls, value):
         if value is None:

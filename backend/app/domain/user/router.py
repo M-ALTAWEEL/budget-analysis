@@ -37,6 +37,7 @@ from app.domain.user.schema import (
     PhoneSendRequest,
     PhoneVerifyRequest,
     ReauthRequest,
+    RefreshRequest,
     RegisterRequest,
     ResetPasswordRequest,
     RevokedCount,
@@ -54,6 +55,7 @@ from app.domain.user.schema import (
 from app.domain.user.service import (
     AccountEmailService,
     AuthService,
+    ClientInfo,
     IssuedTokens,
     SecondStepNeeded,
     SessionService,
@@ -88,16 +90,23 @@ async def _signed_in(
     if isinstance(result, SecondStepNeeded):
         challenge = await TwoFactorService(db, client).start_challenge(result.user)
         return TwoFactorChallenge(challenge=challenge)
-    return _send_tokens(response, result)
+    return _send_tokens(response, result, client)
 
 
 EMAIL_ON_ITS_WAY = "If an account exists for this email, we sent a link to it."
 me_router = APIRouter(prefix="/me", tags=["me"])
 
 
-def _send_tokens(response: Response, tokens: IssuedTokens) -> TokenResponse:
+def _send_tokens(response: Response, tokens: IssuedTokens, client: ClientInfo) -> TokenResponse:
     """Access token in the JSON body; refresh token in an httpOnly cookie that
-    JavaScript cannot read and the browser only sends to /auth endpoints."""
+    JavaScript cannot read and the browser only sends to /auth endpoints.
+    The phone apps get the refresh token in the body instead (no cookie)."""
+    if client.native:
+        return TokenResponse(
+            access_token=tokens.access_token,
+            expires_in=tokens.expires_in,
+            refresh_token=tokens.refresh_token,  # None: keep the one you have
+        )
     if tokens.refresh_token is not None:  # None: the browser already has the right cookie
         response.set_cookie(
             key=REFRESH_COOKIE,
@@ -134,7 +143,7 @@ async def register(
         message = await AccountEmailService(db, client).start_verification(user)
         if message is not None:
             background.add_task(send_safely, email, message)
-    return _send_tokens(response, tokens)
+    return _send_tokens(response, tokens, client)
 
 
 @auth_router.post("/login")
@@ -183,9 +192,12 @@ async def refresh(
     db: DbSession,
     client: Client,
     refresh_token: Annotated[str | None, Cookie()] = None,
+    body: RefreshRequest | None = None,
 ) -> TokenResponse:
+    if client.native and body is not None:
+        refresh_token = body.refresh_token
     tokens = await AuthService(db, client).refresh(refresh_token)
-    return _send_tokens(response, tokens)
+    return _send_tokens(response, tokens, client)
 
 
 @auth_router.post("/logout", status_code=status.HTTP_204_NO_CONTENT)
@@ -194,7 +206,10 @@ async def logout(
     db: DbSession,
     client: Client,
     refresh_token: Annotated[str | None, Cookie()] = None,
+    body: RefreshRequest | None = None,
 ) -> None:
+    if client.native and body is not None:
+        refresh_token = body.refresh_token
     await AuthService(db, client).logout(refresh_token)
     response.delete_cookie(REFRESH_COOKIE, path=REFRESH_COOKIE_PATH)
 
@@ -424,7 +439,7 @@ async def verify_two_factor(
     user = await TwoFactorService(db, client).finish_challenge(data.challenge, data.code)
     tokens = AuthService(db, client).start_session(user)
     await db.commit()
-    return _send_tokens(response, tokens)
+    return _send_tokens(response, tokens, client)
 
 
 @me_router.get("/2fa")

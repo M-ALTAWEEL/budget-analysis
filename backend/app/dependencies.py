@@ -75,9 +75,14 @@ async def get_recent_auth(auth: Annotated[Auth, Depends(get_current_auth)]) -> A
 
 
 def get_client_info(request: Request) -> ClientInfo:
+    app = request.headers.get("x-client")
     return ClientInfo(
-        device=describe_device(request.headers.get("user-agent"), request.headers.get("x-client")),
+        device=describe_device(request.headers.get("user-agent"), app),
         country=client_country(request),
+        # The apps say which they are, and send no Origin. A browser always sends Origin
+        # with a POST and a page's script can't remove it, so a script injected into the
+        # website can't pretend to be the app to get a refresh token it could read.
+        native=app in ("ios", "android") and "origin" not in request.headers,
     )
 
 
