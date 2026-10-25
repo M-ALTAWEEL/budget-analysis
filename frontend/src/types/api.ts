@@ -32,6 +32,8 @@ export interface User {
   base_currency: Currency;
   secondary_currency: Currency | null;
   locale: Locale;
+  month_start_day: number; // 1–28: the day the budget month starts (allowance day)
+  fresh_start_on: string | null; // "start fresh": spending before this day is hidden
   created_at: string;
 }
 

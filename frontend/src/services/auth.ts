@@ -118,7 +118,16 @@ export async function getMe(): Promise<User> {
 
 export async function updateMe(
   changes: Partial<
-    Pick<User, "full_name" | "username" | "base_currency" | "secondary_currency" | "locale">
+    Pick<
+      User,
+      | "full_name"
+      | "username"
+      | "base_currency"
+      | "secondary_currency"
+      | "locale"
+      | "month_start_day"
+      | "fresh_start_on"
+    >
   >,
 ): Promise<User> {
   const { data } = await api.patch<User>("/users/me", changes);

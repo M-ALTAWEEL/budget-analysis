@@ -7,6 +7,7 @@ import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AccountActions } from "@/components/settings/AccountActions";
+import { BudgetCycleSection } from "@/components/settings/BudgetCycleSection";
 import { ProfileSection } from "@/components/settings/ProfileSection";
 import { SecuritySection } from "@/components/settings/SecuritySection";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
@@ -114,6 +115,8 @@ export default function SettingsPage() {
         <MainCurrency />
 
         <SecondCurrency />
+
+        <BudgetCycleSection />
 
         <Link
           href="/categories"

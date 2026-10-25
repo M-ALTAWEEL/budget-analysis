@@ -1,4 +1,40 @@
 // A month is a "YYYY-MM" string, exactly like the API uses in /budgets/{month}.
+//
+// A budget month may start on another day than the 1st: the day the allowance arrives
+// (Settings). With start day 10, "2026-10" runs 10 October – 9 November. The same rule as
+// the server (backend/app/core/dates.py). A fresh start hides the months before it.
+
+let cycle: { startDay: number; freshStart: string | null } = { startDay: 1, freshStart: null };
+
+/** Called once the account is known (MonthProvider). */
+export function setBudgetCycle(startDay: number, freshStart: string | null) {
+  cycle = { startDay: Math.min(Math.max(startDay || 1, 1), 28), freshStart };
+}
+
+export function budgetCycle() {
+  return cycle;
+}
+
+const iso = (date: Date) =>
+  `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+/** The budget month a day (YYYY-MM-DD) belongs to. */
+export function monthOf(isoDate: string): string {
+  const [year, monthNumber, day] = isoDate.split("-").map(Number);
+  const key = `${year}-${String(monthNumber).padStart(2, "0")}`;
+  return day >= cycle.startDay ? key : shiftMonth(key, -1);
+}
+
+/** First day and the day after the last day of a budget month, as Dates (local). */
+export function monthBounds(month: string): [Date, Date] {
+  const [year, monthNumber] = parts(month);
+  return [new Date(year, monthNumber - 1, cycle.startDay), new Date(year, monthNumber, cycle.startDay)];
+}
+
+/** The first month a fresh start still shows (null: everything shows). */
+export function firstVisibleMonth(): string | null {
+  return cycle.freshStart ? monthOf(cycle.freshStart) : null;
+}
 
 function parts(month: string): [number, number] {
   const [year, monthNumber] = month.split("-").map(Number);
@@ -6,8 +42,7 @@ function parts(month: string): [number, number] {
 }
 
 export function currentMonth(): string {
-  const now = new Date();
-  return `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+  return monthOf(iso(new Date()));
 }
 
 export function shiftMonth(month: string, delta: number): string {
@@ -23,9 +58,16 @@ export function monthName(month: string, intl = "en"): string {
 
 export function monthLabel(month: string, intl = "en"): string {
   const [year, monthNumber] = parts(month);
-  return new Intl.DateTimeFormat(intl, { month: "long", year: "numeric" }).format(
-    new Date(year, monthNumber - 1, 1),
-  );
+  if (cycle.startDay === 1) {
+    return new Intl.DateTimeFormat(intl, { month: "long", year: "numeric" }).format(
+      new Date(year, monthNumber - 1, 1),
+    );
+  }
+  // "10 Oct – 9 Nov": the dates say exactly which days this month covers.
+  const [start, end] = monthBounds(month);
+  const last = new Date(end.getFullYear(), end.getMonth(), end.getDate() - 1);
+  const format = new Intl.DateTimeFormat(intl, { day: "numeric", month: "short" });
+  return `${format.format(start)} – ${format.format(last)}`;
 }
 
 export function todayISO(): string {
@@ -36,15 +78,19 @@ export function todayISO(): string {
 
 /** Where we are inside the month: used to compare spending pace with time passing. */
 export function monthProgress(month: string) {
-  const [year, monthNumber] = parts(month);
-  const days = new Date(year, monthNumber, 0).getDate();
+  const [start, end] = monthBounds(month);
+  const DAY = 86_400_000;
+  // Rounded: a daylight-saving change makes one day 23 or 25 hours long.
+  const days = Math.round((end.getTime() - start.getTime()) / DAY);
   const now = new Date();
   const thisMonth = currentMonth();
 
   if (month < thisMonth) return { days, dayOfMonth: days, daysLeft: 0, ratio: 1, isCurrent: false };
   if (month > thisMonth) return { days, dayOfMonth: 0, daysLeft: days, ratio: 0, isCurrent: false };
 
-  const dayOfMonth = now.getDate();
+  // Day 1 is the start day (the 10th, say), not the 1st of the calendar month.
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const dayOfMonth = Math.round((today.getTime() - start.getTime()) / DAY) + 1;
   return {
     days,
     dayOfMonth,
