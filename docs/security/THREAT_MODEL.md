@@ -103,3 +103,5 @@ the date here.
 | 2026-10-25 | 3 | Groups: T2, T3, T4, I2, E1 done; usernames with consent; settlements; chat |
 | 2026-10-25 | 4 | Load tests: D1, D2 measured; no new threats |
 | 2026-10-25 | 5a | ASVS L2 review (`ASVS.md`): per-account sign-in limit (S2), default rate limit and 1 MB bodies (D1), no API map in production, notices on password and 2FA changes |
+| 2026-10-25 | 5b | OWASP ZAP API scans, visitor and signed in: 0 fail; fixed 5xx for switched-off features and added `Cross-Origin-Resource-Policy` |
+| 2026-10-25 | 5c | Hand-written attacks as tests (`test_pentest.py`): cross-group IDOR, outsider access, personal IDOR, `alg: none`, mass assignment. All refused |

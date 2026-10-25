@@ -37,3 +37,6 @@ docs/LEARNING_LOG.md
 # Load tests (phase 4): fresh tokens and raw results stay on this computer
 loadtest/tokens.json
 loadtest/results/
+
+# OWASP ZAP scans (phase 5b): reports stay on this computer
+zap-report/

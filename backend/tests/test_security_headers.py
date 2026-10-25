@@ -10,6 +10,8 @@ async def test_every_answer_has_the_security_headers(client):
     assert response.headers["Referrer-Policy"] == "no-referrer"
     # Personal data must never be stored by a browser cache or a proxy.
     assert response.headers["Cache-Control"] == "no-store"
+    # Other sites can't embed our answers (found by OWASP ZAP, phase 5b).
+    assert response.headers["Cross-Origin-Resource-Policy"] == "same-origin"
 
 
 async def test_error_answers_have_them_too(client):
