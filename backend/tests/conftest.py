@@ -92,6 +92,14 @@ async def db_session():
 
 
 @pytest.fixture(autouse=True)
+def _limits_off_after_each_test():
+    """A test that turns the rate limits on must not leave them on for the next one."""
+    yield
+    limiter.enabled = False
+    limiter.reset()
+
+
+@pytest.fixture(autouse=True)
 def _no_remembered_rates():
     """Rates a process remembers (phase 4) must not leak from one test into the next."""
     forget_rates()

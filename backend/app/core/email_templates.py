@@ -12,7 +12,15 @@ from typing import Literal
 from app.core.email import EmailMessage
 
 Purpose = Literal[
-    "verify_email", "reset_password", "change_email", "email_changed", "account_deleted"
+    "verify_email",
+    "reset_password",
+    "change_email",
+    "email_changed",
+    "account_deleted",
+    # Phase 5 (ASVS 2.2.3): a notice whenever how you sign in changes.
+    "password_changed",
+    "two_factor_on",
+    "two_factor_off",
 ]
 
 
@@ -71,6 +79,33 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             expires="",
             not_you="If you didn't do this, reply to this email.",
         ),
+        "password_changed": _Copy(
+            subject="Your Budget Analysis password was changed",
+            hello="Hi {name},",
+            body="The password of your Budget Analysis account was just changed, "
+            "and the other devices were signed out.",
+            button="",
+            expires="",
+            not_you="If this wasn't you, use “Forgot password” right away to take your "
+            "account back.",
+        ),
+        "two_factor_on": _Copy(
+            subject="Two-step sign-in is on for Budget Analysis",
+            hello="Hi {name},",
+            body="Two-step sign-in was turned on: signing in now also needs a code from "
+            "your authenticator app.",
+            button="",
+            expires="",
+            not_you="If this wasn't you, use “Forgot password” right away.",
+        ),
+        "two_factor_off": _Copy(
+            subject="Two-step sign-in was turned off for Budget Analysis",
+            hello="Hi {name},",
+            body="Two-step sign-in was turned off: signing in needs only your password now.",
+            button="",
+            expires="",
+            not_you="If this wasn't you, use “Forgot password” right away, then turn it back on.",
+        ),
     },
     "ar": {
         "verify_email": _Copy(
@@ -113,6 +148,31 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             button="",
             expires="",
             not_you="إذا لم تقم بذلك، ردّ على هذه الرسالة.",
+        ),
+        "password_changed": _Copy(
+            subject="تم تغيير كلمة سر حسابك في Budget Analysis",
+            hello="مرحباً {name}،",
+            body="تم الآن تغيير كلمة سر حسابك في Budget Analysis، وتم تسجيل الخروج من "
+            "الأجهزة الأخرى.",
+            button="",
+            expires="",
+            not_you="إذا لم تكن أنت، استخدم «نسيت كلمة السر» فوراً لاستعادة حسابك.",
+        ),
+        "two_factor_on": _Copy(
+            subject="تم تفعيل التحقق بخطوتين في Budget Analysis",
+            hello="مرحباً {name}،",
+            body="تم تفعيل التحقق بخطوتين: تسجيل الدخول يحتاج الآن أيضاً رمزاً من تطبيق المصادقة.",
+            button="",
+            expires="",
+            not_you="إذا لم تكن أنت، استخدم «نسيت كلمة السر» فوراً.",
+        ),
+        "two_factor_off": _Copy(
+            subject="تم إيقاف التحقق بخطوتين في Budget Analysis",
+            hello="مرحباً {name}،",
+            body="تم إيقاف التحقق بخطوتين: تسجيل الدخول يحتاج كلمة السر فقط الآن.",
+            button="",
+            expires="",
+            not_you="إذا لم تكن أنت، استخدم «نسيت كلمة السر» فوراً، ثم فعّله من جديد.",
         ),
     },
     "tr": {
@@ -158,6 +218,32 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             button="",
             expires="",
             not_you="Bunu sen yapmadıysan bu e-postayı yanıtla.",
+        ),
+        "password_changed": _Copy(
+            subject="Budget Analysis şifren değiştirildi",
+            hello="Merhaba {name},",
+            body="Budget Analysis hesabının şifresi az önce değiştirildi ve diğer "
+            "cihazlardan çıkış yapıldı.",
+            button="",
+            expires="",
+            not_you="Bu sen değilsen, hesabını geri almak için hemen “Şifremi unuttum”u kullan.",
+        ),
+        "two_factor_on": _Copy(
+            subject="Budget Analysis için iki adımlı giriş açıldı",
+            hello="Merhaba {name},",
+            body="İki adımlı giriş açıldı: giriş yaparken artık doğrulama uygulamandan "
+            "bir kod da gerekiyor.",
+            button="",
+            expires="",
+            not_you="Bu sen değilsen, hemen “Şifremi unuttum”u kullan.",
+        ),
+        "two_factor_off": _Copy(
+            subject="Budget Analysis için iki adımlı giriş kapatıldı",
+            hello="Merhaba {name},",
+            body="İki adımlı giriş kapatıldı: giriş için artık sadece şifren gerekiyor.",
+            button="",
+            expires="",
+            not_you="Bu sen değilsen, hemen “Şifremi unuttum”u kullan, sonra tekrar aç.",
         ),
     },
 }

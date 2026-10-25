@@ -10,6 +10,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.core.account_limit import TOO_MANY, allow_sign_in_attempt
 from app.core.email import EmailMessage
 from app.core.email_templates import build_email
 from app.core.google import GoogleIdentity
@@ -105,6 +106,8 @@ class AuthService:
         return tokens
 
     async def login(self, data: LoginRequest) -> IssuedTokens | SecondStepNeeded:
+        if not allow_sign_in_attempt(data.email):  # threat S2: per account, from any IP
+            raise HTTPException(status.HTTP_429_TOO_MANY_REQUESTS, TOO_MANY)
         user = await self.users.get_by_email(data.email)
         if user is None:
             verify_password(data.password, DUMMY_PASSWORD_HASH)  # same timing as a real check
@@ -421,7 +424,7 @@ class AccountEmailService:
             link=f"{settings.public_app_url}/reset-password?token={raw}",
         )
 
-    async def reset_password(self, raw_token: str, new_password: str) -> None:
+    async def reset_password(self, raw_token: str, new_password: str) -> User:
         now = datetime.now(UTC)
         token = await self._usable_token(raw_token, "reset_password", now)
         user = await self.users.get_by_id(token.user_id)
@@ -435,6 +438,7 @@ class AccountEmailService:
         await self.sessions.revoke_all(user.id, "password_changed", now)
         self._event(user.id, "password_reset")
         await self.session.commit()
+        return user
 
     async def change_password(
         self, user: User, current_session_uuid: str, current: str, new: str
