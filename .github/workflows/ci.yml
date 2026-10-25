@@ -90,6 +90,35 @@ jobs:
       - name: Build
         run: npm run build
 
+  mobile:
+    name: Mobile (shared code + types)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: mobile
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+
+      # The app copies the website's types, texts and API calls: they must not drift.
+      - name: Shared files match the website
+        run: node scripts/sync-shared.mjs --check
+
+      - name: Install
+        run: npm ci
+
+      # expo-env.d.ts is generated on a developer's machine (and git-ignored).
+      - name: Types (TypeScript)
+        run: |
+          echo '/// <reference types="expo/types" />' > expo-env.d.ts
+          npx tsc --noEmit
+
   audit:
     name: Dependencies (known vulnerabilities)
     runs-on: ubuntu-latest
