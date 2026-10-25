@@ -170,7 +170,7 @@ async def test_without_sms_it_is_off(client):
     config = (await client.get(f"{API}/auth/config")).json()
     assert config["phone_enabled"] is False
     assert config["phone_countries"] == []
-    assert (await send(client)).status_code == 503
+    assert (await send(client)).status_code == 404
 
 
 async def test_config_lists_the_countries(client, texts):

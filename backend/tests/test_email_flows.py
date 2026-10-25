@@ -56,7 +56,7 @@ async def test_config_says_whether_email_is_on(client, mail):
 async def test_without_email_the_sending_routes_say_so(client):
     app.dependency_overrides[get_email_sender] = lambda: None
     response = await client.post(f"{API}/auth/password/forgot", json={"email": "a@example.com"})
-    assert response.status_code == 503
+    assert response.status_code == 404
 
 
 def test_production_refuses_to_write_emails_to_the_log():

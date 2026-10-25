@@ -54,6 +54,9 @@ def create_app() -> FastAPI:
         headers.setdefault("X-Frame-Options", "DENY")
         headers.setdefault("Referrer-Policy", "no-referrer")
         headers.setdefault("Cache-Control", "no-store")
+        # Other sites can't load our answers as an image, script or frame (OWASP ZAP,
+        # phase 5b). The website reaches the API through its own address, so it's fine.
+        headers.setdefault("Cross-Origin-Resource-Policy", "same-origin")
         if settings.is_production:
             # JSON needs nothing from anywhere. (Not in development: /docs loads its UI.)
             headers.setdefault(

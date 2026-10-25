@@ -203,8 +203,10 @@ async def logout(
 
 
 def _require(email: EmailSender | None) -> EmailSender:
+    # 404, not 503 (found by OWASP ZAP, phase 5b): switched off here is not "down for a
+    # moment", and a 5xx would look like a crash to monitoring.
     if email is None:
-        raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, "Email is not available yet.")
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Email is not available yet.")
     return email
 
 
@@ -383,9 +385,7 @@ async def send_phone_code(
     background: BackgroundTasks,
 ) -> Message:
     if sender is None:
-        raise HTTPException(
-            status.HTTP_503_SERVICE_UNAVAILABLE, "Sign-in by phone is not available yet."
-        )
+        raise HTTPException(status.HTTP_404_NOT_FOUND, "Sign-in by phone is not available yet.")
     phone, text = await PhoneService(db).send_code(data.phone, data.locale)
     background.add_task(sms.send_safely, sender, phone, text)
     return Message(detail="We sent a code to this number.")

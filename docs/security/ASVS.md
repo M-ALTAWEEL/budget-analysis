@@ -140,4 +140,39 @@ what the requirement asks, what we do, and where in the code it is.
 - **Found and fixed in phase 5:** per-account sign-in limit, a default rate limit on
   every endpoint, a 1 MB body limit, no API map in production, email notices when the
   password or 2FA changes.
-- **Next:** an OWASP ZAP scan (5b), and a review before launch (phase 8).
+- **Next:** a review before launch (phase 8), and an outside penetration test once the
+  app has real users.
+
+## Phase 5 results
+
+### 5b: OWASP ZAP (25 October 2026)
+
+`zap-api-scan.py` (ZAP stable) against the local API, from its OpenAPI description, run
+twice: as a visitor, and signed in (a test account's token in the `Authorization` header).
+
+| Scan | Fail | Warn | Pass |
+|---|---|---|---|
+| Visitor | 0 | 2 | 119 |
+| Signed in (after the fixes) | **0** | **0** | **120** |
+
+The two warnings, both fixed:
+1. **5xx answers** from `/auth/password/forgot` and `/auth/phone/send` where email or SMS is
+   switched off: now 404 (not there), not 503 (looks like a crash).
+2. **No `Cross-Origin-Resource-Policy`** on API answers: now `same-origin`.
+
+Among what passed: SQL injection (PostgreSQL, time-based too), command injection, path
+traversal, XXE, SSRF, server-side template injection, Log4Shell, Spring4Shell, the
+"React2Shell" RCE, and information leaks (`.env`, hidden files, stack traces).
+
+### 5c: trying to break in by hand (`backend/tests/test_pentest.py`)
+
+Written as tests, so every future change is checked against them too:
+
+| Attack | Result |
+|---|---|
+| Reaching another group's expense, payment, invite, invitation or member through **your own** group's URLs, where you are the owner | 404 every time, and the other group unchanged |
+| Putting another group's members in your expense or payment | 422 |
+| Every URL of a group you're not in (16 of them) | 404 or 422, never a sign the group exists |
+| Someone else's expenses and savings goals (read, change, delete, deposit) | 404 |
+| A token with no signature (`alg: none`) | 401 |
+| Mass assignment: sending `email`, `is_active`, `two_factor_enabled` to your profile, or `currency` to a group | Ignored |
