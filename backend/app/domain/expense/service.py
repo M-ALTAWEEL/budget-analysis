@@ -6,7 +6,7 @@ from decimal import Decimal
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.dates import format_month, month_start, next_month
+from app.core.dates import BudgetCalendar, format_month
 from app.core.money import Currency, to_money
 from app.domain.budget.model import Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
@@ -58,8 +58,11 @@ class ExpenseService:
         limit: int,
         offset: int,
     ) -> list[Expense]:
-        start = month
-        end = next_month(month) if month else None
+        calendar = BudgetCalendar.of(user)
+        if month:
+            start, end = calendar.visible(month)
+        else:
+            start, end = (calendar.fresh_start, None)  # a fresh start hides older ones
         return await self.expenses.list(
             user.id, start=start, end=end, category_uuid=category_uuid, limit=limit, offset=offset
         )
@@ -135,7 +138,7 @@ class ExpenseService:
     async def _to_budget_currency(
         self, user: User, amount: Decimal, currency: Currency, spent_at: date
     ) -> tuple[Decimal, Decimal]:
-        month = month_start(spent_at)
+        month = BudgetCalendar.of(user).month_of(spent_at)
         budget = await self.budgets.get_for_month(user.id, month)
         if budget is None:
             raise HTTPException(

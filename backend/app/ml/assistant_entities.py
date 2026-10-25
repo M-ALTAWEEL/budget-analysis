@@ -11,7 +11,7 @@ from dataclasses import dataclass
 from datetime import date, timedelta
 from typing import Literal
 
-from app.core.dates import month_start, next_month
+from app.core.dates import BudgetCalendar
 from app.ml.text import normalize
 
 Period = Literal["today", "yesterday", "this_week", "last_week", "this_month", "last_month"]
@@ -54,23 +54,33 @@ def _contains(words: list[str], phrase: str) -> bool:
     return any(words[i : i + len(target)] == target for i in range(len(words) - len(target) + 1))
 
 
-def find_period(question: str, today: date, default: Period = "this_month") -> DateRange:
+def find_period(
+    question: str,
+    today: date,
+    default: Period = "this_month",
+    calendar: BudgetCalendar | None = None,
+) -> DateRange:
+    """`calendar`: "this month" is the student's budget month (it may start on the 10th)."""
+    calendar = calendar or BudgetCalendar()
     words = normalize(question).split()
     period = next(
         (name for name, phrases in _PERIOD_WORDS if any(_contains(words, p) for p in phrases)),
         default,
     )
     monday = today - timedelta(days=today.weekday())
-    first = month_start(today)
+    this_start, this_end = calendar.bounds(calendar.month_of(today))
+    last_start, _ = calendar.bounds(calendar.month_of(this_start - timedelta(days=1)))
     ranges = {
         "today": (today, today + timedelta(days=1)),
         "yesterday": (today - timedelta(days=1), today),
         "this_week": (monday, today + timedelta(days=1)),
         "last_week": (monday - timedelta(days=7), monday),
-        "this_month": (first, next_month(first)),
-        "last_month": (month_start(first - timedelta(days=1)), first),
+        "this_month": (this_start, this_end),
+        "last_month": (last_start, this_start),
     }
     start, end = ranges[period]
+    start = calendar.clamp(start)  # a fresh start hides what came before
+    end = max(start, end)
     return DateRange(period, start, end)
 
 
