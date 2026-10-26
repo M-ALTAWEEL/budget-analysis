@@ -1,167 +1,173 @@
-# 🗺️ Budget Analysis: خطة المنتج التجاري
+# Budget Analysis: Product Roadmap
 
-> هاي الخطة اللي منمشي عليها من مشروع للـ CV لمنتج تجاري على الويب والآيفون والأندرويد.
-> كل مرحلة بتنكتب تفاصيلها بـ `LEARNING_LOG.md` لما تخلص، وبتتحدّث حالتها بالجدول تحت.
-> آخر تحديث: 26 أكتوبر 2026
+> The plan that takes Budget Analysis from a portfolio project to a commercial product on
+> the web, iPhone and Android. Each phase ships something complete and tested; the status
+> table below is updated when a phase closes.
+>
+> Last updated: 27 October 2026
 
-## الحالة
+## Status
 
-| المرحلة | الموضوع | الحالة |
+| Phase | Scope | Status |
 |---|---|---|
-| 0 | التصميم: الخطة، القروبات، الـ threat model | ✅ خلصت |
-| 1 | البنية التحتية الاحترافية | ✅ خلصت (الدومين والخطط المدفوعة انتقلوا لـ "التفعيل") |
-| 2 | نظام الحسابات من جديد | ✅ خلصت (Apple انتقل للتفعيل، المرحلة 8) |
-| 3 | القروبات | ✅ خلصت (الإشعارات انتقلت للمرحلة 6 مع إشعارات الموبايل) |
-| 4 | الأداء والتحمّل | ✅ خلصت (400 لـ 500 طلب بالثانية على اللابتوب، p95 أقل من 100ms) |
-| 5 | التدقيق الأمني | ✅ خلصت (ASVS L2، و ZAP: صفر ثغرات) |
-| 6 | تطبيق الآيفون والأندرويد | ⏳ شغّالين فيها |
-| 7 | الاشتراكات والدفع والكوبونات | ⬜ |
-| 8 | **التفعيل والدفع** ثم الإطلاق | ⬜ |
+| 0 | Design: product plan, groups, threat model | ✅ Done |
+| 1 | Production-grade infrastructure | ✅ Done (custom domain and paid plans moved to Activation) |
+| 2 | Accounts, rebuilt | ✅ Done (Sign in with Apple moved to Activation, phase 8) |
+| 3 | Groups | ✅ Done (notifications moved to phase 6, with mobile push) |
+| 4 | Performance and load | ✅ Done (400–500 requests/s on a laptop, p95 under 100 ms) |
+| 5 | Security audit | ✅ Done (OWASP ASVS L2; OWASP ZAP: zero findings) |
+| 6 | iPhone and Android apps | ⏳ In progress |
+| 7 | Subscriptions, payments and coupons | ⬜ Not started |
+| 8 | **Activation and payment** of services, then launch | ⬜ Not started |
 
-**ليش هالترتيب؟** الأشياء اللي بتكون صعبة تتغيّر بعدين (البنية التحتية، والحسابات، وقاعدة البيانات) أول. والأشياء اللي بتعتمد عليها (القروبات، والموبايل، والدفع) بعدها. كل مرحلة بتطلع شي شغال ومجرّب، مش نص شغلة.
+**Why this order?** What is hard to change later (infrastructure, accounts, the data model)
+comes first; what depends on it (groups, mobile, payments) comes after.
 
 ---
 
-## القرارات
+## Decisions
 
-| الموضوع | القرار |
+| Topic | Decision |
 |---|---|
-| الاسم | **Budget Analysis** (منشتري دومين عليه بالمرحلة 1) |
-| السوق | كل الدول، والأولوية لتركيا والعالم العربي |
-| المنصات | الويب (Next.js) + آيفون وأندرويد (React Native / Expo)، كلهم على نفس الـ API |
-| طرق الدخول | إيميل وكلمة سر، Google، **Apple**، **رقم الهاتف** (SMS، والواتساب كخيار أرخص) |
-| الأمان | معيار **OWASP ASVS Level 2**، ومتطلبات App Store و Google Play |
-| القروبات | اللي بيعمل القروب بيحدد عدد الأعضاء. قسمة كل عضو **بتنضاف تلقائياً** لحسابه الشخصي بنفس الفئة. القروب ما بيشوف أي شي شخصي |
-| الدفع | اشتراك (حتى لو رمزي)، **آخر مرحلة**. RevenueCat بيوحّد Apple و Google والويب |
-| الكوبونات | كوبونات خصم + أكواد مجانية للعيلة والأصحاب: Offer Codes من Apple، و Promo Codes من Google، ونظامنا عالويب |
-| الكلفة | التفاصيل بآخر الملف |
+| Name | **Budget Analysis** (a custom domain is bought at Activation) |
+| Market | Worldwide, with Turkey and the Arab world first |
+| Platforms | Web (Next.js) and iPhone/Android (React Native with Expo), all on one API |
+| Sign-in methods | Email and password, Google, **Apple**, **phone number** (SMS; WhatsApp as the cheaper channel) |
+| Security baseline | **OWASP ASVS Level 2**, plus App Store and Google Play requirements |
+| Groups | The creator sets the member limit. Each member's share **is added automatically** to their personal budget, in the same category. A group never sees anyone's personal data |
+| Payments | A subscription (even a small one), built **last**. RevenueCat unifies Apple, Google and the web |
+| Coupons | Discount coupons and free codes for family and friends: Apple Offer Codes, Google Promo Codes, and our own codes on the web |
+| Cost | Estimated at the end of this file |
 
 ---
 
-## المرحلة 0: التصميم ✅
-- [x] هاد الملف
-- [x] تصميم القروبات: [`design/groups.md`](design/groups.md)
-- [x] الـ threat model ومعيار الأمان: [`security/THREAT_MODEL.md`](security/THREAT_MODEL.md)
+## Phase 0: Design ✅
+- [x] This roadmap
+- [x] Groups design: [`design/groups.md`](design/groups.md)
+- [x] Threat model and security baseline: [`security/THREAT_MODEL.md`](security/THREAT_MODEL.md)
 
-## المرحلة 1: البنية التحتية الاحترافية
-**الهدف:** أساس بيتحمّل منتج تجاري قبل ما نضيف أي ميزة.
-- [x] **بيئتين** بالكود: `staging` للتجربة و `production` للمستخدمين، كل وحدة بقاعدة بيانات وأسرار منفصلة (`render.yaml`، والدليل بـ [`ENVIRONMENTS.md`](ENVIRONMENTS.md))
-- [x] تجهيز الـ staging: فرع `staging` على Neon، وسيرفر `budget-analysis-api-staging` على Render، والـ preview على Vercel بيحكي معه
-- [x] **Redis** بالكود: الـ rate limiting بيستعمله لما يكون موجود (محلياً بـ Docker). ضايل نشغّله عالسيرفر
-- [ ] **تخزين ملفات** (S3 أو R2): منعمله مع أول ميزة بتحتاجه (تصدير البيانات بالمرحلة 2)
-- [x] **Sentry** بالباك إند (بيشتغل لما تحط `SENTRY_DSN`)
-- [x] حساب Sentry (بيانات بأوروبا 🇪🇺) و `SENTRY_DSN` على الـ production والـ staging
-- [ ] Sentry للفرونت إند (مع المرحلة 6، لما نعمل الموبايل)
-- [x] **Security headers**: CSP و HSTS و X-Frame-Options و Referrer-Policy و Permissions-Policy (الموقع والـ API)
-- [x] **فحص تلقائي بالـ CI**: CodeQL، و Dependabot، و pip-audit، و npm audit
-- [ ] تفعيل secret scanning من إعدادات GitHub (عليك)
-- [x] تحديث روابط الريبو للاسم الجديد `budget-analysis`
-- [x] **إصلاح الـ Auto-Deploy على Render**: تطبيق Render على GitHub بصلاحية على `budget-analysis` بس (كان ما بيعمل deploy من 19 أكتوبر)
-- [x] **Logs منظّمة** (JSON) بدون بيانات شخصية، و **request id** لكل طلب
-- [x] **رقم النسخة**: `/api/v1/version`، ومعروض بالإعدادات جنب نسخة الموقع
-- [x] تنبيه لما الموقع يوقف (uptime): كل 14 دقيقة GitHub Actions بيفحص الـ API والموقع، وإذا ما ردّوا بيوصلك إيميل
-- [x] نسخة للـ API بالمسار (`/api/v1`) وسياسة واضحة لتغييرها: [`API_VERSIONING.md`](API_VERSIONING.md)، لأنه تطبيقات الموبايل القديمة بتضل شغالة سنين
+## Phase 1: Production-grade infrastructure ✅
+**Goal:** a foundation that can carry a commercial product before any new feature.
+- [x] **Two environments** in code: `staging` and `production`, each with its own database and secrets (`render.yaml`; guide in [`ENVIRONMENTS.md`](ENVIRONMENTS.md))
+- [x] Staging provisioned: a `staging` branch on Neon, `budget-analysis-api-staging` on Render, and Vercel preview deployments talking to it
+- [x] **Redis** support: rate limiting uses it when configured (locally through Docker); not yet provisioned on the servers
+- [ ] **Object storage** (S3 or R2): added with the first feature that needs it
+- [x] **Sentry** in the API (enabled when `SENTRY_DSN` is set)
+- [x] Sentry account (EU data region) and `SENTRY_DSN` on production and staging
+- [ ] Sentry for the web and mobile front ends
+- [x] **Security headers**: CSP, HSTS, X-Frame-Options, Referrer-Policy and Permissions-Policy (website and API)
+- [x] **Automated checks in CI**: CodeQL, Dependabot, pip-audit and npm audit
+- [ ] Turn on secret scanning in the GitHub repository settings (owner action)
+- [x] Repository links updated to the new name `budget-analysis`
+- [x] **Render auto-deploy fixed**: the Render GitHub app is scoped to `budget-analysis` only
+- [x] **Structured JSON logs** with no personal data, and a **request ID** on every request
+- [x] **Version endpoint**: `/api/v1/version`, shown in Settings next to the client version
+- [x] **Uptime alert**: every 14 minutes GitHub Actions checks the API and the website and emails on failure
+- [x] **Versioned API path** (`/api/v1`) and a written policy for changing it: [`API_VERSIONING.md`](API_VERSIONING.md), because old mobile app versions keep running for years
 
-## المرحلة 2: نظام الحسابات من جديد
-**ليش قبل القروبات؟** ما بتدعي حدا لقروب إلا إذا متأكدين إنه الإيميل أو الرقم إله.
-- [x] **جدول "طرق الدخول"**: الحساب الواحد ممكن يكون إله إيميل و Google و Apple ورقم بنفس الوقت
-- [x] **تأكيد الإيميل** و **"نسيت كلمة السر"** (روابط بتنتهي بسرعة وبتنستعمل مرة وحدة)
-- [ ] **Sign in with Apple** (ويب وموبايل)
-- [x] **الدخول برقم الهاتف**: كود بالـ SMS أو الواتساب، مع حماية من احتيال الرسائل (SMS pumping)، وحد لكل رقم ولكل IP ولكل دولة
-- [x] **جلسات بقاعدة البيانات**: "أجهزتي"، و"اطلع من هالجهاز"، و"اطلع من كل الأجهزة"
-- [x] **المصادقة الثنائية (2FA)** بتطبيق (TOTP) + أكواد احتياطية
-- [x] **فحص كلمات السر المسرّبة** (Have I Been Pwned، بطريقة ما بتبعت كلمة السر)
-- [x] **حذف الحساب** (شرط Apple و Google و KVKK و GDPR) و **تصدير البيانات**
-- [x] **سجل أمني**: كل دخول، وتغيير كلمة سر، وجهاز جديد، مع إيميل تنبيه
-- [x] تحديث سياسة الخصوصية + **شروط الاستخدام** (بدها مراجعة محامي قبل الإطلاق)
+## Phase 2: Accounts, rebuilt ✅
+**Why before groups?** Nobody can be invited to a group until we know the email or phone number is theirs.
+- [x] **Sign-in identities table**: one account can have an email, Google, Apple and a phone number at the same time
+- [x] **Email verification** and **password reset** (short-lived, single-use links)
+- [ ] **Sign in with Apple** (web and mobile) → Activation
+- [x] **Phone sign-in**: a code by SMS, with SMS-pumping protection and limits per number, per IP and per country
+- [x] **Database-backed sessions**: "My devices", "Sign out this device", "Sign out everywhere"
+- [x] **Two-factor authentication** with an authenticator app (TOTP) and backup codes
+- [x] **Breached-password check** (Have I Been Pwned k-anonymity: the password never leaves the server)
+- [x] **Account deletion** (required by Apple, Google, KVKK and GDPR) and **data export**
+- [x] **Security log**: every sign-in, password change and new device, with email notices
+- [x] Updated privacy policy and new **terms of use** (to be reviewed by a lawyer before launch)
 
-## المرحلة 3: القروبات ✅
-التصميم الكامل بـ [`design/groups.md`](design/groups.md).
-- [x] **3a** القروبات والأعضاء والأدوار، والدعوات (رابط و QR)، والحد اللي بيختاره صاحب القروب
-- [x] **3b** فواتير القروب وطرق التقسيم: بالتساوي، مبالغ، نسب، حصص (والمجموع مضبوط لآخر قرش)
-- [x] **3c** اسم مستخدم فريد بالإعدادات، والدعوة فيه (لازم الشخص يقبل)
-- [x] **3d** **الإضافة التلقائية** لقسمة كل عضو لحسابه الشخصي بنفس الفئة
-- [x] **3e** الأرصدة ("مين عليه لمين")، و"دفعت حصتي" لكل فاتورة، والتسديد، ومحادثة القروب بالتاريخ والساعة
-- [x] **اختبارات صلاحيات** على كل endpoint: عضو ما بيشوف شي شخصي، وغير العضو ما بيشوف القروب أبداً
-- [ ] الإشعارات (دعوة جديدة، فاتورة جديدة) ← المرحلة 6 مع إشعارات الموبايل
-- [ ] "تبسيط الديون" (A→B→C يصير A→C): الحساب هلأ بين كل شخصين، متل ما طلبت. منضيفه إذا احتجناه
+## Phase 3: Groups ✅
+Full design in [`design/groups.md`](design/groups.md); rules in [`BUSINESS_LOGIC.md`](BUSINESS_LOGIC.md).
+- [x] **3a** Groups, members and roles; invitations by link and QR code; a member limit chosen by the owner
+- [x] **3b** Group expenses and split methods: equal, exact amounts, percentages and shares (the total always matches to the cent)
+- [x] **3c** A unique username in Settings, and invitations by username (the invitee must accept)
+- [x] **3d** **Automatic copy** of each member's share into their personal budget, in the same category
+- [x] **3e** Balances ("who owes whom"), "I paid my share" per expense, settlements, and the group chat with date and time
+- [x] **Authorization tests** on every endpoint: a member never sees anything personal; a non-member never sees the group
+- [x] Notifications (new invitation, new expense, payment) → delivered in phase 6h
+- [ ] Debt simplification (A→B→C becomes A→C). Balances are pairwise today, by design; added if users ask
 
-## المرحلة 4: الأداء والتحمّل ✅
-الأدوات والطريقة بـ [`../loadtest/README.md`](../loadtest/README.md)، والأرقام والقرارات بـ [`../loadtest/REPORT.md`](../loadtest/REPORT.md).
-- [x] **4a** أدوات القياس: بيانات تجربة واقعية (200 شخص، 96 ألف مصروف، 50 قروب)، واختبار ضغط بـ **k6** بأهداف مكتوبة: p95 أقل من 300ms، وأخطاء أقل من 1%
-- [x] **4b** القياس: كل طلب بيسجّل عدد استعلاماته ووقتها (`Server-Timing` وبالـ log)، و `summarize.py` بيطلّع أبطأ الصفحات وسببها
-- [x] **4c** النتيجة: قاعدة البيانات أقل من 10% من الوقت، والبطء كان **انتظار بالدور** ورا عملية وحدة. ما احتجنا indexes جديدة
-- [x] **4d** أكتر من worker (`WEB_CONCURRENCY`)، وحجم الاتصالات بقاعدة البيانات (`DB_POOL_SIZE`)، والـ API جاهز لأكتر من سيرفر
-- [x] **4e** caching لأسعار الصرف بذاكرة كل عملية. الملخصات **ما انعملها cache** قصداً (السبب بالتقرير)
-- [x] **4f** التقرير: من p95 = 398ms (worker واحد، 130 طلب/ث) لـ **75ms عند 390 طلب/ث** (4 workers)
+## Phase 4: Performance and load ✅
+Tools and method in [`../loadtest/README.md`](../loadtest/README.md); numbers and decisions in [`../loadtest/REPORT.md`](../loadtest/REPORT.md).
+- [x] **4a** Measurement tools: realistic seed data (200 people, 96,000 expenses, 50 groups) and a **k6** load test with written targets: p95 under 300 ms, errors under 1%
+- [x] **4b** Instrumentation: every request records its query count and database time (`Server-Timing` and logs); `summarize.py` lists the slowest endpoints and why
+- [x] **4c** Finding: the database is under 10% of request time; latency came from **queueing** behind a single worker. No new indexes were needed
+- [x] **4d** Multiple workers (`WEB_CONCURRENCY`), a sized connection pool (`DB_POOL_SIZE`), and an API ready for more than one server
+- [x] **4e** Exchange rates cached in each process's memory. Budget summaries are deliberately **not** cached (reasons in the report)
+- [x] **4f** Result: from p95 = 398 ms (1 worker, 130 req/s) to **75 ms at 390 req/s** (4 workers)
 
-## المرحلة 5: التدقيق الأمني ✅
-القائمة بند بند بـ [`security/ASVS.md`](security/ASVS.md).
-- [x] **5a** مراجعة **ASVS Level 2** بند بند، مع حالة كل بند. وتصليح يلي طلع: حد محاولات دخول لكل حساب، وحد لكل endpoint، وحد 1MB للطلب، وإخفاء خريطة الـ API بالـ production، وإيميل تنبيه لما تتغيّر كلمة السر أو الـ 2FA
-- [x] **5b** فحص بـ **OWASP ZAP** على نسخة محلية (زائر ومسجّل دخول): صفر ثغرات خطيرة، وتصليح التحذيرين
-- [x] **5c** محاولة اختراق ذاتية على المجموعات والحسابات، مكتوبة كاختبارات (`test_pentest.py`)، والتقرير بـ `security/ASVS.md`
-- [ ] (اختياري، قبل ما يكبر) فحص اختراق من شركة خارجية
+## Phase 5: Security audit ✅
+Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
+- [x] **5a** **ASVS Level 2** review with the status of every requirement. Fixed: per-account sign-in limit, per-endpoint default rate limit, 1 MB request body limit, API schema hidden in production, and email notices when the password or 2FA changes
+- [x] **5b** **OWASP ZAP** scans of a local deployment (anonymous and signed in): zero high or medium findings; both warnings fixed
+- [x] **5c** Self-run penetration test of groups and accounts, written as automated tests (`test_pentest.py`); report in `security/ASVS.md`
+- [ ] (Optional, before scale) An external penetration test
 
-## المرحلة 6: تطبيق الآيفون والأندرويد
-- [x] **6a React Native (Expo)**: تطبيق واحد للنظامين، بنفس اللغات الثلاثة و RTL والوضع الليلي
-- [x] تخزين التوكنات بـ **Keychain و Keystore** (مش AsyncStorage)
-- [x] **6b–6f نفس الموقع بالزبط**: كل الشاشات والميزات، والكود المشترك (الأنواع والنصوص والـ API) بينسخ من الموقع بسكريبت، والـ CI بيتأكد إنهم ما اختلفوا
-- [x] **يوم بداية الشهر** (يوم المصروف، 1–28) و **"ابدأ من جديد"** (إخفاء الأشهر القديمة بدون حذف)، بالسيرفر والموقع والتطبيق
-- [ ] الدخول بـ Google من التطبيق (بدها development build)
-- [ ] **قفل بالبصمة أو Face ID**
-- [ ] إشعارات push (القروبات، وتنبيهات الميزانية)
-- [ ] روابط الدعوة بتفتح التطبيق مباشرة (Universal Links و App Links)
-- [ ] متطلبات المتاجر: Privacy labels عند Apple، و Data safety عند Google، وحذف الحساب من جوا التطبيق
-- [ ] **TestFlight** للآيفون، و**اختبار مغلق** للأندرويد (12 شخص لمدة 14 يوم، شرط Google للحسابات الجديدة)
+## Phase 6: iPhone and Android apps ⏳
+- [x] **6a React Native (Expo)**: one app for both platforms, with the same three languages, right-to-left layout and dark mode
+- [x] Tokens stored in the **iOS Keychain / Android Keystore** (never in AsyncStorage)
+- [x] **6b–6f Feature parity with the website**: every screen and feature. Shared code (types, texts, API calls, month and money rules) is copied from the website by a script, and CI fails if the copies drift
+- [x] **Budget month start day** (the allowance day, 1–28) and **Start fresh** (hide older months without deleting them), on the server, website and app
+- [x] **6g App lock** with Face ID, a fingerprint or the phone passcode, after 30 seconds away, with a privacy cover in the app switcher
+- [x] **6h Push notifications for groups** (new expense, payment, invitation) in each reader's language, through Expo and Firebase. First Android development build made with EAS and tested on the Android Emulator
+- [ ] Budget alerts as push notifications
+- [ ] Invitation links open the app directly (Android App Links, iOS Universal Links)
+- [ ] Sign in with Google inside the app (native Google sign-in)
+- [ ] Store requirements: Apple privacy labels, Google Play Data safety, in-app account deletion (done)
+- [ ] **TestFlight** for iPhone and a **closed test** on Google Play (12 testers for 14 days, required for new developer accounts)
 
-## المرحلة 7: الاشتراكات والدفع والكوبونات
-- [ ] جدول **صلاحيات (entitlements)**: شو مجاني وشو مدفوع، والكود بيسأل "عنده صلاحية؟" مش "دفع؟"
-- [ ] **RevenueCat** + Apple In-App Purchase + Google Play Billing
-- [ ] الدفع عالويب (Paddle أو iyzico، لأنه Stripe ما بيشتغل للشركات التركية)
-- [ ] **الكوبونات**: Offer Codes من Apple، و Promo Codes من Google، وأكواد عالويب. وأكواد "مجاني بالكامل" للعيلة
-- [ ] صفحة الاشتراك (paywall) وتجربة مجانية
-- [ ] **تسجيل رسمي** (شركة أو عمل حر) وحساب بنكي لاستلام مصاري المتاجر
+## Phase 7: Subscriptions, payments and coupons
+- [ ] An **entitlements** table: what is free and what is paid. Code asks "is this allowed?", never "did they pay?"
+- [ ] **RevenueCat** with Apple In-App Purchase and Google Play Billing
+- [ ] Payments on the web (Paddle or iyzico; Stripe does not support Turkish companies)
+- [ ] **Coupons**: Apple Offer Codes, Google Promo Codes and web codes, including fully free codes for family
+- [ ] Paywall and a free trial
+- [ ] **Business registration** (company or sole trader) and a bank account to receive store payouts
 
-## المرحلة 8: التفعيل (كل الدفع هون) ثم الإطلاق
-**القاعدة:** منبني كل شي ومنجرّبه **بدون ما ندفع ولا قرش**، وكل خدمة مدفوعة إلها "نسخة تجريبية" بالكود. وبالآخر، بخطوة وحدة، منوصّل الخدمات الحقيقية.
+## Phase 8: Activation (all payments happen here), then launch
+**Rule:** everything is built and tested **without paying for anything**. Every paid service has
+a free stand-in in code. Activation connects the real services in one step.
 
-| الخدمة | لحد التفعيل منستعمل | وقت التفعيل |
+| Service | Until activation | At activation |
 |---|---|---|
-| الدومين | `budgetanalysis.vercel.app` | شراء الدومين (~10-14$ بالسنة) وربطه بـ Vercel و Render و Google |
-| الإيميلات (تأكيد، نسيت كلمة السر) | محلياً: Mailpit بيلقط الإيميلات. الـ staging: بتطلع بالـ logs | Resend + الدومين |
-| SMS والواتساب | الكود بيطلع بالـ logs (بالـ staging والمحلي بس) | Twilio أو مزوّد تاني |
-| Sign in with Apple | اختبارات بمفاتيح وهمية (متل Google) | حساب Apple Developer (99$ بالسنة) |
-| الاشتراكات | `entitlements` وحسابات تجريبية | RevenueCat و Apple و Google و Paddle/iyzico |
-| السيرفر والقاعدة | الخطط المجانية | خطط مدفوعة: ما بينام، ونسخ احتياطية |
+| Domain | `budgetanalysis.vercel.app` | Buy the domain (~$10–14/year) and connect it to Vercel, Render and Google |
+| Email (verification, password reset) | Locally: Mailpit catches messages. Staging: written to the logs | Resend with the custom domain |
+| SMS and WhatsApp | The code is written to the logs (local and staging only) | Twilio or another provider |
+| Sign in with Apple | Tests with fake keys (as for Google) | Apple Developer account ($99/year) |
+| iPhone builds and push | Android builds only | Apple Developer account: builds, APNs, TestFlight |
+| Subscriptions | Entitlements and test accounts | RevenueCat, Apple, Google and Paddle/iyzico |
+| Servers and database | Free plans | Paid plans: no sleeping, backups |
 
-- [ ] شراء الدومين، وإيميل `support@`، وتحديث Google و Render و GitHub
-- [ ] تفعيل Resend و SMS و Apple و RevenueCat، وتجربة كل وحدة عالـ staging
-- [ ] الخطط المدفوعة للسيرفر وقاعدة البيانات
-- [ ] تسجيل رسمي، وشروط الاستخدام
-- [ ] الرفع عالمتاجر، وصور وأوصاف بالثلاث لغات
-- [ ] صفحة تسويقية، وتحليلات بتحترم الخصوصية
-- [ ] إيميل دعم وصفحة أسئلة شائعة
-- [ ] خطة للطوارئ: مين بيعمل شو إذا وقع الموقع أو صار تسريب
+- [ ] Buy the domain, set up `support@`, update Google, Render and GitHub
+- [ ] Activate Resend, SMS, Apple and RevenueCat, and test each on staging
+- [ ] Paid plans for the API server and the database
+- [ ] Business registration and final terms of use
+- [ ] Store listings, screenshots and descriptions in three languages
+- [ ] Marketing page and privacy-respecting analytics
+- [ ] Support email and an FAQ page
+- [ ] Incident plan: who does what if the service goes down or data leaks
 
 ---
 
-## 💰 الكلفة التقديرية
-> أسعار أكتوبر 2026، وبتتغيّر. منتأكد من كل سعر قبل ما ندفع.
+## Estimated cost
+> October 2026 prices; they change. Every price is checked again before paying.
 
-**لمرة وحدة أو سنوية:** Apple 99$ بالسنة · Google Play 25$ مرة وحدة · الدومين 15-20$ بالسنة · التسجيل الرسمي والمحاسب حسب البلد
+**One-off or yearly:** Apple Developer $99/year · Google Play $25 once · domain $15–20/year · registration and accounting depend on the country.
 
-| شهرياً | الإطلاق (~1,000) | النمو (~10,000) | الكبير (~100,000) |
+| Monthly | Launch (~1,000 users) | Growth (~10,000) | Large (~100,000) |
 |---|---|---|---|
-| Vercel Pro | 20$ | 20-60$ | 300$+ |
-| Render (سيرفر + staging) | 32-57$ | 110-200$ | 500$+ |
-| Neon | 20-45$ | 80-160$ | 400$+ |
-| Redis | ~10$ | 10-30$ | 50-100$ |
-| Sentry | 0$ | 26$ | 80$+ |
-| الإيميلات | 0$ | 20$ | 90$ |
-| تخزين الملفات | 0$ | ~5$ | 20-50$ |
-| Expo | 0-19$ | 19$ | 99$+ |
-| **المجموع** | **~80-160$** | **~300-550$** | **~1,500-3,000$** |
+| Vercel Pro | $20 | $20–60 | $300+ |
+| Render (API and staging) | $32–57 | $110–200 | $500+ |
+| Neon | $20–45 | $80–160 | $400+ |
+| Redis | ~$10 | $10–30 | $50–100 |
+| Sentry | $0 | $26 | $80+ |
+| Email | $0 | $20 | $90 |
+| Object storage | $0 | ~$5 | $20–50 |
+| Expo (EAS) | $0–19 | $19 | $99+ |
+| **Total** | **~$80–160** | **~$300–550** | **~$1,500–3,000** |
 
-- **SMS:** حوالي 0.06-0.15$ للكود حسب الدولة. الواتساب أرخص بـ 50-90%.
-- **من الإيرادات:** Apple و Google 15%، الدفع عالويب ~5%، RevenueCat مجاني لحد 2,500$ بالشهر وبعدها ~1%.
-- **منضل عالخطط المجانية لحد قبل الإطلاق بشهر.**
+- **SMS:** about $0.06–0.15 per code depending on the country; WhatsApp is 50–90% cheaper.
+- **Revenue share:** Apple and Google 15%; web payments ~5%; RevenueCat is free up to $2,500/month, then ~1%.
+- **We stay on free plans until about a month before launch.**
