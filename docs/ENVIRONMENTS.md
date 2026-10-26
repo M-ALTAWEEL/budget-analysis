@@ -1,90 +1,116 @@
-# 🌍 البيئات: local و staging و production
+# Environments: local, staging and production
 
-| | Local (جهازك) | Staging (التجربة) | Production (الموقع الحقيقي) |
+| | Local | Staging | Production |
 |---|---|---|---|
-| **الموقع** | `localhost:3000` | روابط الـ preview من Vercel لكل فرع | `budgetanalysis.vercel.app` |
-| **السيرفر** | Docker على جهازك | `budget-analysis-api-staging` على Render، من فرع **`staging`** | `budgetbuddy-api` على Render، من فرع **`main`** |
-| **قاعدة البيانات** | Postgres بـ Docker | فرع **`staging`** على Neon (نسخة منفصلة) | فرع **`main`** على Neon |
-| **الأسرار** | `backend/.env` | متغيرات خدمة الـ staging على Render | متغيرات خدمة الـ production على Render |
+| **Website** | `localhost:3000` | Vercel preview deployment of each branch | `budgetanalysis.vercel.app` |
+| **API** | Docker on the developer's machine | `budget-analysis-api-staging` on Render, from the **`staging`** branch | `budgetbuddy-api` on Render, from the **`main`** branch |
+| **Database** | PostgreSQL in Docker | Neon branch **`staging`** (separate copy) | Neon branch **`main`** |
+| **Mobile app** | Expo Go or a development build, against staging | EAS `development` and `preview` builds | EAS `production` build (store) |
+| **Secrets** | `backend/.env` | Environment variables of the staging service on Render; EAS secrets | Environment variables of the production service on Render; EAS secrets |
 
-**القاعدة:** ولا شي بيوصل لـ `main` قبل ما يمر على الـ staging. والـ staging **ما بيلمس بيانات المستخدمين الحقيقيين أبداً**.
+**Rule:** nothing reaches `main` before it has run on staging, and staging **never touches real user data**.
 
-## الطريقة لكل مرحلة
+## Workflow for every phase
 ```
-git switch phase-N                     # الشغل على فرع المرحلة
-git push origin phase-N                # Vercel بيعمل preview للفرونت إند
-git push origin phase-N:staging        # السيرفر التجريبي بياخذ نفس الكود
+git switch phase-N                     # work happens on the phase branch
+git push origin phase-N                # Vercel builds a preview of the website
+git push --force origin phase-N:staging  # the staging API runs the same code
 ```
-1. Vercel بيعمل **preview**، والـ preview بيحكي مع **سيرفر الـ staging**.
-2. Render بيعمل deploy للـ **staging** لحاله.
-3. منجرّب كل شي عالـ preview.
-4. Pull Request ← CI أخضر ← **merge لـ main** ← الموقع الحقيقي بيتحدّث لحاله.
+1. Vercel builds a **preview**; previews call the **staging API**.
+2. Render deploys **staging** automatically.
+3. Everything is tested on the preview, and in the mobile app (which points at staging).
+4. Pull request → CI green → **merge into `main`** → production updates automatically.
 
-**مين شغال هلأ؟** بالإعدادات بآخر الصفحة: `Version: web 7bc8d23 · api 7bc8d23`. لازم الرقمين يكونوا متل بعض بعد كل release. على الـ staging بيطلع جنبهم `(staging)`.
+**What is running?** At the bottom of Settings: `Version: web 7bc8d23 · api 7bc8d23` (the
+app shows `app 0.1.0 · api …`). After a release both numbers match; on staging `(staging)` is shown next to them.
 
-## التجهيز لمرة وحدة
-### 1. فرع `staging` بـ git
+## One-time setup
+### 1. A `staging` git branch
 ```
-git push origin phase-1:staging
+git push origin main:staging
 ```
 
-### 2. قاعدة بيانات الـ staging على Neon
-Neon ← المشروع ← **Branches** ← **Create branch**:
-- الاسم: `staging`، والـ parent: `main`.
-- بياخذ **نسخة من البيانات الحالية** بلحظتها (copy-on-write: ما بيكلّف مساحة إلا للتغييرات).
-- ⚠️ النسخة فيها بيانات حقيقية. لو بدك staging نظيف، اختار **Schema only**.
-- انسخ الـ **connection string** تبع فرع `staging` (مش `main`).
+### 2. The staging database on Neon
+Neon → project → **Branches** → **Create branch**:
+- Name `staging`, parent `main`.
+- It starts as a **copy of the current data** (copy-on-write: only changes use storage).
+- ⚠️ That copy contains real data. For a clean staging database choose **Schema only**.
+- Copy the **connection string** of the `staging` branch (not `main`).
 
-### 3. سيرفر الـ staging على Render
-لما ينعمل merge لـ `render.yaml` الجديد، Render بيقترح خدمة **`budget-analysis-api-staging`** (Blueprint ← **Sync**). عبّي متغيراتها:
-- `DATABASE_URL` ← رابط فرع **staging** من Neon
-- `FRONTEND_URL` ← روابط الـ preview (مثلاً `https://budget-analysis-git-phase-1-m-altaweel.vercel.app`)
-- `GOOGLE_CLIENT_ID` ← نفس القيمة
-- `SENTRY_DSN` ← (اختياري)
+### 3. The staging API on Render
+After `render.yaml` is merged, Render proposes the **`budget-analysis-api-staging`** service
+(Blueprint → **Sync**). Fill in its variables:
+- `DATABASE_URL` → the Neon **staging** branch
+- `FRONTEND_URL` → the preview URLs (for example `https://budget-analysis-git-phase-1-m-altaweel.vercel.app`)
+- `GOOGLE_CLIENT_ID` → same value as production
+- `SENTRY_DSN` → optional
 
-### 4. الـ preview بيحكي مع الـ staging
-Vercel ← Settings ← **Environment Variables** ← `API_ORIGIN`:
-- **Production** ← سيرفر الـ production (متل ما هو)
-- **Preview** ← `https://budget-analysis-api-staging.onrender.com` (الرابط من Render)
+### 4. Previews call staging
+Vercel → Settings → **Environment Variables** → `API_ORIGIN`:
+- **Production** → the production API
+- **Preview** → `https://budget-analysis-api-staging.onrender.com`
 
-### 5. Sentry (تقارير الأخطاء)
-sentry.io ← حساب مجاني ← **Create Project** ← **FastAPI** ← انسخ الـ **DSN** ← حطّه بـ `SENTRY_DSN` بالخدمتين على Render. الأخطاء بتنفصل لحالها: `production` و `staging`.
+### 5. Sentry (error reports)
+sentry.io → free account → **Create Project** → **FastAPI** → copy the **DSN** into `SENTRY_DSN`
+on both Render services. Errors are separated by `environment`: `production` and `staging`.
 
-### 6. `EDGE_SECRET` (من المرحلة 2a)
-سرّ مشترك بين الموقع (Vercel) والـ API (Render)، عشان الـ API يعرف IP الزائر الحقيقي (التهديد S6).
-**سرّين مختلفين**، واحد لكل بيئة. كل واحد بينحط بمكانين **بنفس القيمة**:
+### 6. `EDGE_SECRET` (phase 2a)
+A secret shared by the website server (Vercel) and the API (Render), so the API can trust the
+visitor IP the website forwards (threat S6). **Two different secrets**, one per environment,
+each set in two places with the **same value**:
 
-| السرّ | Vercel (Environment Variables) | Render |
+| Secret | Vercel (Environment Variables) | Render |
 |---|---|---|
-| الأول | `EDGE_SECRET` ← **Production** | `budgetbuddy-api` |
-| الثاني | `EDGE_SECRET` ← **Preview** | `budget-analysis-api-staging` |
+| First | `EDGE_SECRET` → **Production** | `budgetbuddy-api` |
+| Second | `EDGE_SECRET` → **Preview** | `budget-analysis-api-staging` |
 
-بتعمل السرّ بأمر: `python -c "import secrets; print(secrets.token_urlsafe(32))"`. ما بينكتب بالشات ولا بالكود.
+Generate with `python -c "import secrets; print(secrets.token_urlsafe(32))"`. Never written in chat or code.
 
-### 7. الإيميلات (من المرحلة 2b)
-`EMAIL_BACKEND` بيقرر وين بتروح الإيميلات:
+### 7. Email (phase 2b)
+`EMAIL_BACKEND` decides where email goes:
 
-| البيئة | القيمة | يعني |
+| Environment | Value | Meaning |
 |---|---|---|
-| جهازك | `smtp` | بتوصل لـ **Mailpit**: `docker compose up -d mailpit` وبتقراها على http://localhost:8025 |
-| staging | `console` | بتنكتب بالـ **Logs** تبع خدمة الـ staging على Render (مع الرابط) |
-| production | `none` | الإيميلات مطفية لحد التفعيل (المرحلة 8). "نسيت كلمة السر" ما بيظهر |
+| Local | `smtp` | Delivered to **Mailpit**: `docker compose up -d mailpit`, read at http://localhost:8025 |
+| Staging | `console` | Written to the **logs** of the staging service on Render (with the link) |
+| Production | `none` | Email is off until Activation (phase 8); "Forgot password" is hidden |
 
-الـ production **بيرفض يشتغل** إذا حطيت `console`، لأنه روابط تغيير كلمة السر بتصير بالـ logs.
+Production **refuses to start** with `console`, because password-reset links would end up in the logs.
 
-### 8. `TOTP_ENCRYPTION_KEY` (من المرحلة 2d)
-مفتاح بيشفّر مفاتيح المصادقة الثنائية بقاعدة البيانات. **مفتاحين مختلفين**، واحد لكل خدمة على Render (`budgetbuddy-api` و `budget-analysis-api-staging`). بتعمله بأمر:
+### 8. `TOTP_ENCRYPTION_KEY` (phase 2d)
+Encrypts the two-factor keys in the database. **Two different keys**, one per Render service.
 ```
 python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 ```
-- بدونه، الـ staging والـ production **بيخبّوا** خيار المصادقة الثنائية.
-- ⚠️ **إذا ضاع المفتاح أو تغيّر، كل اللي مفعّلين 2FA ما بيقدروا يدخلوا** إلا بالرموز الاحتياطية. احفظه بمكان آمن (مدير كلمات سر)، وما بيتغيّر.
+- Without it, staging and production **hide** the two-factor option.
+- ⚠️ **If the key is lost or changed, everyone with 2FA can only sign in with backup codes.**
+  Keep it in a password manager; it is never rotated casually.
 
-### 9. `SMS_BACKEND` (من المرحلة 2e)
-| البيئة | القيمة | يعني |
+### 9. `SMS_BACKEND` (phase 2e)
+| Environment | Value | Meaning |
 |---|---|---|
-| جهازك | `console` (بـ `backend/.env`) | الكود بيظهر بالـ terminal تبع السيرفر |
-| staging | `console` | الكود بيظهر بالـ **Logs** على Render (ابحث عن `sms to=`) |
-| production | `none` | "المتابعة برقم الهاتف" مخفي لحد التفعيل (المرحلة 8) |
+| Local | `console` (in `backend/.env`) | The code appears in the API terminal |
+| Staging | `console` | The code appears in the Render **logs** (search for `sms to=`) |
+| Production | `none` | "Continue with phone" is hidden until Activation |
 
-الـ production **بيرفض يشتغل** إذا حطيت `console`، لأنه أي حدا بيقرا الـ logs بيقدر يدخل على أي حساب برقم.
+Production **refuses to start** with `console`: anyone reading the logs could sign in to any phone account.
+
+### 10. `PUSH_BACKEND` (phase 6h)
+| Environment | Value | Meaning |
+|---|---|---|
+| Local | `none` or `console` | Nothing is sent, or messages are written to the terminal |
+| Staging | `expo` | Real notifications through Expo's push service |
+| Production | `none` until the store release, then `expo` | |
+
+`EXPO_ACCESS_TOKEN` is only needed if "enhanced push security" is turned on in the Expo account.
+
+### 11. The mobile app (EAS, phase 6)
+- `mobile/eas.json` sets `EXPO_PUBLIC_API_URL` per build profile: `development` and `preview`
+  use the staging API; `production` uses `https://budgetanalysis.vercel.app/api/v1`.
+- **Firebase** (Android push): `google-services.json` is **not** in git. It is stored as the EAS
+  secret file `GOOGLE_SERVICES_JSON`, which `mobile/app.config.ts` reads at build time.
+- The **FCM V1 service-account key** is uploaded to EAS credentials (`eas credentials`) and never
+  kept on disk.
+- The **Android signing keystore** is generated and stored by EAS. Its SHA-1 and SHA-256
+  fingerprints (public) are needed for Google sign-in and App Links.
+- Developers sign in to the CLI with an Expo access token in `EXPO_TOKEN`, never written in chat.

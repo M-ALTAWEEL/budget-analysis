@@ -1,56 +1,57 @@
-# 🛟 الرجوع لنسخة آمنة
+# Recovery: going back to a safe version
 
-> هاد الملف بيضل بالمشروع نفسه، فبتلاقيه دايماً حتى لو بدأت محادثة جديدة أو مع أي حدا.
+> This file lives in the repository, so it is always at hand.
 
-## نقطة الأمان: v1.0
-آخر نسخة شغالة قبل الخطة التجارية (19 أكتوبر 2026):
+## Safe point: v1.0
+The last working version before the commercial plan (19 October 2026):
 
 | | |
 |---|---|
-| **الـ tag** | `v1.0` |
-| **الـ commit** | `fe8b23919f82b8f7bbb4a7f54fd13857f501bf12` (`fe8b239`) |
-| **فيها** | Budget Analysis كامل: الميزانية، والمصاريف، والأهداف، والتصنيف بالـ ML، والتوقّع، والنصائح، والمساعد، والدخول بـ Google، و3 لغات، والاسم واللوغو الجداد |
-| **نسخة احتياطية كاملة** | `Desktop\BudgetAnalysis_v1.0_backup.bundle`: كل تاريخ المشروع بملف واحد على جهازك، بيشتغل حتى لو انحذف الريبو من GitHub |
+| **Tag** | `v1.0` |
+| **Commit** | `fe8b23919f82b8f7bbb4a7f54fd13857f501bf12` (`fe8b239`) |
+| **Contents** | The complete single-user Budget Analysis: budgets, expenses, goals, ML categorization, forecast, tips, assistant, Google sign-in, three languages, new name and logo |
+| **Full offline backup** | `BudgetAnalysis_v1.0_backup.bundle` on the maintainer's machine: the whole history in one file, usable even if the GitHub repository is deleted |
 
-## الحالات
+## Situations
 
-### 1. عملت push لشي وما عجبني (آخر commit بس)
+### 1. The last pushed commit was a mistake
 ```
 git revert HEAD
 git push
 ```
-بيعمل commit جديد عكس الأخير، والموقع بيرجع. التاريخ ما بيضيع.
+Creates a new commit that undoes the last one. History is kept.
 
-### 2. بدي أرجّع الموقع كله لـ v1.0، وأشيل كل الشغل الجديد
+### 2. Return the whole product to v1.0, removing all later work
 ```
 git switch main
 git revert --no-edit v1.0..HEAD
 git push
 ```
-بيعكس كل الـ commits اللي بعد v1.0 بالترتيب. الموقع بيرجع متل v1.0 بالضبط، والشغل الجديد بيضل بالتاريخ إذا غيّرت رأيك.
+Undoes every commit after v1.0, in order. The product behaves exactly like v1.0, and the newer
+work stays in history in case the decision is reversed.
 
-### 3. بدي أشوف v1.0 بس، بدون ما أغيّر شي
+### 3. Look at v1.0 without changing anything
 ```
 git switch --detach v1.0
 ```
-وبترجع بعدها بـ `git switch main`.
+Return with `git switch main`.
 
-### 4. انحذف الريبو أو خرب الجهاز
+### 4. The repository is gone or the machine failed
 ```
-git clone C:\Users\MOHAMMED\Desktop\BudgetAnalysis_v1.0_backup.bundle budgetbuddy-restored
+git clone <path-to>/BudgetAnalysis_v1.0_backup.bundle budget-analysis-restored
 ```
-**انسخ ملف الـ bundle لمكان تاني كمان** (Google Drive أو فلاشة)، مش بس عالـ Desktop.
+**Keep a second copy of the bundle elsewhere** (cloud drive or USB stick), not only on the desktop.
 
-## قاعدة البيانات ⚠️
-الكود بيرجع بالأوامر فوق، بس **قاعدة البيانات ما بترجع مع الكود**. لهيك:
-- كل تغيير بالجداول (migration) إله أمر رجعة: `alembic downgrade -1`
-- **قبل أي migration** على قاعدة البيانات الحقيقية: نسخة احتياطية من Neon (Branches ← Create branch)
-- من المرحلة 1: بيئة staging منجرّب عليها أول
+## The database ⚠️
+The commands above restore code, **not data**. Therefore:
+- Every schema change (Alembic migration) has a downgrade: `alembic downgrade -1`.
+- **Before any migration** on the production database: a Neon backup branch (Branches → Create branch).
+- Since phase 1, every migration runs on staging first.
 
-## القاعدة من هلأ
-- كل مرحلة على **فرع لحاله** (`phase-1`، `phase-2`…)، و `main` = الموقع الحقيقي
-- قبل كل مرحلة كبيرة: tag جديد (`v1.1`، `v2.0`…)، ومنضيفه بالجدول تحت
+## Rules from now on
+- Every phase on **its own branch** (`phase-1`, `phase-2`, …); `main` is production.
+- Before every large phase: a new tag (`v1.1`, `v2.0`, …), recorded below.
 
-| الـ tag | التاريخ | شو فيه |
+| Tag | Date | Contents |
 |---|---|---|
-| `v1.0` | 2026-10-19 | آخر نسخة قبل الخطة التجارية |
+| `v1.0` | 2026-10-19 | Last version before the commercial plan |
