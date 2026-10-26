@@ -8,6 +8,7 @@ import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "@/components/auth/AuthProvider";
+import { setRestoredAtLaunch } from "@/components/security/AppLock";
 import { takeLocalePickedWhileSignedOut } from "@/components/settings/useChangeLocale";
 import { FONT_FILES } from "@/components/ui/fonts";
 import { Toaster } from "@/components/ui/Toast";
@@ -16,6 +17,8 @@ import { updateMe } from "@/services/auth";
 import { ThemeProvider, useTheme } from "@/theme/ThemeProvider";
 
 void SplashScreen.preventAutoHideAsync();
+
+let launchSeen = false;
 
 /** Once the account is known, the app and the account agree on one language (as on the website). */
 function AccountLocale() {
@@ -38,6 +41,11 @@ function AccountLocale() {
 function Routes({ fontsReady }: { fontsReady: boolean }) {
   const { status } = useAuth();
   const { dir } = useI18n();
+  // The first answer after "loading" says how the app opened (read by the app lock).
+  if (!launchSeen && status !== "loading") {
+    launchSeen = true;
+    setRestoredAtLaunch(status === "authenticated");
+  }
   const { colors, dark } = useTheme();
   const ready = fontsReady && status !== "loading";
   useEffect(() => {

@@ -42,3 +42,8 @@ example
 /ios
 /android
 _to_delete/
+
+# Firebase (Android notifications) and its service-account key: secrets, never in git
+google-services.json
+*firebase-adminsdk*.json
+service-account*.json

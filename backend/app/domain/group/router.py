@@ -7,9 +7,10 @@ back, and the group's chat (/groups/{uuid}/activity)."""
 from datetime import datetime
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, Query, Request, status
+from fastapi import APIRouter, BackgroundTasks, Depends, Query, Request, status
 
 from app.core.limiter import limiter
+from app.core.push import PushSender, get_push_sender
 from app.dependencies import CurrentUser, DbSession
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
 from app.domain.currency.service import CurrencyService
@@ -40,6 +41,7 @@ from app.domain.group.schema import (
 from app.domain.group.service import GroupService
 from app.domain.group.settle import SettlementService
 from app.domain.group.shares import MyShares
+from app.domain.notify.service import GroupNotifications, deliver
 from app.domain.user.router import Email
 
 router = APIRouter(prefix="/groups", tags=["groups"])
@@ -47,6 +49,7 @@ FxClient = Annotated[ExchangeRateClient, Depends(get_fx_client)]
 invites_router = APIRouter(prefix="/invites", tags=["groups"])
 my_requests_router = APIRouter(prefix="/me/group-requests", tags=["groups"])
 my_shares_router = APIRouter(prefix="/me/group-shares", tags=["groups"])
+Push = Annotated[PushSender | None, Depends(get_push_sender)]
 
 
 @router.get("")
@@ -127,9 +130,19 @@ async def list_group_expenses(
 
 @router.post("/{group_uuid}/expenses", status_code=status.HTTP_201_CREATED)
 async def add_group_expense(
-    group_uuid: str, data: GroupExpenseInput, user: CurrentUser, db: DbSession, fx: FxClient
+    group_uuid: str,
+    data: GroupExpenseInput,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+    background: BackgroundTasks,
+    push: Push,
 ) -> GroupExpenseRead:
-    return await GroupExpenseService(db, fx).create(user, group_uuid, data)
+    expense = await GroupExpenseService(db, fx).create(user, group_uuid, data)
+    if push is not None:  # the others in it: "Ali added Groceries: 500. Your share: 125."
+        messages = await GroupNotifications(db).new_expense(user, group_uuid, expense)
+        background.add_task(deliver, push, messages)
+    return expense
 
 
 @router.put("/{group_uuid}/expenses/{expense_uuid}")
@@ -175,10 +188,20 @@ async def accept_invite(
 @router.post("/{group_uuid}/requests", status_code=status.HTTP_201_CREATED)
 @limiter.limit("30/hour")
 async def invite_by_username(
-    request: Request, group_uuid: str, data: UsernameInvite, user: CurrentUser, db: DbSession
+    request: Request,
+    group_uuid: str,
+    data: UsernameInvite,
+    user: CurrentUser,
+    db: DbSession,
+    background: BackgroundTasks,
+    push: Push,
 ) -> SentRequestRead:
     """Send an invitation to someone by their username. They have to accept it."""
-    return await GroupRequestService(db).invite(user, group_uuid, data.username)
+    sent = await GroupRequestService(db).invite(user, group_uuid, data.username)
+    if push is not None:
+        messages = await GroupNotifications(db).invitation(user, group_uuid, sent.username)
+        background.add_task(deliver, push, messages)
+    return sent
 
 
 @router.get("/{group_uuid}/requests")
@@ -270,8 +293,14 @@ async def record_settlement(
     user: CurrentUser,
     db: DbSession,
     fx: FxClient,
+    background: BackgroundTasks,
+    push: Push,
 ) -> SettlementRead:
-    return await SettlementService(db, fx).record(user, group_uuid, data)
+    settlement = await SettlementService(db, fx).record(user, group_uuid, data)
+    if push is not None:  # the other side: "Sara paid you back 125.00 TRY."
+        messages = await GroupNotifications(db).settlement(user, group_uuid, settlement)
+        background.add_task(deliver, push, messages)
+    return settlement
 
 
 @router.delete(

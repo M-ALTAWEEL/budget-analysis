@@ -663,6 +663,24 @@ export const ar: Messages = {
     failed: "حدث خطأ ما. حاول السؤال مرة أخرى.",
   },
 
+  lock: {
+    title: "قفل التطبيق",
+    text: "اطلب Face ID أو البصمة أو رمز الهاتف في كل مرة تعود فيها إلى التطبيق.",
+    toggle: "اقفل التطبيق",
+    unavailable: "فعّل Face ID أو البصمة أو رمز قفل على هاتفك أولًا.",
+    locked: "Budget Analysis مقفل",
+    unlock: "افتح القفل",
+    reason: "افتح قفل Budget Analysis",
+  },
+
+  notifications: {
+    title: "الإشعارات",
+    groups: "إشعارات المجموعات",
+    groupsText: "عندما يضيف أحدهم مصروفًا لك حصة فيه، أو يردّ لك مبلغًا، أو يدعوك إلى مجموعة.",
+    denied: "الإشعارات متوقفة لتطبيق Budget Analysis في إعدادات هاتفك.",
+    openSettings: "افتح إعدادات الهاتف",
+  },
+
   errors: {
     network: "تعذّر الوصول إلى خادم Budget Analysis. تحقق من اتصالك وحاول مرة أخرى.",
     tooMany: "محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.",

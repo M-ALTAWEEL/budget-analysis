@@ -49,6 +49,9 @@ class User(BaseModel):
     # "Start fresh": spending before this day is hidden from months, charts and
     # comparisons. Nothing is deleted; clearing it brings the history back.
     fresh_start_on: Mapped[date | None] = mapped_column(Date)
+    # Push notifications about groups (new expense, paying back, invitations). The app
+    # also needs the phone's permission; this is the person's own switch.
+    notify_groups: Mapped[bool] = mapped_column(Boolean, server_default=true())
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
     # Two-factor authentication (2d). The key is encrypted (app/core/secret_box.py); it
     # exists but is not enabled while the person is still scanning the QR code.

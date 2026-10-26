@@ -68,3 +68,16 @@ class FakeSmsSender:
         import re
 
         return re.search(r"\b(\d{6})\b", self.sent[-1][1]).group(1)
+
+
+class FakePushSender:
+    """Keeps the notifications instead of sending them. `dead` tokens are reported back
+    as "app removed", like Expo does."""
+
+    def __init__(self) -> None:
+        self.sent = []
+        self.dead: set[str] = set()
+
+    async def send(self, messages) -> list[str]:
+        self.sent.extend(messages)
+        return [m.to for m in messages if m.to in self.dead]

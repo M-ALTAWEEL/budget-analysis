@@ -651,6 +651,26 @@ export const en = {
     failed: "Something went wrong. Try asking again.",
   },
 
+  // The phone app only: lock with Face ID, a fingerprint or the phone's passcode.
+  lock: {
+    title: "App lock",
+    text: "Ask for Face ID, a fingerprint or your phone's passcode every time you come back to the app.",
+    toggle: "Lock the app",
+    unavailable: "Set up Face ID, a fingerprint or a passcode on your phone first.",
+    locked: "Budget Analysis is locked",
+    unlock: "Unlock",
+    reason: "Unlock Budget Analysis",
+  },
+
+  // The phone app only: push notifications.
+  notifications: {
+    title: "Notifications",
+    groups: "Group notifications",
+    groupsText: "When someone adds an expense you're part of, pays you back, or invites you to a group.",
+    denied: "Notifications are turned off for Budget Analysis in your phone's settings.",
+    openSettings: "Open phone settings",
+  },
+
   errors: {
     network: "Can't reach the Budget Analysis server. Check your connection and try again.",
     tooMany: "Too many attempts. Wait a minute and try again.",

@@ -644,6 +644,24 @@ export const tr: Messages = {
     failed: "Bir şeyler ters gitti. Tekrar sormayı dene.",
   },
 
+  lock: {
+    title: "Uygulama kilidi",
+    text: "Uygulamaya her döndüğünde Face ID, parmak izi ya da telefonunun şifresini iste.",
+    toggle: "Uygulamayı kilitle",
+    unavailable: "Önce telefonunda Face ID, parmak izi ya da bir şifre ayarla.",
+    locked: "Budget Analysis kilitli",
+    unlock: "Kilidi aç",
+    reason: "Budget Analysis kilidini aç",
+  },
+
+  notifications: {
+    title: "Bildirimler",
+    groups: "Grup bildirimleri",
+    groupsText: "Biri payın olan bir harcama eklediğinde, sana borcunu ödediğinde ya da seni bir gruba davet ettiğinde.",
+    denied: "Telefonunun ayarlarında Budget Analysis için bildirimler kapalı.",
+    openSettings: "Telefon ayarlarını aç",
+  },
+
   errors: {
     network: "Budget Analysis sunucusuna ulaşılamıyor. Bağlantını kontrol edip tekrar dene.",
     tooMany: "Çok fazla deneme. Bir dakika bekleyip tekrar dene.",
