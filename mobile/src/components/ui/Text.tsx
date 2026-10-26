@@ -46,6 +46,9 @@ export function Text({
   const align: TextStyle["textAlign"] = center ? "center" : end !== rtl ? "right" : "left";
   return (
     <NativeText
+      // Android measures some Arabic text a little short and cuts the last word off
+      // ("تغيير كلمة" instead of "تغيير كلمة السر"): the simple line breaker doesn't.
+      textBreakStrategy="simple"
       {...props}
       style={[
         {

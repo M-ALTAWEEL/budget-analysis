@@ -2,6 +2,8 @@ import { Stack } from "expo-router";
 
 import { ExpenseSheetProvider } from "@/components/expense/ExpenseSheet";
 import { MonthProvider } from "@/components/layout/MonthProvider";
+import { PushSetup } from "@/components/layout/PushSetup";
+import { AppLock } from "@/components/security/AppLock";
 import { useColors } from "@/theme/ThemeProvider";
 
 /**
@@ -11,13 +13,16 @@ import { useColors } from "@/theme/ThemeProvider";
 export default function AppLayout() {
   const colors = useColors();
   return (
-    <MonthProvider>
-      <ExpenseSheetProvider>
-        <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="categories" />
-        </Stack>
-      </ExpenseSheetProvider>
-    </MonthProvider>
+    <AppLock>
+      <PushSetup />
+      <MonthProvider>
+        <ExpenseSheetProvider>
+          <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="categories" />
+          </Stack>
+        </ExpenseSheetProvider>
+      </MonthProvider>
+    </AppLock>
   );
 }

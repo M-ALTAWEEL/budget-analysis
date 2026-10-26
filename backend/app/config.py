@@ -73,6 +73,12 @@ class Settings(BaseSettings):
     # The website address used in email links. Empty = the first FRONTEND_URL.
     app_url: str = ""
 
+    # Push notifications to the phone app (app/core/push.py): "none" (off), "console"
+    # (written to the log) or "expo" (Expo's free push service). EXPO_ACCESS_TOKEN only if
+    # "enhanced push security" is turned on in the Expo account.
+    push_backend: Literal["none", "console", "expo"] = "none"
+    expo_access_token: str = ""
+
     # Sign-in with a phone number (2e). "none" (off: the option is hidden), "console" (the
     # code is written to the log; staging only) or a real provider at activation (phase 8).
     sms_backend: Literal["none", "console"] = "none"

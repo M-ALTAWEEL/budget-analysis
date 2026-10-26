@@ -7,6 +7,8 @@ import { Pressable, View } from "react-native";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { AccountActions } from "@/components/settings/AccountActions";
+import { AppLockSection } from "@/components/settings/AppLockSection";
+import { NotificationsSection } from "@/components/settings/NotificationsSection";
 import { BudgetCycleSection } from "@/components/settings/BudgetCycleSection";
 import { ProfileSection } from "@/components/settings/ProfileSection";
 import { SecuritySection } from "@/components/settings/SecuritySection";
@@ -19,6 +21,7 @@ import { Text } from "@/components/ui/Text";
 import { LOCALES, LOCALE_INFO, type Locale } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
+import { forgetPushDevice } from "@/lib/push";
 import { updateMe } from "@/services/auth";
 import { getVersion } from "@/services/system";
 import { ACCENTS, SWATCHES, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
@@ -124,12 +127,14 @@ export default function SettingsScreen() {
               variant="secondary"
               style={{ marginTop: 16, alignSelf: "flex-start" }}
               icon={<LogOut size={16} color={colors.ink} style={locale === "ar" ? { transform: [{ scaleX: -1 }] } : undefined} />}
-              onPress={() => void logout()}>
+              onPress={() => void forgetPushDevice().finally(() => void logout())}>
               {t.nav.logout}
             </Button>
           </Card>
         </View>
 
+        <NotificationsSection />
+        <AppLockSection />
         <SecuritySection />
         <AccountActions />
         <Versions />

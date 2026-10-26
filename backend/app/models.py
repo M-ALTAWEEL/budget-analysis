@@ -17,6 +17,7 @@ from app.domain.group.model import (
     GroupRequest,
     GroupSettlement,
 )
+from app.domain.notify.model import PushDevice
 from app.domain.user.model import (
     BackupCode,
     OneTimeToken,
@@ -45,6 +46,7 @@ __all__ = [
     "GroupSettlement",
     "OneTimeToken",
     "PhoneCode",
+    "PushDevice",
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",

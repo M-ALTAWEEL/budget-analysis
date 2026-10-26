@@ -127,6 +127,7 @@ export async function updateMe(
       | "locale"
       | "month_start_day"
       | "fresh_start_on"
+      | "notify_groups"
     >
   >,
 ): Promise<User> {
