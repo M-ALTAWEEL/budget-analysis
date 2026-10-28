@@ -3,10 +3,17 @@ import type { Locale } from "@/i18n/config";
 // Shapes returned by the Budget Analysis API. Money is always a string ("120.50"):
 // the backend uses exact decimals, and JavaScript numbers are floats.
 
-export const CURRENCIES = ["TRY", "USD", "AED", "SAR", "QAR", "EUR"] as const;
-export type Currency = (typeof CURRENCIES)[number];
+/** An ISO 4217 code ("TRY"). The list lives on the server, so admins can add currencies:
+ *  GET /currency/list (`CurrencyInfo`). */
+export type Currency = string;
 
 export type { Locale };
+
+export interface CurrencyInfo {
+  code: Currency;
+  names: Record<Locale, string>;
+  hidden: boolean; // not offered for new choices; still shown for whoever already uses it
+}
 
 export interface TokenResponse {
   access_token: string;

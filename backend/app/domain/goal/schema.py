@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.core.money import Currency, PositiveMoney
+from app.core.money import CurrencyCode, PositiveMoney
 
 HEX_COLOR = r"^#[0-9A-Fa-f]{6}$"
 
@@ -16,7 +16,7 @@ class GoalCreate(BaseModel):
 
     name: str = Field(min_length=1, max_length=60)
     target_amount: PositiveMoney
-    currency: Currency | None = None  # default: the user's base currency
+    currency: CurrencyCode | None = None  # default: the user's base currency
     target_date: date | None = None
     icon: str = Field(default="piggy-bank", min_length=1, max_length=30)
     color: str = Field(default="#14B8A6", pattern=HEX_COLOR)
@@ -67,7 +67,7 @@ class GoalRead(BaseModel):
     name: str
     icon: str
     color: str
-    currency: Currency
+    currency: CurrencyCode
     target_amount: Decimal
     target_date: date | None
     saved: Decimal

@@ -21,7 +21,7 @@ import {
   suggestCategory,
   updateExpense,
 } from "@/services/expenses";
-import { getRates } from "@/services/currency";
+import { getRates, listCurrencies } from "@/services/currency";
 import {
   addContribution,
   archiveGoal,
@@ -43,6 +43,7 @@ export const queryKeys = {
   goals: ["goals"] as const,
   goal: (uuid: string) => ["goals", uuid] as const,
   rates: (base: Currency) => ["rates", base] as const,
+  currencies: ["currencies"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -219,5 +220,14 @@ export function useRates(base: Currency, enabled = true) {
     queryFn: () => getRates(base),
     enabled,
     staleTime: 60 * 60_000, // the API caches rates for 12 hours; an hour here is plenty
+  });
+}
+
+/** The currencies and their names (admins add them now and then). */
+export function useCurrencies() {
+  return useQuery({
+    queryKey: queryKeys.currencies,
+    queryFn: listCurrencies,
+    staleTime: 60 * 60_000,
   });
 }

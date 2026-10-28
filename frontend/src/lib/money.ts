@@ -1,4 +1,22 @@
-import type { Currency } from "@/types/api";
+import type { Currency, CurrencyInfo, Locale } from "@/types/api";
+
+/** "Turkish lira (TRY)" in the person's language; just "TRY" while the list is loading. */
+export function currencyLabel(list: CurrencyInfo[] | undefined, code: Currency, locale: Locale): string {
+  const name = list?.find((c) => c.code === code)?.names[locale];
+  return name ? `${name} (${code})` : code;
+}
+
+/** What a currency picker offers: the visible currencies, plus the ones in `keep` even when
+ *  hidden (the one already chosen, their main currency: those stay theirs), so the field
+ *  never looks empty. */
+export function currencyChoices(
+  list: CurrencyInfo[] | undefined,
+  keep: (Currency | null | undefined)[] = [],
+): Currency[] {
+  const kept = keep.filter((code): code is Currency => !!code);
+  const codes = (list ?? []).filter((c) => !c.hidden || kept.includes(c.code)).map((c) => c.code);
+  return [...new Set([...kept.filter((code) => !codes.includes(code)), ...codes])];
+}
 
 /** Format an amount for display. Cents are shown only when there are any.
  *  `intl` is the language's Intl tag: "en" -> "TRY 8,000", "tr" -> "8.000 TRY". */

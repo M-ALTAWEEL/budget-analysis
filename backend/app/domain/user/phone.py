@@ -13,6 +13,7 @@ from sqlalchemy import func, select, true, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.user.model import PhoneCode, User, UserIdentity
 from app.domain.user.repository import IdentityRepository, UserRepository
 
@@ -144,7 +145,7 @@ class PhoneService:
             email=None,
             password_hash=None,
             full_name=readable(phone)[:100],
-            base_currency=base_currency,
+            base_currency=await CurrencyCatalog(self.session).offered_or_default(base_currency),
             locale=locale,
         )
         self.users.add(user)

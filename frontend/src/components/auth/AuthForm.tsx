@@ -8,10 +8,11 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { PhoneSignIn } from "@/components/auth/PhoneSignIn";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 export function LoginForm() {
   const { login } = useAuth();
@@ -139,17 +140,7 @@ export function RegisterForm() {
         onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <Select
-        label={t.auth.currency}
-        value={currency}
-        onChange={(e) => setCurrency(e.target.value as Currency)}
-      >
-        {CURRENCIES.map((code) => (
-          <option key={code} value={code}>
-            {t.currencies[code]} ({code})
-          </option>
-        ))}
-      </Select>
+      <CurrencySelect label={t.auth.currency} value={currency} onChange={setCurrency} />
       <FormError message={error} />
       <Button type="submit" loading={busy} className="w-full">
         {t.auth.createAccount}

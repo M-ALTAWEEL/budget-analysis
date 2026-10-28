@@ -22,6 +22,7 @@ from app.core.security import (
     hash_token,
     verify_password,
 )
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.group.model import GroupMember
 from app.domain.user.model import OneTimeToken, SecurityEvent, User, UserIdentity, UserSession
 from app.domain.user.repository import (
@@ -87,6 +88,7 @@ class AuthService:
     async def register(self, data: RegisterRequest) -> IssuedTokens:
         if await self.users.get_by_email(data.email):
             raise self._email_taken()
+        await CurrencyCatalog(self.session).require_offered(data.base_currency)
 
         user = User(
             email=data.email,
@@ -152,7 +154,9 @@ class AuthService:
                     email_verified_at=now,
                     password_hash=None,
                     full_name=(identity.name or identity.email.split("@")[0])[:100],
-                    base_currency=data.base_currency,
+                    base_currency=await CurrencyCatalog(self.session).offered_or_default(
+                        data.base_currency
+                    ),
                     locale=data.locale,
                 )
                 self.users.add(user)
@@ -516,6 +520,10 @@ class UserService:
             )
             if taken:
                 raise _username_taken()
+        catalog = CurrencyCatalog(self.session)
+        for field in ("base_currency", "secondary_currency"):
+            if changes.get(field) is not None:
+                await catalog.require_offered(changes[field], current=getattr(user, field))
         for field, value in changes.items():
             setattr(user, field, value)
         if "full_name" in changes:

@@ -18,7 +18,6 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dates import BudgetCalendar, format_month
-from app.core.money import Currency
 from app.domain.budget.model import Budget, Category
 from app.domain.currency.service import CurrencyService
 from app.domain.expense.model import Expense
@@ -71,7 +70,7 @@ class ShareCopies:
             return False
         category = await self._default_category(expense.category_slug)
         amount_base, rate = await self.currency.convert(
-            share.amount, Currency(group.currency), Currency(budget.currency)
+            share.amount, group.currency, budget.currency
         )
         copy = Expense(
             user_id=member.user_id,
@@ -105,7 +104,7 @@ class ShareCopies:
             await self._drop_copy(share)
             return
         amount_base, rate = await self.currency.convert(
-            share.amount, Currency(group.currency), Currency(budget.currency)
+            share.amount, group.currency, budget.currency
         )
         copy.amount = share.amount
         copy.currency = group.currency

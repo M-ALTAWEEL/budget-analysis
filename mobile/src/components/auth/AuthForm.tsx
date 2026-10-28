@@ -6,12 +6,13 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { PhoneSignIn } from "@/components/auth/PhoneSignIn";
 import { useAuthConfig } from "@/components/auth/useAuthConfig";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { WEBSITE_URL } from "@/lib/api";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 function Link({ label, onPress }: { label: string; onPress: () => void }) {
   return (
@@ -128,12 +129,7 @@ export function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
         value={password}
         onChangeText={setPassword}
       />
-      <Select
-        label={t.auth.currency}
-        value={currency}
-        options={CURRENCIES.map((code) => ({ value: code, label: `${t.currencies[code]} (${code})` }))}
-        onChange={setCurrency}
-      />
+      <CurrencySelect label={t.auth.currency} value={currency} onChange={setCurrency} />
       <FormError message={error} />
       <Button onPress={submit} loading={busy}>{t.auth.createAccount}</Button>
       <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 4, alignItems: "center" }}>

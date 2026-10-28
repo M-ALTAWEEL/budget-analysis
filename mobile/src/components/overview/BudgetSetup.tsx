@@ -3,7 +3,8 @@ import { View } from "react-native";
 
 import { useAuth, useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Card } from "@/components/ui/Layout";
 import { Text } from "@/components/ui/Text";
 import { toast } from "@/components/ui/Toast";
@@ -13,7 +14,7 @@ import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount } from "@/lib/money";
 import { shiftMonth } from "@/lib/month";
 import { getMe } from "@/services/auth";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 /** Shown when the month has no budget yet (the website's BudgetSetup). */
 export function BudgetSetup({ month }: { month: string }) {
@@ -91,11 +92,11 @@ export function BudgetSetup({ month }: { month: string }) {
             onChangeText={(text) => setTotal(text.replace(",", "."))}
             autoFocus
           />
-          <Select
+          <CurrencySelect
             style={{ width: 110 }}
             label={t.expenses.currency}
             value={currency}
-            options={CURRENCIES.map((code) => ({ value: code, label: code }))}
+            short
             onChange={setCurrency}
           />
         </View>

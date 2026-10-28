@@ -6,6 +6,7 @@ import { Pressable, TextInput, View } from "react-native";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { DateField } from "@/components/ui/DateField";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { Field, FormError, Select } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import { Text } from "@/components/ui/Text";
@@ -19,7 +20,7 @@ import {
   type GroupCategory, type GroupDetail, type GroupExpense, type SplitMethod,
 } from "@/services/groups";
 import { useColors } from "@/theme/ThemeProvider";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 const METHODS: SplitMethod[] = ["equal", "exact", "percent", "shares"];
 const VALUE_PATTERN = /^\d{1,10}(\.\d{1,4})?$/;
@@ -140,7 +141,7 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
       <View style={{ gap: 16 }}>
         <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-end" }}>
           <Field style={{ flex: 1 }} label={t.expenses.amount} keyboardType="decimal-pad" placeholder="0.00" value={amount} onChangeText={(text) => setAmount(text.replace(",", "."))} autoFocus={!expense} />
-          <Select style={{ width: 110 }} label={t.expenses.currency} value={currency} options={CURRENCIES.map((code) => ({ value: code, label: code }))} onChange={setCurrency} />
+          <CurrencySelect style={{ width: 110 }} label={t.expenses.currency} value={currency} keep={[group.currency, expense?.original_currency]} short onChange={setCurrency} />
         </View>
         {currency !== group.currency && <Text size={14} tone="muted">{t.groups.otherCurrency}</Text>}
 

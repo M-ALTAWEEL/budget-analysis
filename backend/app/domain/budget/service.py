@@ -7,7 +7,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dates import BudgetCalendar, format_month
-from app.core.money import Currency, to_money
+from app.core.money import to_money
 from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
 from app.domain.budget.schema import (
@@ -25,6 +25,7 @@ from app.domain.budget.schema import (
     WeekdayPatternRead,
 )
 from app.domain.budget.tips import busiest_weekday, repeated_purchases
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.expense.repository import ExpenseRepository
 from app.domain.user.model import User
 from app.ml.forecast import forecast_month
@@ -89,13 +90,14 @@ class BudgetService:
         self.expenses = ExpenseRepository(session)
 
     async def set_total(
-        self, user: User, month: date, total: Decimal, currency: Currency | None = None
+        self, user: User, month: date, total: Decimal, currency: str | None = None
     ) -> Budget:
         budget = await self.budgets.get_for_month(user.id, month)
         if budget is None:
             # The currency is fixed at creation: all of this month's expenses are
             # converted into it, so changing it later would mix currencies.
             if currency is not None and currency != user.base_currency:
+                await CurrencyCatalog(self.session).require_offered(currency)
                 # The student's allowance comes in this currency now: make it the
                 # default for new expenses and next months too.
                 user.base_currency = currency
@@ -183,7 +185,7 @@ class BudgetService:
         allocated = to_money(sum((a.limit_amount for a in budget.allocations), Decimal("0")))
         return BudgetSummary(
             month=format_month(month),
-            currency=Currency(budget.currency),
+            currency=budget.currency,
             total_amount=budget.total_amount,
             allocated=allocated,
             spent=spent,
@@ -220,7 +222,7 @@ class BudgetService:
 
         return DailySpending(
             month=format_month(month),
-            currency=Currency(budget.currency),
+            currency=budget.currency,
             total_amount=budget.total_amount,
             categories=[CategoryRead.model_validate(category) for category in categories],
             days=days,
@@ -249,7 +251,7 @@ class BudgetService:
 
         return Tips(
             month=format_month(month),
-            currency=Currency(budget.currency),
+            currency=budget.currency,
             repeated=[
                 RepeatedPurchaseRead(
                     label=r.label, category=by_id[r.category_id], count=r.count, total=r.total

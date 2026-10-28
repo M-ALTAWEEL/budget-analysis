@@ -1,17 +1,21 @@
 """Shared FastAPI dependencies. The single authentication boundary of the API."""
 
+import logging
 from dataclasses import dataclass
 from datetime import UTC, datetime, timedelta
 from typing import Annotated
 
 from fastapi import Depends, HTTPException, Request, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
+from limits import parse
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.client_ip import client_country
 from app.core.device import describe_device
+from app.core.limiter import limiter
 from app.core.security import decode_access_token
 from app.database import get_db
+from app.domain.admin.repository import AdminRepository
 from app.domain.user.model import User, UserSession
 from app.domain.user.repository import UserRepository
 from app.domain.user.service import ClientInfo
@@ -74,6 +78,39 @@ async def get_recent_auth(auth: Annotated[Auth, Depends(get_current_auth)]) -> A
     return auth
 
 
+# ── the admin dashboard (docs/design/admin.md) ───────────────────────────────
+
+logger = logging.getLogger("app.admin")
+# Not an admin: the same answer as a page that doesn't exist, so a signed-in visitor can't
+# even tell the admin API is there.
+NOT_FOUND = "Not Found"
+ADMIN_2FA_REQUIRED = "admin_2fa_required"  # the website says "turn on 2FA first"
+# Repeated tries by one account are worth a look: reported to Sentry (an error log).
+DENIED_ALERT = parse("5/hour")
+
+
+async def get_admin(auth: Annotated[Auth, Depends(get_current_auth)], db: DbSession) -> Auth:
+    """Admins only, and only with two-factor authentication on. Not signed in: 401 like
+    any other endpoint (the browser renews its token on a 401)."""
+    if not await AdminRepository(db).is_admin(auth.user.id):
+        fields = {"user": auth.user.uuid}
+        logger.warning("admin access denied", extra={"fields": fields})
+        try:
+            if not limiter.limiter.hit(DENIED_ALERT, "admin-denied", auth.user.uuid):
+                logger.error("repeated admin access denied", extra={"fields": fields})
+        except Exception:  # the counter store is down: the warning above is enough
+            pass
+        raise HTTPException(status.HTTP_404_NOT_FOUND, NOT_FOUND)
+    if not auth.user.two_factor_enabled:
+        raise HTTPException(status.HTTP_403_FORBIDDEN, ADMIN_2FA_REQUIRED)
+    return auth
+
+
+async def get_admin_recent(auth: Annotated[Auth, Depends(get_admin)]) -> Auth:
+    """Admin actions (disable, sign out, ...): also proved it's them in the last 10 minutes."""
+    return await get_recent_auth(auth)
+
+
 def get_client_info(request: Request) -> ClientInfo:
     app = request.headers.get("x-client")
     return ClientInfo(
@@ -90,3 +127,5 @@ CurrentAuth = Annotated[Auth, Depends(get_current_auth)]
 RecentAuth = Annotated[Auth, Depends(get_recent_auth)]
 CurrentUser = Annotated[User, Depends(get_current_user)]
 Client = Annotated[ClientInfo, Depends(get_client_info)]
+Admin = Annotated[Auth, Depends(get_admin)]
+AdminRecent = Annotated[Auth, Depends(get_admin_recent)]

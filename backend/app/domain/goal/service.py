@@ -6,7 +6,8 @@ from decimal import ROUND_UP, Decimal
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.money import Currency, to_money
+from app.core.money import to_money
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.goal.repository import GoalRepository
 from app.domain.goal.schema import (
@@ -51,7 +52,7 @@ def describe(goal: SavingsGoal, today: date) -> GoalRead:
         name=goal.name,
         icon=goal.icon,
         color=goal.color,
-        currency=Currency(goal.currency),
+        currency=goal.currency,
         target_amount=goal.target_amount,
         target_date=goal.target_date,
         saved=saved,
@@ -83,11 +84,13 @@ class GoalService:
         return self._detail(goal)
 
     async def create(self, user: User, data: GoalCreate) -> GoalDetail:
+        currency = data.currency or user.base_currency
+        await CurrencyCatalog(self.session).require_offered(currency, current=user.base_currency)
         goal = SavingsGoal(
             user_id=user.id,
             name=data.name,
             target_amount=to_money(data.target_amount),
-            currency=data.currency or user.base_currency,
+            currency=currency,
             target_date=data.target_date,
             icon=data.icon,
             color=data.color,

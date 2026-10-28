@@ -5,12 +5,13 @@ import { useState } from "react";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { createGroup, type GroupDetail } from "@/services/groups";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 export function CreateGroupSheet({
   onClose,
@@ -58,17 +59,7 @@ export function CreateGroupSheet({
           autoFocus
         />
         <div>
-          <Select
-            label={t.groups.currency}
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value as Currency)}
-          >
-            {CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {t.currencies[code]} ({code})
-              </option>
-            ))}
-          </Select>
+          <CurrencySelect label={t.groups.currency} value={currency} onChange={setCurrency} />
           <p className="mt-1.5 text-sm text-muted">{t.groups.currencyHint}</p>
         </div>
         <Field

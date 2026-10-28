@@ -15,6 +15,7 @@ from app.core.default_limit import DefaultRateLimitMiddleware
 from app.core.limiter import limiter
 from app.core.observability import RequestContextMiddleware, setup_logging, setup_sentry
 from app.database import get_db
+from app.domain.admin.router import router as admin_router
 from app.domain.assistant.router import router as assistant_router
 from app.domain.budget.router import budgets_router, categories_router
 from app.domain.currency.router import router as currency_router
@@ -122,6 +123,7 @@ def create_app() -> FastAPI:
     app.include_router(my_shares_router, prefix=settings.api_prefix)
     app.include_router(assistant_router, prefix=settings.api_prefix)
     app.include_router(push_devices_router, prefix=settings.api_prefix)
+    app.include_router(admin_router, prefix=settings.api_prefix)
 
     return app
 

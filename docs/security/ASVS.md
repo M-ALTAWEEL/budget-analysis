@@ -50,11 +50,11 @@ what the requirement asks, what we do, and where in the code it is.
 
 | Requirement | Status | How |
 |---|---|---|
-| Enforced on the server, deny by default (4.1.1, 4.1.3, 4.1.5) | ✅ | Every route needs `CurrentUser` unless it's public on purpose (sign-in, health, version) |
+| Enforced on the server, deny by default (4.1.1, 4.1.3, 4.1.5) | ✅ | Every route needs `CurrentUser` unless it's public on purpose (sign-in, health, version, the currency list) |
 | No IDOR (4.2.1) | ✅ | Personal data: every query filtered by user id, 404 for others. Groups: membership checked inside the query, 404 for non-members. Tests for each |
 | Roles can't be raised by the user (4.1.2, 4.2.2) | ✅ | Only the owner changes roles; checked on the server; tested |
 | Anti-CSRF (4.2.2) | ✅ | JSON API with a bearer token; the only cookie (refresh) is `SameSite=Lax` and same-site (the website forwards `/api/v1`) |
-| MFA for administrative access (4.3.1) | ➖ | No admin interface. Hosting dashboards (GitHub, Render, Vercel, Neon) use the owner's 2FA |
+| MFA for administrative access (4.3.1) | ✅ | The admin dashboard (`docs/design/admin.md`) answers 403 `admin_2fa_required` until the admin turns on 2FA, and actions need the password again within 10 minutes; tested in `test_admin.py`. Admins are made only from the command line. Hosting dashboards (GitHub, Render, Vercel, Neon) use the owner's 2FA |
 
 ## V5 Validation, sanitization and encoding
 

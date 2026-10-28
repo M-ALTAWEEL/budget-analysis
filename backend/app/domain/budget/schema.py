@@ -5,7 +5,7 @@ from decimal import Decimal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.core.money import Currency, NonNegativeMoney, PositiveMoney
+from app.core.money import CurrencyCode, NonNegativeMoney, PositiveMoney
 
 HEX_COLOR = r"^#[0-9A-Fa-f]{6}$"
 
@@ -54,7 +54,7 @@ class BudgetSet(BaseModel):
     total_amount: PositiveMoney
     # Only used when the month's budget is created (default: the user's main currency).
     # After that it is fixed: the month's expenses are already converted into it.
-    currency: Currency | None = None
+    currency: CurrencyCode | None = None
 
 
 class AllocationItem(BaseModel):
@@ -91,7 +91,7 @@ class DailySpending(BaseModel):
     fair comparisons ("by this day last month")."""
 
     month: str  # "2026-10"
-    currency: Currency
+    currency: CurrencyCode
     total_amount: Decimal  # the month's budget, so a chart can draw the even-pace line
     categories: list[CategoryRead]  # every category that appears in by_category
     days: list[DaySpending]
@@ -100,7 +100,7 @@ class DailySpending(BaseModel):
 
 class BudgetSummary(BaseModel):
     month: str  # "2026-10"
-    currency: Currency
+    currency: CurrencyCode
     total_amount: Decimal
     allocated: Decimal  # sum of all category limits
     spent: Decimal
@@ -125,6 +125,6 @@ class Tips(BaseModel):
     """Things worth knowing, from the student's own numbers. Empty when nothing stands out."""
 
     month: str
-    currency: Currency
+    currency: CurrencyCode
     repeated: list[RepeatedPurchaseRead]
     busiest_weekday: WeekdayPatternRead | None = None  # current month only, needs 4 weeks

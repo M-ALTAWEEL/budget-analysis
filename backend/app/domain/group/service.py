@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
 from app.core.security import generate_refresh_token, hash_token
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.group.ledger import member_net
 from app.domain.group.model import Group, GroupInvite, GroupMember, GroupRequest
 from app.domain.group.schema import (
@@ -59,6 +60,7 @@ class GroupService:
     # ── groups ───────────────────────────────────────────────────────────────
 
     async def create(self, user: User, data: GroupCreate) -> GroupDetail:
+        await CurrencyCatalog(self.session).require_offered(data.currency)
         group = Group(
             name=data.name,
             currency=data.currency,

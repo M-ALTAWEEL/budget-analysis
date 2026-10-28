@@ -4,13 +4,14 @@ import { View } from "react-native";
 
 import { useAuth } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { createGroup, type GroupDetail } from "@/services/groups";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 export function CreateGroupSheet({ onClose, onCreated }: { onClose: () => void; onCreated: (group: GroupDetail) => void }) {
   const { t } = useI18n();
@@ -42,12 +43,7 @@ export function CreateGroupSheet({ onClose, onCreated }: { onClose: () => void; 
       <View style={{ gap: 16 }}>
         <Field label={t.groups.name} placeholder={t.groups.namePlaceholder} maxLength={60} value={name} onChangeText={setName} autoFocus />
         <View>
-          <Select
-            label={t.groups.currency}
-            value={currency}
-            options={CURRENCIES.map((code) => ({ value: code, label: `${t.currencies[code]} (${code})` }))}
-            onChange={setCurrency}
-          />
+          <CurrencySelect label={t.groups.currency} value={currency} onChange={setCurrency} />
           <Text size={14} tone="muted" style={{ marginTop: 6 }}>{t.groups.currencyHint}</Text>
         </View>
         <Field

@@ -28,6 +28,7 @@ Related documents: [`SAD.docx`](SAD.docx) (architecture), [`design/accounts.md`]
 14. [Privacy and data rights](#14-privacy-and-data-rights)
 15. [Platform parity](#15-platform-parity)
 16. [Invariants checked by tests](#16-invariants-checked-by-tests)
+17. [Admin dashboard](#17-admin-dashboard)
 
 ---
 
@@ -73,7 +74,14 @@ Arabic (right-to-left) and Turkish.
 1. Money is always a **decimal**, never a floating-point number. Amounts have **2 decimal
    places**; rounding is **half-up** (2.345 → 2.35).
 2. Amounts are positive and at most **9,999,999,999.99**.
-3. Supported currencies: **TRY, USD, EUR, AED, SAR, QAR**.
+3. Supported currencies are rows in the **`currencies` table** (`app/domain/currency/catalog.py`),
+   with a name in each language. The app started with **TRY, USD, EUR, AED, SAR, QAR**;
+   admins add more (section 17), only ones the rates provider knows. A currency is never
+   removed, only **hidden**: a hidden currency isn't offered for anything newly chosen
+   (sign-up, main or second currency, a goal, a group, a budget or expense in another
+   currency), but whoever already uses it keeps it, and it still converts. TRY, the sign-up
+   default, can't be hidden. A sign-in with Google or a phone that makes a new account
+   falls back to TRY when the chosen currency isn't offered.
 4. Exchange rates have **8 decimal places**. They are fetched from the rates provider and
    cached in the database and in each server process for **12 hours**. If the provider is
    down, the most recent cached rates are used ("stale but available"); with no rates at
@@ -426,6 +434,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    copy**, copied from the website into the app by a script; CI fails if they drift.
 3. Platform-only features: app lock and push notifications (mobile), keyboard and large-screen
    layouts (web). Links sent by email open the website.
+4. The admin dashboard is **website only** (section 17).
 
 ## 16. Invariants checked by tests
 
@@ -441,3 +450,25 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | The forecast counts days from the start day and appears only within the current month | `test_budget_cycle.py`, `test_ml_forecast.py` |
 | Notifications reach the right people, in their language, and respect the switch | `test_push.py` |
 | Sign-in limits, session expiry and re-authentication | `test_auth.py`, `test_sessions.py`, `test_hardening.py` |
+| No request makes anyone an admin; non-admins get 404 on every admin address | `test_admin.py` |
+| Admins never see an amount, expense, budget or goal | `test_admin.py` |
+| A hidden currency can't be newly chosen, but stays usable and convertible for whoever has it | `test_admin_currencies.py` |
+| The exchange-rate URL only ever holds a three-letter code from our table | `test_currency.py` |
+
+## 17. Admin dashboard
+
+Full design: [`design/admin.md`](design/admin.md).
+
+1. **Who:** only the command line (`python -m app.cli grant-admin`) makes an admin, and it
+   needs the database URL. Admins need two-factor authentication.
+2. **What they see:** counts across everyone, and account information of one person (email,
+   phone, sign-in methods, devices, security activity). **Never** expenses, budgets, goals,
+   categories or groups.
+3. **What they do:** disable or enable an account, sign it out everywhere, resend the email
+   confirmation. Each needs the password again within 10 minutes, never applies to an admin
+   (themselves included), is written to the audit log, and appears in the person's own
+   security activity.
+4. **Currencies:** admins add a currency (code plus its name in English, Arabic and Turkish)
+   and hide or show it again (section 3). Same rules: the password again within 10 minutes,
+   and every change in the audit log. The website and the app read the list from
+   `GET /currency/list`, so a new currency appears without a new release.

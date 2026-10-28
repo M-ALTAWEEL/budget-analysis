@@ -4,8 +4,9 @@ Alembic (migrations/env.py) and the test setup import this module.
 Add one line here for each new domain model file.
 """
 
+from app.domain.admin.model import AdminAuditLog, PlatformAdmin
 from app.domain.budget.model import Budget, BudgetAllocation, Category
-from app.domain.currency.model import ExchangeRate
+from app.domain.currency.model import ExchangeRate, SupportedCurrency
 from app.domain.expense.model import Expense
 from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.group.model import (
@@ -30,6 +31,7 @@ from app.domain.user.model import (
 )
 
 __all__ = [
+    "AdminAuditLog",
     "BackupCode",
     "Budget",
     "BudgetAllocation",
@@ -46,10 +48,12 @@ __all__ = [
     "GroupSettlement",
     "OneTimeToken",
     "PhoneCode",
+    "PlatformAdmin",
     "PushDevice",
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",
+    "SupportedCurrency",
     "User",
     "UserIdentity",
     "UserSession",

@@ -118,12 +118,27 @@ Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
 - [ ] Store requirements: Apple privacy labels, Google Play Data safety, in-app account deletion (done)
 - [ ] **TestFlight** for iPhone and a **closed test** on Google Play (12 testers for 14 days, required for new developer accounts)
 
+## Admin dashboard (website only) ✅
+Design in [`design/admin.md`](design/admin.md).
+- [x] Admins made only from the command line (`python -m app.cli grant-admin`), never by a request
+- [x] 2FA required, the password again for actions, 404 for everyone else, tight rate limits
+- [x] Overview (counts only, no money), users (search, account details, devices, security activity), system status, audit log
+- [x] Actions: disable / enable, sign out everywhere, resend email confirmation; each audited and shown to the person
+- [x] Currencies: the list moves into the database; admins add currencies (only ones the rates provider knows) and hide or show them, never delete; the website and app pickers read the list from the server
+- [ ] Privacy policy: a sentence that support can see account details (not budget data), checked by the owner
+
 ## Phase 7: Subscriptions, payments and coupons
 - [ ] An **entitlements** table: what is free and what is paid. Code asks "is this allowed?", never "did they pay?"
+  Sources: `apple`, `google`, `web` and `admin_grant`
 - [ ] **RevenueCat** with Apple In-App Purchase and Google Play Billing
 - [ ] Payments on the web (Paddle or iyzico; Stripe does not support Turkish companies)
 - [ ] **Coupons**: Apple Offer Codes, Google Promo Codes and web codes, including fully free codes for family
 - [ ] Paywall and a free trial
+- [ ] **Admin: free grants**: Premium for a fixed period or lifetime, with a reason; re-auth and audit log
+- [ ] **Admin: discount codes** (website only; inside the apps only Apple Offer Codes / Google Promo Codes are allowed): percent, fixed amount or free period; start and end dates; maximum uses; one per person; new subscribers only; per plan; bulk single-use codes; switch off at once; who used them
+- [ ] **Admin: subscriptions** on the user page (plan, source, status, renewal) and business stats (subscribers, MRR, conversions, code use), summarised from RevenueCat
+- [ ] **Admin: safety for money actions**: a second admin approves lifetime grants and big codes, daily caps, an email to all admins
+- [ ] (Maybe) announcement banner, feature flags, support inbox
 - [ ] **Business registration** (company or sole trader) and a bank account to receive store payouts
 
 ## Phase 8: Activation (all payments happen here), then launch

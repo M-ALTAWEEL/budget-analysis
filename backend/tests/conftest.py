@@ -22,7 +22,10 @@ from app.core.limiter import limiter
 from app.database import get_db
 from app.domain.budget.defaults import DEFAULT_CATEGORIES
 from app.domain.budget.model import Category
+from app.domain.currency.catalog import forget_currencies
 from app.domain.currency.client import get_fx_client
+from app.domain.currency.defaults import DEFAULT_CURRENCIES
+from app.domain.currency.model import SupportedCurrency
 from app.domain.currency.service import forget_rates
 from app.main import app
 from tests.fakes import FakeBreachChecker, FakeFxClient
@@ -71,6 +74,9 @@ async def db_session():
             await conn.run_sync(Base.metadata.create_all)
             # create_all makes empty tables; the migration's seed data has to be added here.
             await conn.execute(insert(Category), DEFAULT_CATEGORIES)
+            await conn.execute(
+                insert(SupportedCurrency), [{**c, "added_by": "seed"} for c in DEFAULT_CURRENCIES]
+            )
         _schema_ready = True
 
     connection = await engine.connect()
@@ -101,10 +107,13 @@ def _limits_off_after_each_test():
 
 @pytest.fixture(autouse=True)
 def _no_remembered_rates():
-    """Rates a process remembers (phase 4) must not leak from one test into the next."""
+    """Rates and currencies a process remembers must not leak from one test into the next
+    (each test's rows are rolled back)."""
     forget_rates()
+    forget_currencies()
     yield
     forget_rates()
+    forget_currencies()
 
 
 @pytest.fixture

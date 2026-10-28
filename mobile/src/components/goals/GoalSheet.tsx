@@ -5,7 +5,8 @@ import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
 import { COLOR_CHOICES, GOAL_ICON_CHOICES } from "@/components/ui/CategoryIcon";
 import { DateField } from "@/components/ui/DateField";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { IconColorPicker } from "@/components/ui/IconColorPicker";
 import { Preview } from "@/components/ui/Preview";
 import { Sheet } from "@/components/ui/Sheet";
@@ -15,7 +16,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount, toInputAmount } from "@/lib/money";
 import { todayISO } from "@/lib/month";
-import { CURRENCIES, type Currency, type Goal } from "@/types/api";
+import { type Currency, type Goal } from "@/types/api";
 
 /** Create a goal (goal = null) or edit one. */
 export function GoalSheet({ goal, onClose }: { goal: Goal | null; onClose: () => void }) {
@@ -88,12 +89,12 @@ export function GoalSheet({ goal, onClose }: { goal: Goal | null; onClose: () =>
             onChangeText={(text) => setTarget(text.replace(",", "."))}
           />
           {/* The currency is fixed once the goal exists: every deposit is in it. */}
-          <Select
+          <CurrencySelect
             style={{ width: 110 }}
             label={t.goals.currency}
             value={currency}
             disabled={goal !== null}
-            options={CURRENCIES.map((code) => ({ value: code, label: code }))}
+            short
             onChange={setCurrency}
           />
         </View>

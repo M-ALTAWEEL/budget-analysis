@@ -5,20 +5,15 @@ Money is ALWAYS a Decimal, never a float: floats are binary approximations
 """
 
 from decimal import ROUND_HALF_UP, Decimal
-from enum import StrEnum
 from typing import Annotated
 
 from pydantic import Field
 
-
-class Currency(StrEnum):
-    TRY = "TRY"  # Turkish Lira
-    USD = "USD"  # US Dollar
-    AED = "AED"  # UAE Dirham
-    SAR = "SAR"  # Saudi Riyal
-    QAR = "QAR"  # Qatari Riyal
-    EUR = "EUR"  # Euro
-
+# The currencies themselves live in the `currencies` table, so admins can add more
+# (app/domain/currency/catalog.py). Here only the shape: three capital letters (ISO 4217).
+CURRENCY_PATTERN = r"^[A-Z]{3}$"
+CurrencyCode = Annotated[str, Field(pattern=CURRENCY_PATTERN)]
+DEFAULT_CURRENCY = "TRY"  # sign-up default; it can't be hidden
 
 CENTS = Decimal("0.01")
 RATE_PLACES = Decimal("0.00000001")  # exchange rates keep 8 decimal places
