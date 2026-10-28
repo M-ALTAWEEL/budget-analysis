@@ -14,7 +14,7 @@ import { ProfileSection } from "@/components/settings/ProfileSection";
 import { SecuritySection } from "@/components/settings/SecuritySection";
 import { SettingsBlock } from "@/components/settings/SettingsBlock";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
-import { Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { Button } from "@/components/ui/Button";
 import { Card, Screen } from "@/components/ui/Layout";
 import { Text } from "@/components/ui/Text";
@@ -25,7 +25,7 @@ import { forgetPushDevice } from "@/lib/push";
 import { updateMe } from "@/services/auth";
 import { getVersion } from "@/services/system";
 import { ACCENTS, SWATCHES, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 const FLAG: Record<Locale, string> = { en: "🇬🇧", ar: "🇸🇦", tr: "🇹🇷" };
 const THEMES: { value: ThemePreference; icon: LucideIcon }[] = [
@@ -176,10 +176,9 @@ function MainCurrency() {
 
   return (
     <SettingsBlock title={t.settings.mainCurrency}>
-      <Select
+      <CurrencySelect
         label={t.settings.mainCurrencyHint}
         value={user.base_currency}
-        options={CURRENCIES.map((code) => ({ value: code, label: `${t.currencies[code]} (${code})` }))}
         onChange={(value) => void change(value)}
       />
       {error && <Text size={14} tone="berry" style={{ marginTop: 8 }}>{error}</Text>}
@@ -206,13 +205,11 @@ function SecondCurrency() {
 
   return (
     <SettingsBlock title={t.settings.secondCurrency}>
-      <Select<string>
+      <CurrencySelect
         label={t.settings.secondCurrencyHint}
         value={user.secondary_currency ?? ""}
-        options={[
-          { value: "", label: t.settings.none },
-          ...CURRENCIES.filter((code) => code !== user.base_currency).map((code) => ({ value: code, label: `${t.currencies[code]} (${code})` })),
-        ]}
+        exclude={user.base_currency}
+        none={t.settings.none}
         onChange={(value) => void change(value)}
       />
       {error && <Text size={14} tone="berry" style={{ marginTop: 8 }}>{error}</Text>}

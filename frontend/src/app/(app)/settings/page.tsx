@@ -12,7 +12,7 @@ import { ProfileSection } from "@/components/settings/ProfileSection";
 import { SecuritySection } from "@/components/settings/SecuritySection";
 import { useChangeLocale } from "@/components/settings/useChangeLocale";
 import { Button } from "@/components/ui/Button";
-import { Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { Flag } from "@/components/ui/Flag";
 import { LOCALES, LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -20,7 +20,7 @@ import { useErrorMessage } from "@/lib/errors";
 import { updateMe } from "@/services/auth";
 import { getVersion } from "@/services/system";
 import { ACCENTS, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 /** A row of large, tappable options where exactly one is chosen (a radio group). */
 function Choice({
@@ -193,17 +193,11 @@ function MainCurrency() {
       <h2 id="main-currency" className="mb-3 font-display text-lg font-semibold">
         {t.settings.mainCurrency}
       </h2>
-      <Select
+      <CurrencySelect
         label={t.settings.mainCurrencyHint}
         value={user.base_currency}
-        onChange={(e) => void change(e.target.value as Currency)}
-      >
-        {CURRENCIES.map((code) => (
-          <option key={code} value={code}>
-            {t.currencies[code]} ({code})
-          </option>
-        ))}
-      </Select>
+        onChange={(code) => void change(code)}
+      />
       {error && <p className="mt-2 text-sm text-berry">{error}</p>}
     </section>
   );
@@ -231,18 +225,14 @@ function SecondCurrency() {
       <h2 id="second-currency" className="mb-3 font-display text-lg font-semibold">
         {t.settings.secondCurrency}
       </h2>
-      <Select
+      <CurrencySelect
         label={t.settings.secondCurrencyHint}
         value={user.secondary_currency ?? ""}
-        onChange={(e) => void change(e.target.value)}
+        exclude={user.base_currency}
+        onChange={(code) => void change(code)}
       >
         <option value="">{t.settings.none}</option>
-        {CURRENCIES.filter((code) => code !== user.base_currency).map((code) => (
-          <option key={code} value={code}>
-            {t.currencies[code]} ({code})
-          </option>
-        ))}
-      </Select>
+      </CurrencySelect>
       {error && <p className="mt-2 text-sm text-berry">{error}</p>}
     </section>
   );

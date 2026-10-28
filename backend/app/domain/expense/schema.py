@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
-from app.core.money import Currency, PositiveMoney
+from app.core.money import CurrencyCode, PositiveMoney
 from app.domain.budget.schema import CategoryRead
 
 
@@ -21,7 +21,7 @@ class ExpenseCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     amount: PositiveMoney
-    currency: Currency | None = None  # default: the user's base currency
+    currency: CurrencyCode | None = None  # default: the user's base currency
     description: str = Field(min_length=1, max_length=200)
     category_uuid: str  # the frontend fills it in from /expenses/category-suggestion
     spent_at: date = Field(default_factory=date.today)
@@ -33,7 +33,7 @@ class ExpenseUpdate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     amount: PositiveMoney | None = None
-    currency: Currency | None = None
+    currency: CurrencyCode | None = None
     description: str | None = Field(default=None, min_length=1, max_length=200)
     category_uuid: str | None = None
     spent_at: date | None = None
@@ -53,7 +53,7 @@ class ExpenseRead(BaseModel):
 
     uuid: str
     amount: Decimal
-    currency: Currency
+    currency: CurrencyCode
     amount_base: Decimal  # in the budget currency of that month
     fx_rate: Decimal
     description: str

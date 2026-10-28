@@ -6,7 +6,8 @@ import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { DateField } from "@/components/ui/DateField";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import { Text } from "@/components/ui/Text";
 import { toast } from "@/components/ui/Toast";
@@ -17,7 +18,7 @@ import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount, toInputAmount } from "@/lib/money";
 import { todayISO } from "@/lib/month";
 import { useColors } from "@/theme/ThemeProvider";
-import { CURRENCIES, type Currency, type Expense } from "@/types/api";
+import { type Currency, type Expense } from "@/types/api";
 
 type SheetState = { open: false } | { open: true; expense: Expense | null };
 const SheetContext = createContext<((expense?: Expense) => void) | null>(null);
@@ -125,11 +126,12 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
             onChangeText={(text) => setAmount(text.replace(",", "."))}
             autoFocus={!expense}
           />
-          <Select
+          <CurrencySelect
             style={{ width: 110 }}
             label={t.expenses.currency}
             value={currency}
-            options={CURRENCIES.map((code) => ({ value: code, label: code }))}
+            keep={[user.base_currency]}
+            short
             onChange={setCurrency}
           />
         </View>

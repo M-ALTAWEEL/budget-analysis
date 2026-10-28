@@ -5,14 +5,15 @@ import { toast } from "sonner";
 
 import { useAuth, useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { useCategories, useSetAllocations, useSetBudget, useSummary } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount } from "@/lib/money";
 import { shiftMonth } from "@/lib/month";
 import { getMe } from "@/services/auth";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 /** Shown when the month has no budget yet. */
 export function BudgetSetup({ month }: { month: string }) {
@@ -96,17 +97,13 @@ export function BudgetSetup({ month }: { month: string }) {
             autoFocus
             required
           />
-          <Select
+          <CurrencySelect
             label={t.expenses.currency}
             value={currency}
-            onChange={(e) => setCurrency(e.target.value as Currency)}
-          >
-            {CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {code}
-              </option>
-            ))}
-          </Select>
+            onChange={setCurrency}
+            keep={[user?.base_currency]}
+            short
+          />
         </div>
         <p className="text-sm text-muted">{t.setup.currencyHint}</p>
         <FormError message={error} />

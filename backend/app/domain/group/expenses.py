@@ -19,7 +19,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.money import Currency, to_rate
+from app.core.money import to_rate
 from app.domain.currency.client import ExchangeRateClient
 from app.domain.currency.service import CurrencyService
 from app.domain.group.model import (
@@ -123,13 +123,14 @@ class GroupExpenseService:
         payer = usable(data.paid_by) if data.paid_by else me
         people = [usable(share.member) for share in data.shares]
 
-        paid_in = data.currency or Currency(group.currency)
-        if paid_in.value == group.currency:
+        paid_in = data.currency or group.currency
+        # A hidden currency stays usable where it's already in use (this group, this expense).
+        if paid_in not in (group.currency, expense.original_currency):
+            await self.currency.catalog.require_offered(paid_in)
+        if paid_in == group.currency:
             amount, rate = data.amount, to_rate(1)
         else:
-            amount, rate = await self.currency.convert(
-                data.amount, paid_in, Currency(group.currency)
-            )
+            amount, rate = await self.currency.convert(data.amount, paid_in, group.currency)
 
         typed = [share.value for share in data.shares]
         if data.split_method == "equal":
@@ -145,7 +146,7 @@ class GroupExpenseService:
         expense.category_slug = data.category
         expense.amount = amount
         expense.original_amount = data.amount
-        expense.original_currency = paid_in.value
+        expense.original_currency = paid_in
         expense.fx_rate = rate
         expense.split_method = data.split_method
         expense.spent_at = data.spent_at

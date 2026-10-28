@@ -247,14 +247,6 @@ export const tr: Messages = {
     settleFirst: "Ayrılmadan önce hesabı kapat: bakiyen sıfır değil.",
   },
 
-  currencies: {
-    TRY: "Türk lirası",
-    USD: "ABD doları",
-    AED: "BAE dirhemi",
-    SAR: "Suudi riyali",
-    QAR: "Katar riyali",
-    EUR: "Euro",
-  },
 
   month: {
     previous: "Önceki ay",
@@ -540,6 +532,7 @@ export const tr: Messages = {
         "2fa_disabled": "İki adımlı doğrulama kapatıldı",
         backup_codes_created: "Yeni yedek kodlar oluşturuldu",
         backup_code_used: "Bir yedek kod kullanıldı",
+        admin_action: "Budget Analysis destek ekibinin hesabında yaptığı işlem",
       } as Record<string, string>,
       otherEvent: "Güvenlik değişikliği",
     },

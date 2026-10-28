@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { Field, FormError, Select } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import { LOCALE_INFO } from "@/i18n/config";
@@ -23,7 +24,7 @@ import {
   type GroupExpense,
   type SplitMethod,
 } from "@/services/groups";
-import { CURRENCIES, type Currency } from "@/types/api";
+import type { Currency } from "@/types/api";
 
 const METHODS: SplitMethod[] = ["equal", "exact", "percent", "shares"];
 const VALUE_PATTERN = /^\d{1,10}(\.\d{1,4})?$/;
@@ -173,13 +174,13 @@ export function GroupExpenseSheet({
             autoFocus
             required
           />
-          <Select label={t.expenses.currency} value={currency} onChange={(e) => setCurrency(e.target.value as Currency)}>
-            {CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {code}
-              </option>
-            ))}
-          </Select>
+          <CurrencySelect
+            label={t.expenses.currency}
+            value={currency}
+            onChange={setCurrency}
+            keep={[group.currency, expense?.original_currency]}
+            short
+          />
         </div>
         {currency !== group.currency && <p className="text-sm text-muted">{t.groups.otherCurrency}</p>}
 

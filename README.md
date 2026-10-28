@@ -69,7 +69,7 @@ flowchart LR
   A -.->|"checks the signature"| G
 ```
 
-The backend is split by domain (`user`, `budget`, `expense`, `goal`, `currency`, `assistant`), each with its model, schema, repository, service and router.
+The backend is split by domain (`user`, `budget`, `expense`, `goal`, `currency`, `assistant`, `group`, `notify`, `admin`), each with its model, schema, repository, service and router.
 
 ## Engineering notes
 
@@ -103,6 +103,12 @@ npm run dev                         # http://localhost:3000
 ```
 
 Sign in with Google is optional: set `GOOGLE_CLIENT_ID` in `backend/.env` (see the comment in `.env.example`). Without it the button is simply hidden.
+
+**Admin dashboard** (website only, `/admin`): make an account an admin from the command line, then turn on two-factor authentication for it in Settings. Details: [`docs/design/admin.md`](docs/design/admin.md).
+
+```bash
+docker compose exec api python -m app.cli grant-admin you@example.com --by yourname
+```
 
 ### Tests
 

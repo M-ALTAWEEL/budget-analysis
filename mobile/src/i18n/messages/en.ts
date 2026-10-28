@@ -245,14 +245,6 @@ export const en = {
     settleFirst: "Settle up before leaving: your balance isn't zero.",
   },
 
-  currencies: {
-    TRY: "Turkish lira",
-    USD: "US dollar",
-    AED: "UAE dirham",
-    SAR: "Saudi riyal",
-    QAR: "Qatari riyal",
-    EUR: "Euro",
-  },
 
   month: {
     previous: "Previous month",
@@ -544,6 +536,7 @@ export const en = {
         "2fa_disabled": "Two-factor turned off",
         backup_codes_created: "New backup codes created",
         backup_code_used: "A backup code was used",
+        admin_action: "Account action by Budget Analysis support",
       } as Record<string, string>,
       otherEvent: "Security change",
     },

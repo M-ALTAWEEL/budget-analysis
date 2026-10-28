@@ -2,7 +2,6 @@
 
 from decimal import Decimal
 
-from app.core.money import Currency
 from app.domain.currency.client import FxUnavailableError
 
 # Value of 1 USD in each currency (realistic numbers, fixed so tests are predictable).
@@ -14,6 +13,8 @@ USD_RATES = {
     "QAR": Decimal("3.64"),
     "EUR": Decimal("0.92"),
 }
+# The provider knows more currencies than we offer: admins can add these.
+PROVIDER_RATES = {**USD_RATES, "JPY": Decimal("150"), "GBP": Decimal("0.79")}
 
 
 class FakeFxClient:
@@ -23,11 +24,15 @@ class FakeFxClient:
         self.calls = 0
         self.fail = False  # set True to simulate the provider being down
 
-    async def fetch_rates(self, base: Currency) -> dict[str, Decimal]:
+    async def fetch_all(self, base: str) -> dict[str, Decimal]:
         self.calls += 1
         if self.fail:
             raise FxUnavailableError("simulated outage")
-        return {quote: rate / USD_RATES[base.value] for quote, rate in USD_RATES.items()}
+        return {quote: rate / PROVIDER_RATES[base] for quote, rate in PROVIDER_RATES.items()}
+
+    async def fetch_rates(self, base: str, quotes: set[str]) -> dict[str, Decimal]:
+        rates = await self.fetch_all(base)
+        return {quote: rates[quote] for quote in quotes}
 
 
 class FakeEmailSender:

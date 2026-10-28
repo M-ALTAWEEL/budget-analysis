@@ -6,7 +6,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
-from app.core.money import Currency
+from app.core.money import DEFAULT_CURRENCY, CurrencyCode
 
 Locale = Literal["en", "ar", "tr"]
 
@@ -29,7 +29,7 @@ class RegisterRequest(BaseModel):
     email: EmailStr
     password: str = Field(min_length=8, max_length=72)
     full_name: str = Field(min_length=1, max_length=100)
-    base_currency: Currency = Currency.TRY
+    base_currency: CurrencyCode = DEFAULT_CURRENCY
     locale: Locale = "en"  # the language picked on the sign-up page
 
     _lower_email = field_validator("email")(_normalize_email)
@@ -40,7 +40,7 @@ class RegisterRequest(BaseModel):
 class GoogleSignInRequest(BaseModel):
     credential: str = Field(min_length=1, max_length=4096)  # the ID token from Google
     # Used only when this creates a new account (what the sign-up form would ask):
-    base_currency: Currency = Currency.TRY
+    base_currency: CurrencyCode = DEFAULT_CURRENCY
     locale: Locale = "en"
 
 
@@ -139,7 +139,7 @@ class PhoneVerifyRequest(BaseModel):
     phone: str = Field(min_length=6, max_length=20)
     code: str = Field(min_length=6, max_length=6, pattern=r"^\d{6}$")
     # Used only when this creates a new account:
-    base_currency: Currency = Currency.TRY
+    base_currency: CurrencyCode = DEFAULT_CURRENCY
     locale: Locale = "en"
 
 
@@ -179,8 +179,8 @@ class UserRead(BaseModel):
     two_factor_enabled: bool
     full_name: str
     username: str | None = None
-    base_currency: Currency
-    secondary_currency: Currency | None
+    base_currency: CurrencyCode
+    secondary_currency: CurrencyCode | None
     locale: Locale
     month_start_day: int = 1
     fresh_start_on: date | None = None
@@ -195,8 +195,8 @@ class UserUpdate(BaseModel):
 
     full_name: str | None = Field(default=None, min_length=1, max_length=100)
     username: str | None = None  # null removes it
-    base_currency: Currency | None = None
-    secondary_currency: Currency | None = None  # null clears it
+    base_currency: CurrencyCode | None = None
+    secondary_currency: CurrencyCode | None = None  # null clears it
     locale: Locale | None = None
     month_start_day: int | None = Field(default=None, ge=1, le=28)
     fresh_start_on: date | None = None  # null shows the old months again

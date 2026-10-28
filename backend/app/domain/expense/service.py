@@ -7,7 +7,7 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dates import BudgetCalendar, format_month
-from app.core.money import Currency, to_money
+from app.core.money import to_money
 from app.domain.budget.model import Category
 from app.domain.budget.repository import BudgetRepository, CategoryRepository
 from app.domain.currency.client import ExchangeRateClient
@@ -31,7 +31,8 @@ class ExpenseService:
 
     async def create(self, user: User, data: ExpenseCreate) -> Expense:
         category = await self._category(user, data.category_uuid)
-        currency = data.currency or Currency(user.base_currency)
+        currency = data.currency or user.base_currency
+        await self.currency.catalog.require_offered(currency, current=user.base_currency)
         amount = to_money(data.amount)
         amount_base, rate = await self._to_budget_currency(user, amount, currency, data.spent_at)
 
@@ -96,7 +97,8 @@ class ExpenseService:
         # Amount, currency or date changed -> convert again with the right month's budget.
         if changes.keys() & {"amount", "currency", "spent_at"}:
             amount = to_money(changes.get("amount", expense.amount))
-            currency = Currency(changes.get("currency", expense.currency))
+            currency = changes.get("currency") or expense.currency
+            await self.currency.catalog.require_offered(currency, current=expense.currency)
             spent_at = changes.get("spent_at", expense.spent_at)
             amount_base, rate = await self._to_budget_currency(user, amount, currency, spent_at)
             expense.amount = amount
@@ -136,7 +138,7 @@ class ExpenseService:
         return category
 
     async def _to_budget_currency(
-        self, user: User, amount: Decimal, currency: Currency, spent_at: date
+        self, user: User, amount: Decimal, currency: str, spent_at: date
     ) -> tuple[Decimal, Decimal]:
         month = BudgetCalendar.of(user).month_of(spent_at)
         budget = await self.budgets.get_for_month(user.id, month)
@@ -145,4 +147,4 @@ class ExpenseService:
                 status.HTTP_409_CONFLICT,
                 f"Set a budget for {format_month(month)} before adding expenses to it.",
             )
-        return await self.currency.convert(amount, currency, Currency(budget.currency))
+        return await self.currency.convert(amount, currency, budget.currency)

@@ -258,14 +258,6 @@ export const ar: Messages = {
     settleFirst: "سدّد حسابك قبل المغادرة: رصيدك ليس صفراً.",
   },
 
-  currencies: {
-    TRY: "الليرة التركية",
-    USD: "الدولار الأمريكي",
-    AED: "الدرهم الإماراتي",
-    SAR: "الريال السعودي",
-    QAR: "الريال القطري",
-    EUR: "اليورو",
-  },
 
   month: {
     previous: "الشهر السابق",
@@ -559,6 +551,7 @@ export const ar: Messages = {
         "2fa_disabled": "تم إيقاف المصادقة الثنائية",
         backup_codes_created: "تم إنشاء رموز احتياطية جديدة",
         backup_code_used: "تم استخدام رمز احتياطي",
+        admin_action: "إجراء على حسابك من فريق دعم Budget Analysis",
       } as Record<string, string>,
       otherEvent: "تغيير أمني",
     },

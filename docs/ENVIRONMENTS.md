@@ -114,3 +114,19 @@ Production **refuses to start** with `console`: anyone reading the logs could si
 - The **Android signing keystore** is generated and stored by EAS. Its SHA-1 and SHA-256
   fingerprints (public) are needed for Google sign-in and App Links.
 - Developers sign in to the CLI with an Expo access token in `EXPO_TOKEN`, never written in chat.
+
+### 12. Admins (admin dashboard)
+Admins are made **only from the command line**, which needs that environment's
+`DATABASE_URL`. No page or request can make one (`docs/design/admin.md`).
+
+| Environment | How |
+|---|---|
+| Local | `docker compose exec api python -m app.cli grant-admin <email> --by <your name>` |
+| Staging / production | Render's free plan has no shell: from a developer machine, `cd backend` and run `python -m app.cli grant-admin <email> --by <your name>` with `DATABASE_URL` set to that environment's Neon URL **for that command only** (never saved in a file) |
+
+- Also: `revoke-admin <email> --by <name>` and `list-admins`. Every grant and revoke is in the
+  audit log.
+- The person must already have an account, and must turn on **two-factor authentication**
+  before the dashboard (`/admin`) opens.
+- Migrations add the `platform_admins`, `admin_audit_log` and `currencies` tables (the
+  last one starts with the six built-in currencies); they run on deploy like any other.

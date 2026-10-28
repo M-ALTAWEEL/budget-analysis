@@ -7,7 +7,8 @@ from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
-from app.core.money import Currency, to_money, to_rate
+from app.core.money import to_money, to_rate
+from app.domain.currency.catalog import CurrencyCatalog
 from app.domain.currency.client import ExchangeRateClient, FxUnavailableError
 from app.domain.currency.repository import ExchangeRateRepository
 
@@ -27,55 +28,66 @@ class CurrencyService:
         self.session = session
         self.client = client
         self.rates = ExchangeRateRepository(session)
+        self.catalog = CurrencyCatalog(session)
 
-    async def get_rates(self, base: Currency) -> dict[str, Decimal]:
-        """Rates from `base` to every supported currency.
+    async def get_rates(self, base: str, need: str | None = None) -> dict[str, Decimal]:
+        """Rates from `base` to every currency in the `currencies` table (`need`: one
+        quote that must be among them).
 
         0. This process saw fresh rates      -> use them, no query (phase 4).
         1. Fresh cache (younger than FX_CACHE_HOURS)  -> use it, no network call.
         2. Otherwise ask the provider and update the cache.
         3. Provider down -> use the old cache if we have one ("stale but available").
         4. No cache at all -> 503.
+        A currency an admin just added isn't in the cache yet: the rates are fetched again.
         """
+        await self.catalog.require_known(base)
+        codes = await self.catalog.all(including=need)
         now = datetime.now(UTC)
         max_age = timedelta(hours=settings.fx_cache_hours)
-        remembered = _memory.get(base.value)
-        if remembered is not None and now - remembered[0] < max_age:
+        remembered = _memory.get(base)
+        if (
+            remembered is not None
+            and now - remembered[0] < max_age
+            and remembered[1].keys() >= codes
+        ):
             return remembered[1]  # 0. this process already has fresh rates: no query at all
 
-        cached = await self.rates.list_for_base(base.value)
+        cached = await self.rates.list_for_base(base)
 
-        complete = {row.quote for row in cached} >= {c.value for c in Currency}
+        complete = {row.quote for row in cached} >= codes
         if complete and all(now - row.fetched_at < max_age for row in cached):
             rates = {row.quote: row.rate for row in cached}
-            _memory[base.value] = (min(row.fetched_at for row in cached), rates)
+            _memory[base] = (min(row.fetched_at for row in cached), rates)
             return rates
 
         try:
-            fetched = await self.client.fetch_rates(base)
+            fetched = await self.client.fetch_rates(base, codes)
         except FxUnavailableError:
-            if complete:
-                return {row.quote: row.rate for row in cached}
+            # Old rates are better than none, also when only a just-added currency is missing
+            # and the caller needs another one.
+            stale = {row.quote: row.rate for row in cached}
+            if complete or (need is not None and need in stale):
+                return stale
             raise HTTPException(
                 status.HTTP_503_SERVICE_UNAVAILABLE,
                 "Exchange rates are temporarily unavailable. Try again later.",
             ) from None
 
         rounded = {quote: to_rate(rate) for quote, rate in fetched.items()}
-        await self.rates.save_rates(base.value, rounded, now)
+        await self.rates.save_rates(base, rounded, now)
         await self.session.commit()
-        _memory[base.value] = (now, rounded)
+        _memory[base] = (now, rounded)
         return rounded
 
-    async def get_rate(self, base: Currency, quote: Currency) -> Decimal:
+    async def get_rate(self, base: str, quote: str) -> Decimal:
         if base == quote:
             return to_rate(1)
-        rates = await self.get_rates(base)
-        return rates[quote.value]
+        await self.catalog.require_known(quote)
+        rates = await self.get_rates(base, need=quote)
+        return rates[quote]
 
-    async def convert(
-        self, amount: Decimal, source: Currency, target: Currency
-    ) -> tuple[Decimal, Decimal]:
+    async def convert(self, amount: Decimal, source: str, target: str) -> tuple[Decimal, Decimal]:
         """Return (converted amount, rate used). The rate is stored with the expense
         as a snapshot, so later rate changes never rewrite history."""
         rate = await self.get_rate(source, target)

@@ -8,7 +8,8 @@ import { toast } from "sonner";
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
-import { Field, FormError, Select } from "@/components/ui/Field";
+import { CurrencySelect } from "@/components/ui/CurrencySelect";
+import { Field, FormError } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
 import {
   useCategories,
@@ -21,7 +22,7 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { isValidAmount, toInputAmount } from "@/lib/money";
 import { todayISO } from "@/lib/month";
-import { CURRENCIES, type Currency, type Expense } from "@/types/api";
+import { type Currency, type Expense } from "@/types/api";
 
 // ── Context: any screen can open the sheet, to add or to edit ───────────────
 
@@ -144,17 +145,13 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
             autoFocus
             required
           />
-          <Select
+          <CurrencySelect
             label={t.expenses.currency}
             value={currency}
-            onChange={(e) => setCurrency(e.target.value as Currency)}
-          >
-            {CURRENCIES.map((code) => (
-              <option key={code} value={code}>
-                {code}
-              </option>
-            ))}
-          </Select>
+            onChange={setCurrency}
+            keep={[user?.base_currency]}
+            short
+          />
         </div>
 
         <Field

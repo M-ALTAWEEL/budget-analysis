@@ -7,14 +7,14 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.core.money import Currency, PositiveMoney
+from app.core.money import CurrencyCode, PositiveMoney
 
 
 class GroupCreate(BaseModel):
     model_config = ConfigDict(str_strip_whitespace=True)
 
     name: str = Field(min_length=1, max_length=60)
-    currency: Currency
+    currency: CurrencyCode
     member_limit: int = Field(default=10, ge=2, le=100)
 
 
@@ -43,7 +43,7 @@ class MemberRead(BaseModel):
 class GroupSummary(BaseModel):
     uuid: str
     name: str
-    currency: Currency
+    currency: CurrencyCode
     member_limit: int
     member_count: int
     my_role: Literal["owner", "admin", "member"]
@@ -108,7 +108,7 @@ class GroupExpenseInput(BaseModel):
     description: str = Field(min_length=1, max_length=200)
     category: CategorySlug = "other"
     amount: PositiveMoney
-    currency: Currency | None = None  # what it was paid in; default: the group's currency
+    currency: CurrencyCode | None = None  # what it was paid in; default: the group's currency
     paid_by: str | None = None  # a member's uuid; default: me
     spent_at: date = Field(default_factory=date.today)
     split_method: SplitMethod = "equal"
@@ -156,7 +156,7 @@ class GroupExpenseRead(BaseModel):
     category: str
     amount: Decimal  # in the group's currency
     original_amount: Decimal
-    original_currency: Currency
+    original_currency: CurrencyCode
     split_method: SplitMethod
     spent_at: date
     paid_by: MemberRef
@@ -206,7 +206,7 @@ class PendingShareRead(BaseModel):
     group_name: str
     description: str
     amount: Decimal
-    currency: Currency
+    currency: CurrencyCode
     spent_at: date
 
 
@@ -262,7 +262,7 @@ class MemberBalance(BaseModel):
 
 
 class BalancesRead(BaseModel):
-    currency: Currency
+    currency: CurrencyCode
     debts: list[DebtRead]  # who owes whom, after everything paid back
     members: list[MemberBalance]
     my_net: Decimal
