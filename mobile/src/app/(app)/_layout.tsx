@@ -22,6 +22,7 @@ export default function AppLayout() {
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="categories" />
+            <Stack.Screen name="expenses-category" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>

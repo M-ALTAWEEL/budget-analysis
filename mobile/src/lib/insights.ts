@@ -126,3 +126,26 @@ export function findAlerts(summary: BudgetSummary, month: string): Alert[] {
   const rank = { critical: 0, warning: 1 };
   return alerts.sort((a, b) => rank[a.severity] - rank[b.severity]);
 }
+
+export interface CategoryShare {
+  category: Category;
+  spent: number; // in the budget's currency
+  share: number; // of the month's spending, 0..1 (all shares add up to 1)
+}
+
+/** Where the month's money went, biggest first (the expenses page's bar and tiles). */
+export function categoryShares(summary: BudgetSummary): CategoryShare[] {
+  const rows = summary.categories
+    .map((row) => ({ category: row.category, spent: Number(row.spent) }))
+    .filter((row) => row.spent > 0);
+  const total = rows.reduce((sum, row) => sum + row.spent, 0);
+  if (total <= 0) return [];
+  return rows
+    .map((row) => ({ ...row, share: row.spent / total }))
+    .sort((a, b) => b.spent - a.spent);
+}
+
+/** "9%", or "<1%" for a sliver, so a category that was used never shows as 0%. */
+export function shareLabel(share: number, percent: (ratio: number) => string): string {
+  return share > 0 && share < 0.01 ? `<${percent(0.01)}` : percent(share);
+}
