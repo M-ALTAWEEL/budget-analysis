@@ -32,7 +32,7 @@ class FakeFxClient:
 
     async def fetch_rates(self, base: str, quotes: set[str]) -> dict[str, Decimal]:
         rates = await self.fetch_all(base)
-        return {quote: rates[quote] for quote in quotes}
+        return {quote: rates[quote] for quote in quotes if quote in rates}
 
 
 class FakeEmailSender:

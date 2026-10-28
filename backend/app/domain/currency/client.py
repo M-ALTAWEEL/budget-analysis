@@ -4,6 +4,7 @@ Provider: ExchangeRate-API open access endpoint (https://www.exchangerate-api.co
 free and without an API key. Rates update once a day.
 """
 
+import logging
 import re
 from decimal import Decimal, InvalidOperation
 
@@ -11,6 +12,8 @@ import httpx
 
 from app.config import settings
 from app.core.money import CURRENCY_PATTERN
+
+logger = logging.getLogger("app.fx")
 
 
 class FxUnavailableError(Exception):
@@ -47,12 +50,16 @@ class ExchangeRateClient:
             raise FxUnavailableError(str(exc)) from exc
 
     async def fetch_rates(self, base: str, quotes: set[str]) -> dict[str, Decimal]:
-        """Return {quote: rate} for each of `quotes` (our currencies)."""
+        """Return {quote: rate} for each of `quotes` (our currencies) the provider has. A
+        currency it stops quoting is left out and logged, so one missing code never stops
+        conversion between all the others."""
         rates = await self.fetch_all(base)
-        try:
-            return {quote: rates[quote] for quote in quotes}
-        except KeyError as exc:
-            raise FxUnavailableError(f"The provider has no rate for {exc}") from exc
+        missing = len(quotes - rates.keys())
+        if missing:
+            # Only a count: the codes came through a request and the provider's answer, and
+            # a log line never carries such text (CodeQL "log injection").
+            logger.warning("fx provider has no rate", extra={"fields": {"missing": missing}})
+        return {quote: rates[quote] for quote in quotes if quote in rates}
 
 
 exchange_rate_client = ExchangeRateClient(settings.fx_api_url, settings.fx_timeout_seconds)

@@ -102,3 +102,48 @@ async def test_a_process_remembers_fresh_rates_without_asking_the_database(db_se
         event.remove(sync, "before_cursor_execute", listener)
     assert rates["TRY"] == Decimal("34.00000000")
     assert fx.calls == 1 and queries == []
+
+
+async def _add_currency_the_provider_lacks(db_session, code: str = "BHD") -> None:
+    from app.domain.currency.catalog import forget_currencies
+    from app.domain.currency.model import SupportedCurrency
+
+    db_session.add(
+        SupportedCurrency(code=code, name_en=code, name_ar=code, name_tr=code, added_by="test")
+    )
+    await db_session.flush()
+    forget_currencies()
+
+
+async def test_a_currency_the_provider_stops_quoting_never_stops_the_others(db_session):
+    fx = FakeFxClient()
+    await _add_currency_the_provider_lacks(db_session)  # in our table, unknown to the provider
+    service = CurrencyService(db_session, fx)
+
+    amount, _ = await service.convert(Decimal("100"), "USD", "TRY")
+    assert amount == Decimal("3400.00")
+    rates = await service.get_rates("USD")
+    assert "BHD" not in rates and rates["EUR"] == Decimal("0.92000000")
+    # Remembered as asked: the missing code doesn't send every request to the provider.
+    await CurrencyService(db_session, fx).convert(Decimal("1"), "USD", "EUR")
+    assert fx.calls == 1
+
+
+async def test_converting_into_a_currency_without_a_rate_is_503(db_session):
+    fx = FakeFxClient()
+    await _add_currency_the_provider_lacks(db_session)
+    with pytest.raises(HTTPException) as error:
+        await CurrencyService(db_session, fx).convert(Decimal("10"), "USD", "BHD")
+    assert error.value.status_code == 503
+
+
+async def test_old_rates_still_serve_the_others_when_one_currency_is_new(db_session):
+    fx = FakeFxClient()
+    await CurrencyService(db_session, fx).get_rates("USD")  # cached before BHD existed
+    await _add_currency_the_provider_lacks(db_session)
+    from app.domain.currency.service import forget_rates
+
+    forget_rates()
+    fx.fail = True
+    rates = await CurrencyService(db_session, fx).get_rates("USD")
+    assert rates["TRY"] == Decimal("34.00000000")

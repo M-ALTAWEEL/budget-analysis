@@ -9,7 +9,7 @@ import type { Locale } from "@/i18n/config";
 const POLICY: Record<Locale, LegalDocument> = {
   en: {
     title: "Privacy policy",
-    updated: "Last updated 25 October 2026",
+    updated: "Last updated 28 October 2026",
     intro:
       "Budget Analysis is run by Mouhammed Altaweel. This page explains what it stores about you, why, who else handles it, for how long, and how you can see, download or delete it.",
     sections: [
@@ -33,6 +33,14 @@ const POLICY: Record<Locale, LegalDocument> = {
           "A security activity log (sign-ins, failed attempts, password and two-factor changes), shown to you in Settings.",
           "If you turn on two-factor authentication: its key, encrypted, and your backup codes, as hashes only.",
           "Links we email you and codes we text you are stored only as hashes, and stop working after minutes or hours.",
+        ],
+      },
+      {
+        heading: "Account support",
+        body: [
+          "A small support team (the people who run Budget Analysis) can look up an account to help with sign-in or security problems. They see only account details: name, email address, phone number, username, sign-in methods, language, currencies, devices and security activity.",
+          "They never see your budgets, expenses, categories, goals or groups.",
+          "They can disable an account that is being misused, sign it out of every device, or resend an email-confirmation link. Every such action is recorded, and it also appears in your own security activity in Settings.",
         ],
       },
       {
@@ -95,7 +103,7 @@ const POLICY: Record<Locale, LegalDocument> = {
   },
   ar: {
     title: "سياسة الخصوصية",
-    updated: "آخر تحديث: 25 أكتوبر 2026",
+    updated: "آخر تحديث: 28 أكتوبر 2026",
     intro:
       "يدير Budget Analysis محمد الطويل. توضّح هذه الصفحة ما يحفظه Budget Analysis عنك، ولماذا، ومن يتعامل معه غيرنا، وإلى متى، وكيف تطّلع عليه أو تنزّله أو تحذفه.",
     sections: [
@@ -119,6 +127,14 @@ const POLICY: Record<Locale, LegalDocument> = {
           "سجل النشاط الأمني (تسجيلات الدخول، والمحاولات الفاشلة، وتغييرات كلمة المرور والمصادقة الثنائية)، ويظهر لك في الإعدادات.",
           "إذا فعّلت المصادقة الثنائية: مفتاحها مشفّراً، ورموزك الاحتياطية مشفّرة فقط.",
           "الروابط التي نرسلها بالبريد والرموز التي نرسلها برسالة نصية تُحفظ مشفّرة فقط، وتتوقف عن العمل بعد دقائق أو ساعات.",
+        ],
+      },
+      {
+        heading: "دعم الحسابات",
+        body: [
+          "يمكن لفريق دعم صغير (القائمون على Budget Analysis) الاطلاع على حساب للمساعدة في مشاكل الدخول أو الأمان. يرون بيانات الحساب فقط: الاسم، والبريد الإلكتروني، ورقم الهاتف، واسم المستخدم، وطرق الدخول، واللغة، والعملات، والأجهزة، وسجل الأمان.",
+          "لا يرون أبداً ميزانياتك أو مصاريفك أو فئاتك أو أهدافك أو مجموعاتك.",
+          "يمكنهم إيقاف حساب يُساء استخدامه، أو تسجيل خروجه من كل الأجهزة، أو إعادة إرسال رابط تأكيد البريد. كل إجراء من هذه يُسجَّل، ويظهر لك أيضاً في سجل الأمان في الإعدادات.",
         ],
       },
       {
@@ -181,7 +197,7 @@ const POLICY: Record<Locale, LegalDocument> = {
   },
   tr: {
     title: "Gizlilik politikası",
-    updated: "Son güncelleme: 25 Ekim 2026",
+    updated: "Son güncelleme: 28 Ekim 2026",
     intro:
       "Budget Analysis'i Mouhammed Altaweel yürütür. Bu sayfa senin hakkında neyin saklandığını, neden, başka kimlerin işlediğini, ne kadar süre tutulduğunu ve onu nasıl görebileceğini, indirebileceğini veya silebileceğini anlatır.",
     sections: [
@@ -205,6 +221,14 @@ const POLICY: Record<Locale, LegalDocument> = {
           "Ayarlar'da sana gösterilen bir güvenlik etkinliği kaydı (girişler, başarısız denemeler, şifre ve iki adımlı doğrulama değişiklikleri).",
           "İki adımlı doğrulamayı açarsan: anahtarı şifrelenmiş olarak ve yedek kodların yalnızca özet (hash) olarak.",
           "E-postayla gönderdiğimiz bağlantılar ve SMS ile gönderdiğimiz kodlar yalnızca özet olarak saklanır ve dakikalar ya da saatler sonra geçersiz olur.",
+        ],
+      },
+      {
+        heading: "Hesap desteği",
+        body: [
+          "Küçük bir destek ekibi (Budget Analysis'i yürüten kişiler), giriş veya güvenlik sorunlarında yardım etmek için bir hesaba bakabilir. Yalnızca hesap bilgilerini görürler: ad, e-posta adresi, telefon numarası, kullanıcı adı, giriş yöntemleri, dil, para birimleri, cihazlar ve güvenlik etkinliği.",
+          "Bütçelerini, harcamalarını, kategorilerini, hedeflerini veya gruplarını asla görmezler.",
+          "Kötüye kullanılan bir hesabı devre dışı bırakabilir, tüm cihazlardan çıkış yaptırabilir veya e-posta doğrulama bağlantısını yeniden gönderebilirler. Bu işlemlerin her biri kaydedilir ve Ayarlar'daki kendi güvenlik etkinliğinde de görünür.",
         ],
       },
       {
