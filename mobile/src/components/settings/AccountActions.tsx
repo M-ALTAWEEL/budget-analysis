@@ -5,6 +5,7 @@ import { useCallback, useRef, useState } from "react";
 import { View } from "react-native";
 
 import { useAuth } from "@/components/auth/AuthProvider";
+import { GoogleButton } from "@/components/auth/GoogleButton";
 import { useAuthConfig } from "@/components/auth/useAuthConfig";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
@@ -74,17 +75,18 @@ function ReauthSheet({ onClose, onConfirmed }: { onClose: () => void; onConfirme
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
-  async function confirm() {
+  async function confirmWith(proof: { password: string } | { credential: string }) {
     setError(null);
     setBusy(true);
     try {
-      await reauthenticate({ password });
+      await reauthenticate(proof);
       await onConfirmed();
     } catch (err) {
       setError(errorMessage(err, { 400: t.account.wrongCurrent }));
       setBusy(false);
     }
   }
+  const confirm = () => confirmWith({ password });
 
   return (
     <Sheet
@@ -98,8 +100,12 @@ function ReauthSheet({ onClose, onConfirmed }: { onClose: () => void; onConfirme
           <FormError message={error} />
         </View>
       ) : (
-        // Google accounts confirm with Google, which the app gets with the store builds (phase 8).
-        <Text tone="muted">{t.account.reauthGoogle}</Text>
+        // Google accounts confirm with Google, as on the website.
+        <View style={{ gap: 16 }}>
+          <Text tone="muted">{t.account.reauthGoogle}</Text>
+          <GoogleButton onCredential={(credential) => confirmWith({ credential })} />
+          <FormError message={error} />
+        </View>
       )}
     </Sheet>
   );
