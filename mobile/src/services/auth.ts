@@ -128,6 +128,7 @@ export async function updateMe(
       | "month_start_day"
       | "fresh_start_on"
       | "notify_groups"
+      | "notify_budget"
     >
   >,
 ): Promise<User> {

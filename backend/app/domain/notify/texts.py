@@ -9,20 +9,77 @@ _TEXT: dict[str, dict[str, str]] = {
         "paid_you": "{actor} paid you back {amount}.",
         "got_it": "{actor} marked {amount} from you as received.",
         "invite": "{actor} invited you to the group {group}.",
+        "budget_title": "Your budget",
+        "cat_near": "{category} is at {percent}% of its limit: {left} left.",
+        "cat_over": "{category} is over its limit by {over}.",
+        "budget_near": "{percent}% of this month's money is gone, with {days} days to go.",
+        "budget_over": "This month's budget is overspent by {over}.",
     },
     "ar": {
         "expense": "أضاف {actor} {what}: {amount}. حصتك: {share}.",
         "paid_you": "دفع لك {actor} مبلغ {amount}.",
         "got_it": "سجّل {actor} أنه استلم منك {amount}.",
         "invite": "دعاك {actor} إلى مجموعة {group}.",
+        "budget_title": "ميزانيتك",
+        "cat_near": "وصلت {category} إلى {percent}% من حدّها: بقي {left}.",
+        "cat_over": "تجاوزت {category} حدّها بمبلغ {over}.",
+        "budget_near": "صُرف {percent}% من مال هذا الشهر، وبقي {days} أيام.",
+        "budget_over": "تجاوزت ميزانية هذا الشهر بمبلغ {over}.",
     },
     "tr": {
         "expense": "{actor} {what} ekledi: {amount}. Senin payın: {share}.",
         "paid_you": "{actor} sana {amount} ödedi.",
         "got_it": "{actor} senden {amount} aldığını kaydetti.",
         "invite": "{actor} seni {group} grubuna davet etti.",
+        "budget_title": "Bütçen",
+        "cat_near": "{category} limitinin %{percent} seviyesinde: {left} kaldı.",
+        "cat_over": "{category} limitini {over} aştı.",
+        "budget_near": "Bu ayın parasının %{percent} kadarı harcandı, {days} gün var.",
+        "budget_over": "Bu ayın bütçesi {over} aşıldı.",
     },
 }
+
+
+# The eight built-in categories, as the website and the app name them (i18n messages).
+_CATEGORIES: dict[str, dict[str, str]] = {
+    "en": {
+        "food": "Food",
+        "transport": "Transport",
+        "study": "Study",
+        "entertainment": "Entertainment",
+        "shopping": "Shopping",
+        "health": "Health",
+        "bills": "Bills",
+        "other": "Other",
+    },
+    "ar": {
+        "food": "طعام",
+        "transport": "مواصلات",
+        "study": "دراسة",
+        "entertainment": "ترفيه",
+        "shopping": "تسوّق",
+        "health": "صحة",
+        "bills": "فواتير",
+        "other": "أخرى",
+    },
+    "tr": {
+        "food": "Yemek",
+        "transport": "Ulaşım",
+        "study": "Okul",
+        "entertainment": "Eğlence",
+        "shopping": "Alışveriş",
+        "health": "Sağlık",
+        "bills": "Faturalar",
+        "other": "Diğer",
+    },
+}
+
+
+def category_name(locale: str, slug: str | None, name: str) -> str:
+    """A built-in category in the reader's language; the person's own one as they named it."""
+    if slug is None:
+        return name
+    return _CATEGORIES.get(locale, _CATEGORIES["en"]).get(slug, name)
 
 
 def money(amount: Decimal, currency: str) -> str:

@@ -651,6 +651,8 @@ export const tr: Messages = {
     title: "Bildirimler",
     groups: "Grup bildirimleri",
     groupsText: "Biri payın olan bir harcama eklediğinde, sana borcunu ödediğinde ya da seni bir gruba davet ettiğinde.",
+    budget: "Bütçe uyarıları",
+    budgetText: "Bir kategori limitine yaklaştığında ya da aştığında veya bu ayın parası bitmek üzereyken. Her uyarı ayda bir kez.",
     denied: "Telefonunun ayarlarında Budget Analysis için bildirimler kapalı.",
     openSettings: "Telefon ayarlarını aç",
   },

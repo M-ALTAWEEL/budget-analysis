@@ -185,6 +185,7 @@ class UserRead(BaseModel):
     month_start_day: int = 1
     fresh_start_on: date | None = None
     notify_groups: bool = True
+    notify_budget: bool = True
     created_at: datetime
 
 
@@ -201,6 +202,7 @@ class UserUpdate(BaseModel):
     month_start_day: int | None = Field(default=None, ge=1, le=28)
     fresh_start_on: date | None = None  # null shows the old months again
     notify_groups: bool | None = None
+    notify_budget: bool | None = None
 
     @field_validator("username")
     @classmethod
@@ -216,7 +218,9 @@ class UserUpdate(BaseModel):
             raise ValueError("A fresh start cannot be in the future.")
         return value
 
-    @field_validator("full_name", "base_currency", "locale", "month_start_day", "notify_groups")
+    @field_validator(
+        "full_name", "base_currency", "locale", "month_start_day", "notify_groups", "notify_budget"
+    )
     @classmethod
     def not_null(cls, value):
         if value is None:

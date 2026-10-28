@@ -24,13 +24,13 @@ export function NotificationsSection() {
     void pushPermission().then(setPermission);
   }, []);
   if (!user || permission === "unsupported") return null;
-  const on = user.notify_groups && permission === "granted";
+  const granted = permission === "granted";
 
-  async function change(value: boolean) {
+  async function change(field: "notify_groups" | "notify_budget", value: boolean) {
     setBusy(true);
     try {
       if (value) setPermission(await registerForPush(true));
-      updateUser(await updateMe({ notify_groups: value }));
+      updateUser(await updateMe({ [field]: value }));
     } catch {
       // offline: the switch shows what the server has
     } finally {
@@ -38,23 +38,30 @@ export function NotificationsSection() {
     }
   }
 
+  const rows = [
+    { field: "notify_groups" as const, title: t.notifications.groups, text: t.notifications.groupsText },
+    { field: "notify_budget" as const, title: t.notifications.budget, text: t.notifications.budgetText },
+  ];
+
   return (
     <SettingsBlock title={t.notifications.title}>
       <Card>
-        <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
-          <View style={{ flex: 1 }}>
-            <Text weight="semibold">{t.notifications.groups}</Text>
-            <Text size={14} tone="muted" style={{ marginTop: 2 }}>{t.notifications.groupsText}</Text>
+        {rows.map((row) => (
+          <View key={row.field} style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
+            <View style={{ flex: 1 }}>
+              <Text weight="semibold">{row.title}</Text>
+              <Text size={14} tone="muted" style={{ marginTop: 2 }}>{row.text}</Text>
+            </View>
+            <Switch
+              value={user[row.field] && granted}
+              disabled={busy || permission === "denied"}
+              accessibilityLabel={row.title}
+              onValueChange={(value) => void change(row.field, value)}
+              trackColor={{ true: colors.pine, false: colors.line }}
+              thumbColor="#fff"
+            />
           </View>
-          <Switch
-            value={on}
-            disabled={busy || permission === "denied"}
-            accessibilityLabel={t.notifications.groups}
-            onValueChange={(value) => void change(value)}
-            trackColor={{ true: colors.pine, false: colors.line }}
-            thumbColor="#fff"
-          />
-        </View>
+        ))}
         {permission === "denied" && (
           <>
             <Text size={14} tone="berry">{t.notifications.denied}</Text>
