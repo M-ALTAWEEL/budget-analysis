@@ -403,20 +403,28 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 
 1. **Email** is used for verification, password reset, email change, account deletion and
    security notices, in the user's language, at most 3 of a kind per account per hour.
-2. **Push notifications** (mobile) are sent for group activity:
+2. **Push notifications** (mobile) are sent for group activity and budget alerts:
 
 | Event | Who receives it |
 |---|---|
 | New group expense | Members with a non-zero share, except who added it |
 | Payment recorded | The other person in the payment |
 | Invitation by username | The invitee |
+| A category reaches **85%** of its limit, or goes **over** it | The budget's owner |
+| **90%** of the month's money is gone with more than 3 days left, or the month is **overspent** | The budget's owner |
 
-3. Each person receives it **in their own language**. Tapping it opens the group.
-4. Users switch group notifications on or off in Settings; the phone's own permission is
-   also required. Signing out removes that phone; phones that uninstalled the app are
+3. Each person receives it **in their own language**. Tapping a group one opens the group.
+4. **Budget alerts** (`app/domain/notify/budget_alerts.py`) follow the overview's alerts and
+   arrive **once per budget month** each; going over replaces the "near" one. Only the
+   current budget month counts, and they are checked after anything that adds to the
+   person's spending: their own expense, an edit, or a group share copied into their budget.
+   Tapping one opens the overview.
+5. Users switch group notifications and budget alerts on or off (separately) in Settings;
+   the phone's own permission is also required. Signing out removes that phone; phones that uninstalled the app are
    forgotten automatically.
-5. Notifications contain only who, which group and how much: what a lock screen may show.
-6. Sending happens **after** the response, so a slow notification service never delays the
+6. Notifications contain only who, which group or category, and how much: what a lock
+   screen may show.
+7. Sending happens **after** the response, so a slow notification service never delays the
    app.
 
 ## 14. Privacy and data rights
@@ -455,6 +463,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Expenses fall in the budget month of their start day; a fresh start hides without deleting | `test_budget_cycle.py` |
 | The forecast counts days from the start day and appears only within the current month | `test_budget_cycle.py`, `test_ml_forecast.py` |
 | Notifications reach the right people, in their language, and respect the switch | `test_push.py` |
+| Each budget alert arrives once a month, only for the current month, and respects its switch | `test_budget_alerts.py` |
 | Sign-in limits, session expiry and re-authentication | `test_auth.py`, `test_sessions.py`, `test_hardening.py` |
 | No request makes anyone an admin; non-admins get 404 on every admin address | `test_admin.py` |
 | Admins never see an amount, expense, budget or goal | `test_admin.py` |

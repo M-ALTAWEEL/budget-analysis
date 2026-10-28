@@ -41,6 +41,7 @@ from app.domain.group.schema import (
 from app.domain.group.service import GroupService
 from app.domain.group.settle import SettlementService
 from app.domain.group.shares import MyShares
+from app.domain.notify.budget_alerts import BudgetAlerts
 from app.domain.notify.service import GroupNotifications, deliver
 from app.domain.user.router import Email
 
@@ -141,6 +142,8 @@ async def add_group_expense(
     expense = await GroupExpenseService(db, fx).create(user, group_uuid, data)
     if push is not None:  # the others in it: "Ali added Groceries: 500. Your share: 125."
         messages = await GroupNotifications(db).new_expense(user, group_uuid, expense)
+        # Shares copied into budgets may cross a limit (phase 6i).
+        messages += await BudgetAlerts(db).check_group_expense(expense)
         background.add_task(deliver, push, messages)
     return expense
 
@@ -153,8 +156,13 @@ async def change_group_expense(
     user: CurrentUser,
     db: DbSession,
     fx: FxClient,
+    background: BackgroundTasks,
+    push: Push,
 ) -> GroupExpenseRead:
-    return await GroupExpenseService(db, fx).update(user, group_uuid, expense_uuid, data)
+    expense = await GroupExpenseService(db, fx).update(user, group_uuid, expense_uuid, data)
+    if push is not None:
+        background.add_task(deliver, push, await BudgetAlerts(db).check_group_expense(expense))
+    return expense
 
 
 @router.delete("/{group_uuid}/expenses/{expense_uuid}", status_code=status.HTTP_204_NO_CONTENT)
@@ -260,13 +268,27 @@ async def list_pending_shares(
 
 
 @my_shares_router.post("/add-all")
-async def add_all_shares(user: CurrentUser, db: DbSession, fx: FxClient) -> AddAllResult:
-    return await _my_shares(db, fx).add_all(user.id)
+async def add_all_shares(
+    user: CurrentUser, db: DbSession, fx: FxClient, background: BackgroundTasks, push: Push
+) -> AddAllResult:
+    result = await _my_shares(db, fx).add_all(user.id)
+    if push is not None and result.added:
+        background.add_task(deliver, push, await BudgetAlerts(db).check(user))
+    return result
 
 
 @my_shares_router.post("/{share_uuid}/add", status_code=status.HTTP_204_NO_CONTENT)
-async def add_share(share_uuid: str, user: CurrentUser, db: DbSession, fx: FxClient) -> None:
+async def add_share(
+    share_uuid: str,
+    user: CurrentUser,
+    db: DbSession,
+    fx: FxClient,
+    background: BackgroundTasks,
+    push: Push,
+) -> None:
     await _my_shares(db, fx).add(user.id, share_uuid)
+    if push is not None:
+        background.add_task(deliver, push, await BudgetAlerts(db).check(user))
 
 
 @my_shares_router.post("/{share_uuid}/dismiss", status_code=status.HTTP_204_NO_CONTENT)

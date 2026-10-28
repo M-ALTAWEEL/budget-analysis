@@ -660,6 +660,8 @@ export const en = {
     title: "Notifications",
     groups: "Group notifications",
     groupsText: "When someone adds an expense you're part of, pays you back, or invites you to a group.",
+    budget: "Budget alerts",
+    budgetText: "When a category nears or passes its limit, or this month's money is almost gone. Once a month each.",
     denied: "Notifications are turned off for Budget Analysis in your phone's settings.",
     openSettings: "Open phone settings",
   },

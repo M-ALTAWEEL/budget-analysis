@@ -3,7 +3,16 @@
 from datetime import date
 from decimal import Decimal
 
-from sqlalchemy import Boolean, Date, ForeignKey, Numeric, String, UniqueConstraint, false
+from sqlalchemy import (
+    Boolean,
+    Date,
+    ForeignKey,
+    Numeric,
+    String,
+    Text,
+    UniqueConstraint,
+    false,
+)
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.base import BaseModel
@@ -38,6 +47,9 @@ class Budget(BaseModel):
     total_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))
     # Fixed when the budget is created; every expense of the month is converted to it.
     currency: Mapped[str] = mapped_column(String(3))
+    # Budget alerts already sent as push notifications this month, so each one arrives
+    # once: "budget_near budget_over cat_near:<uuid> cat_over:<uuid>" (space separated).
+    alerts_sent: Mapped[str | None] = mapped_column(Text)
 
     allocations: Mapped[list["BudgetAllocation"]] = relationship(
         back_populates="budget",

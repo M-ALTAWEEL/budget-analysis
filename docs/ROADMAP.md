@@ -112,7 +112,7 @@ Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
 - [x] **Budget month start day** (the allowance day, 1–28) and **Start fresh** (hide older months without deleting them), on the server, website and app
 - [x] **6g App lock** with Face ID, a fingerprint or the phone passcode, after 30 seconds away, with a privacy cover in the app switcher
 - [x] **6h Push notifications for groups** (new expense, payment, invitation) in each reader's language, through Expo and Firebase. First Android development build made with EAS and tested on the Android Emulator
-- [ ] Budget alerts as push notifications
+- [x] **6i Budget alerts as push notifications**: a category near or over its limit, the month's money almost gone or overspent; once a month each, with their own switch in Settings
 - [ ] Invitation links open the app directly (Android App Links, iOS Universal Links)
 - [ ] Sign in with Google inside the app (native Google sign-in)
 - [ ] Store requirements: Apple privacy labels, Google Play Data safety, in-app account deletion (done)

@@ -52,6 +52,9 @@ class User(BaseModel):
     # Push notifications about groups (new expense, paying back, invitations). The app
     # also needs the phone's permission; this is the person's own switch.
     notify_groups: Mapped[bool] = mapped_column(Boolean, server_default=true())
+    # Push notifications about the person's own budget: a category near or over its limit,
+    # the month's money almost gone or overspent (app/domain/notify/budget_alerts.py).
+    notify_budget: Mapped[bool] = mapped_column(Boolean, server_default=true())
     is_active: Mapped[bool] = mapped_column(Boolean, server_default=true())
     # Two-factor authentication (2d). The key is encrypted (app/core/secret_box.py); it
     # exists but is not enabled while the person is still scanning the QR code.
