@@ -114,3 +114,21 @@ export function dayLabel(
   if (date.toDateString() === yesterday.toDateString()) return words.yesterday;
   return new Intl.DateTimeFormat(intl, { weekday: "long", day: "numeric", month: "long" }).format(date);
 }
+
+/**
+ * "27.10.2026 09:24", as a bank statement shows it: the day of the expense, and the time it
+ * was written down when that was the same day (an expense added later for an earlier day
+ * shows the day only: the time would be wrong).
+ */
+export function expenseWhen(spentAt: string, createdAt: string, intl: string): string {
+  const [year, monthIndex, day] = spentAt.split("-").map(Number);
+  const date = new Intl.DateTimeFormat(intl, { day: "2-digit", month: "2-digit", year: "numeric" }).format(
+    new Date(year, monthIndex - 1, day),
+  );
+  const created = new Date(createdAt);
+  const sameDay =
+    created.getFullYear() === year && created.getMonth() === monthIndex - 1 && created.getDate() === day;
+  if (!sameDay) return date;
+  const time = new Intl.DateTimeFormat(intl, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(created);
+  return `${date} ${time}`;
+}

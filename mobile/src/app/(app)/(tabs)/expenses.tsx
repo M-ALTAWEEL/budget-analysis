@@ -1,5 +1,6 @@
 import { View } from "react-native";
 
+import { CategoryBreakdown } from "@/components/expense/CategoryBreakdown";
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
@@ -10,19 +11,8 @@ import { useExpenses, useSummary } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { useColors } from "@/theme/ThemeProvider";
-import type { Expense } from "@/types/api";
 
-/** Expenses are already sorted newest first; group consecutive ones by day. */
-function groupByDay(expenses: Expense[]) {
-  const groups: { day: string; items: Expense[] }[] = [];
-  for (const expense of expenses) {
-    const last = groups.at(-1);
-    if (last?.day === expense.spent_at) last.items.push(expense);
-    else groups.push({ day: expense.spent_at, items: [expense] });
-  }
-  return groups;
-}
-
+/** The month's expenses: where the money went (tiles open a category), then every expense. */
 export default function ExpensesScreen() {
   const { month } = useMonth();
   const expenses = useExpenses(month);
@@ -30,7 +20,7 @@ export default function ExpensesScreen() {
   const openSheet = useExpenseSheet();
   const colors = useColors();
   const currency = summary.data?.currency;
-  const { t, money, monthName, dayLabel } = useI18n();
+  const { t, monthName } = useI18n();
   const errorMessage = useErrorMessage();
 
   return (
@@ -51,24 +41,14 @@ export default function ExpensesScreen() {
           )}
         </View>
       ) : (
-        <View style={{ gap: 32 }}>
-          {groupByDay(expenses.data).map(({ day, items }) => {
-            const dayTotal = items.reduce((sum, item) => sum + Number(item.amount_base), 0);
-            return (
-              <View key={day} accessibilityLabel={dayLabel(day)}>
-                <View style={{ marginBottom: 8, flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 4 }}>
-                  <Text weight="semibold" accessibilityRole="header">{dayLabel(day)}</Text>
-                  {currency && <Text size={14} tone="muted">{money(dayTotal, currency)}</Text>}
-                </View>
-                <List>
-                  {items.map((expense) => (
-                    <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
-                  ))}
-                </List>
-              </View>
-            );
-          })}
-        </View>
+        <>
+          {summary.data && <CategoryBreakdown summary={summary.data} />}
+          <List>
+            {expenses.data.map((expense) => (
+              <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
+            ))}
+          </List>
+        </>
       )}
     </Screen>
   );

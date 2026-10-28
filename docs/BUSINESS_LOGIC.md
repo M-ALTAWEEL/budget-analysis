@@ -240,6 +240,16 @@ Overspending the whole budget is not an alert: the tank already says it prominen
    each weekday was seen at least 4 times and the busiest costs **30% more** than an average
    day. Months budgeted in another currency are left out.
 
+### 8.6 Where the money went (Expenses page)
+**Rules** (`frontend/src/lib/insights.ts: categoryShares`):
+1. One bar split by category and a tile per category, biggest first, for the selected
+   budget month. Each share is a category's spending **out of the month's spending** (all
+   tiles add up to 100%), in the budget's currency. A used category is never shown as 0%:
+   a sliver shows as "<1%".
+2. A tile opens that category's month: its total, its share, and its expenses.
+3. Each expense shows its day and, when it was written down that same day, the time
+   (`lib/month.ts: expenseWhen`); an expense added later for an earlier day shows the day only.
+
 ## 9. Savings goals
 
 **Rules** (`app/domain/goal/service.py`):
