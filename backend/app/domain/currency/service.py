@@ -15,7 +15,11 @@ from app.domain.currency.repository import ExchangeRateRepository
 # The last rates each server process saw, per base currency, with when they were fetched
 # (phase 4). Rates change twice a day at most and are already allowed to be 12 hours old,
 # so a process doesn't need to ask the database for them on every expense.
-_memory: dict[str, tuple[datetime, dict[str, Decimal]]] = {}
+# (when fetched, the rates, which of our codes were asked for): a code the provider doesn't
+# have is remembered as asked, so it can't send every request back to the provider.
+_memory: dict[str, tuple[datetime, dict[str, Decimal], frozenset[str]]] = {}
+
+NO_RATES = "Exchange rates are temporarily unavailable. Try again later."
 
 
 def forget_rates() -> None:
@@ -40,6 +44,7 @@ class CurrencyService:
         3. Provider down -> use the old cache if we have one ("stale but available").
         4. No cache at all -> 503.
         A currency an admin just added isn't in the cache yet: the rates are fetched again.
+        A currency the provider stops quoting is left out; the others keep working.
         """
         await self.catalog.require_known(base)
         codes = await self.catalog.all(including=need)
@@ -49,7 +54,7 @@ class CurrencyService:
         if (
             remembered is not None
             and now - remembered[0] < max_age
-            and remembered[1].keys() >= codes
+            and remembered[2] >= codes
         ):
             return remembered[1]  # 0. this process already has fresh rates: no query at all
 
@@ -58,7 +63,7 @@ class CurrencyService:
         complete = {row.quote for row in cached} >= codes
         if complete and all(now - row.fetched_at < max_age for row in cached):
             rates = {row.quote: row.rate for row in cached}
-            _memory[base] = (min(row.fetched_at for row in cached), rates)
+            _memory[base] = (min(row.fetched_at for row in cached), rates, frozenset(codes))
             return rates
 
         try:
@@ -67,17 +72,14 @@ class CurrencyService:
             # Old rates are better than none, also when only a just-added currency is missing
             # and the caller needs another one.
             stale = {row.quote: row.rate for row in cached}
-            if complete or (need is not None and need in stale):
+            if stale and (need is None or need in stale):
                 return stale
-            raise HTTPException(
-                status.HTTP_503_SERVICE_UNAVAILABLE,
-                "Exchange rates are temporarily unavailable. Try again later.",
-            ) from None
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, NO_RATES) from None
 
         rounded = {quote: to_rate(rate) for quote, rate in fetched.items()}
         await self.rates.save_rates(base, rounded, now)
         await self.session.commit()
-        _memory[base] = (now, rounded)
+        _memory[base] = (now, rounded, frozenset(codes))
         return rounded
 
     async def get_rate(self, base: str, quote: str) -> Decimal:
@@ -85,6 +87,8 @@ class CurrencyService:
             return to_rate(1)
         await self.catalog.require_known(quote)
         rates = await self.get_rates(base, need=quote)
+        if quote not in rates:  # the provider has no rate for it today
+            raise HTTPException(status.HTTP_503_SERVICE_UNAVAILABLE, NO_RATES)
         return rates[quote]
 
     async def convert(self, amount: Decimal, source: str, target: str) -> tuple[Decimal, Decimal]:

@@ -85,7 +85,9 @@ Arabic (right-to-left) and Turkish.
 4. Exchange rates have **8 decimal places**. They are fetched from the rates provider and
    cached in the database and in each server process for **12 hours**. If the provider is
    down, the most recent cached rates are used ("stale but available"); with no rates at
-   all the request fails with a clear message rather than guessing.
+   all the request fails with a clear message rather than guessing. If the provider stops
+   quoting one currency, only conversions into or out of that currency fail (503); every
+   other currency keeps working, and the gap is logged.
 5. **Rate snapshot:** when an expense is converted, the rate used is stored with it. Later
    rate changes never rewrite history.
 6. A **second currency** can be chosen for display only (amounts shown again as "≈"). It
@@ -426,6 +428,10 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    email (or phone). Personal data is deleted; in groups the person becomes "Deleted user"
    so other members' balances stay correct.
 4. The privacy policy and terms of use are available in all three languages.
+5. **Support access:** admins (section 17) see account details only (name, email, phone,
+   username, sign-in methods, language, currencies, devices, security activity), never
+   budgets, expenses, categories, goals or groups. Every admin action is in the audit log
+   and in the person's own security activity. The privacy policy says so.
 
 ## 15. Platform parity
 
@@ -454,6 +460,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Admins never see an amount, expense, budget or goal | `test_admin.py` |
 | A hidden currency can't be newly chosen, but stays usable and convertible for whoever has it | `test_admin_currencies.py` |
 | The exchange-rate URL only ever holds a three-letter code from our table | `test_currency.py` |
+| A currency the rates provider stops quoting never stops conversion between the others | `test_currency.py` |
 
 ## 17. Admin dashboard
 
