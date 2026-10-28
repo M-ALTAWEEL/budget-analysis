@@ -117,6 +117,12 @@ Production **refuses to start** with `console`: anyone reading the logs could si
   allowed to open `https://budgetanalysis.vercel.app/join`. When Google Play signs the store
   build, add the **Play app signing** SHA-256 (Play Console → App integrity) to that list.
   Changing the intent filters in `mobile/app.json` needs a new native build.
+- **Google sign-in in the app:** Google Cloud Console (the project of `GOOGLE_CLIENT_ID`) →
+  APIs & Services → Credentials → an **Android** OAuth client for `com.budgetanalysis.app`
+  with the build's **SHA-1**. Nothing from it goes into the app: the app asks for an ID token
+  for the **web** client ID (from `/auth/config`), which the API already accepts. Add the
+  Play app signing SHA-1 too when the store build exists. iPhone: an iOS OAuth client and
+  the `@react-native-google-signin/google-signin` config plugin with its `iosUrlScheme`.
 - Developers sign in to the CLI with an Expo access token in `EXPO_TOKEN`, never written in chat.
 
 ### 12. Admins (admin dashboard)

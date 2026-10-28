@@ -115,7 +115,7 @@ Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
 - [x] **6i Budget alerts as push notifications**: a category near or over its limit, the month's money almost gone or overspent; once a month each, with their own switch in Settings
 - [x] **6j Invitation links open the app** on Android (App Links: `/.well-known/assetlinks.json` on the website, verified intent filter for `/join`), signed in or not
 - [ ] The same on iPhone (Universal Links): needs the Apple Developer team ID → Activation
-- [ ] Sign in with Google inside the app (native Google sign-in)
+- [x] **6k Sign in with Google inside the app** (Android): the native account picker; its ID token is checked by the server exactly like the website's, and it also confirms "is it you?" for Google accounts. iPhone needs an iOS OAuth client → Activation
 - [ ] Store requirements: Apple privacy labels, Google Play Data safety, in-app account deletion (done)
 - [ ] **TestFlight** for iPhone and a **closed test** on Google Play (12 testers for 14 days, required for new developer accounts)
 

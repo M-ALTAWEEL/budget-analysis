@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Pressable, View } from "react-native";
 
 import { useAuth } from "@/components/auth/AuthProvider";
+import { GoogleButton } from "@/components/auth/GoogleButton";
 import { PhoneSignIn } from "@/components/auth/PhoneSignIn";
 import { useAuthConfig } from "@/components/auth/useAuthConfig";
 import { Button } from "@/components/ui/Button";
@@ -46,6 +47,7 @@ export function LoginForm({ onSwitch, onForgot }: { onSwitch: () => void; onForg
   return (
     <View style={{ gap: 16 }}>
       <Text display weight="semibold" size={30} accessibilityRole="header">{t.auth.loginTitle}</Text>
+      <GoogleButton />
       <PhoneSignIn />
       <Field
         label={t.auth.email}
@@ -108,6 +110,7 @@ export function RegisterForm({ onSwitch }: { onSwitch: () => void }) {
   return (
     <View style={{ gap: 16 }}>
       <Text display weight="semibold" size={30} accessibilityRole="header">{t.auth.registerTitle}</Text>
+      <GoogleButton currency={currency} />
       <PhoneSignIn currency={currency} />
       <Field label={t.auth.name} autoComplete="name" textContentType="name" value={fullName} onChangeText={setFullName} />
       <Field
