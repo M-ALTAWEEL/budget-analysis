@@ -54,10 +54,11 @@ class ExchangeRateClient:
         currency it stops quoting is left out and logged, so one missing code never stops
         conversion between all the others."""
         rates = await self.fetch_all(base)
-        missing = sorted(quotes - rates.keys())
+        missing = len(quotes - rates.keys())
         if missing:
-            fields = {"base": base, "missing": missing}
-            logger.warning("fx provider has no rate", extra={"fields": fields})
+            # Only a count: the codes came through a request and the provider's answer, and
+            # a log line never carries such text (CodeQL "log injection").
+            logger.warning("fx provider has no rate", extra={"fields": {"missing": missing}})
         return {quote: rates[quote] for quote in quotes if quote in rates}
 
 
