@@ -447,7 +447,9 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 2. Types, texts in three languages, API calls and the month and money rules are **one shared
    copy**, copied from the website into the app by a script; CI fails if they drift.
 3. Platform-only features: app lock and push notifications (mobile), keyboard and large-screen
-   layouts (web). Links sent by email open the website.
+   layouts (web). Links sent by email open the website. **Invitation links** open the app on
+   Android when it is installed (App Links), and the website otherwise; opened while signed
+   out, the app asks for sign-in first, then shows the invitation.
 4. The admin dashboard is **website only** (section 17).
 
 ## 16. Invariants checked by tests

@@ -113,6 +113,10 @@ Production **refuses to start** with `console`: anyone reading the logs could si
   kept on disk.
 - The **Android signing keystore** is generated and stored by EAS. Its SHA-1 and SHA-256
   fingerprints (public) are needed for Google sign-in and App Links.
+- **App Links:** `frontend/public/.well-known/assetlinks.json` lists the SHA-256 fingerprints
+  allowed to open `https://budgetanalysis.vercel.app/join`. When Google Play signs the store
+  build, add the **Play app signing** SHA-256 (Play Console → App integrity) to that list.
+  Changing the intent filters in `mobile/app.json` needs a new native build.
 - Developers sign in to the CLI with an Expo access token in `EXPO_TOKEN`, never written in chat.
 
 ### 12. Admins (admin dashboard)

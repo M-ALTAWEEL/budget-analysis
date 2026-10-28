@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.budgetanalysis.app",
+      "sha256_cert_fingerprints": [
+        "27:E9:A0:D9:A2:13:CC:ED:27:EB:52:C1:24:E0:58:AD:37:EE:DE:A5:C4:61:5F:B2:1B:39:A4:C4:16:D9:5A:2D"
+      ]
+    }
+  }
+]

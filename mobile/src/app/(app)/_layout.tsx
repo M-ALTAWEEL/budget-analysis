@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 
 import { ExpenseSheetProvider } from "@/components/expense/ExpenseSheet";
 import { MonthProvider } from "@/components/layout/MonthProvider";
+import { PendingLink } from "@/components/layout/PendingLink";
 import { PushSetup } from "@/components/layout/PushSetup";
 import { AppLock } from "@/components/security/AppLock";
 import { useColors } from "@/theme/ThemeProvider";
@@ -15,6 +16,7 @@ export default function AppLayout() {
   return (
     <AppLock>
       <PushSetup />
+      <PendingLink />
       <MonthProvider>
         <ExpenseSheetProvider>
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
