@@ -51,11 +51,7 @@ class CurrencyService:
         now = datetime.now(UTC)
         max_age = timedelta(hours=settings.fx_cache_hours)
         remembered = _memory.get(base)
-        if (
-            remembered is not None
-            and now - remembered[0] < max_age
-            and remembered[2] >= codes
-        ):
+        if remembered is not None and now - remembered[0] < max_age and remembered[2] >= codes:
             return remembered[1]  # 0. this process already has fresh rates: no query at all
 
         cached = await self.rates.list_for_base(base)
