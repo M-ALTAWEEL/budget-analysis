@@ -4,7 +4,7 @@
 > the web, iPhone and Android. Each phase ships something complete and tested; the status
 > table below is updated when a phase closes.
 >
-> Last updated: 27 October 2026
+> Last updated: 29 October 2026
 
 ## Status
 
@@ -16,7 +16,7 @@
 | 3 | Groups | ✅ Done (notifications moved to phase 6, with mobile push) |
 | 4 | Performance and load | ✅ Done (400–500 requests/s on a laptop, p95 under 100 ms) |
 | 5 | Security audit | ✅ Done (OWASP ASVS L2; OWASP ZAP: zero findings) |
-| 6 | iPhone and Android apps | ⏳ In progress |
+| 6 | iPhone and Android apps | ✅ Done on Android (iPhone builds, Universal Links, TestFlight and the Play closed test need paid accounts → Activation, phase 8) |
 | 7 | Subscriptions, payments and coupons | ⬜ Not started |
 | 8 | **Activation and payment** of services, then launch | ⬜ Not started |
 
@@ -105,7 +105,7 @@ Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
 - [x] **5c** Self-run penetration test of groups and accounts, written as automated tests (`test_pentest.py`); report in `security/ASVS.md`
 - [ ] (Optional, before scale) An external penetration test
 
-## Phase 6: iPhone and Android apps ⏳
+## Phase 6: iPhone and Android apps ✅
 - [x] **6a React Native (Expo)**: one app for both platforms, with the same three languages, right-to-left layout and dark mode
 - [x] Tokens stored in the **iOS Keychain / Android Keystore** (never in AsyncStorage)
 - [x] **6b–6f Feature parity with the website**: every screen and feature. Shared code (types, texts, API calls, month and money rules) is copied from the website by a script, and CI fails if the copies drift
@@ -116,8 +116,8 @@ Item-by-item checklist in [`security/ASVS.md`](security/ASVS.md).
 - [x] **6j Invitation links open the app** on Android (App Links: `/.well-known/assetlinks.json` on the website, verified intent filter for `/join`), signed in or not
 - [ ] The same on iPhone (Universal Links): needs the Apple Developer team ID → Activation
 - [x] **6k Sign in with Google inside the app** (Android): the native account picker; its ID token is checked by the server exactly like the website's, and it also confirms "is it you?" for Google accounts. iPhone needs an iOS OAuth client → Activation
-- [ ] Store requirements: Apple privacy labels, Google Play Data safety, in-app account deletion (done)
-- [ ] **TestFlight** for iPhone and a **closed test** on Google Play (12 testers for 14 days, required for new developer accounts)
+- [x] **Store requirements** written down: Google Play Data safety and App Store privacy labels, ready to copy ([`STORE_REQUIREMENTS.md`](STORE_REQUIREMENTS.md)); in-app account deletion done. Filled in at phase 8
+- [ ] **TestFlight** for iPhone and a **closed test** on Google Play (12 testers for 14 days, required for new developer accounts) → Activation, phase 8
 
 ## Admin dashboard (website only) ✅
 Design in [`design/admin.md`](design/admin.md).
