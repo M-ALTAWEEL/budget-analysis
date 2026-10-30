@@ -1,5 +1,6 @@
 """The month-end report ("Wrapped", feature F4): a month in a few numbers, and a push
-notification when a month ends. Rules: docs/BUSINESS_LOGIC.md, section 8.7."""
+notification when a month ends; and the data of the downloadable reports (feature F5).
+Rules: docs/BUSINESS_LOGIC.md, sections 8.7 and 8.8."""
 
 from __future__ import annotations
 
@@ -23,7 +24,8 @@ from app.domain.expense.repository import ExpenseRepository
 from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.income.service import IncomeService
 from app.domain.notify.model import PushDevice
-from app.domain.notify.texts import money, text
+from app.domain.notify.texts import category_name, money, text
+from app.domain.report.files import CategoryRow, ExpenseRow, MonthRow, ReportData
 from app.domain.report.schema import BiggestExpense, TopCategory, Wrapped
 from app.domain.user.model import User
 
@@ -193,3 +195,106 @@ async def users_with_recent_budgets(session: AsyncSession, today: date) -> list[
             )
         )
     )
+
+
+class ReportFiles:
+    """A month or a year as a PDF or Excel file (feature F5)."""
+
+    def __init__(self, session: AsyncSession, fx_client: ExchangeRateClient) -> None:
+        self.session = session
+        self.fx_client = fx_client
+        self.budgets = BudgetRepository(session)
+
+    async def month(self, user: User, month: date) -> ReportData:
+        budget = await self.budgets.get_for_month(user.id, month)
+        if budget is None or BudgetCalendar.of(user).hidden(month):
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "No budget for this month.")
+        return await self._build(user, [budget], format_month(month), with_limits=True)
+
+    async def year(self, user: User, year: int) -> ReportData:
+        calendar = BudgetCalendar.of(user)
+        budgets = [
+            b
+            for b in await self.session.scalars(
+                select(Budget)
+                .where(
+                    Budget.user_id == user.id,
+                    Budget.month >= date(year, 1, 1),
+                    Budget.month < date(year + 1, 1, 1),
+                )
+                .order_by(Budget.month)
+            )
+            if not calendar.hidden(b.month)
+        ]
+        if not budgets:
+            raise HTTPException(status.HTTP_404_NOT_FOUND, "No budget in this year.")
+        return await self._build(user, budgets, str(year), with_limits=False)
+
+    async def _build(
+        self, user: User, budgets: list[Budget], period: str, with_limits: bool
+    ) -> ReportData:
+        calendar = BudgetCalendar.of(user)
+        incomes = IncomeService(self.session, self.fx_client)
+        months: list[MonthRow] = []
+        rows: list[ExpenseRow] = []
+        # (category id, currency) -> [category, limit, spent]
+        by_category: dict[tuple[int, str], list] = {}
+        for budget in budgets:
+            start, end = calendar.visible(budget.month)
+            expenses = list(
+                await self.session.scalars(
+                    select(Expense)
+                    .where(
+                        Expense.user_id == user.id,
+                        Expense.spent_at >= start,
+                        Expense.spent_at < end,
+                    )
+                    .order_by(Expense.spent_at, Expense.id)
+                )
+            )
+            income = await incomes.month(user, budget.month)
+            months.append(
+                MonthRow(
+                    month=format_month(budget.month),
+                    currency=budget.currency,
+                    budget=budget.total_amount,
+                    spent=to_money(sum((e.amount_base for e in expenses), Decimal("0"))),
+                    income=income.total if income.items else None,
+                )
+            )
+            if with_limits:
+                for allocation in budget.allocations:
+                    key = (allocation.category_id, budget.currency)
+                    by_category[key] = [allocation.category, allocation.limit_amount, Decimal("0")]
+            for e in expenses:
+                other = e.currency != budget.currency
+                key = (e.category_id, budget.currency)
+                by_category.setdefault(key, [e.category, None, Decimal("0")])[2] += e.amount_base
+                rows.append(
+                    ExpenseRow(
+                        day=e.spent_at,
+                        description=e.description,
+                        category=category_name(user.locale, e.category.slug, e.category.name),
+                        amount=e.amount_base,
+                        currency=budget.currency,
+                        original=money(e.amount, e.currency) if other else None,
+                    )
+                )
+        categories = [
+            CategoryRow(
+                name=category_name(user.locale, category.slug, category.name),
+                currency=currency,
+                limit=limit,
+                spent=to_money(spent),
+            )
+            for (_, currency), (category, limit, spent) in by_category.items()
+        ]
+        categories.sort(key=lambda c: c.spent, reverse=True)
+        return ReportData(
+            locale=user.locale,
+            person=user.full_name,
+            period=period,
+            months=months,
+            categories=categories,
+            expenses=rows,
+        )

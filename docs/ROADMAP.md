@@ -135,7 +135,7 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F2 Personal debts**: lent or borrowed outside groups, paid back in parts, totals both ways, a reminder on the due day
 - [x] **F3 Income and its sources**: job, scholarship, family and more, in any currency; came in, went out and what is left; "make my budget" from income; "same as last month"
 - [x] **F4 Month-end report (Wrapped)**: spent and left over, change against last month, top categories, biggest expense, no-spend days; a push notification when a month ends; share
-- [ ] F5 PDF and Excel reports (Plus)
+- [x] **F5 PDF and Excel reports (Plus)**: a month or a whole year, in the person's language (Arabic right to left); downloaded on the website, shared from the app
 - [ ] F6 Savings challenges
 - [ ] F7 Shared household budget (Plus)
 - [ ] F8 Inflation and currency view (Plus)

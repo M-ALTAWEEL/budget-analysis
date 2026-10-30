@@ -7,6 +7,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { toast } from "sonner";
 
+import { DownloadReport } from "@/components/reports/DownloadReport";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { LoadError } from "@/components/ui/LoadError";
@@ -176,6 +177,8 @@ function Report({ data }: { data: Wrapped }) {
           {Number(data.goals_saved) > 0 && <li>{t.wrapped.goalsSaved(m(data.goals_saved))}</li>}
         </ul>
       </Card>
+
+      <DownloadReport month={data.month} />
 
       <div className="pt-2">
         <Button type="button" variant="secondary" onClick={share}>

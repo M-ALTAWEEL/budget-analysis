@@ -460,6 +460,16 @@ export const en = {
     see: "See it",
   },
 
+  reports: {
+    title: "Download",
+    intro: "Your month or your whole year as a file, to keep or send to family or a scholarship office.",
+    thisMonth: (month: string) => month,
+    wholeYear: (year: string) => `All of ${year}`,
+    pdf: "PDF",
+    excel: "Excel",
+    failed: "Couldn't make the file. Try again.",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",

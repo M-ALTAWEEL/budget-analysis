@@ -94,8 +94,14 @@ jobs:
       - name: Types (TypeScript)
         run: npx tsc --noEmit
 
+      # As for pytest: a failure becomes an annotation, readable without the full log.
       - name: Build
-        run: npm run build
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee build.log || {
+            tail -n 60 build.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g' | sed -e 's/^/::error title=build::/'
+            exit 1
+          }
 
   mobile:
     name: Mobile (shared code + types)

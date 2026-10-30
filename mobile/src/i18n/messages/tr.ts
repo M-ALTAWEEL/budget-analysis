@@ -460,6 +460,16 @@ export const tr: Messages = {
     see: "Gör",
   },
 
+  reports: {
+    title: "İndir",
+    intro: "Ayını ya da tüm yılını dosya olarak al; sakla ya da ailene veya burs ofisine gönder.",
+    thisMonth: (month: string) => month,
+    wholeYear: (year: string) => `${year} yılının tamamı`,
+    pdf: "PDF",
+    excel: "Excel",
+    failed: "Dosya oluşturulamadı. Tekrar dene.",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",
