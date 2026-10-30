@@ -561,7 +561,6 @@ export const en = {
     nothing: "Couldn't find an amount. Try \"coffee 45\".",
     noMic: "Speech isn't available in this browser. Type it instead.",
     scan: "Scan a receipt",
-    scanNeedsUpdate: "Scanning needs the next app update.",
     scanning: "Reading the receipt…",
     scanFailed: "Couldn't find the total. Check the photo, or type it.",
   },
@@ -606,6 +605,14 @@ export const en = {
     name: "Your name (optional)",
     contactSent: "Thanks! We'll answer by email.",
     back: "Back to sign in",
+  },
+
+  widget: {
+    left: "Left this month",
+    spentOf: (spent: string, total: string) => `Spent ${spent} of ${total}`,
+    over: "Over the budget",
+    add: "+ Add expense",
+    noBudget: "Set this month's budget in the app",
   },
 
   budget: {

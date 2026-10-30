@@ -574,7 +574,6 @@ export const ar: Messages = {
     nothing: "لم أجد مبلغاً. جرّب \"قهوة 45\".",
     noMic: "التعرّف على الصوت غير متاح في هذا المتصفح. اكتبها بدلاً من ذلك.",
     scan: "امسح فاتورة",
-    scanNeedsUpdate: "المسح يحتاج تحديث التطبيق القادم.",
     scanning: "أقرأ الفاتورة…",
     scanFailed: "لم أجد المجموع. تأكد من الصورة، أو اكتبه.",
   },
@@ -618,6 +617,14 @@ export const ar: Messages = {
     name: "اسمك (اختياري)",
     contactSent: "شكراً! سنرد بالإيميل.",
     back: "العودة لتسجيل الدخول",
+  },
+
+  widget: {
+    left: "المتبقي هذا الشهر",
+    spentOf: (spent: string, total: string) => `صرفت ${spent} من ${total}`,
+    over: "تجاوزت الميزانية",
+    add: "+ أضف مصروفاً",
+    noBudget: "حدّد ميزانية هذا الشهر في التطبيق",
   },
 
   budget: {
