@@ -10,6 +10,7 @@ from app.config import settings
 from app.core.push import PushSender, get_push_sender
 from app.dependencies import CurrentUser, DbSession
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
+from app.domain.debt.service import DebtService, users_with_debts_due
 from app.domain.notify.budget_alerts import BudgetAlerts
 from app.domain.notify.service import deliver
 from app.domain.recurring.schema import (
@@ -60,7 +61,8 @@ async def daily(
     x_cron_secret: Annotated[str, Header()] = "",
 ) -> dict:
     """Once a day (.github/workflows/daily.yml): add the recurring expenses that fell due
-    for everyone, send tomorrow's reminders, and the budget alerts they may cause."""
+    for everyone, send tomorrow's reminders and today's debt reminders (F2), and the budget
+    alerts they may cause."""
     if not settings.cron_secret:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Not Found")
     if not hmac.compare_digest(x_cron_secret.encode(), settings.cron_secret.encode()):
@@ -76,6 +78,11 @@ async def daily(
         messages += notes
         if count:
             messages += await BudgetAlerts(db).check(user)
+    debts = DebtService(db, fx)
+    for user in await users_with_debts_due(db, debts.today):
+        notes = await debts.reminders(user)
+        reminded += len(notes)
+        messages += notes
     if push is not None:
         await deliver(push, messages)
     logger.info("daily job", extra={"fields": {"added": added, "reminders": reminded}})

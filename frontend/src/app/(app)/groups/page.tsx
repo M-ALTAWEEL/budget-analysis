@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { ChevronRight, Plus, Users } from "lucide-react";
+import { ChevronRight, HandCoins, Plus, Users } from "lucide-react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -13,6 +14,7 @@ import { ReceivedInvitations } from "@/components/groups/ReceivedInvitations";
 import { Button } from "@/components/ui/Button";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
+import { useDebts } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { listGroups } from "@/services/groups";
@@ -56,6 +58,7 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
 
       <ReceivedInvitations onJoined={onOpen} />
       <PendingShares />
+      <DebtsLink />
 
       {groups.isPending ? (
         <PageLoader />
@@ -105,5 +108,26 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
         )}
       </AnimatePresence>
     </>
+  );
+}
+
+/** The way to personal debts outside groups (feature F2), with what is open both ways. */
+function DebtsLink() {
+  const debts = useDebts();
+  const { t, money } = useI18n();
+  const data = debts.data;
+  const open = data?.items.some((d) => d.settled_on === null);
+  const label = data && open
+    ? t.debts.summary(money(data.owed_to_you, data.currency), money(data.you_owe, data.currency))
+    : t.debts.title;
+  return (
+    <Link
+      href="/debts"
+      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <HandCoins className="size-5 shrink-0 text-pine" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
   );
 }

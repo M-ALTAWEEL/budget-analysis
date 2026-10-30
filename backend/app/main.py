@@ -19,6 +19,7 @@ from app.domain.admin.router import router as admin_router
 from app.domain.assistant.router import router as assistant_router
 from app.domain.budget.router import budgets_router, categories_router
 from app.domain.currency.router import router as currency_router
+from app.domain.debt.router import router as debts_router
 from app.domain.expense.router import router as expenses_router
 from app.domain.goal.router import router as goals_router
 from app.domain.group.router import invites_router, my_requests_router, my_shares_router
@@ -127,6 +128,7 @@ def create_app() -> FastAPI:
     app.include_router(push_devices_router, prefix=settings.api_prefix)
     app.include_router(admin_router, prefix=settings.api_prefix)
     app.include_router(recurring_router, prefix=settings.api_prefix)
+    app.include_router(debts_router, prefix=settings.api_prefix)
     app.include_router(internal_router, prefix=settings.api_prefix)
 
     return app

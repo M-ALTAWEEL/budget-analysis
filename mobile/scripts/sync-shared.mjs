@@ -29,6 +29,7 @@ export const SHARED = [
   "services/auth.ts",
   "services/budget.ts",
   "services/currency.ts",
+  "services/debts.ts",
   "services/expenses.ts",
   "services/goals.ts",
   "services/groups.ts",

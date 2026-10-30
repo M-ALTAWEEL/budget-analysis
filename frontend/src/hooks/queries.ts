@@ -23,6 +23,15 @@ import {
 } from "@/services/expenses";
 import { getRates, listCurrencies } from "@/services/currency";
 import {
+  addDebtPayment,
+  createDebt,
+  deleteDebt,
+  listDebts,
+  settleDebt,
+  undoDebtPayment,
+  updateDebt,
+} from "@/services/debts";
+import {
   createRecurring,
   deleteRecurring,
   listRecurring,
@@ -40,6 +49,7 @@ import {
 import type {
   ContributionInput,
   Currency,
+  DebtInput,
   ExpenseInput,
   GoalInput,
   RecurringInput,
@@ -57,6 +67,7 @@ export const queryKeys = {
   rates: (base: Currency) => ["rates", base] as const,
   currencies: ["currencies"] as const,
   recurring: ["recurring"] as const,
+  debts: ["debts"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -277,4 +288,45 @@ export function useCurrencies() {
     queryFn: listCurrencies,
     staleTime: 60 * 60_000,
   });
+}
+
+// ── personal debts (feature F2) ─────────────────────────────────────────────
+
+export function useDebts() {
+  return useQuery({ queryKey: queryKeys.debts, queryFn: listDebts });
+}
+
+/** Debts never touch the budget, so only the debts list refreshes. */
+function useDebtMutation<T>(fn: (input: T) => Promise<unknown>) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.debts }),
+  });
+}
+
+export function useSaveDebt() {
+  return useDebtMutation(({ uuid, input }: { uuid?: string; input: DebtInput }) =>
+    uuid
+      ? updateDebt(uuid, { person: input.person, amount: input.amount, note: input.note, due_on: input.due_on })
+      : createDebt(input),
+  );
+}
+
+export function useDeleteDebt() {
+  return useDebtMutation(deleteDebt);
+}
+
+export function useDebtPayment() {
+  return useDebtMutation(({ uuid, amount }: { uuid: string; amount: string }) => addDebtPayment(uuid, amount));
+}
+
+export function useSettleDebt() {
+  return useDebtMutation(settleDebt);
+}
+
+export function useUndoDebtPayment() {
+  return useDebtMutation(({ uuid, paymentUuid }: { uuid: string; paymentUuid: string }) =>
+    undoDebtPayment(uuid, paymentUuid),
+  );
 }

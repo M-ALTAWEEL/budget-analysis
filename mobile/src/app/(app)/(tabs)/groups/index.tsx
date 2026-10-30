@@ -1,8 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
-import { ChevronRight, Plus, Users } from "lucide-react-native";
+import { useRouter, type Href } from "expo-router";
+import { ChevronRight, HandCoins, Plus, Users } from "lucide-react-native";
 import { useState } from "react";
-import { View } from "react-native";
+import { Pressable, View } from "react-native";
 
 import { CreateGroupSheet } from "@/components/groups/CreateGroupSheet";
 import { PendingShares } from "@/components/groups/PendingShares";
@@ -10,6 +10,7 @@ import { ReceivedInvitations } from "@/components/groups/ReceivedInvitations";
 import { Button } from "@/components/ui/Button";
 import { List, LoadError, PageLoader, Row, Screen } from "@/components/ui/Layout";
 import { Text } from "@/components/ui/Text";
+import { useDebts } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { listGroups } from "@/services/groups";
@@ -36,6 +37,7 @@ export default function GroupsScreen() {
 
       <ReceivedInvitations onJoined={open} />
       <PendingShares />
+      <DebtsLink />
 
       {groups.isPending ? (
         <PageLoader />
@@ -74,5 +76,31 @@ export default function GroupsScreen() {
         />
       )}
     </Screen>
+  );
+}
+
+/** The way to personal debts outside groups (feature F2), with what is open both ways. */
+function DebtsLink() {
+  const debts = useDebts();
+  const router = useRouter();
+  const colors = useColors();
+  const { t, dir, money } = useI18n();
+  const data = debts.data;
+  const open = data?.items.some((d) => d.settled_on === null);
+  const label = data && open
+    ? t.debts.summary(money(data.owed_to_you, data.currency), money(data.you_owe, data.currency))
+    : t.debts.title;
+  return (
+    <Pressable
+      onPress={() => router.push("/debts" as Href)}
+      accessibilityRole="link"
+      style={({ pressed }) => ({
+        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
+      })}>
+      <HandCoins size={20} color={colors.pine} />
+      <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{label}</Text>
+      <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+    </Pressable>
   );
 }
