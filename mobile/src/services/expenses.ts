@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import type { CategorySuggestion, Expense, ExpenseInput } from "@/types/api";
+import type { Category, CategorySuggestion, Currency, Expense, ExpenseInput } from "@/types/api";
 
 export async function listExpenses(month: string): Promise<Expense[]> {
   const { data } = await api.get<Expense[]>("/expenses", { params: { month, limit: 100 } });
@@ -28,5 +28,19 @@ export async function suggestCategory(
     params: { description },
     signal, // a newer keystroke cancels the request that is no longer needed
   });
+  return data;
+}
+
+export interface QuickAdd {
+  amount: string | null;
+  currency: Currency | null;
+  description: string;
+  spent_at: string;
+  category: Category | null;
+}
+
+/** Feature F9: read an expense out of one sentence ("coffee 45 lira yesterday"). */
+export async function quickAdd(text: string): Promise<QuickAdd> {
+  const { data } = await api.post<QuickAdd>("/expenses/quick", { text });
   return data;
 }

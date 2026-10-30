@@ -89,7 +89,12 @@ jobs:
         run: npm ci
 
       - name: Lint (ESLint)
-        run: npm run lint
+        run: |
+          set -o pipefail
+          npm run lint 2>&1 | tee lint.log || {
+            tail -n 60 lint.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g' | sed -e 's/^/::error title=eslint::/'
+            exit 1
+          }
 
       - name: Types (TypeScript)
         run: npx tsc --noEmit

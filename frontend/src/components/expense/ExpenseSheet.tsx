@@ -6,6 +6,7 @@ import { createContext, useCallback, useContext, useState } from "react";
 import { toast } from "sonner";
 
 import { useCurrentUser } from "@/components/auth/AuthProvider";
+import { QuickAddBar } from "@/components/expense/QuickAddBar";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { CurrencySelect } from "@/components/ui/CurrencySelect";
@@ -149,6 +150,19 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
       <div className="space-y-4">
         {expense?.source === "group" && (
           <p className="rounded-xl bg-pine-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
+        )}
+        {!expense && (
+          <QuickAddBar
+            onFound={(found) => {
+              if (found.amount !== null) setAmount(toInputAmount(found.amount));
+              if (found.currency) setCurrency(found.currency);
+              if (found.description) setDescription(found.description);
+              setSpentAt(found.spent_at);
+              if (found.category && categories.data?.some((c) => c.uuid === found.category!.uuid)) {
+                setPickedUuid(found.category.uuid);
+              }
+            }}
+          />
         )}
         <div className="grid grid-cols-[1fr_auto] gap-3">
           <Field

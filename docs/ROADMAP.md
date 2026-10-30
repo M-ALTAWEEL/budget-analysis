@@ -139,7 +139,7 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F6 Savings challenges**: skip a category, spend under an amount, days without spending; wins, badges and a no-spend streak; shared with a group and joined by its members
 - [x] **F7 Shared household budget (Plus)**: one monthly total for the whole group with category limits, what is left, and who paid how much; set by the group admins
 - [x] **F8 Inflation and currency view (Plus)**: six months of spending in the person's currency and in a steady one at each month's rate (ECB rates, kept once fetched); purchases that got more expensive
-- [ ] F9 Add an expense by voice
+- [x] **F9 Add an expense by voice**: one sentence in English, Arabic or Turkish fills in the form (browser speech recognition on the website, the keyboard microphone in the app)
 - [ ] F10 Receipt scan (Plus)
 - [ ] F11 Bank statement import (Plus)
 - [ ] F12 Home-screen widget

@@ -551,6 +551,17 @@ export const en = {
     link: "Inflation and currencies",
   },
 
+  quickAdd: {
+    label: "Say it or type it",
+    placeholder: "e.g. coffee 45 lira yesterday",
+    fill: "Fill in",
+    listen: "Speak",
+    listening: "Listening…",
+    hint: "Tap the microphone on your keyboard and say it, then Fill in.",
+    nothing: "Couldn't find an amount. Try \"coffee 45\".",
+    noMic: "Speech isn't available in this browser. Type it instead.",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",

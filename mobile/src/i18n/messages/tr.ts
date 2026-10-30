@@ -551,6 +551,17 @@ export const tr: Messages = {
     link: "Enflasyon ve döviz",
   },
 
+  quickAdd: {
+    label: "Söyle ya da yaz",
+    placeholder: "ör. dün kahve 45 lira",
+    fill: "Doldur",
+    listen: "Konuş",
+    listening: "Dinliyorum…",
+    hint: "Klavyedeki mikrofona dokunup söyle, sonra Doldur.",
+    nothing: "Tutar bulunamadı. \"kahve 45\" gibi dene.",
+    noMic: "Bu tarayıcıda ses tanıma yok. Yazarak dene.",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",
