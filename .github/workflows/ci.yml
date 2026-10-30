@@ -59,8 +59,15 @@ jobs:
           ruff check .
           ruff format --check .
 
+      # A failure also becomes an annotation on the run, so it is readable from the API
+      # and the pull request's checks page without opening the full log.
       - name: Tests (pytest)
-        run: pytest -q
+        run: |
+          set -o pipefail
+          pytest -q -rfE --tb=short 2>&1 | tee pytest.log || {
+            tail -n 80 pytest.log | sed -e 's/%/%25/g' | sed -e ':a;N;$!ba;s/\n/%0A/g' | sed -e 's/^/::error title=pytest::/'
+            exit 1
+          }
 
   frontend:
     name: Frontend (lint + types + build)
