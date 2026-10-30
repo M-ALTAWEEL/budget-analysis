@@ -473,6 +473,16 @@ export const ar: Messages = {
     see: "اعرضه",
   },
 
+  reports: {
+    title: "تنزيل",
+    intro: "شهرك أو سنتك كاملة كملف، تحتفظ به أو ترسله للأهل أو لجهة المنحة.",
+    thisMonth: (month: string) => month,
+    wholeYear: (year: string) => `سنة ${year} كاملة`,
+    pdf: "PDF",
+    excel: "Excel",
+    failed: "تعذّر إنشاء الملف. حاول مرة أخرى.",
+  },
+
   budget: {
     totalLabel: (month) => `ميزانية ${month}`,
     update: "تحديث الميزانية",

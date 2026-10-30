@@ -4,6 +4,7 @@ import { ChevronLeft, ChevronRight, Share2, TrendingDown, TrendingUp } from "luc
 import type { ReactNode } from "react";
 import { Pressable, Share, View } from "react-native";
 
+import { DownloadReport } from "@/components/reports/DownloadReport";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { LoadError, PageLoader, Screen } from "@/components/ui/Layout";
@@ -153,6 +154,8 @@ function Report({ data }: { data: Wrapped }) {
           ))}
         </View>
       </Card>
+
+      <DownloadReport month={data.month} />
 
       <Button
         variant="secondary"

@@ -304,6 +304,21 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 4. Sharing sends only a sentence with the month, spent and budget: no categories or
    expenses.
 
+### 8.8 Downloadable reports, PDF and Excel (feature F5, Plus)
+**Rules** (`app/domain/report/files.py`):
+
+1. A **month** with a budget, or a **year** (every month of it with a budget), as a PDF or an
+   Excel file, in the person's language (Arabic pages read right to left). Nothing to report
+   answers `404`.
+2. Contents: per month the budget, spent, left and income; categories with their limit (month
+   only) and spent; every expense with its date, description, category and amount in the
+   month's currency, plus the amount paid when it was another currency. A year keeps each
+   month's own currency; category totals are kept apart per currency, never mixed.
+3. Excel cells hold plain numbers and dates, so the sheet can be summed and charted.
+4. Files are made on request and never stored; the answer says `Cache-Control: no-store`.
+   The website downloads it; the app opens the share sheet (save to Files, send by mail...).
+5. Free for now; in phase 7 it becomes part of Plus.
+
 ## 9. Savings goals
 
 **Rules** (`app/domain/goal/service.py`):
@@ -558,6 +573,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A recurring expense is added once per occurrence, never re-added after deletion, and never for a paused or ended rule | `test_recurring.py` |
 | "Left" is income minus the month's expenses in one currency; "same as last month" copies only once | `test_income.py` |
 | The month report counts only the visible days, compares like with like, and its notification comes once | `test_wrapped.py` |
+| Report files carry the same numbers as the app and never mix currencies | `test_report_files.py` |
 
 ## 17. Admin dashboard
 
