@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft, ChevronRight, Repeat } from "lucide-react";
+import { ArrowLeft, ChevronRight, FileUp, Repeat } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -78,6 +78,7 @@ function Expenses() {
         <>
           {categoryUuid === null && summary.data && <CategoryBreakdown summary={summary.data} />}
           {categoryUuid === null && <RecurringLink />}
+          {categoryUuid === null && <ImportLink />}
           {shown.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-line px-6 py-8 text-muted">
               {t.expenses.categoryEmpty}
@@ -136,6 +137,20 @@ function CategoryHeader({
 }
 
 /** "4 recurring · 1,250 TRY a month ›": the way to rent, bills and subscriptions (F1). */
+function ImportLink() {
+  const { t } = useI18n();
+  return (
+    <Link
+      href="/import"
+      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <FileUp className="size-5 shrink-0 text-pine" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">{t.imports.link}</span>
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
+  );
+}
+
 function RecurringLink() {
   const recurring = useRecurring();
   const { t, money } = useI18n();
@@ -147,7 +162,7 @@ function RecurringLink() {
   return (
     <Link
       href="/recurring"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Repeat className="size-5 shrink-0 text-pine" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>

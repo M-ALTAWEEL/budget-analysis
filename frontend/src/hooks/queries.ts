@@ -490,3 +490,8 @@ export function useOpenSupport() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.support }),
   });
 }
+
+/** Refreshes everything that depends on spending and income (a statement import, say). */
+export function useInvalidateMoneyPublic() {
+  return useInvalidateMoney();
+}

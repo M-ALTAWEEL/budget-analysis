@@ -615,6 +615,30 @@ export const en = {
     noBudget: "Set this month's budget in the app",
   },
 
+  imports: {
+    title: "Import a bank statement",
+    link: "Import a bank statement",
+    intro: "Upload your bank's statement (Excel, CSV or PDF). You'll see every line with a suggestion, choose what to add, and nothing is added twice. The file isn't kept.",
+    choose: "Choose a file",
+    reading: "Reading the statement…",
+    period: (from: string, to: string) => `${from} – ${to}`,
+    totals: (out: string, into: string) => `Out ${out} · In ${into}`,
+    addAs: { expense: "Expense", income: "Income", skip: "Skip" },
+    kinds: {
+      purchase: "Card purchase", bill: "Bill", card_payment: "Credit card payment (already counted)",
+      transfer_out: "Transfer out", transfer_in: "Transfer in", deposit: "Deposit", refund: "Refund", other: "Other",
+    },
+    duplicate: "Already added",
+    noBudget: "No budget that month",
+    selected: (count: number) => (count === 1 ? "1 line selected" : `${count} lines selected`),
+    add: "Add selected",
+    done: (expenses: number, income: number) => `Added ${expenses} expenses and ${income} income.`,
+    skipped: (already: number, noBudget: number) =>
+      [already ? `${already} were already there` : "", noBudget ? `${noBudget} have no budget for their month` : ""].filter(Boolean).join(" · "),
+    another: "Import another file",
+    howTo: "From your bank's app: open the account, then “Account statement” (Hesap Özeti / كشف الحساب) and share it as Excel or PDF.",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",

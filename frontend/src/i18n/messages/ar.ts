@@ -627,6 +627,30 @@ export const ar: Messages = {
     noBudget: "حدّد ميزانية هذا الشهر في التطبيق",
   },
 
+  imports: {
+    title: "استيراد كشف حساب",
+    link: "استيراد كشف حساب",
+    intro: "ارفع كشف حساب بنكك (Excel أو CSV أو PDF). سترى كل حركة مع اقتراح، وتختار ما تضيفه، ولا شيء يُضاف مرتين. الملف لا يُحفظ.",
+    choose: "اختر ملفاً",
+    reading: "أقرأ الكشف…",
+    period: (from: string, to: string) => `${from} – ${to}`,
+    totals: (out: string, into: string) => `خرج ${out} · دخل ${into}`,
+    addAs: { expense: "مصروف", income: "دخل", skip: "تجاهل" },
+    kinds: {
+      purchase: "شراء بالبطاقة", bill: "فاتورة", card_payment: "سداد بطاقة ائتمان (محسوب مسبقاً)",
+      transfer_out: "تحويل صادر", transfer_in: "تحويل وارد", deposit: "إيداع", refund: "استرجاع", other: "أخرى",
+    },
+    duplicate: "مضاف سابقاً",
+    noBudget: "لا ميزانية لذلك الشهر",
+    selected: (count: number) => `${count} حركات محددة`,
+    add: "أضف المحدد",
+    done: (expenses: number, income: number) => `أُضيف ${expenses} مصاريف و ${income} دخل.`,
+    skipped: (already: number, noBudget: number) =>
+      [already ? `${already} كانت موجودة` : "", noBudget ? `${noBudget} بلا ميزانية لشهرها` : ""].filter(Boolean).join(" · "),
+    another: "استيراد ملف آخر",
+    howTo: "من تطبيق بنكك: افتح الحساب ثم «كشف الحساب» وشاركه Excel أو PDF.",
+  },
+
   budget: {
     totalLabel: (month) => `ميزانية ${month}`,
     update: "تحديث الميزانية",

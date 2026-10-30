@@ -1,5 +1,5 @@
 import { useRouter, type Href } from "expo-router";
-import { ChevronRight, Repeat } from "lucide-react-native";
+import { ChevronRight, FileUp, Repeat } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 
 import { CategoryBreakdown } from "@/components/expense/CategoryBreakdown";
@@ -48,6 +48,7 @@ export default function ExpensesScreen() {
         <>
           {summary.data && <CategoryBreakdown summary={summary.data} />}
           <RecurringLink />
+          <ImportLink />
           <List>
             {expenses.data.map((expense) => (
               <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
@@ -60,6 +61,25 @@ export default function ExpensesScreen() {
 }
 
 /** "4 recurring · 1,250 TRY a month ›": the way to rent, bills and subscriptions (F1). */
+function ImportLink() {
+  const router = useRouter();
+  const colors = useColors();
+  const { t, dir } = useI18n();
+  return (
+    <Pressable
+      onPress={() => router.push("/import" as Href)}
+      accessibilityRole="link"
+      style={({ pressed }) => ({
+        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
+      })}>
+      <FileUp size={20} color={colors.pine} />
+      <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{t.imports.link}</Text>
+      <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+    </Pressable>
+  );
+}
+
 function RecurringLink() {
   const recurring = useRecurring();
   const router = useRouter();
@@ -75,7 +95,7 @@ function RecurringLink() {
       onPress={() => router.push("/recurring" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Repeat size={20} color={colors.pine} />
