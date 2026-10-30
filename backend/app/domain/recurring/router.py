@@ -20,6 +20,7 @@ from app.domain.recurring.schema import (
     RecurringUpdate,
 )
 from app.domain.recurring.service import RecurringService, users_with_rules
+from app.domain.report.service import WrappedService, users_with_recent_budgets
 
 router = APIRouter(prefix="/recurring", tags=["recurring"])
 internal_router = APIRouter(prefix="/internal", tags=["internal"], include_in_schema=False)
@@ -61,8 +62,8 @@ async def daily(
     x_cron_secret: Annotated[str, Header()] = "",
 ) -> dict:
     """Once a day (.github/workflows/daily.yml): add the recurring expenses that fell due
-    for everyone, send tomorrow's reminders and today's debt reminders (F2), and the budget
-    alerts they may cause."""
+    for everyone, send tomorrow's reminders, today's debt reminders (F2), the budget alerts they
+    may cause, and the month-end report notification when a month has just ended (F4)."""
     if not settings.cron_secret:
         raise HTTPException(status.HTTP_404_NOT_FOUND, "Not Found")
     if not hmac.compare_digest(x_cron_secret.encode(), settings.cron_secret.encode()):
@@ -81,6 +82,11 @@ async def daily(
     debts = DebtService(db, fx)
     for user in await users_with_debts_due(db, debts.today):
         notes = await debts.reminders(user)
+        reminded += len(notes)
+        messages += notes
+    wrapped = WrappedService(db, fx)
+    for user in await users_with_recent_budgets(db, wrapped.today):
+        notes = await wrapped.notify(user)
         reminded += len(notes)
         messages += notes
     if push is not None:

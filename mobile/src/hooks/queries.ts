@@ -31,6 +31,7 @@ import {
   undoDebtPayment,
   updateDebt,
 } from "@/services/debts";
+import { getWrapped } from "@/services/reports";
 import {
   copyPreviousIncome,
   createIncome,
@@ -77,6 +78,7 @@ export const queryKeys = {
   recurring: ["recurring"] as const,
   debts: ["debts"] as const,
   income: (month: string) => ["income", month] as const,
+  wrapped: (month: string) => ["wrapped", month] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -115,6 +117,7 @@ function useInvalidateMoney() {
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
       queryClient.invalidateQueries({ queryKey: ["recurring"] }),
       queryClient.invalidateQueries({ queryKey: ["income"] }), // spent and net change
+      queryClient.invalidateQueries({ queryKey: ["wrapped"] }),
     ]);
 }
 
@@ -375,4 +378,16 @@ export function useDeleteIncome() {
 
 export function useCopyPreviousIncome() {
   return useIncomeMutation(copyPreviousIncome);
+}
+
+// ── month-end report (feature F4) ───────────────────────────────────────────
+
+/** `enabled` false: not asked (the overview only asks in the first days of a month). */
+export function useWrapped(month: string, enabled = true) {
+  return useQuery({
+    queryKey: queryKeys.wrapped(month),
+    queryFn: () => getWrapped(month),
+    enabled,
+    retry: false, // a month without a budget answers 404: nothing to retry
+  });
 }

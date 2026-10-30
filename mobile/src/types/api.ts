@@ -331,3 +331,25 @@ export interface IncomeInput {
   received_on: string;
   note?: string | null;
 }
+
+// ── month-end report (feature F4) ───────────────────────────────────────────
+
+export interface Wrapped {
+  month: string;
+  currency: Currency;
+  finished: boolean; // false: the month is still going ("so far")
+  days: number;
+  budget: string;
+  spent: string;
+  saved: string; // budget - spent; negative when overspent
+  expense_count: number;
+  no_spend_days: number;
+  daily_average: string;
+  previous_spent: string | null;
+  change_percent: number | null; // spending compared with the month before
+  top_categories: { category: Category; spent: string; share: number }[];
+  biggest: { description: string; amount: string; spent_at: string; category: Category } | null;
+  busiest_weekday: number | null; // 0 = Monday
+  income: string | null;
+  goals_saved: string;
+}

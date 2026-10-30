@@ -16,11 +16,11 @@ import { BudgetTank } from "@/components/overview/BudgetTank";
 import { CategoryBreakdown } from "@/components/overview/CategoryBreakdown";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
-import { useDaily, useExpenses, useSummary, useTips } from "@/hooks/queries";
+import { useDaily, useExpenses, useSummary, useTips, useWrapped } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { compareWithPrevious, daysElapsed, findAlerts } from "@/lib/insights";
-import { shiftMonth } from "@/lib/month";
+import { currentMonth, monthProgress, shiftMonth } from "@/lib/month";
 import type { DailySpending } from "@/types/api";
 
 /** A titled block of the overview. */
@@ -71,6 +71,7 @@ export default function OverviewPage() {
       </header>
 
       <PendingSharesBanner />
+      {month === currentMonth() && <WrappedBanner />}
 
       {summary.isPending ? (
         <PageLoader />
@@ -159,5 +160,23 @@ function Comparison({
     previous && previous.currency !== current.currency ? t.insights.differentCurrency : t.insights.noComparison;
   return (
     <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">{reason}</p>
+  );
+}
+
+/** In the first week of a month: last month's report is ready (feature F4). */
+function WrappedBanner() {
+  const { t, monthLabel } = useI18n();
+  const previous = shiftMonth(currentMonth(), -1);
+  const early = monthProgress(currentMonth()).dayOfMonth <= 7;
+  const report = useWrapped(previous, early);
+  if (!early || !report.data) return null;
+  return (
+    <Link
+      href={`/wrapped?month=${previous}`}
+      className="mb-8 flex items-center justify-between gap-3 rounded-2xl bg-pine px-5 py-4 text-white transition-opacity hover:opacity-90"
+    >
+      <span className="font-semibold">{t.wrapped.ready(monthLabel(previous))}</span>
+      <span className="shrink-0 text-sm font-semibold underline">{t.wrapped.see}</span>
+    </Link>
   );
 }
