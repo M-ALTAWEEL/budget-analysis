@@ -296,3 +296,38 @@ export interface DebtInput {
   started_on?: string;
   due_on?: string | null;
 }
+
+// ── income (feature F3) ─────────────────────────────────────────────────────
+
+export type IncomeKind = "job" | "scholarship" | "family" | "freelance" | "other";
+
+export interface Income {
+  uuid: string;
+  source: string;
+  kind: IncomeKind;
+  amount: string;
+  currency: Currency;
+  received_on: string;
+  note: string | null;
+  converted: string | null; // in the month's currency; null: no rate right now
+}
+
+export interface IncomeMonth {
+  month: string;
+  currency: Currency; // the month budget's currency, or the main one without a budget
+  items: Income[]; // newest first
+  total: string;
+  by_kind: { kind: IncomeKind; total: string }[]; // biggest first
+  spent: string;
+  net: string; // total - spent
+  budget: string | null;
+}
+
+export interface IncomeInput {
+  source: string;
+  kind: IncomeKind;
+  amount: string;
+  currency: Currency;
+  received_on: string;
+  note?: string | null;
+}

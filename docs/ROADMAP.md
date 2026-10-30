@@ -133,7 +133,7 @@ Thirteen features that make the product stronger, one pull request each, easiest
 Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F1 Recurring expenses and subscriptions**: rules added on their day each month, reminders the day before, a monthly total; "Repeat every month" on a new expense
 - [x] **F2 Personal debts**: lent or borrowed outside groups, paid back in parts, totals both ways, a reminder on the due day
-- [ ] F3 Income and its sources
+- [x] **F3 Income and its sources**: job, scholarship, family and more, in any currency; came in, went out and what is left; "make my budget" from income; "same as last month"
 - [ ] F4 Month-end report (Wrapped)
 - [ ] F5 PDF and Excel reports (Plus)
 - [ ] F6 Savings challenges
