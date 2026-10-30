@@ -420,3 +420,29 @@ export interface GroupBudget {
   paid_by: { name: string; me: boolean; paid: string }[];
   can_edit: boolean;
 }
+
+// ── inflation and currencies (feature F8) ───────────────────────────────────
+
+export interface InflationView {
+  stable_currency: Currency;
+  months: {
+    month: string;
+    currency: Currency;
+    spent: string;
+    spent_stable: string | null; // null: no rate for that month
+    rate: string | null;
+    partial: boolean;
+  }[];
+  change_local: number | null;
+  change_stable: number | null;
+  prices: {
+    label: string;
+    category: Category;
+    currency: Currency;
+    first_month: string;
+    first_price: string;
+    last_month: string;
+    last_price: string;
+    change: number;
+  }[];
+}

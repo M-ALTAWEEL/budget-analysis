@@ -532,6 +532,25 @@ export const tr: Messages = {
     limitsTooHigh: "Limitler toplamı aşıyor.",
   },
 
+  inflation: {
+    title: "Enflasyon ve döviz",
+    intro: (stable: string) =>
+      `Fiyatlar sürekli değişiyor. Burada harcamaların ay ay kendi para biriminde ve her ayın kuruyla ${stable} olarak, ayrıca pahalanan alışkanlıkların var.`,
+    monthsTitle: "Ay ay",
+    local: "Kendi para birimin",
+    stable: (code: string) => `${code} olarak`,
+    noRate: "kur yok",
+    soFar: "şimdilik",
+    summary: (local: number, stable: number, code: string) =>
+      `Harcamaların kendi para biriminde %${local > 0 ? "+" : ""}${local}, ${code} olarak %${stable > 0 ? "+" : ""}${stable} değişti.`,
+    explain: "İkisi çok farklıysa, alışkanlıklarından çok fiyatlar ve kur değişmiş demektir.",
+    pricesTitle: "Fiyatı artanlar",
+    pricesEmpty: "Bu aylarda düzenli aldığın hiçbir şey pahalanmadı.",
+    priceLine: (before: string, after: string) => `${before} → ${after}`,
+    empty: "Bunu görmek için birkaç ay bütçe belirle ve harcama ekle.",
+    link: "Enflasyon ve döviz",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",

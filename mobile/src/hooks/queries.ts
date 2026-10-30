@@ -32,6 +32,7 @@ import {
   updateDebt,
 } from "@/services/debts";
 import { createChallenge, deleteChallenge, joinChallenge, listChallenges } from "@/services/challenges";
+import { getInflation } from "@/services/inflation";
 import { getWrapped } from "@/services/reports";
 import {
   copyPreviousIncome,
@@ -81,6 +82,7 @@ export const queryKeys = {
   income: (month: string) => ["income", month] as const,
   wrapped: (month: string) => ["wrapped", month] as const,
   challenges: ["challenges"] as const,
+  inflation: ["inflation"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -121,6 +123,7 @@ function useInvalidateMoney() {
       queryClient.invalidateQueries({ queryKey: ["income"] }), // spent and net change
       queryClient.invalidateQueries({ queryKey: ["wrapped"] }),
       queryClient.invalidateQueries({ queryKey: ["challenges"] }), // progress comes from spending
+      queryClient.invalidateQueries({ queryKey: ["inflation"] }),
     ]);
 }
 
@@ -419,4 +422,10 @@ export function useJoinChallenge() {
 
 export function useDeleteChallenge() {
   return useChallengeMutation(deleteChallenge);
+}
+
+// ── inflation and currencies (feature F8) ───────────────────────────────────
+
+export function useInflation() {
+  return useQuery({ queryKey: queryKeys.inflation, queryFn: getInflation });
 }

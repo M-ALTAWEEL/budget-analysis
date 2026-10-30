@@ -7,7 +7,7 @@ Add one line here for each new domain model file.
 from app.domain.admin.model import AdminAuditLog, PlatformAdmin
 from app.domain.budget.model import Budget, BudgetAllocation, Category
 from app.domain.challenge.model import Challenge
-from app.domain.currency.model import ExchangeRate, SupportedCurrency
+from app.domain.currency.model import ExchangeRate, PastRate, SupportedCurrency
 from app.domain.debt.model import Debt, DebtPayment
 from app.domain.expense.model import Expense
 from app.domain.goal.model import GoalContribution, SavingsGoal
@@ -57,6 +57,7 @@ __all__ = [
     "GroupSettlement",
     "Income",
     "OneTimeToken",
+    "PastRate",
     "PhoneCode",
     "PlatformAdmin",
     "PushDevice",

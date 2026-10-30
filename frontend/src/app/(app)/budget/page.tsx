@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronRight, Sparkles, Wallet } from "lucide-react";
+import { ChevronRight, Sparkles, TrendingUp, Wallet } from "lucide-react";
 import Link from "next/link";
 
 import { AllocationEditor, TotalForm } from "@/components/budget/BudgetPlan";
@@ -26,6 +26,7 @@ export default function BudgetPage() {
       </header>
       <IncomeLink month={month} />
       <WrappedLink month={month} />
+      <InflationLink />
 
       {summary.isPending || categories.isPending ? (
         <PageLoader />
@@ -90,10 +91,25 @@ function WrappedLink({ month }: { month: string }) {
   return (
     <Link
       href={`/wrapped?month=${month}`}
-      className="mb-10 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Sparkles className="size-5 shrink-0 text-pine" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.wrapped.title}</span>
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
+  );
+}
+
+/** The way to the inflation and currency view (feature F8). */
+function InflationLink() {
+  const { t } = useI18n();
+  return (
+    <Link
+      href="/inflation"
+      className="mb-10 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <TrendingUp className="size-5 shrink-0 text-pine" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">{t.inflation.link}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>
   );
