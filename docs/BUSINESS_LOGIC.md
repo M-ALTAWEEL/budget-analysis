@@ -395,6 +395,21 @@ to the member who joined first. 100.00 ÷ 3 = 33.34 + 33.33 + 33.33.
 6. **The chat** lists every expense and payment in the order they were recorded, each with
    the **server's** date and time, so nothing can be back-dated. It loads 30 items at a time.
 
+### 11.8 Personal debts outside groups (feature F2)
+**Rules** (`app/domain/debt/`):
+
+1. A debt is the person's own note: someone's name (no account needed), **lent** (they owe
+   me) or **borrowed** (I owe them), an amount and currency, an optional note and due day.
+2. **Debts never touch the budget**: lending is not spending, and paying back is not income.
+3. Paid back in one or more payments, never more than what is left; "All paid back" adds one
+   payment of the rest. A debt is **settled** when nothing is left, on its last payment's day;
+   undoing a payment opens it again. The amount can't drop below what was already paid.
+4. Open debts come first, by due day; settled ones last. A debt past its due day and not
+   settled is **overdue**. At most 100 open debts.
+5. Totals ("owed to you", "you owe") count open debts in the person's main currency at
+   today's rates.
+6. **Reminder:** a push notification on the due day, once, with the budget alerts switch.
+
 ## 12. Accounts and security
 
 Full design: [`design/accounts.md`](design/accounts.md); verification: [`security/ASVS.md`](security/ASVS.md).
@@ -501,6 +516,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A hidden currency can't be newly chosen, but stays usable and convertible for whoever has it | `test_admin_currencies.py` |
 | The exchange-rate URL only ever holds a three-letter code from our table | `test_currency.py` |
 | A currency the rates provider stops quoting never stops conversion between the others | `test_currency.py` |
+| A debt can't be paid back beyond what is left, and settles exactly when nothing is left | `test_debts.py` |
 | A recurring expense is added once per occurrence, never re-added after deletion, and never for a paused or ended rule | `test_recurring.py` |
 
 ## 17. Admin dashboard

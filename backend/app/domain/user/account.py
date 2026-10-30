@@ -17,6 +17,7 @@ from app.core.email_templates import build_email
 from app.core.google import GoogleIdentity
 from app.core.security import generate_refresh_token, hash_token, verify_password
 from app.domain.budget.model import Budget, Category
+from app.domain.debt.model import Debt
 from app.domain.expense.model import Expense
 from app.domain.goal.model import SavingsGoal
 from app.domain.group.service import GroupService
@@ -215,6 +216,7 @@ class AccountService:
                 select(RecurringExpense).where(RecurringExpense.user_id == user.id)
             )
         ).all()
+        debts = (await self.session.scalars(select(Debt).where(Debt.user_id == user.id))).all()
         identities = (
             await self.session.scalars(select(UserIdentity).where(UserIdentity.user_id == user.id))
         ).all()
@@ -296,6 +298,22 @@ class AccountService:
                     "paused": r.paused,
                 }
                 for r in recurring
+            ],
+            "debts": [
+                {
+                    "person": d.person,
+                    "direction": d.direction,
+                    "amount": str(d.amount),
+                    "currency": d.currency,
+                    "note": d.note,
+                    "started_on": d.started_on.isoformat(),
+                    "due_on": when(d.due_on),
+                    "settled_on": when(d.settled_on),
+                    "payments": [
+                        {"date": p.paid_on.isoformat(), "amount": str(p.amount)} for p in d.payments
+                    ],
+                }
+                for d in debts
             ],
             "devices": [
                 {

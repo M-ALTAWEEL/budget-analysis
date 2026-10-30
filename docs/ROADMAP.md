@@ -132,7 +132,7 @@ Design in [`design/admin.md`](design/admin.md).
 Thirteen features that make the product stronger, one pull request each, easiest first.
 Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F1 Recurring expenses and subscriptions**: rules added on their day each month, reminders the day before, a monthly total; "Repeat every month" on a new expense
-- [ ] F2 Personal debts (lent / borrowed)
+- [x] **F2 Personal debts**: lent or borrowed outside groups, paid back in parts, totals both ways, a reminder on the due day
 - [ ] F3 Income and its sources
 - [ ] F4 Month-end report (Wrapped)
 - [ ] F5 PDF and Excel reports (Plus)

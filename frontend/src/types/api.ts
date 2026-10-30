@@ -256,3 +256,43 @@ export interface RecurringInput {
   paused?: boolean;
   from_expense_uuid?: string; // "repeat every month" on an expense just added
 }
+
+/** Money lent to or borrowed from someone outside any group (feature F2). */
+export interface DebtPayment {
+  uuid: string;
+  amount: string;
+  paid_on: string;
+}
+
+export interface Debt {
+  uuid: string;
+  person: string;
+  direction: "lent" | "borrowed"; // lent: they owe me; borrowed: I owe them
+  amount: string;
+  currency: Currency;
+  note: string | null;
+  started_on: string;
+  due_on: string | null;
+  settled_on: string | null; // set once nothing is left
+  paid: string;
+  remaining: string;
+  overdue: boolean;
+  payments: DebtPayment[];
+}
+
+export interface DebtList {
+  items: Debt[]; // open ones first (by due day), then settled ones
+  owed_to_you: string; // open debts in the person's main currency
+  you_owe: string;
+  currency: Currency;
+}
+
+export interface DebtInput {
+  person: string;
+  direction: "lent" | "borrowed";
+  amount: string;
+  currency: Currency;
+  note?: string | null;
+  started_on?: string;
+  due_on?: string | null;
+}

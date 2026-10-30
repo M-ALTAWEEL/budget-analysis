@@ -16,6 +16,9 @@ _TEXT: dict[str, dict[str, str]] = {
         "budget_over": "This month's budget is overspent by {over}.",
         "bill_title": "Coming up",
         "bill_tomorrow": "Tomorrow: {what}, {amount}.",
+        "debt_title": "Debts",
+        "debt_owed": "{person} owes you {amount}, due today.",
+        "debt_owe": "You owe {person} {amount}, due today.",
     },
     "ar": {
         "expense": "أضاف {actor} {what}: {amount}. حصتك: {share}.",
@@ -29,6 +32,9 @@ _TEXT: dict[str, dict[str, str]] = {
         "budget_over": "تجاوزت ميزانية هذا الشهر بمبلغ {over}.",
         "bill_title": "قادم",
         "bill_tomorrow": "غداً: {what}، {amount}.",
+        "debt_title": "الديون",
+        "debt_owed": "{person} مدين لك بـ {amount}، موعده اليوم.",
+        "debt_owe": "عليك لـ {person} مبلغ {amount}، موعده اليوم.",
     },
     "tr": {
         "expense": "{actor} {what} ekledi: {amount}. Senin payın: {share}.",
@@ -42,6 +48,9 @@ _TEXT: dict[str, dict[str, str]] = {
         "budget_over": "Bu ayın bütçesi {over} aşıldı.",
         "bill_title": "Yaklaşan ödeme",
         "bill_tomorrow": "Yarın: {what}, {amount}.",
+        "debt_title": "Borçlar",
+        "debt_owed": "{person} sana {amount} borçlu, vadesi bugün.",
+        "debt_owe": "{person} kişisine {amount} borcun var, vadesi bugün.",
     },
 }
 
