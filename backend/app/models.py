@@ -19,6 +19,7 @@ from app.domain.group.model import (
     GroupRequest,
     GroupSettlement,
 )
+from app.domain.income.model import Income
 from app.domain.notify.model import PushDevice
 from app.domain.recurring.model import RecurringExpense
 from app.domain.user.model import (
@@ -50,6 +51,7 @@ __all__ = [
     "GroupMember",
     "GroupRequest",
     "GroupSettlement",
+    "Income",
     "OneTimeToken",
     "PhoneCode",
     "PlatformAdmin",

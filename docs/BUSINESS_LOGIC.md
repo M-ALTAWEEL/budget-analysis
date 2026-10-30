@@ -184,6 +184,24 @@ server, website and app):
    reminder and the person's budget alerts switch are on.
 8. The monthly total shows the active rules in the person's main currency at today's rates.
 
+### 6.5 Income (feature F3)
+**Rules** (`app/domain/income/`):
+
+1. An income is a source (the person's own name for it), a **type** (job, scholarship,
+   family, freelance, other), an amount, a currency, the day it arrived and an optional note.
+   It cannot be dated in the future. At most 50 per budget month.
+2. It belongs to the **budget month** its day falls in (the start day and a fresh start apply,
+   as for expenses).
+3. The month shows: everything received (**came in**), the month's expenses (**went out**,
+   zero without a budget) and **left** = came in - went out, which can be negative. Amounts
+   are in the month budget's currency, or the main currency when there is no budget, at
+   today's rate. One with no rate right now is listed but not counted.
+4. Income **never changes the budget by itself**. "Make my budget X" sets the month's budget
+   to what came in (through the normal budget rules: not below the planned limits).
+5. **Same as last month** copies last month's income one month later (the 31st becomes the
+   last day of a short month), only into a month with no income yet, so it can't count twice.
+6. Ownership as for expenses: someone else's income answers `404`. It is in the data export.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -518,6 +536,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A currency the rates provider stops quoting never stops conversion between the others | `test_currency.py` |
 | A debt can't be paid back beyond what is left, and settles exactly when nothing is left | `test_debts.py` |
 | A recurring expense is added once per occurrence, never re-added after deletion, and never for a paused or ended rule | `test_recurring.py` |
+| "Left" is income minus the month's expenses in one currency; "same as last month" copies only once | `test_income.py` |
 
 ## 17. Admin dashboard
 

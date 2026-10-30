@@ -21,6 +21,7 @@ from app.domain.debt.model import Debt
 from app.domain.expense.model import Expense
 from app.domain.goal.model import SavingsGoal
 from app.domain.group.service import GroupService
+from app.domain.income.model import Income
 from app.domain.recurring.model import RecurringExpense
 from app.domain.user.model import (
     OneTimeToken,
@@ -217,6 +218,11 @@ class AccountService:
             )
         ).all()
         debts = (await self.session.scalars(select(Debt).where(Debt.user_id == user.id))).all()
+        incomes = (
+            await self.session.scalars(
+                select(Income).where(Income.user_id == user.id).order_by(Income.received_on)
+            )
+        ).all()
         identities = (
             await self.session.scalars(select(UserIdentity).where(UserIdentity.user_id == user.id))
         ).all()
@@ -314,6 +320,17 @@ class AccountService:
                     ],
                 }
                 for d in debts
+            ],
+            "income": [
+                {
+                    "date": i.received_on.isoformat(),
+                    "source": i.source,
+                    "kind": i.kind,
+                    "amount": str(i.amount),
+                    "currency": i.currency,
+                    "note": i.note,
+                }
+                for i in incomes
             ],
             "devices": [
                 {

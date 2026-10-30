@@ -32,6 +32,13 @@ import {
   updateDebt,
 } from "@/services/debts";
 import {
+  copyPreviousIncome,
+  createIncome,
+  deleteIncome,
+  getIncomeMonth,
+  updateIncome,
+} from "@/services/income";
+import {
   createRecurring,
   deleteRecurring,
   listRecurring,
@@ -52,6 +59,7 @@ import type {
   DebtInput,
   ExpenseInput,
   GoalInput,
+  IncomeInput,
   RecurringInput,
 } from "@/types/api";
 
@@ -68,6 +76,7 @@ export const queryKeys = {
   currencies: ["currencies"] as const,
   recurring: ["recurring"] as const,
   debts: ["debts"] as const,
+  income: (month: string) => ["income", month] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -105,6 +114,7 @@ function useInvalidateMoney() {
       queryClient.invalidateQueries({ queryKey: ["tips"] }),
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
       queryClient.invalidateQueries({ queryKey: ["recurring"] }),
+      queryClient.invalidateQueries({ queryKey: ["income"] }), // spent and net change
     ]);
 }
 
@@ -182,8 +192,11 @@ export function useSetBudget(month: string) {
       setBudget(month, total, currency),
     onSuccess: (summary) => {
       queryClient.setQueryData(queryKeys.summary(month), summary);
-      // the even-pace line depends on the total
-      return queryClient.invalidateQueries({ queryKey: queryKeys.daily(month) });
+      // the even-pace line depends on the total; the income page shows the budget
+      return Promise.all([
+        queryClient.invalidateQueries({ queryKey: queryKeys.daily(month) }),
+        queryClient.invalidateQueries({ queryKey: queryKeys.income(month) }),
+      ]);
     },
   });
 }
@@ -329,4 +342,37 @@ export function useUndoDebtPayment() {
   return useDebtMutation(({ uuid, paymentUuid }: { uuid: string; paymentUuid: string }) =>
     undoDebtPayment(uuid, paymentUuid),
   );
+}
+
+// ── income (feature F3) ─────────────────────────────────────────────────────
+
+export function useIncome(month: string) {
+  return useQuery({
+    queryKey: queryKeys.income(month),
+    queryFn: () => getIncomeMonth(month),
+    placeholderData: keepPreviousData,
+  });
+}
+
+/** Income never changes the budget by itself, so only the income pages refresh. */
+function useIncomeMutation<T>(fn: (input: T) => Promise<unknown>) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["income"] }),
+  });
+}
+
+export function useSaveIncome() {
+  return useIncomeMutation(({ uuid, input }: { uuid?: string; input: IncomeInput }) =>
+    uuid ? updateIncome(uuid, input) : createIncome(input),
+  );
+}
+
+export function useDeleteIncome() {
+  return useIncomeMutation(deleteIncome);
+}
+
+export function useCopyPreviousIncome() {
+  return useIncomeMutation(copyPreviousIncome);
 }

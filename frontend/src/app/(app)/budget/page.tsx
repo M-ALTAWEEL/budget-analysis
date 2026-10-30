@@ -1,5 +1,6 @@
 "use client";
 
+import { ChevronRight, Wallet } from "lucide-react";
 import Link from "next/link";
 
 import { AllocationEditor, TotalForm } from "@/components/budget/BudgetPlan";
@@ -7,7 +8,7 @@ import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { BudgetSetup } from "@/components/overview/BudgetSetup";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
-import { useCategories, useSummary } from "@/hooks/queries";
+import { useCategories, useIncome, useSummary } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 
@@ -23,6 +24,7 @@ export default function BudgetPage() {
       <header className="mb-10">
         <MonthSwitcher />
       </header>
+      <IncomeLink month={month} />
 
       {summary.isPending || categories.isPending ? (
         <PageLoader />
@@ -59,5 +61,24 @@ export default function BudgetPage() {
         </div>
       )}
     </>
+  );
+}
+
+/** The way to the month's income (feature F3), with what came in. */
+function IncomeLink({ month }: { month: string }) {
+  const income = useIncome(month);
+  const { t, money } = useI18n();
+  const data = income.data;
+  const label =
+    data && data.items.length > 0 ? t.income.summary(money(data.total, data.currency)) : t.income.title;
+  return (
+    <Link
+      href="/income"
+      className="mb-10 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <Wallet className="size-5 shrink-0 text-pine" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
   );
 }
