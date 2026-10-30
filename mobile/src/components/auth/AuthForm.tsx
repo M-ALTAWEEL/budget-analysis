@@ -23,7 +23,15 @@ function Link({ label, onPress }: { label: string; onPress: () => void }) {
   );
 }
 
-export function LoginForm({ onSwitch, onForgot }: { onSwitch: () => void; onForgot?: () => void }) {
+export function LoginForm({
+  onSwitch,
+  onForgot,
+  onContact,
+}: {
+  onSwitch: () => void;
+  onForgot?: () => void;
+  onContact?: () => void;
+}) {
   const { login } = useAuth();
   const config = useAuthConfig();
   const { t } = useI18n();
@@ -79,6 +87,7 @@ export function LoginForm({ onSwitch, onForgot }: { onSwitch: () => void; onForg
         <Text size={14} tone="muted">{t.auth.newHere}</Text>
         <Link label={t.auth.createOne} onPress={onSwitch} />
       </View>
+      {onContact && <Link label={t.support.contactLink} onPress={onContact} />}
       <Agreement />
     </View>
   );

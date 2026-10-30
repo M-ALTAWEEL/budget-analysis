@@ -31,6 +31,7 @@ export default function AppLayout() {
             <Stack.Screen name="wrapped" />
             <Stack.Screen name="challenges" />
             <Stack.Screen name="inflation" />
+            <Stack.Screen name="support" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>

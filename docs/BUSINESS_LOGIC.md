@@ -635,6 +635,24 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    budgets, expenses, categories, goals or groups. Every admin action is in the audit log
    and in the person's own security activity. The privacy policy says so.
 
+### 14.1 Customer support
+**Rules** (`app/domain/support/`):
+
+1. Anyone signed in writes to the team from **Settings › Help and feedback** (website and app):
+   a topic (problem, idea, question, account, other), a subject and a message. The app or
+   website version and the platform are sent along. Someone who can't sign in uses
+   **Contact us** on the sign-in page and leaves an email address.
+2. Each message starts a **conversation**. The team answers from the admin dashboard
+   (**Support**, website only, admins with 2FA and a recent sign-in). The answer appears in
+   the conversation, arrives as a **push notification** (it opens Help and feedback) and by
+   **email** in the person's language. A new answer is marked until opened.
+3. The person can write again; the conversation goes back to "waiting for us". Admins can
+   close it. Every answer and close is in the audit log.
+4. A copy of each new message goes to the team's inbox (`SUPPORT_EMAIL`) when it is set.
+5. Limits: 10 new messages an hour and 10 open conversations per person; 5 an hour per
+   address for the contact form; 4,000 characters per message. People see only their own.
+6. Conversations are in the data export and are deleted with the account.
+
 ## 15. Platform parity
 
 1. The website, iPhone app and Android app offer **the same features and rules**.
@@ -677,6 +695,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A sentence gives the same amount, currency, day and description in all three languages, and saves nothing | `test_quick_add.py` |
 | A receipt's total is never the tax, subtotal or change; the photo is never kept | `test_receipt.py` |
 | The same expense sent twice from offline is added once, and only for its own person | `test_offline.py` |
+| People see only their own support conversations; only admins see the inbox, and every answer is audited | `test_support.py` |
 
 ## 17. Admin dashboard
 

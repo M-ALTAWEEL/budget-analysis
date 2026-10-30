@@ -1,6 +1,6 @@
 "use client";
 
-import { Activity, ArrowLeft, Coins, LayoutDashboard, ScrollText, ShieldAlert, Users } from "lucide-react";
+import { Activity, ArrowLeft, Coins, LayoutDashboard, LifeBuoy, ScrollText, ShieldAlert, Users } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -15,6 +15,7 @@ import { isNotFound, isTwoFactorRequired } from "@/services/admin";
 const NAV = [
   { href: "/admin", label: "Overview", icon: LayoutDashboard },
   { href: "/admin/users", label: "Users", icon: Users },
+  { href: "/admin/support", label: "Support", icon: LifeBuoy },
   { href: "/admin/currencies", label: "Currencies", icon: Coins },
   { href: "/admin/system", label: "System", icon: Activity },
   { href: "/admin/audit", label: "Audit log", icon: ScrollText },

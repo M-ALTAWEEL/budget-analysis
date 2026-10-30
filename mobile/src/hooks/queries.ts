@@ -35,6 +35,7 @@ import { createChallenge, deleteChallenge, joinChallenge, listChallenges } from 
 import { flushPending, isOffline, newClientId, queueExpense } from "@/lib/offline";
 import { getInflation } from "@/services/inflation";
 import { getWrapped } from "@/services/reports";
+import { listSupport, openSupport, replyToSupport, writeToSupport } from "@/services/support";
 import {
   copyPreviousIncome,
   createIncome,
@@ -65,6 +66,7 @@ import type {
   ExpenseInput,
   GoalInput,
   IncomeInput,
+  SupportInput,
   RecurringInput,
 } from "@/types/api";
 
@@ -85,6 +87,7 @@ export const queryKeys = {
   wrapped: (month: string) => ["wrapped", month] as const,
   challenges: ["challenges"] as const,
   inflation: ["inflation"] as const,
+  support: ["support"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -455,4 +458,35 @@ export function useFlushPending() {
     if (result.sent > 0 || result.refused > 0) await invalidate();
     return result;
   };
+}
+
+// ── customer support ────────────────────────────────────────────────────────
+
+export function useSupport() {
+  return useQuery({ queryKey: queryKeys.support, queryFn: listSupport });
+}
+
+export function useWriteToSupport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (input: SupportInput) => writeToSupport(input),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.support }),
+  });
+}
+
+export function useReplyToSupport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ uuid, message }: { uuid: string; message: string }) => replyToSupport(uuid, message),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.support }),
+  });
+}
+
+/** Marks the team's answer as seen, then refreshes the list (and the unread dot). */
+export function useOpenSupport() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: openSupport,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.support }),
+  });
 }
