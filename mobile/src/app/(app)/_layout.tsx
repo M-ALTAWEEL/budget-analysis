@@ -5,6 +5,7 @@ import { MonthProvider } from "@/components/layout/MonthProvider";
 import { PendingLink } from "@/components/layout/PendingLink";
 import { PushSetup } from "@/components/layout/PushSetup";
 import { OfflineSync } from "@/components/offline/Offline";
+import { WidgetSync } from "@/components/widget/WidgetSync";
 import { AppLock } from "@/components/security/AppLock";
 import { useColors } from "@/theme/ThemeProvider";
 
@@ -21,6 +22,7 @@ export default function AppLayout() {
       <OfflineSync />
       <MonthProvider>
         <ExpenseSheetProvider>
+          <WidgetSync />
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="categories" />
@@ -32,6 +34,7 @@ export default function AppLayout() {
             <Stack.Screen name="challenges" />
             <Stack.Screen name="inflation" />
             <Stack.Screen name="support" />
+            <Stack.Screen name="add-expense" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>

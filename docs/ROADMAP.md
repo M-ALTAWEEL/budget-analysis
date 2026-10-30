@@ -140,9 +140,9 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F7 Shared household budget (Plus)**: one monthly total for the whole group with category limits, what is left, and who paid how much; set by the group admins
 - [x] **F8 Inflation and currency view (Plus)**: six months of spending in the person's currency and in a steady one at each month's rate (ECB rates, kept once fetched); purchases that got more expensive
 - [x] **F9 Add an expense by voice**: one sentence in English, Arabic or Turkish fills in the form (browser speech recognition on the website, the keyboard microphone in the app)
-- [x] **F10 Receipt scan (Plus)**: a photo fills in total, date and shop (Tesseract, Turkish / English / Arabic); nothing is kept. The app camera needs `expo-image-picker` in the next build
+- [x] **F10 Receipt scan (Plus)**: a photo fills in total, date and shop (Tesseract, Turkish / English / Arabic); nothing is kept. In the app through `expo-image-picker`
 - [ ] F11 Bank statement import (Plus)
-- [ ] F12 Home-screen widget
+- [x] **F12 Home-screen widget** (Android): left this month, a progress bar and + Add expense; cleared on sign-out. iPhone widget with the iPhone release
 - [x] **Customer support**: Help and feedback in Settings, Contact us on the sign-in page, an inbox in the admin dashboard; answers by push and email
 - [x] **F13 Offline mode**: new expenses wait on the device without a connection and are sent by themselves when it is back; a device-made id stops duplicates
 

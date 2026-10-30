@@ -228,8 +228,8 @@ server, website and app):
 3. **Nothing is kept**: the photo is read in memory and forgotten, and nothing is saved until
    the person taps Add. At most 30 photos an hour; up to 6 MB (the website shrinks photos
    first).
-4. Free for now; in phase 7 it becomes part of Plus. The app's camera arrives with the next
-   app build (expo-image-picker); until then its scan button says so.
+4. Free for now; in phase 7 it becomes part of Plus. In the app the camera asks for
+   permission once (expo-image-picker); the photo is sent at low JPEG quality.
 
 ### 6.8 Adding expenses offline (feature F13)
 **Rules** (`frontend/src/lib/offline.ts`, shared with the app; `expenses.client_id`):
@@ -383,6 +383,20 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 5. Only the person's own expenses are used; nothing is sent to the rates provider but two
    currency codes and a date.
 6. Free for now; in phase 7 it becomes part of Plus.
+
+### 8.10 Home-screen widget (feature F12, Android)
+**Rules** (`mobile/src/widget/`, `mobile/src/components/widget/WidgetSync.tsx`):
+
+1. A widget for the Android home screen: what is **left this month** (or how much over), spent
+   of the budget with a bar, and **+ Add expense**, which opens the app with the new-expense
+   sheet (`budgetanalysis://add-expense`). Tapping elsewhere opens the app.
+2. The app writes a small snapshot of the current budget month (texts already in the person's
+   language) whenever its numbers change; the widget reads it, also when the app is closed,
+   and Android refreshes it at least every 30 minutes.
+3. Without a budget for this month it says so; signed out (or before the first sign-in) it
+   only offers to open the app. **Signing out clears the numbers** from the widget.
+4. The widget is a platform-only feature, like push notifications (section 15). An iPhone
+   widget needs an iOS extension and comes with the iPhone release.
 
 ## 9. Savings goals
 
@@ -658,7 +672,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 1. The website, iPhone app and Android app offer **the same features and rules**.
 2. Types, texts in three languages, API calls and the month and money rules are **one shared
    copy**, copied from the website into the app by a script; CI fails if they drift.
-3. Platform-only features: app lock and push notifications (mobile), keyboard and large-screen
+3. Platform-only features: app lock, push notifications and the home-screen widget (mobile), keyboard and large-screen
    layouts (web). Links sent by email open the website. **Invitation links** open the app on
    Android when it is installed (App Links), and the website otherwise; opened while signed
    out, the app asks for sign-in first, then shows the invitation.
