@@ -1,5 +1,5 @@
-import { useRouter } from "expo-router";
-import { View } from "react-native";
+import { type Href, useRouter } from "expo-router";
+import { Pressable, View } from "react-native";
 
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
@@ -14,11 +14,11 @@ import { BudgetTank } from "@/components/overview/BudgetTank";
 import { CategoryBreakdown } from "@/components/overview/CategoryBreakdown";
 import { List, LoadError, PageLoader, Screen, Section } from "@/components/ui/Layout";
 import { Text } from "@/components/ui/Text";
-import { useDaily, useExpenses, useSummary, useTips } from "@/hooks/queries";
+import { useDaily, useExpenses, useSummary, useTips, useWrapped } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { compareWithPrevious, daysElapsed, findAlerts } from "@/lib/insights";
-import { shiftMonth } from "@/lib/month";
+import { currentMonth, monthProgress, shiftMonth } from "@/lib/month";
 import { useColors } from "@/theme/ThemeProvider";
 import type { DailySpending } from "@/types/api";
 
@@ -53,6 +53,7 @@ export default function OverviewScreen() {
       </View>
 
       <PendingSharesBanner />
+      {month === currentMonth() && <WrappedBanner />}
 
       {summary.isPending ? (
         <PageLoader />
@@ -119,5 +120,28 @@ function Comparison({ current, previous, month }: { current: DailySpending; prev
     <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
       {reason}
     </Text>
+  );
+}
+
+/** In the first week of a month: last month's report is ready (feature F4). */
+function WrappedBanner() {
+  const router = useRouter();
+  const colors = useColors();
+  const { t, monthLabel } = useI18n();
+  const previous = shiftMonth(currentMonth(), -1);
+  const early = monthProgress(currentMonth()).dayOfMonth <= 7;
+  const report = useWrapped(previous, early);
+  if (!early || !report.data) return null;
+  return (
+    <Pressable
+      onPress={() => router.push(`/wrapped?month=${previous}` as Href)}
+      accessibilityRole="link"
+      style={({ pressed }) => ({
+        marginBottom: 24, flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12,
+        borderRadius: 16, backgroundColor: colors.pine, paddingHorizontal: 20, paddingVertical: 16, opacity: pressed ? 0.9 : 1,
+      })}>
+      <Text weight="semibold" tone="onPine" style={{ flex: 1 }}>{t.wrapped.ready(monthLabel(previous))}</Text>
+      <Text size={14} weight="semibold" tone="onPine">{t.wrapped.see}</Text>
+    </Pressable>
   );
 }

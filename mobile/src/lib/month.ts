@@ -132,3 +132,8 @@ export function expenseWhen(spentAt: string, createdAt: string, intl: string): s
   const time = new Intl.DateTimeFormat(intl, { hour: "2-digit", minute: "2-digit", hourCycle: "h23" }).format(created);
   return `${date} ${time}`;
 }
+
+/** 2026-01-05 was a Monday: weekday 0 in the API's numbering. */
+export function weekdayName(weekday: number, intl: string): string {
+  return new Intl.DateTimeFormat(intl, { weekday: "long" }).format(new Date(2026, 0, 5 + weekday));
+}

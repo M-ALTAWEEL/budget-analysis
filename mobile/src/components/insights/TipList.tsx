@@ -7,12 +7,8 @@ import { Text } from "@/components/ui/Text";
 import { LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useColors } from "@/theme/ThemeProvider";
+import { weekdayName } from "@/lib/month";
 import type { Tips } from "@/types/api";
-
-/** 2026-01-05 was a Monday: weekday 0 in the API's numbering. */
-function weekdayName(weekday: number, intl: string): string {
-  return new Intl.DateTimeFormat(intl, { weekday: "long" }).format(new Date(2026, 0, 5 + weekday));
-}
 
 export function TipList({ tips }: { tips: Tips }) {
   const { t, money, locale } = useI18n();

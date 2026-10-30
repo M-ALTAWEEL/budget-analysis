@@ -1,5 +1,5 @@
 import { type Href, useRouter } from "expo-router";
-import { ChevronRight, Wallet } from "lucide-react-native";
+import { ChevronRight, Sparkles, Wallet } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 
 import { AllocationEditor, TotalForm } from "@/components/budget/BudgetPlan";
@@ -31,6 +31,7 @@ export default function BudgetScreen() {
         <MonthSwitcher />
       </View>
       <IncomeLink month={month} />
+      <WrappedLink month={month} />
       {summary.isPending || categories.isPending ? (
         <PageLoader />
       ) : summary.isError || categories.isError ? (
@@ -75,11 +76,31 @@ function IncomeLink({ month }: { month: string }) {
       onPress={() => router.push("/income" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Wallet size={20} color={colors.pine} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{label}</Text>
+      <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+    </Pressable>
+  );
+}
+
+/** The way to the month report (feature F4). */
+function WrappedLink({ month }: { month: string }) {
+  const router = useRouter();
+  const colors = useColors();
+  const { t, dir } = useI18n();
+  return (
+    <Pressable
+      onPress={() => router.push(`/wrapped?month=${month}` as Href)}
+      accessibilityRole="link"
+      style={({ pressed }) => ({
+        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
+      })}>
+      <Sparkles size={20} color={colors.pine} />
+      <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{t.wrapped.title}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>
   );

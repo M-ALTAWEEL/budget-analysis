@@ -287,6 +287,23 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 3. Each expense shows its day and, when it was written down that same day, the time
    (`lib/month.ts: expenseWhen`); an expense added later for an earlier day shows the day only.
 
+### 8.7 Month report, "Wrapped" (feature F4)
+**Rules** (`app/domain/report/`):
+
+1. Any month **with a budget** has a report; a month without one answers `404`. While the
+   month is still going it is "so far": everything counts only up to today.
+2. It shows: spent of the budget and what was left over (or overspent); the change against
+   the month before (a month still going is compared with the same number of days of the
+   month before; no percentage when the month before spent nothing); the three biggest
+   categories with their share; the biggest single expense; the number of expenses, days
+   without spending and the daily average; the weekday with the most spending; income
+   (section 6.5) and what went into savings goals (withdrawals subtracted).
+3. The day after a budget month ends, the **daily job** sends one push notification
+   ("Your month in numbers"), once per month, to people with budget alerts on. It opens the
+   report. The overview shows a banner for last month's report during the first 7 days.
+4. Sharing sends only a sentence with the month, spent and budget: no categories or
+   expenses.
+
 ## 9. Savings goals
 
 **Rules** (`app/domain/goal/service.py`):
@@ -474,6 +491,9 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Invitation by username | The invitee |
 | A category reaches **85%** of its limit, or goes **over** it | The budget's owner |
 | **90%** of the month's money is gone with more than 3 days left, or the month is **overspent** | The budget's owner |
+| A recurring expense is due **tomorrow** (section 6.4) | The rule's owner, when its reminder is on |
+| A personal debt is **due today** (section 11.8) | The debt's owner |
+| A budget month has **just ended** (section 8.7) | The budget's owner |
 
 3. Each person receives it **in their own language**. Tapping a group one opens the group.
 4. **Budget alerts** (`app/domain/notify/budget_alerts.py`) follow the overview's alerts and
@@ -537,6 +557,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A debt can't be paid back beyond what is left, and settles exactly when nothing is left | `test_debts.py` |
 | A recurring expense is added once per occurrence, never re-added after deletion, and never for a paused or ended rule | `test_recurring.py` |
 | "Left" is income minus the month's expenses in one currency; "same as last month" copies only once | `test_income.py` |
+| The month report counts only the visible days, compares like with like, and its notification comes once | `test_wrapped.py` |
 
 ## 17. Admin dashboard
 

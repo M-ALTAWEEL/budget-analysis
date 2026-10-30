@@ -19,6 +19,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "debt_title": "Debts",
         "debt_owed": "{person} owes you {amount}, due today.",
         "debt_owe": "You owe {person} {amount}, due today.",
+        "wrapped_title": "Your month in numbers",
+        "wrapped_body": "You spent {spent} of {budget}. Tap to see how your month went.",
     },
     "ar": {
         "expense": "أضاف {actor} {what}: {amount}. حصتك: {share}.",
@@ -35,6 +37,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "debt_title": "الديون",
         "debt_owed": "{person} مدين لك بـ {amount}، موعده اليوم.",
         "debt_owe": "عليك لـ {person} مبلغ {amount}، موعده اليوم.",
+        "wrapped_title": "شهرك بالأرقام",
+        "wrapped_body": "صرفت {spent} من {budget}. اضغط لترى كيف كان شهرك.",
     },
     "tr": {
         "expense": "{actor} {what} ekledi: {amount}. Senin payın: {share}.",
@@ -51,6 +55,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "debt_title": "Borçlar",
         "debt_owed": "{person} sana {amount} borçlu, vadesi bugün.",
         "debt_owe": "{person} kişisine {amount} borcun var, vadesi bugün.",
+        "wrapped_title": "Ayın rakamlarla",
+        "wrapped_body": "{budget} bütçenin {spent} kadarını harcadın. Ayını görmek için dokun.",
     },
 }
 

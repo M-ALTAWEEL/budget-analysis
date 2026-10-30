@@ -35,6 +35,7 @@ export const SHARED = [
   "services/groups.ts",
   "services/income.ts",
   "services/recurring.ts",
+  "services/reports.ts",
   "services/security.ts",
   "services/system.ts",
   "components/auth/AuthProvider.tsx",
