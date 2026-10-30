@@ -9,6 +9,7 @@ from datetime import date, datetime
 from decimal import Decimal
 
 from sqlalchemy import (
+    JSON,
     Boolean,
     CheckConstraint,
     Date,
@@ -187,3 +188,17 @@ class GroupSettlement(BaseModel):
         ForeignKey("group_expenses.id", ondelete="SET NULL"), index=True
     )
     deleted_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+class GroupBudget(BaseModel):
+    """A shared household budget (feature F7): one monthly total for the whole group, in
+    the group's currency, with optional limits per category. Calendar months."""
+
+    __tablename__ = "group_budgets"
+    __table_args__ = (UniqueConstraint("group_id", "month"),)
+
+    group_id: Mapped[int] = mapped_column(ForeignKey("groups.id", ondelete="CASCADE"), index=True)
+    month: Mapped[date] = mapped_column(Date)  # the 1st
+    total_amount: Mapped[Decimal] = mapped_column(Numeric(12, 2))
+    # {"food": "1500.00", "bills": "900.00"}: built-in category slugs only
+    limits: Mapped[dict] = mapped_column(JSON, default=dict)

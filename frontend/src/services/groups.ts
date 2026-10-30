@@ -1,5 +1,5 @@
 import { api } from "@/lib/api";
-import type { Currency } from "@/types/api";
+import type { Currency, GroupBudget } from "@/types/api";
 
 export type GroupRole = "owner" | "admin" | "member";
 
@@ -362,4 +362,29 @@ export async function deleteSettlement(groupUuid: string, settlementUuid: string
   await api.delete(
     `/groups/${encodeURIComponent(groupUuid)}/settlements/${encodeURIComponent(settlementUuid)}`,
   );
+}
+
+// ── household budget (feature F7) ───────────────────────────────────────────
+
+export async function getGroupBudget(uuid: string, month: string): Promise<GroupBudget> {
+  const { data } = await api.get<GroupBudget>(`/groups/${uuid}/budget/${month}`);
+  return data;
+}
+
+/** Owners and admins: the month's total and optional limits per built-in category. */
+export async function setGroupBudget(
+  uuid: string,
+  month: string,
+  total: string,
+  limits: Record<string, string>,
+): Promise<GroupBudget> {
+  const { data } = await api.put<GroupBudget>(`/groups/${uuid}/budget/${month}`, {
+    total_amount: total,
+    limits,
+  });
+  return data;
+}
+
+export async function deleteGroupBudget(uuid: string, month: string): Promise<void> {
+  await api.delete(`/groups/${uuid}/budget/${month}`);
 }

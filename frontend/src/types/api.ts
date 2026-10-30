@@ -407,3 +407,16 @@ export interface ChallengeInput {
   ends_on: string;
   group_uuid?: string | null;
 }
+
+// ── household budget of a group (feature F7) ────────────────────────────────
+
+export interface GroupBudget {
+  month: string;
+  currency: Currency; // the group's
+  total_amount: string | null; // null: none set this month
+  spent: string;
+  remaining: string | null;
+  categories: { category: string; limit: string | null; spent: string }[];
+  paid_by: { name: string; me: boolean; paid: string }[];
+  can_edit: boolean;
+}

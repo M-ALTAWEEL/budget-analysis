@@ -479,6 +479,19 @@ to the member who joined first. 100.00 ÷ 3 = 33.34 + 33.33 + 33.33.
    today's rates.
 6. **Reminder:** a push notification on the due day, once, with the budget alerts switch.
 
+### 11.9 Household budget of a group (feature F7, Plus)
+**Rules** (`app/domain/group/budget.py`):
+
+1. A group can have **one budget per calendar month**, in the group's currency, with optional
+   limits per built-in category (a zero limit is no limit). The limits can't add up to more
+   than the total.
+2. Only the group's **owner and admins** set or remove it; every member sees it.
+3. It counts **every group expense** of the month, whoever paid: spent, what is left (negative
+   when over), each category against its limit, and **who paid how much**.
+4. It does not change anyone's personal budget; shares still reach personal budgets as in
+   section 11 (phase 3d).
+5. Free for now; in phase 7 it becomes part of Plus.
+
 ## 12. Accounts and security
 
 Full design: [`design/accounts.md`](design/accounts.md); verification: [`security/ASVS.md`](security/ASVS.md).
@@ -594,6 +607,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | The month report counts only the visible days, compares like with like, and its notification comes once | `test_wrapped.py` |
 | Report files carry the same numbers as the app and never mix currencies | `test_report_files.py` |
 | A challenge is won or missed exactly by its rule; only group members can see or join a shared one | `test_challenges.py` |
+| Only group admins set the household budget; its limits never exceed the total | `test_group_budget.py` |
 
 ## 17. Admin dashboard
 

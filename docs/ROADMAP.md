@@ -137,7 +137,7 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F4 Month-end report (Wrapped)**: spent and left over, change against last month, top categories, biggest expense, no-spend days; a push notification when a month ends; share
 - [x] **F5 PDF and Excel reports (Plus)**: a month or a whole year, in the person's language (Arabic right to left); downloaded on the website, shared from the app
 - [x] **F6 Savings challenges**: skip a category, spend under an amount, days without spending; wins, badges and a no-spend streak; shared with a group and joined by its members
-- [ ] F7 Shared household budget (Plus)
+- [x] **F7 Shared household budget (Plus)**: one monthly total for the whole group with category limits, what is left, and who paid how much; set by the group admins
 - [ ] F8 Inflation and currency view (Plus)
 - [ ] F9 Add an expense by voice
 - [ ] F10 Receipt scan (Plus)

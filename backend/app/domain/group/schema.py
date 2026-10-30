@@ -7,7 +7,7 @@ from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
-from app.core.money import CurrencyCode, PositiveMoney
+from app.core.money import CurrencyCode, NonNegativeMoney, PositiveMoney
 
 
 class GroupCreate(BaseModel):
@@ -277,3 +277,34 @@ class ActivityItem(BaseModel):
     by: MemberRef | None
     expense: GroupExpenseRead | None = None
     settlement: SettlementRead | None = None
+
+
+# ── household budget (feature F7) ────────────────────────────────────────────
+
+
+class GroupBudgetSet(BaseModel):
+    total_amount: PositiveMoney
+    limits: dict[CategorySlug, NonNegativeMoney] = Field(default_factory=dict)
+
+
+class GroupCategorySpending(BaseModel):
+    category: CategorySlug
+    limit: Decimal | None  # None: spent without a planned limit
+    spent: Decimal
+
+
+class MemberPaid(BaseModel):
+    name: str
+    me: bool
+    paid: Decimal  # what they paid for the group this month
+
+
+class GroupBudgetRead(BaseModel):
+    month: str
+    currency: str  # the group's currency
+    total_amount: Decimal | None  # None: no household budget this month
+    spent: Decimal  # every group expense of the month
+    remaining: Decimal | None
+    categories: list[GroupCategorySpending]  # most spent first
+    paid_by: list[MemberPaid]  # who paid how much, most first
+    can_edit: bool  # owners and admins set it
