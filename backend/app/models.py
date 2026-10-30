@@ -13,6 +13,7 @@ from app.domain.expense.model import Expense
 from app.domain.goal.model import GoalContribution, SavingsGoal
 from app.domain.group.model import (
     Group,
+    GroupBudget,
     GroupExpense,
     GroupExpenseShare,
     GroupInvite,
@@ -47,6 +48,7 @@ __all__ = [
     "Expense",
     "GoalContribution",
     "Group",
+    "GroupBudget",
     "GroupExpense",
     "GroupExpenseShare",
     "GroupInvite",

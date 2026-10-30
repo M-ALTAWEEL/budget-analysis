@@ -513,6 +513,25 @@ export const tr: Messages = {
     needCategory: "Bir kategori seç.",
   },
 
+  household: {
+    title: "Ev bütçesi",
+    intro: "Tüm ev için tek bir aylık bütçe: yemek, temizlik, faturalar. Herkes ne kaldığını görür.",
+    none: "Bu ay ev bütçesi yok.",
+    set: "Bütçe belirle",
+    edit: "Düzenle",
+    total: "Aylık toplam",
+    limits: "Kategori limitleri (isteğe bağlı)",
+    left: (amount: string) => `${amount} kaldı`,
+    over: (amount: string) => `${amount} aşıldı`,
+    spentOf: (spent: string, total: string) => `${spent} / ${total}`,
+    paidBy: "Bu ay kim ödedi",
+    onlyAdmins: "Sadece grup yöneticileri belirleyebilir.",
+    saved: "Ev bütçesi kaydedildi",
+    removed: "Ev bütçesi kaldırıldı",
+    remove: "Kaldır",
+    limitsTooHigh: "Limitler toplamı aşıyor.",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",

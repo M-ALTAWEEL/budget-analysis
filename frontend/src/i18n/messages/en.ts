@@ -513,6 +513,25 @@ export const en = {
     needCategory: "Choose a category.",
   },
 
+  household: {
+    title: "Household budget",
+    intro: "One monthly budget for the whole flat: food, cleaning, bills. Everyone sees what is left.",
+    none: "No household budget this month.",
+    set: "Set a budget",
+    edit: "Edit",
+    total: "Monthly total",
+    limits: "Limits per category (optional)",
+    left: (amount: string) => `${amount} left`,
+    over: (amount: string) => `${amount} over`,
+    spentOf: (spent: string, total: string) => `${spent} of ${total}`,
+    paidBy: "Who paid this month",
+    onlyAdmins: "Only the group's admins can set it.",
+    saved: "Household budget saved",
+    removed: "Household budget removed",
+    remove: "Remove",
+    limitsTooHigh: "The limits add up to more than the total.",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",

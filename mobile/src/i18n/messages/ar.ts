@@ -526,6 +526,25 @@ export const ar: Messages = {
     needCategory: "اختر فئة.",
   },
 
+  household: {
+    title: "ميزانية السكن",
+    intro: "ميزانية شهرية واحدة للشقة كلها: أكل، تنظيف، فواتير. الكل يرى ما تبقّى.",
+    none: "لا توجد ميزانية سكن لهذا الشهر.",
+    set: "حدّد ميزانية",
+    edit: "تعديل",
+    total: "المجموع الشهري",
+    limits: "حدود لكل فئة (اختياري)",
+    left: (amount: string) => `تبقّى ${amount}`,
+    over: (amount: string) => `تجاوز بـ ${amount}`,
+    spentOf: (spent: string, total: string) => `${spent} من ${total}`,
+    paidBy: "من دفع هذا الشهر",
+    onlyAdmins: "فقط مشرفو المجموعة يستطيعون تحديدها.",
+    saved: "تم حفظ ميزانية السكن",
+    removed: "تمت إزالة ميزانية السكن",
+    remove: "إزالة",
+    limitsTooHigh: "مجموع الحدود أكبر من المجموع الشهري.",
+  },
+
   budget: {
     totalLabel: (month) => `ميزانية ${month}`,
     update: "تحديث الميزانية",

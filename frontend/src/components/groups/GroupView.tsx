@@ -7,6 +7,7 @@ import { useState } from "react";
 import { ByUsername } from "@/components/groups/ByUsername";
 import { GroupBalances } from "@/components/groups/GroupBalances";
 import { GroupExpenses } from "@/components/groups/GroupExpenses";
+import { GroupHousehold } from "@/components/groups/GroupHousehold";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
 import { LoadError } from "@/components/ui/LoadError";
@@ -59,6 +60,7 @@ export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }
       </header>
       <div className="space-y-10">
         <GroupBalances group={g} />
+        <GroupHousehold group={g} />
         <GroupExpenses group={g} />
         <Members group={g} />
         {admin && <Invites group={g} />}

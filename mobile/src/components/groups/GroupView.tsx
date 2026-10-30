@@ -8,6 +8,7 @@ import { Pressable, Share, Switch, View } from "react-native";
 import { ByUsername } from "@/components/groups/ByUsername";
 import { GroupBalances } from "@/components/groups/GroupBalances";
 import { GroupExpenses } from "@/components/groups/GroupExpenses";
+import { GroupHousehold } from "@/components/groups/GroupHousehold";
 import { Button } from "@/components/ui/Button";
 import { Field, FormError } from "@/components/ui/Field";
 import { Card, List, LoadError, PageLoader, Screen } from "@/components/ui/Layout";
@@ -72,6 +73,7 @@ function Body({ g, onBack, t }: { g: GroupDetail; onBack: () => void; t: ReturnT
       </View>
       <View style={{ gap: 40 }}>
         <GroupBalances group={g} />
+        <GroupHousehold group={g} />
         <GroupExpenses group={g} />
         <Members group={g} />
         {admin && <Invites group={g} />}

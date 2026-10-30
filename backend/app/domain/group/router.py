@@ -2,18 +2,20 @@
 invitations by username (/me/group-requests).
 Phase 3a: groups, members, invites. Phase 3b: expenses. Phase 3c: usernames.
 Phase 3d: my shares in my own budget (/me/group-shares). Phase 3e: balances, paying
-back, and the group's chat (/groups/{uuid}/activity)."""
+back, and the group's chat (/groups/{uuid}/activity). Feature F7: the household budget."""
 
 from datetime import datetime
 from typing import Annotated
 
 from fastapi import APIRouter, BackgroundTasks, Depends, Query, Request, status
 
+from app.core.dates import MonthPath, parse_month
 from app.core.limiter import limiter
 from app.core.push import PushSender, get_push_sender
 from app.dependencies import CurrentUser, DbSession
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
 from app.domain.currency.service import CurrencyService
+from app.domain.group.budget import GroupBudgetService
 from app.domain.group.expenses import GroupExpenseService
 from app.domain.group.requests import GroupRequestService
 from app.domain.group.schema import (
@@ -21,6 +23,8 @@ from app.domain.group.schema import (
     AddAllResult,
     AutoAddUpdate,
     BalancesRead,
+    GroupBudgetRead,
+    GroupBudgetSet,
     GroupCreate,
     GroupDetail,
     GroupExpenseInput,
@@ -345,3 +349,28 @@ async def group_activity(
 ) -> list[ActivityItem]:
     """The group's chat, newest first: every expense and payment, with the server's time."""
     return await SettlementService(db, fx).activity(user, group_uuid, before, limit)
+
+
+# ── household budget (feature F7) ────────────────────────────────────────────
+
+
+@router.get("/{group_uuid}/budget/{month}")
+async def get_group_budget(
+    group_uuid: str, month: MonthPath, user: CurrentUser, db: DbSession
+) -> GroupBudgetRead:
+    """The flat's budget for a month and what is left; total null when none is set."""
+    return await GroupBudgetService(db).get(user, group_uuid, parse_month(month))
+
+
+@router.put("/{group_uuid}/budget/{month}")
+async def set_group_budget(
+    group_uuid: str, month: MonthPath, data: GroupBudgetSet, user: CurrentUser, db: DbSession
+) -> GroupBudgetRead:
+    return await GroupBudgetService(db).set(user, group_uuid, parse_month(month), data)
+
+
+@router.delete("/{group_uuid}/budget/{month}", status_code=status.HTTP_204_NO_CONTENT)
+async def delete_group_budget(
+    group_uuid: str, month: MonthPath, user: CurrentUser, db: DbSession
+) -> None:
+    await GroupBudgetService(db).delete(user, group_uuid, parse_month(month))
