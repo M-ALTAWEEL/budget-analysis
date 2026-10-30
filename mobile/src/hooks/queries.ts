@@ -31,6 +31,7 @@ import {
   undoDebtPayment,
   updateDebt,
 } from "@/services/debts";
+import { createChallenge, deleteChallenge, joinChallenge, listChallenges } from "@/services/challenges";
 import { getWrapped } from "@/services/reports";
 import {
   copyPreviousIncome,
@@ -79,6 +80,7 @@ export const queryKeys = {
   debts: ["debts"] as const,
   income: (month: string) => ["income", month] as const,
   wrapped: (month: string) => ["wrapped", month] as const,
+  challenges: ["challenges"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -118,6 +120,7 @@ function useInvalidateMoney() {
       queryClient.invalidateQueries({ queryKey: ["recurring"] }),
       queryClient.invalidateQueries({ queryKey: ["income"] }), // spent and net change
       queryClient.invalidateQueries({ queryKey: ["wrapped"] }),
+      queryClient.invalidateQueries({ queryKey: ["challenges"] }), // progress comes from spending
     ]);
 }
 
@@ -390,4 +393,30 @@ export function useWrapped(month: string, enabled = true) {
     enabled,
     retry: false, // a month without a budget answers 404: nothing to retry
   });
+}
+
+// ── savings challenges (feature F6) ─────────────────────────────────────────
+
+export function useChallenges() {
+  return useQuery({ queryKey: queryKeys.challenges, queryFn: listChallenges });
+}
+
+function useChallengeMutation<T>(fn: (input: T) => Promise<unknown>) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: fn,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeys.challenges }),
+  });
+}
+
+export function useCreateChallenge() {
+  return useChallengeMutation(createChallenge);
+}
+
+export function useJoinChallenge() {
+  return useChallengeMutation(joinChallenge);
+}
+
+export function useDeleteChallenge() {
+  return useChallengeMutation(deleteChallenge);
 }

@@ -337,6 +337,25 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 7. Goals are separate from the monthly budget: saving does not count as spending.
 8. Archiving a goal hides it; its history is kept.
 
+### 9.1 Savings challenges (feature F6)
+**Rules** (`app/domain/challenge/`):
+
+1. Three kinds, each 1 to 62 days long, starting today or within a month:
+   **skip a category** (nothing spent in it), **spend under an amount** (in one category or
+   everything) and **days without spending** (a number of days with no expense at all).
+2. Progress comes only from the person's own expenses (in their budget currency). A purchase
+   today counts at once; days without spending count only once the day is over.
+3. **Won** / **missed**: skipping a category or spending under an amount is missed as soon as
+   it is broken and won when the last day is over unbroken. Days without spending is won as
+   soon as the number is reached, and missed when not enough days are left.
+4. At most 10 running at once. Removing one deletes it.
+5. **Wins** make **badges** (1, 3, 5 and 10 wins). The **streak** is the number of days in a
+   row without any expense, up to yesterday.
+6. **Shared challenges:** shared with one of the person's groups, other members see it and
+   can **join** with their own copy (once). Everyone in it sees each other's name, progress
+   and result, never their expenses. Shared ones use the built-in categories only. Someone
+   who leaves the group is no longer shown.
+
 ## 10. The assistant
 
 **Rules** (`app/domain/assistant/`, `app/ml/assistant_entities.py`):
@@ -574,6 +593,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | "Left" is income minus the month's expenses in one currency; "same as last month" copies only once | `test_income.py` |
 | The month report counts only the visible days, compares like with like, and its notification comes once | `test_wrapped.py` |
 | Report files carry the same numbers as the app and never mix currencies | `test_report_files.py` |
+| A challenge is won or missed exactly by its rule; only group members can see or join a shared one | `test_challenges.py` |
 
 ## 17. Admin dashboard
 

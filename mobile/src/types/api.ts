@@ -353,3 +353,57 @@ export interface Wrapped {
   income: string | null;
   goals_saved: string;
 }
+
+// ── savings challenges (feature F6) ─────────────────────────────────────────
+
+export type ChallengeKind = "no_spend_category" | "spend_under" | "no_spend_days";
+export type ChallengeStatus = "upcoming" | "active" | "won" | "lost";
+
+export interface Challenge {
+  uuid: string;
+  kind: ChallengeKind;
+  category: Category | null;
+  amount: string | null;
+  target_days: number | null;
+  starts_on: string;
+  ends_on: string;
+  currency: Currency;
+  status: ChallengeStatus;
+  days: number;
+  days_done: number;
+  value: string; // clean days, money spent or days without spending
+  target: string;
+  group: string | null;
+  group_uuid: string | null;
+  participants: { name: string; me: boolean; status: ChallengeStatus; value: string; target: string }[];
+}
+
+export interface OpenChallenge {
+  uuid: string;
+  kind: ChallengeKind;
+  category: Category | null;
+  amount: string | null;
+  target_days: number | null;
+  starts_on: string;
+  ends_on: string;
+  group: string;
+  by: string;
+}
+
+export interface ChallengeList {
+  items: Challenge[];
+  open: OpenChallenge[];
+  wins: number;
+  badges: string[];
+  streak: number;
+}
+
+export interface ChallengeInput {
+  kind: ChallengeKind;
+  category_uuid?: string | null;
+  amount?: string | null;
+  target_days?: number | null;
+  starts_on?: string;
+  ends_on: string;
+  group_uuid?: string | null;
+}

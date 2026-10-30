@@ -17,6 +17,7 @@ from app.core.email_templates import build_email
 from app.core.google import GoogleIdentity
 from app.core.security import generate_refresh_token, hash_token, verify_password
 from app.domain.budget.model import Budget, Category
+from app.domain.challenge.model import Challenge
 from app.domain.debt.model import Debt
 from app.domain.expense.model import Expense
 from app.domain.goal.model import SavingsGoal
@@ -218,6 +219,9 @@ class AccountService:
             )
         ).all()
         debts = (await self.session.scalars(select(Debt).where(Debt.user_id == user.id))).all()
+        challenges = (
+            await self.session.scalars(select(Challenge).where(Challenge.user_id == user.id))
+        ).all()
         incomes = (
             await self.session.scalars(
                 select(Income).where(Income.user_id == user.id).order_by(Income.received_on)
@@ -331,6 +335,19 @@ class AccountService:
                     "note": i.note,
                 }
                 for i in incomes
+            ],
+            "challenges": [
+                {
+                    "kind": c.kind,
+                    "category": category_name(c.category) if c.category else None,
+                    "amount": str(c.amount) if c.amount is not None else None,
+                    "currency": c.currency,
+                    "target_days": c.target_days,
+                    "starts_on": c.starts_on.isoformat(),
+                    "ends_on": c.ends_on.isoformat(),
+                    "shared": c.group_id is not None,
+                }
+                for c in challenges
             ],
             "devices": [
                 {
