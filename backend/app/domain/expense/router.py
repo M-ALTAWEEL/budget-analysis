@@ -1,11 +1,15 @@
 """HTTP endpoints for expenses."""
 
+import base64
+import binascii
 from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, Request, status
+from starlette.concurrency import run_in_threadpool
 
 from app.core.dates import MONTH_PATTERN, parse_month
+from app.core.limiter import limiter
 from app.core.push import PushSender, get_push_sender
 from app.dependencies import CurrentUser, DbSession
 from app.domain.budget.schema import CategoryRead
@@ -19,11 +23,14 @@ from app.domain.expense.schema import (
     ExpenseUpdate,
     QuickAddInput,
     QuickAddRead,
+    ReceiptInput,
+    ReceiptRead,
 )
 from app.domain.expense.service import ExpenseService
 from app.domain.notify.budget_alerts import BudgetAlerts
 from app.domain.notify.service import deliver
 from app.domain.recurring.service import RecurringService
+from app.ml import receipt
 from app.ml.quick_add import parse
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
@@ -86,6 +93,35 @@ async def quick_add(
         description=found.description,
         spent_at=found.spent_at,
         category=CategoryRead.model_validate(suggestion.category) if suggestion else None,
+    )
+
+
+@router.post("/receipt")
+@limiter.limit("30/hour")
+async def read_receipt(
+    request: Request, data: ReceiptInput, user: CurrentUser, db: DbSession
+) -> ReceiptRead:
+    """Feature F10: the total, date and shop on a receipt photo. Saves nothing."""
+    try:
+        image = base64.b64decode(data.image.split(",")[-1], validate=True)
+    except (binascii.Error, ValueError):
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Not an image.") from None
+    try:
+        text = await run_in_threadpool(receipt.ocr, image)
+    except ValueError:
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Not an image.") from None
+    except RuntimeError:  # Tesseract's own time limit
+        raise HTTPException(status.HTTP_422_UNPROCESSABLE_CONTENT, "Couldn't read it.") from None
+    today = date.today()
+    found = receipt.read(text, today)
+    suggestion = await CategorySuggester(db).suggest(user, found.shop) if found.shop else None
+    return ReceiptRead(
+        amount=found.total,
+        description=found.shop,
+        spent_at=found.day or today,
+        category=CategoryRead.model_validate(suggestion.category) if suggestion else None,
+        found_date=found.day is not None,
+        text=text[:2000],
     )
 
 

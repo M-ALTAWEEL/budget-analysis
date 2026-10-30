@@ -216,6 +216,21 @@ server, website and app):
    Its category is the usual suggestion (section 7).
 3. Nothing is saved: the form is filled in and the person checks it and taps Add.
 
+### 6.7 Receipt scan (feature F10, Plus)
+**Rules** (`app/ml/receipt.py`, `POST /expenses/receipt`):
+
+1. A photo of a receipt fills in the new-expense form: the **total**, the **date** and the
+   **shop** (as the description, with its usual category suggestion).
+2. Tesseract reads the text (Turkish, English, Arabic). The total is the amount on the line
+   that says so ("GENEL TOPLAM", "TOPLAM", "TOTAL", "المجموع"...), never tax, subtotal,
+   cash given or change; with no such line, the biggest amount. The date must be a real
+   one within the last year and not in the future, otherwise today's.
+3. **Nothing is kept**: the photo is read in memory and forgotten, and nothing is saved until
+   the person taps Add. At most 30 photos an hour; up to 6 MB (the website shrinks photos
+   first).
+4. Free for now; in phase 7 it becomes part of Plus. The app's camera arrives with the next
+   app build (expo-image-picker); until then its scan button says so.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -644,6 +659,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Only group admins set the household budget; its limits never exceed the total | `test_group_budget.py` |
 | Spending in the steady currency uses each month's own rate, fetched once | `test_inflation.py` |
 | A sentence gives the same amount, currency, day and description in all three languages, and saves nothing | `test_quick_add.py` |
+| A receipt's total is never the tax, subtotal or change; the photo is never kept | `test_receipt.py` |
 
 ## 17. Admin dashboard
 

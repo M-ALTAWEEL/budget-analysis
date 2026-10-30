@@ -560,6 +560,10 @@ export const en = {
     hint: "Tap the microphone on your keyboard and say it, then Fill in.",
     nothing: "Couldn't find an amount. Try \"coffee 45\".",
     noMic: "Speech isn't available in this browser. Type it instead.",
+    scan: "Scan a receipt",
+    scanNeedsUpdate: "Scanning needs the next app update.",
+    scanning: "Reading the receipt…",
+    scanFailed: "Couldn't find the total. Check the photo, or type it.",
   },
 
   budget: {

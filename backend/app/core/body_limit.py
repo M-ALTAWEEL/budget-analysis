@@ -1,4 +1,4 @@
-"""No request body bigger than 1 MB (threat D1, phase 5).
+"""No request body bigger than 1 MB (threat D1, phase 5), except a receipt photo (6 MB).
 
 Every JSON body this API takes is small: the biggest is an expense split between 100
 people, a few kilobytes. Without a limit, someone could send gigabytes and keep the server
@@ -12,6 +12,9 @@ passes the limit."""
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 MAX_BODY_BYTES = 1_000_000
+# The one exception: a receipt photo (feature F10). The website shrinks it first (about
+# 0.5 MB); the app sends it at low JPEG quality.
+LARGER = {"/api/v1/expenses/receipt": 6_000_000}
 
 
 class BodySizeLimitMiddleware:
@@ -23,8 +26,9 @@ class BodySizeLimitMiddleware:
         if scope["type"] != "http":
             await self.app(scope, receive, send)
             return
+        limit = LARGER.get(scope.get("path", ""), self.max_bytes)
         declared = dict(scope["headers"]).get(b"content-length")
-        if declared is not None and (not declared.isdigit() or int(declared) > self.max_bytes):
+        if declared is not None and (not declared.isdigit() or int(declared) > limit):
             await _too_large(send)
             return
 
@@ -36,7 +40,7 @@ class BodySizeLimitMiddleware:
                 return
             body = message.get("body", b"")
             size += len(body)
-            if size > self.max_bytes:
+            if size > limit:
                 await _too_large(send)
                 return
             chunks.append(body)
