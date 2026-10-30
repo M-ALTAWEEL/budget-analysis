@@ -65,7 +65,13 @@ async def test_open_and_overdue_first_settled_last(client):
     settled = await lend(client, me, person="Old")
     await client.post(f"{API}/debts/{settled['uuid']}/settle", headers=me)
     await lend(client, me, person="Later", due_on=str(TODAY + timedelta(days=20)))
-    await lend(client, me, person="Late", due_on=str(TODAY - timedelta(days=1)))
+    await lend(
+        client,
+        me,
+        person="Late",
+        started_on=str(TODAY - timedelta(days=10)),
+        due_on=str(TODAY - timedelta(days=1)),
+    )
     items = (await client.get(f"{API}/debts", headers=me)).json()["items"]
     assert [i["person"] for i in items] == ["Late", "Later", "Old"]
     assert items[0]["overdue"] is True and items[1]["overdue"] is False
