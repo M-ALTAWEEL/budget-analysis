@@ -1,6 +1,10 @@
 """Recurring expenses (feature F1): the rules, adding their expenses when they fall due,
 and the reminder the day before. Rules: docs/BUSINESS_LOGIC.md, section 6.4."""
 
+# Annotations stay strings: the classes have a method called `list`, which would
+# otherwise hide the built-in list[...] in the annotations that follow it.
+from __future__ import annotations
+
 import calendar
 import logging
 from datetime import date, timedelta
