@@ -5,6 +5,7 @@ import { Pressable, View } from "react-native";
 import { CategoryBreakdown } from "@/components/expense/CategoryBreakdown";
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
+import { PendingExpenses } from "@/components/offline/Offline";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { Button } from "@/components/ui/Button";
 import { List, LoadError, PageLoader, Screen } from "@/components/ui/Layout";
@@ -30,6 +31,7 @@ export default function ExpensesScreen() {
       <View style={{ marginBottom: 40 }}>
         <MonthSwitcher />
       </View>
+      <PendingExpenses />
       {expenses.isPending ? (
         <PageLoader />
       ) : expenses.isError ? (

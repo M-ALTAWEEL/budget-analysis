@@ -4,6 +4,7 @@ import { ExpenseSheetProvider } from "@/components/expense/ExpenseSheet";
 import { MonthProvider } from "@/components/layout/MonthProvider";
 import { PendingLink } from "@/components/layout/PendingLink";
 import { PushSetup } from "@/components/layout/PushSetup";
+import { OfflineSync } from "@/components/offline/Offline";
 import { AppLock } from "@/components/security/AppLock";
 import { useColors } from "@/theme/ThemeProvider";
 
@@ -17,6 +18,7 @@ export default function AppLayout() {
     <AppLock>
       <PushSetup />
       <PendingLink />
+      <OfflineSync />
       <MonthProvider>
         <ExpenseSheetProvider>
           <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>

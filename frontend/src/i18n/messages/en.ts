@@ -566,6 +566,16 @@ export const en = {
     scanFailed: "Couldn't find the total. Check the photo, or type it.",
   },
 
+  offline: {
+    queued: "No connection: saved on this device. It will be added when you're back online.",
+    waiting: (count: number) => (count === 1 ? "1 expense waiting for a connection" : `${count} expenses waiting for a connection`),
+    waitingHint: "They are added by themselves when you're back online.",
+    synced: (count: number) => (count === 1 ? "1 expense added from offline" : `${count} expenses added from offline`),
+    refused: (count: number) =>
+      count === 1 ? "1 offline expense couldn't be added (is there a budget for its month?)" : `${count} offline expenses couldn't be added (is there a budget for their month?)`,
+    retry: "Try now",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",

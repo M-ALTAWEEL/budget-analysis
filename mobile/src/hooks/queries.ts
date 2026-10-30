@@ -32,6 +32,7 @@ import {
   updateDebt,
 } from "@/services/debts";
 import { createChallenge, deleteChallenge, joinChallenge, listChallenges } from "@/services/challenges";
+import { flushPending, isOffline, newClientId, queueExpense } from "@/lib/offline";
 import { getInflation } from "@/services/inflation";
 import { getWrapped } from "@/services/reports";
 import {
@@ -59,6 +60,7 @@ import {
 import type {
   ContributionInput,
   Currency,
+  Expense,
   DebtInput,
   ExpenseInput,
   GoalInput,
@@ -160,12 +162,25 @@ export function useDeleteRecurring() {
   return useMutation({ mutationFn: deleteRecurring, onSuccess: invalidate });
 }
 
+/**
+ * Save an expense. A new one that can't reach the server waits on the device and is sent
+ * when the connection is back (feature F13): the result is then null.
+ */
 export function useSaveExpense() {
   const invalidate = useInvalidateMoney();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ uuid, input }: { uuid?: string; input: ExpenseInput }) =>
-      uuid ? updateExpense(uuid, input) : createExpense(input),
+    mutationFn: async ({ uuid, input }: { uuid?: string; input: ExpenseInput }): Promise<Expense | null> => {
+      if (uuid) return updateExpense(uuid, input);
+      const withId = { ...input, client_id: input.client_id ?? newClientId() };
+      try {
+        return await createExpense(withId);
+      } catch (error) {
+        if (!isOffline(error)) throw error;
+        queueExpense(withId);
+        return null;
+      }
+    },
     onSuccess: () => {
       // The saved category is now part of the student's history: suggestions change.
       queryClient.removeQueries({ queryKey: ["category-suggestion"] });
@@ -428,4 +443,16 @@ export function useDeleteChallenge() {
 
 export function useInflation() {
   return useQuery({ queryKey: queryKeys.inflation, queryFn: getInflation });
+}
+
+// ── offline (feature F13) ───────────────────────────────────────────────────
+
+/** Sends what waits for a connection; refreshes the money pages when something got through. */
+export function useFlushPending() {
+  const invalidate = useInvalidateMoney();
+  return async () => {
+    const result = await flushPending((item) => createExpense({ ...item.input, client_id: item.client_id }));
+    if (result.sent > 0 || result.refused > 0) await invalidate();
+    return result;
+  };
 }

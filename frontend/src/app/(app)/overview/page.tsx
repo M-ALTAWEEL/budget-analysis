@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 
 import { PendingSharesBanner } from "@/components/groups/PendingShares";
+import { PendingExpenses } from "@/components/offline/Offline";
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
@@ -71,6 +72,7 @@ export default function OverviewPage() {
       </header>
 
       <PendingSharesBanner />
+      <PendingExpenses />
       {month === currentMonth() && <WrappedBanner />}
 
       {summary.isPending ? (

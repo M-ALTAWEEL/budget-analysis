@@ -143,7 +143,7 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F10 Receipt scan (Plus)**: a photo fills in total, date and shop (Tesseract, Turkish / English / Arabic); nothing is kept. The app camera needs `expo-image-picker` in the next build
 - [ ] F11 Bank statement import (Plus)
 - [ ] F12 Home-screen widget
-- [ ] F13 Offline mode
+- [x] **F13 Offline mode**: new expenses wait on the device without a connection and are sent by themselves when it is back; a device-made id stops duplicates
 
 ## Phase 7: Subscriptions, payments and coupons
 - [ ] An **entitlements** table: what is free and what is paid. Code asks "is this allowed?", never "did they pay?"
