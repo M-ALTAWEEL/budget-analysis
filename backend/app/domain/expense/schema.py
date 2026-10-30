@@ -86,3 +86,20 @@ class QuickAddRead(BaseModel):
     description: str
     spent_at: date
     category: CategoryRead | None  # the usual suggestion for the description
+
+
+class ReceiptInput(BaseModel):
+    """A photo of a receipt (feature F10), base64. Up to about 6 MB."""
+
+    image: str = Field(min_length=100, max_length=8_000_000)
+
+
+class ReceiptRead(BaseModel):
+    """What the receipt says; nothing is saved and the photo isn't kept."""
+
+    amount: Decimal | None  # the total
+    description: str  # the shop's name
+    spent_at: date
+    category: CategoryRead | None
+    found_date: bool  # false: today's date, the receipt's wasn't readable
+    text: str  # what was read, shown when the total wasn't found

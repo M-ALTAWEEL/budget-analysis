@@ -560,6 +560,10 @@ export const tr: Messages = {
     hint: "Klavyedeki mikrofona dokunup söyle, sonra Doldur.",
     nothing: "Tutar bulunamadı. \"kahve 45\" gibi dene.",
     noMic: "Bu tarayıcıda ses tanıma yok. Yazarak dene.",
+    scan: "Fiş tara",
+    scanNeedsUpdate: "Fiş tarama bir sonraki uygulama güncellemesiyle gelecek.",
+    scanning: "Fiş okunuyor…",
+    scanFailed: "Toplam bulunamadı. Fotoğrafı kontrol et ya da yaz.",
   },
 
   budget: {

@@ -1,10 +1,10 @@
 "use client";
 
-import { Mic, Wand2 } from "lucide-react";
+import { Camera, Mic, Wand2 } from "lucide-react";
 import { useRef, useState, useSyncExternalStore } from "react";
 
 import { useI18n } from "@/i18n/I18nProvider";
-import { quickAdd, type QuickAdd } from "@/services/expenses";
+import { quickAdd, readReceipt, type QuickAdd } from "@/services/expenses";
 
 // The browser's speech recognition (Chrome, Edge, Safari); missing in Firefox.
 type Recognition = {
@@ -42,6 +42,21 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   );
   const recognition = useRef<Recognition | null>(null);
 
+  const fileInput = useRef<HTMLInputElement | null>(null);
+
+  async function scan(file: File) {
+    setBusy(true);
+    setMessage(t.quickAdd.scanning);
+    try {
+      const found = await readReceipt(await shrink(file));
+      setMessage(found.amount === null ? t.quickAdd.scanFailed : null);
+      onFound({ amount: found.amount, currency: null, description: found.description, spent_at: found.spent_at, category: found.category });
+    } catch {
+      setMessage(t.quickAdd.scanFailed);
+    } finally {
+      setBusy(false);
+    }
+  }
 
   async function fill(sentence = text) {
     if (!sentence.trim()) return;
@@ -110,6 +125,28 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
         )}
         <button
           type="button"
+          onClick={() => fileInput.current?.click()}
+          disabled={busy}
+          aria-label={t.quickAdd.scan}
+          title={t.quickAdd.scan}
+          className="grid size-10 shrink-0 place-items-center rounded-lg border border-line bg-surface hover:bg-ink/5 disabled:opacity-50"
+        >
+          <Camera className="size-5" aria-hidden />
+        </button>
+        <input
+          ref={fileInput}
+          type="file"
+          accept="image/*"
+          capture="environment"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            e.target.value = "";
+            if (file) void scan(file);
+          }}
+        />
+        <button
+          type="button"
           onClick={() => void fill()}
           disabled={busy || !text.trim()}
           className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-pine px-3 text-sm font-semibold text-white disabled:opacity-50"
@@ -118,7 +155,18 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
           {t.quickAdd.fill}
         </button>
       </div>
-      {message && <p className="mt-1.5 text-sm text-berry">{message}</p>}
+      {message && <p className={`mt-1.5 text-sm ${message === t.quickAdd.scanning ? "text-muted" : "text-berry"}`}>{message}</p>}
     </div>
   );
+}
+
+/** A phone photo is several MB: 1600 px and JPEG is plenty to read a receipt. */
+async function shrink(file: File): Promise<string> {
+  const bitmap = await createImageBitmap(file);
+  const scale = Math.min(1, 1600 / Math.max(bitmap.width, bitmap.height));
+  const canvas = document.createElement("canvas");
+  canvas.width = Math.round(bitmap.width * scale);
+  canvas.height = Math.round(bitmap.height * scale);
+  canvas.getContext("2d")!.drawImage(bitmap, 0, 0, canvas.width, canvas.height);
+  return canvas.toDataURL("image/jpeg", 0.85);
 }

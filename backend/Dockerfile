@@ -10,6 +10,11 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+# Tesseract reads receipt photos (feature F10), in Turkish, English and Arabic.
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends tesseract-ocr tesseract-ocr-tur tesseract-ocr-ara \
+    && rm -rf /var/lib/apt/lists/*
+
 # Install dependencies first. This layer is cached until pyproject.toml changes,
 # so rebuilding after a code change is fast.
 # The cache mount keeps downloaded packages between builds, so a failed build

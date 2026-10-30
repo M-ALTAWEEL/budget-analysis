@@ -44,3 +44,18 @@ export async function quickAdd(text: string): Promise<QuickAdd> {
   const { data } = await api.post<QuickAdd>("/expenses/quick", { text });
   return data;
 }
+
+export interface ReceiptFound {
+  amount: string | null;
+  description: string;
+  spent_at: string;
+  category: Category | null;
+  found_date: boolean;
+  text: string;
+}
+
+/** Feature F10: the total, date and shop on a receipt photo (base64 JPEG). Saves nothing. */
+export async function readReceipt(imageBase64: string): Promise<ReceiptFound> {
+  const { data } = await api.post<ReceiptFound>("/expenses/receipt", { image: imageBase64 });
+  return data;
+}
