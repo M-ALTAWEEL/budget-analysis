@@ -14,6 +14,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "cat_over": "{category} is over its limit by {over}.",
         "budget_near": "{percent}% of this month's money is gone, with {days} days to go.",
         "budget_over": "This month's budget is overspent by {over}.",
+        "bill_title": "Coming up",
+        "bill_tomorrow": "Tomorrow: {what}, {amount}.",
     },
     "ar": {
         "expense": "أضاف {actor} {what}: {amount}. حصتك: {share}.",
@@ -25,6 +27,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "cat_over": "تجاوزت {category} حدّها بمبلغ {over}.",
         "budget_near": "صُرف {percent}% من مال هذا الشهر، وبقي {days} أيام.",
         "budget_over": "تجاوزت ميزانية هذا الشهر بمبلغ {over}.",
+        "bill_title": "قادم",
+        "bill_tomorrow": "غداً: {what}، {amount}.",
     },
     "tr": {
         "expense": "{actor} {what} ekledi: {amount}. Senin payın: {share}.",
@@ -36,6 +40,8 @@ _TEXT: dict[str, dict[str, str]] = {
         "cat_over": "{category} limitini {over} aştı.",
         "budget_near": "Bu ayın parasının %{percent} kadarı harcandı, {days} gün var.",
         "budget_over": "Bu ayın bütçesi {over} aşıldı.",
+        "bill_title": "Yaklaşan ödeme",
+        "bill_tomorrow": "Yarın: {what}, {amount}.",
     },
 }
 

@@ -165,6 +165,25 @@ server, website and app):
 7. **Ownership:** every expense belongs to one user. Requesting someone else's expense gets
    the same answer as one that does not exist (`404`).
 
+### 6.4 Recurring expenses (feature F1)
+**Rules** (`app/domain/recurring/`):
+
+1. A rule is a description, amount, currency, category and **day of the month** (1–31).
+   In a shorter month the 29th–31st fall on its last day. Optional end date; at most 50 rules.
+2. On its day, an ordinary expense (source `recurring`) is added in that budget month's
+   currency, at that day's rate. It is added when the person next opens their budget or
+   expenses, and by the **daily job** for everyone else; never twice for the same day.
+3. A day whose budget month has **no budget** is skipped (nothing to add it to). Missed days
+   are caught up only **62 days** back. A fresh start also limits it.
+4. An added expense **deleted by the person never comes back**. Changing a rule affects
+   only the next occurrences; deleting a rule keeps the expenses it already added.
+5. **Paused** rules add nothing; resuming does not add the paused days.
+6. "Repeat every month" on a new expense creates a rule on that day and links the expense
+   as this month's occurrence, so it is not added a second time.
+7. **Reminder:** a push notification the day before, once per occurrence, when the rule's
+   reminder and the person's budget alerts switch are on.
+8. The monthly total shows the active rules in the person's main currency at today's rates.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -482,6 +501,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A hidden currency can't be newly chosen, but stays usable and convertible for whoever has it | `test_admin_currencies.py` |
 | The exchange-rate URL only ever holds a three-letter code from our table | `test_currency.py` |
 | A currency the rates provider stops quoting never stops conversion between the others | `test_currency.py` |
+| A recurring expense is added once per occurrence, never re-added after deletion, and never for a paused or ended rule | `test_recurring.py` |
 
 ## 17. Admin dashboard
 

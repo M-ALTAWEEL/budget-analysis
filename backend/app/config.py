@@ -45,6 +45,9 @@ class Settings(BaseSettings):
     # trusts the visitor IP and country the website forwards (X-Client-IP). Empty = never
     # trusted (local runs). Different value per environment; see docs/design/accounts.md 2.2.
     edge_secret: str = ""
+    # The daily job (POST /internal/daily: recurring expenses, reminders), called by a
+    # GitHub Actions schedule with this secret. Empty = the endpoint answers 404.
+    cron_secret: str = ""
 
     # "Sign in with Google": the OAuth client ID from Google Cloud Console.
     # Empty = the Google button is hidden and /auth/google answers 503.

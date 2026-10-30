@@ -16,6 +16,7 @@ import {
   useCategorySuggestion,
   useDeleteExpense,
   useSaveExpense,
+  useSaveRecurring,
 } from "@/hooks/queries";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -63,6 +64,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const categories = useCategories();
   const save = useSaveExpense();
   const remove = useDeleteExpense();
+  const saveRecurring = useSaveRecurring();
   const { t, categoryName } = useI18n();
   const errorMessage = useErrorMessage();
 
@@ -74,6 +76,8 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const [spentAt, setSpentAt] = useState(expense?.spent_at ?? todayISO());
   const [error, setError] = useState<string | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  // "Repeat every month": a new expense also becomes a recurring one (feature F1).
+  const [repeat, setRepeat] = useState(false);
 
   // Ask for a suggestion once the student pauses typing; only for a new expense that
   // has no category chosen by hand yet.
@@ -95,7 +99,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
     if (!categoryUuid) return setError(t.expenses.needCategory);
 
     try {
-      await save.mutateAsync({
+      const saved = await save.mutateAsync({
         uuid: expense?.uuid,
         input: {
           amount: amount.trim(),
@@ -105,6 +109,18 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
           spent_at: spentAt,
         },
       });
+      if (!expense && repeat) {
+        await saveRecurring.mutateAsync({
+          input: {
+            description: saved.description,
+            amount: saved.amount,
+            currency: saved.currency,
+            category_uuid: saved.category.uuid,
+            day_of_month: Number(saved.spent_at.slice(8, 10)),
+            from_expense_uuid: saved.uuid, // this month's: not added a second time
+          },
+        });
+      }
       toast.success(expense ? t.expenses.saved : t.expenses.added);
       onClose();
     } catch (err) {
@@ -208,6 +224,22 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
           required
         />
 
+        {!expense && (
+          <label className="flex cursor-pointer items-start gap-4 rounded-xl border border-line px-4 py-3">
+            <span className="min-w-0 flex-1">
+              <span className="block font-semibold">{t.expenses.repeatMonthly}</span>
+              <span className="mt-0.5 block text-sm text-muted">{t.expenses.repeatHint}</span>
+            </span>
+            <input
+              type="checkbox"
+              role="switch"
+              checked={repeat}
+              onChange={(e) => setRepeat(e.target.checked)}
+              className="mt-1 size-5 shrink-0 accent-pine"
+            />
+          </label>
+        )}
+
         <FormError message={error} />
       </div>
 
@@ -219,7 +251,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
         ) : (
           <span />
         )}
-        <Button type="submit" loading={save.isPending}>
+        <Button type="submit" loading={save.isPending || saveRecurring.isPending}>
           {expense ? t.expenses.saveChanges : t.expenses.add}
         </Button>
       </div>

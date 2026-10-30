@@ -1,6 +1,6 @@
 "use client";
 
-import { Users } from "lucide-react";
+import { Repeat, Users } from "lucide-react";
 import { motion } from "motion/react";
 
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
@@ -46,6 +46,12 @@ export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budg
               <span className="inline-flex items-center gap-1" title={t.groups.fromGroup}>
                 · <Users className="size-3.5" aria-hidden />
                 <span className="sr-only">{t.groups.fromGroup}</span>
+              </span>
+            )}
+            {expense.source === "recurring" && (
+              <span className="inline-flex items-center gap-1" title={t.recurring.open}>
+                · <Repeat className="size-3.5" aria-hidden />
+                <span className="sr-only">{t.recurring.open}</span>
               </span>
             )}
           </span>

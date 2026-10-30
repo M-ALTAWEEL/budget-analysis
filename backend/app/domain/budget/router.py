@@ -1,6 +1,8 @@
 """HTTP endpoints for categories (/categories) and monthly budgets (/budgets)."""
 
-from fastapi import APIRouter, status
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, status
 
 from app.core.dates import MonthPath, parse_month
 from app.core.money import to_money
@@ -16,9 +18,12 @@ from app.domain.budget.schema import (
     Tips,
 )
 from app.domain.budget.service import BudgetService, CategoryService
+from app.domain.currency.client import ExchangeRateClient, get_fx_client
+from app.domain.recurring.service import RecurringService
 
 categories_router = APIRouter(prefix="/categories", tags=["categories"])
 budgets_router = APIRouter(prefix="/budgets", tags=["budgets"])
+FxClient = Annotated[ExchangeRateClient, Depends(get_fx_client)]
 
 
 # ── /categories ──────────────────────────────────────────────────────────────
@@ -51,8 +56,11 @@ async def archive_category(category_uuid: str, user: CurrentUser, db: DbSession)
 
 
 @budgets_router.get("/{month}")
-async def get_budget(month: MonthPath, user: CurrentUser, db: DbSession) -> BudgetSummary:
+async def get_budget(
+    month: MonthPath, user: CurrentUser, db: DbSession, fx: FxClient
+) -> BudgetSummary:
     """The month's plan and how much was spent: total, per category, remaining."""
+    await RecurringService(db, fx).catch_up(user)  # recurring expenses that fell due
     return await BudgetService(db).summary(user, parse_month(month))
 
 

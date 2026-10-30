@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ChevronRight, Repeat } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
-import { useCategories, useExpenses, useSummary } from "@/hooks/queries";
+import { useCategories, useExpenses, useRecurring, useSummary } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { categoryShares, shareLabel } from "@/lib/insights";
@@ -75,6 +75,7 @@ function Expenses() {
       ) : (
         <>
           {categoryUuid === null && summary.data && <CategoryBreakdown summary={summary.data} />}
+          {categoryUuid === null && <RecurringLink />}
           {shown.length === 0 ? (
             <p className="rounded-2xl border border-dashed border-line px-6 py-8 text-muted">
               {t.expenses.categoryEmpty}
@@ -129,5 +130,26 @@ function CategoryHeader({
         {share && <p className="text-sm text-muted">{t.expenses.ofMonth(shareLabel(share.share, percent))}</p>}
       </div>
     </section>
+  );
+}
+
+/** "4 recurring · 1,250 TRY a month ›": the way to rent, bills and subscriptions (F1). */
+function RecurringLink() {
+  const recurring = useRecurring();
+  const { t, money } = useI18n();
+  const data = recurring.data;
+  const label =
+    data && data.items.length > 0
+      ? t.recurring.summary(data.items.length, money(data.monthly_total, data.currency))
+      : t.recurring.title;
+  return (
+    <Link
+      href="/recurring"
+      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <Repeat className="size-5 shrink-0 text-pine" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
   );
 }
