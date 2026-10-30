@@ -202,6 +202,20 @@ server, website and app):
    last day of a short month), only into a month with no income yet, so it can't count twice.
 6. Ownership as for expenses: someone else's income answers `404`. It is in the data export.
 
+### 6.6 Add an expense by voice (feature F9)
+**Rules** (`app/ml/quick_add.py`, `POST /expenses/quick`):
+
+1. One sentence, said or typed, in English, Arabic or Turkish: "coffee 45 lira yesterday",
+   "قهوة بخمسين ليرة مبارح", "dün 120 TL market". On the website the browser listens
+   (where it can); in the app the keyboard's own microphone does, so the app needs no
+   microphone permission.
+2. Rules, not guesses: the **amount** is the first number (digits in any script, "12,50",
+   "1.250"; or numbers said as words when no digits were said), a **currency** word or
+   sign sets the currency (only one the person can use), "yesterday" sets the day, small
+   words ("spent", "on", "على", "için") are dropped, and the rest is the **description**.
+   Its category is the usual suggestion (section 7).
+3. Nothing is saved: the form is filled in and the person checks it and taps Add.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -629,6 +643,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A challenge is won or missed exactly by its rule; only group members can see or join a shared one | `test_challenges.py` |
 | Only group admins set the household budget; its limits never exceed the total | `test_group_budget.py` |
 | Spending in the steady currency uses each month's own rate, fetched once | `test_inflation.py` |
+| A sentence gives the same amount, currency, day and description in all three languages, and saves nothing | `test_quick_add.py` |
 
 ## 17. Admin dashboard
 

@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useState, type ReactNode } from
 import { Pressable, View } from "react-native";
 
 import { useCurrentUser } from "@/components/auth/AuthProvider";
+import { QuickAddBar } from "@/components/expense/QuickAddBar";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { DateField } from "@/components/ui/DateField";
@@ -130,6 +131,19 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
           <Text size={14} style={{ borderRadius: 12, backgroundColor: colors.pineSoft, paddingHorizontal: 14, paddingVertical: 10, overflow: "hidden" }}>
             {t.groups.copyNote}
           </Text>
+        )}
+        {!expense && (
+          <QuickAddBar
+            onFound={(found) => {
+              if (found.amount !== null) setAmount(toInputAmount(found.amount));
+              if (found.currency) setCurrency(found.currency);
+              if (found.description) setDescription(found.description);
+              setSpentAt(found.spent_at);
+              if (found.category && categories.data?.some((c) => c.uuid === found.category!.uuid)) {
+                setPickedUuid(found.category.uuid);
+              }
+            }}
+          />
         )}
         <View style={{ flexDirection: "row", gap: 12, alignItems: "flex-end" }}>
           <Field

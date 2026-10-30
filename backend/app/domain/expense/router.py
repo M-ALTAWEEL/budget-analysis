@@ -1,25 +1,30 @@
 """HTTP endpoints for expenses."""
 
+from datetime import date
 from typing import Annotated
 
-from fastapi import APIRouter, BackgroundTasks, Depends, Query, status
+from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query, status
 
 from app.core.dates import MONTH_PATTERN, parse_month
 from app.core.push import PushSender, get_push_sender
 from app.dependencies import CurrentUser, DbSession
 from app.domain.budget.schema import CategoryRead
 from app.domain.currency.client import ExchangeRateClient, get_fx_client
+from app.domain.currency.service import CurrencyService
 from app.domain.expense.categorizer import CategorySuggester
 from app.domain.expense.schema import (
     CategorySuggestion,
     ExpenseCreate,
     ExpenseRead,
     ExpenseUpdate,
+    QuickAddInput,
+    QuickAddRead,
 )
 from app.domain.expense.service import ExpenseService
 from app.domain.notify.budget_alerts import BudgetAlerts
 from app.domain.notify.service import deliver
 from app.domain.recurring.service import RecurringService
+from app.ml.quick_add import parse
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
 
@@ -60,6 +65,30 @@ async def list_expenses(
 
 
 # Declared before "/{expense_uuid}", or FastAPI would read "category-suggestion" as a uuid.
+@router.post("/quick")
+async def quick_add(
+    data: QuickAddInput, user: CurrentUser, db: DbSession, fx: FxClient
+) -> QuickAddRead:
+    """Feature F9: read an expense out of one sentence (voice or typed). Saves nothing."""
+    found = parse(data.text, date.today())
+    currency = found.currency
+    if currency is not None:
+        try:
+            await CurrencyService(db, fx).catalog.require_offered(currency, user.base_currency)
+        except HTTPException:  # a currency the app doesn't offer: the form keeps its own
+            currency = None
+    suggestion = (
+        await CategorySuggester(db).suggest(user, found.description) if found.description else None
+    )
+    return QuickAddRead(
+        amount=found.amount,
+        currency=currency,
+        description=found.description,
+        spent_at=found.spent_at,
+        category=CategoryRead.model_validate(suggestion.category) if suggestion else None,
+    )
+
+
 @router.get("/category-suggestion")
 async def suggest_category(
     user: CurrentUser,

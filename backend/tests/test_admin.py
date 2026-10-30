@@ -164,7 +164,7 @@ async def test_user_detail_shows_the_account_and_nothing_of_the_money(client, db
     admin = await make_admin(client, db_session)
     student = await signup(client, email="sara@example.com")
     await set_budget(client, student, total="7777")
-    added = await add_expense(client, student, amount="55.50", description="secret kebab")
+    added = await add_expense(client, student, amount="7391.37", description="secret kebab")
     assert added.status_code == 201
     await create_goal(client, student, name="Hidden laptop", target_amount="30000")
     sara = await uuid_of(client, student)
@@ -180,7 +180,7 @@ async def test_user_detail_shows_the_account_and_nothing_of_the_money(client, db
     assert detail["email"] == "sara@example.com"
     assert detail["sign_in_methods"] == ["password"]
     assert len(detail["sessions"]) == 1
-    for secret in ("7777", "55.5", "secret kebab", "Hidden laptop"):
+    for secret in ("7777", "7391.37", "secret kebab", "Hidden laptop"):
         assert secret not in response.text
 
     missing = await client.get(f"{ADMIN}/users/not-a-uuid", headers=admin)

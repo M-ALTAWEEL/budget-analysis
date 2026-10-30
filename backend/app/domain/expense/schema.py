@@ -70,3 +70,19 @@ class CategorySuggestion(BaseModel):
     category: CategoryRead | None = None
     confidence: float | None = None  # 0..1
     source: Literal["history", "model"] | None = None
+
+
+class QuickAddInput(BaseModel):
+    """One sentence, said or typed (feature F9): "coffee 45 lira yesterday"."""
+
+    text: str = Field(min_length=1, max_length=300)
+
+
+class QuickAddRead(BaseModel):
+    """What the sentence said; the student checks it in the form before saving."""
+
+    amount: Decimal | None
+    currency: str | None  # only one the person can use
+    description: str
+    spent_at: date
+    category: CategoryRead | None  # the usual suggestion for the description
