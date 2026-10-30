@@ -42,7 +42,7 @@ const POLICY: Record<Locale, LegalDocument> = {
           "They never see your budgets, expenses, categories, goals or groups.",
           "They can disable an account that is being misused, sign it out of every device, or resend an email-confirmation link. Every such action is recorded, and it also appears in your own security activity in Settings.",
           "When you write to us (Help and feedback, or Contact us), the team reads your message, with the app version and the kind of device, to answer it. Conversations are kept until you delete your account, and they are in your data export.",
-          "A receipt photo you scan is read on our server and forgotten at once; it is never stored. A sentence you say is turned into text by your phone or browser, and only that text reaches us.",
+          "A receipt photo you scan, or a bank statement you import, is read on our server and forgotten at once; the file is never stored, only the lines you choose to add. A sentence you say is turned into text by your phone or browser, and only that text reaches us.",
         ],
       },
       {
@@ -138,7 +138,7 @@ const POLICY: Record<Locale, LegalDocument> = {
           "لا يرون أبداً ميزانياتك أو مصاريفك أو فئاتك أو أهدافك أو مجموعاتك.",
           "يمكنهم إيقاف حساب يُساء استخدامه، أو تسجيل خروجه من كل الأجهزة، أو إعادة إرسال رابط تأكيد البريد. كل إجراء من هذه يُسجَّل، ويظهر لك أيضاً في سجل الأمان في الإعدادات.",
           "عندما تكتب لنا (المساعدة والملاحظات، أو تواصل معنا)، يقرأ الفريق رسالتك مع نسخة التطبيق ونوع الجهاز ليرد عليها. تُحفظ المحادثات حتى تحذف حسابك، وهي ضمن تصدير بياناتك.",
-          "صورة الفاتورة التي تمسحها تُقرأ على خادمنا ثم تُنسى فوراً، ولا تُخزَّن أبداً. الجملة التي تقولها يحوّلها هاتفك أو متصفحك إلى نص، ولا يصلنا إلا هذا النص.",
+          "صورة الفاتورة التي تمسحها، أو كشف الحساب الذي تستورده، يُقرأ على خادمنا ثم يُنسى فوراً؛ الملف لا يُخزَّن أبداً، بل فقط الحركات التي تختار إضافتها. الجملة التي تقولها يحوّلها هاتفك أو متصفحك إلى نص، ولا يصلنا إلا هذا النص.",
         ],
       },
       {
@@ -234,7 +234,7 @@ const POLICY: Record<Locale, LegalDocument> = {
           "Bütçelerini, harcamalarını, kategorilerini, hedeflerini veya gruplarını asla görmezler.",
           "Kötüye kullanılan bir hesabı devre dışı bırakabilir, tüm cihazlardan çıkış yaptırabilir veya e-posta doğrulama bağlantısını yeniden gönderebilirler. Bu işlemlerin her biri kaydedilir ve Ayarlar'daki kendi güvenlik etkinliğinde de görünür.",
           "Bize yazdığında (Yardım ve geri bildirim ya da Bize ulaş), ekip mesajını, uygulama sürümü ve cihaz türüyle birlikte, yanıtlamak için okur. Konuşmalar hesabını silene kadar saklanır ve veri dışa aktarımında yer alır.",
-          "Taradığın fiş fotoğrafı sunucumuzda okunur ve hemen unutulur; asla saklanmaz. Söylediğin cümleyi telefonun ya da tarayıcın metne çevirir; bize yalnızca bu metin ulaşır.",
+          "Taradığın fiş fotoğrafı ya da içe aktardığın banka ekstresi sunucumuzda okunur ve hemen unutulur; dosya asla saklanmaz, yalnızca eklemeyi seçtiğin satırlar kaydedilir. Söylediğin cümleyi telefonun ya da tarayıcın metne çevirir; bize yalnızca bu metin ulaşır.",
         ],
       },
       {

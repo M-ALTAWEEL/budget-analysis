@@ -35,6 +35,7 @@ export default function AppLayout() {
             <Stack.Screen name="inflation" />
             <Stack.Screen name="support" />
             <Stack.Screen name="add-expense" />
+            <Stack.Screen name="import" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>

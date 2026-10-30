@@ -247,6 +247,34 @@ server, website and app):
 6. Only adding works offline; editing, deleting and opening the app signed out still need a
    connection. Pages already open keep showing what they last loaded.
 
+### 6.9 Bank statement import (feature F11, Plus)
+**Rules** (`app/ml/statement.py`, `app/domain/imports/`):
+
+1. The person uploads their bank's statement as **Excel, CSV or PDF** (website: a file;
+   app: the system file picker). Nothing is saved at this step and the file isn't kept.
+2. **Reading.** A table with headers (date, description, amount, or debit and credit, in
+   English, Turkish or Arabic) is read by its columns. Anything else, such as a PDF turned
+   into Excel, is read as lines: a date opens a transaction; Turkish amounts ("1.234,56")
+   and number cells give the amount and the balance; lines out of place are joined back.
+   Where balances are known, previous balance + amount = balance decides which number is
+   which and the amount's sign. The carried-over balance plus all amounts equals the
+   closing balance.
+3. **Understanding** (Turkish banks, Kuveyt Türk first): a card purchase at a shop, a bill
+   (with the company's name, in Bills), a transfer to or from a person, a credit-card
+   payment, a cash deposit, a refund. Descriptions are shortened ("SEYRA MARKET",
+   "Transfer to Tüba Şenol"); long card and account numbers are dropped.
+4. **Suggestions:** purchases and bills become expenses (category suggested as usual);
+   transfers, deposits and refunds are left out for the person to decide (a transfer may
+   be rent, a split or a loan); a credit-card payment is always left out unless picked,
+   because the card's purchases are counted already. Lines in a month without a budget,
+   and lines already added (same day and amount), start unticked.
+5. **Adding:** picked lines become expenses (in the statement's currency, the main one by
+   default) or income. Each expense gets an id from its day, amount and description, so
+   importing the same statement twice adds nothing the second time; income is matched by
+   day, amount and source. Lines in a month without a budget are counted and skipped.
+6. At most 500 lines per import, 2,000 lines read, 6 MB per file, 20 imports an hour.
+7. Free for now; in phase 7 it becomes part of Plus.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -710,6 +738,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A receipt's total is never the tax, subtotal or change; the photo is never kept | `test_receipt.py` |
 | The same expense sent twice from offline is added once, and only for its own person | `test_offline.py` |
 | People see only their own support conversations; only admins see the inbox, and every answer is audited | `test_support.py` |
+| A statement adds up from the carried-over to the closing balance, and importing it twice adds nothing | `test_statement_import.py` |
 
 ## 17. Admin dashboard
 

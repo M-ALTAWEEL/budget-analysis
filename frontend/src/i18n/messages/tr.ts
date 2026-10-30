@@ -614,6 +614,30 @@ export const tr: Messages = {
     noBudget: "Bu ayın bütçesini uygulamada belirle",
   },
 
+  imports: {
+    title: "Banka ekstresi içe aktar",
+    link: "Banka ekstresi içe aktar",
+    intro: "Bankanın ekstresini yükle (Excel, CSV ya da PDF). Her satırı bir öneriyle görürsün, ekleyeceklerini seçersin ve hiçbir şey iki kez eklenmez. Dosya saklanmaz.",
+    choose: "Dosya seç",
+    reading: "Ekstre okunuyor…",
+    period: (from: string, to: string) => `${from} – ${to}`,
+    totals: (out: string, into: string) => `Çıkan ${out} · Giren ${into}`,
+    addAs: { expense: "Harcama", income: "Gelir", skip: "Atla" },
+    kinds: {
+      purchase: "Kartla alışveriş", bill: "Fatura", card_payment: "Kredi kartı ödemesi (zaten sayıldı)",
+      transfer_out: "Giden transfer", transfer_in: "Gelen transfer", deposit: "Para yatırma", refund: "İade", other: "Diğer",
+    },
+    duplicate: "Zaten eklendi",
+    noBudget: "O ayın bütçesi yok",
+    selected: (count: number) => `${count} satır seçildi`,
+    add: "Seçilenleri ekle",
+    done: (expenses: number, income: number) => `${expenses} harcama ve ${income} gelir eklendi.`,
+    skipped: (already: number, noBudget: number) =>
+      [already ? `${already} zaten vardı` : "", noBudget ? `${noBudget} satırın ayında bütçe yok` : ""].filter(Boolean).join(" · "),
+    another: "Başka bir dosya içe aktar",
+    howTo: "Bankanın uygulamasından: hesabı aç, “Hesap Özeti / Ekstre”yi Excel ya da PDF olarak paylaş.",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",

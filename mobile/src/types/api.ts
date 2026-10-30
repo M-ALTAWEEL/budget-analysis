@@ -469,3 +469,46 @@ export interface SupportInput {
   message: string;
   platform?: string;
 }
+
+// ── bank statement import (feature F11) ─────────────────────────────────────
+
+export type StatementKind =
+  | "purchase" | "bill" | "card_payment" | "transfer_out" | "transfer_in" | "deposit" | "refund" | "other";
+
+export interface StatementRow {
+  day: string;
+  label: string;
+  original: string;
+  amount: string;
+  direction: "out" | "in";
+  kind: StatementKind;
+  suggestion: "expense" | "income" | "skip";
+  category: Category | null;
+  duplicate: boolean; // an expense with the same day and amount is already there
+  has_budget: boolean;
+}
+
+export interface StatementPreview {
+  rows: StatementRow[];
+  currency: Currency;
+  first_day: string;
+  last_day: string;
+  money_out: string;
+  money_in: string;
+}
+
+export interface StatementImportRow {
+  day: string;
+  description: string;
+  amount: string;
+  as: "expense" | "income";
+  category_uuid?: string | null;
+  income_kind?: IncomeKind;
+}
+
+export interface StatementImportResult {
+  expenses: number;
+  income: number;
+  already_there: number;
+  no_budget: number;
+}
