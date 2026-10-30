@@ -114,6 +114,13 @@ which adds the recurring expenses that fell due and sends tomorrow's reminders.
 - Without `CRON_SECRET` the endpoint answers 404; people still get their recurring expenses
   when they open the app, but no reminders.
 
+
+### 10c. `SUPPORT_EMAIL`: the team's inbox (optional)
+- Render: `SUPPORT_EMAIL` on both services, e.g. `support@yourdomain.com` (an address the team reads).
+- Each new support message is copied there, with a link to answer it in the admin dashboard.
+- Without it, messages still arrive in the dashboard (**Admin › Support**). Emails need
+  `EMAIL_BACKEND=smtp` to actually leave.
+
 ### 11. The mobile app (EAS, phase 6)
 - `mobile/eas.json` sets `EXPO_PUBLIC_API_URL` per build profile: `development` and `preview`
   use the staging API; `production` uses `https://budgetanalysis.vercel.app/api/v1`.

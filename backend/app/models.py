@@ -24,6 +24,7 @@ from app.domain.group.model import (
 from app.domain.income.model import Income
 from app.domain.notify.model import PushDevice
 from app.domain.recurring.model import RecurringExpense
+from app.domain.support.model import SupportMessage, SupportTicket
 from app.domain.user.model import (
     BackupCode,
     OneTimeToken,
@@ -65,6 +66,8 @@ __all__ = [
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",
+    "SupportMessage",
+    "SupportTicket",
     "SupportedCurrency",
     "User",
     "UserIdentity",

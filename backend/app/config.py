@@ -73,6 +73,8 @@ class Settings(BaseSettings):
     smtp_host: str = "localhost"
     smtp_port: int = 1025
     email_from: str = "Budget Analysis <no-reply@budgetanalysis.app>"
+    # The team's inbox: a copy of every new support message goes here (empty: none).
+    support_email: str = ""
     # The website address used in email links. Empty = the first FRONTEND_URL.
     app_url: str = ""
 

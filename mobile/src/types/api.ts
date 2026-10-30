@@ -447,3 +447,25 @@ export interface InflationView {
     change: number;
   }[];
 }
+
+// ── customer support ────────────────────────────────────────────────────────
+
+export type SupportTopic = "problem" | "idea" | "question" | "account" | "other";
+
+export interface SupportTicket {
+  uuid: string;
+  topic: SupportTopic;
+  subject: string;
+  status: "open" | "answered" | "closed";
+  created_at: string;
+  last_message_at: string;
+  unread: boolean; // an answer not opened yet
+  messages: { from_support: boolean; author: string; body: string; created_at: string }[];
+}
+
+export interface SupportInput {
+  topic: SupportTopic;
+  subject: string;
+  message: string;
+  platform?: string;
+}

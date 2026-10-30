@@ -84,3 +84,48 @@ export async function setCurrencyHidden(code: string, hidden: boolean): Promise<
   );
   return data.detail;
 }
+
+// ── support inbox ───────────────────────────────────────────────────────────
+
+export interface SupportRow {
+  uuid: string;
+  topic: string;
+  subject: string;
+  status: "open" | "answered" | "closed";
+  who: string;
+  has_account: boolean;
+  platform: string | null;
+  created_at: string;
+  last_message_at: string;
+  messages: number;
+}
+
+export interface SupportDetail extends SupportRow {
+  user_uuid: string | null;
+  locale: string;
+  thread: { from_support: boolean; author: string; body: string; created_at: string }[];
+}
+
+export async function getSupportInbox(
+  status: "" | "open" | "answered" | "closed",
+  page: number,
+): Promise<{ items: SupportRow[]; total: number; open: number }> {
+  const { data } = await api.get("/admin/support", { params: { status: status || undefined, page } });
+  return data;
+}
+
+export async function getSupportTicket(uuid: string): Promise<SupportDetail> {
+  const { data } = await api.get<SupportDetail>(`/admin/support/${encodeURIComponent(uuid)}`);
+  return data;
+}
+
+/** Needs a recent sign-in: run it through useSensitiveAction. */
+export async function answerSupport(uuid: string, message: string): Promise<SupportDetail> {
+  const { data } = await api.post<SupportDetail>(`/admin/support/${encodeURIComponent(uuid)}/answer`, { message });
+  return data;
+}
+
+export async function closeSupport(uuid: string): Promise<SupportDetail> {
+  const { data } = await api.post<SupportDetail>(`/admin/support/${encodeURIComponent(uuid)}/close`);
+  return data;
+}

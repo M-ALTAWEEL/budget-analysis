@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import Constants from "expo-constants";
-import { useRouter } from "expo-router";
-import { ChevronRight, LogOut, Monitor, Moon, Shapes, Sun, type LucideIcon } from "lucide-react-native";
+import { type Href, useRouter } from "expo-router";
+import { ChevronRight, LifeBuoy, LogOut, Monitor, Moon, Shapes, Sun, type LucideIcon } from "lucide-react-native";
 import { useState, type ReactNode } from "react";
 import { Pressable, View } from "react-native";
 
@@ -24,7 +24,8 @@ import { useErrorMessage } from "@/lib/errors";
 import { forgetPushDevice } from "@/lib/push";
 import { updateMe } from "@/services/auth";
 import { getVersion } from "@/services/system";
-import { ACCENTS, SWATCHES, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
+import { useSupport } from "@/hooks/queries";
+import { ACCENTS, SWATCHES, useColors, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
 import type { Currency } from "@/types/api";
 
 const FLAG: Record<Locale, string> = { en: "🇬🇧", ar: "🇸🇦", tr: "🇹🇷" };
@@ -114,6 +115,8 @@ export default function SettingsScreen() {
           <Text size={15} weight="semibold" style={{ flex: 1 }}>{t.settings.manageCategories}</Text>
           <ChevronRight size={20} color={colors.muted} style={locale === "ar" ? { transform: [{ scaleX: -1 }] } : undefined} />
         </Pressable>
+
+        <SupportLink />
 
         <View>
           <Text display weight="semibold" size={18} accessibilityRole="header" style={{ marginBottom: 12 }}>{t.settings.account}</Text>
@@ -214,5 +217,32 @@ function SecondCurrency() {
       />
       {error && <Text size={14} tone="berry" style={{ marginTop: 8 }}>{error}</Text>}
     </SettingsBlock>
+  );
+}
+
+/** Help and feedback, with the number of answers not read yet. */
+function SupportLink() {
+  const router = useRouter();
+  const colors = useColors();
+  const { t, dir } = useI18n();
+  const tickets = useSupport();
+  const unread = tickets.data?.filter((ticket) => ticket.unread).length ?? 0;
+  return (
+    <Pressable
+      onPress={() => router.push("/support" as Href)}
+      accessibilityRole="link"
+      style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
+      <LifeBuoy size={20} color={colors.muted} />
+      <View style={{ flex: 1 }}>
+        <Text size={15} weight="semibold">{t.support.link}</Text>
+        <Text size={13} tone="muted">{t.support.linkHint}</Text>
+      </View>
+      {unread > 0 && (
+        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.pine }}>
+          <Text size={12} weight="semibold" tone="onPine">{unread}</Text>
+        </View>
+      )}
+      <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+    </Pressable>
   );
 }

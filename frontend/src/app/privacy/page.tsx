@@ -9,7 +9,7 @@ import type { Locale } from "@/i18n/config";
 const POLICY: Record<Locale, LegalDocument> = {
   en: {
     title: "Privacy policy",
-    updated: "Last updated 28 October 2026",
+    updated: "Last updated 31 October 2026",
     intro:
       "Budget Analysis is run by Mouhammed Altaweel. This page explains what it stores about you, why, who else handles it, for how long, and how you can see, download or delete it.",
     sections: [
@@ -41,6 +41,8 @@ const POLICY: Record<Locale, LegalDocument> = {
           "A small support team (the people who run Budget Analysis) can look up an account to help with sign-in or security problems. They see only account details: name, email address, phone number, username, sign-in methods, language, currencies, devices and security activity.",
           "They never see your budgets, expenses, categories, goals or groups.",
           "They can disable an account that is being misused, sign it out of every device, or resend an email-confirmation link. Every such action is recorded, and it also appears in your own security activity in Settings.",
+          "When you write to us (Help and feedback, or Contact us), the team reads your message, with the app version and the kind of device, to answer it. Conversations are kept until you delete your account, and they are in your data export.",
+          "A receipt photo you scan is read on our server and forgotten at once; it is never stored. A sentence you say is turned into text by your phone or browser, and only that text reaches us.",
         ],
       },
       {
@@ -103,7 +105,7 @@ const POLICY: Record<Locale, LegalDocument> = {
   },
   ar: {
     title: "سياسة الخصوصية",
-    updated: "آخر تحديث: 28 أكتوبر 2026",
+    updated: "آخر تحديث: 31 أكتوبر 2026",
     intro:
       "يدير Budget Analysis محمد الطويل. توضّح هذه الصفحة ما يحفظه Budget Analysis عنك، ولماذا، ومن يتعامل معه غيرنا، وإلى متى، وكيف تطّلع عليه أو تنزّله أو تحذفه.",
     sections: [
@@ -135,6 +137,8 @@ const POLICY: Record<Locale, LegalDocument> = {
           "يمكن لفريق دعم صغير (القائمون على Budget Analysis) الاطلاع على حساب للمساعدة في مشاكل الدخول أو الأمان. يرون بيانات الحساب فقط: الاسم، والبريد الإلكتروني، ورقم الهاتف، واسم المستخدم، وطرق الدخول، واللغة، والعملات، والأجهزة، وسجل الأمان.",
           "لا يرون أبداً ميزانياتك أو مصاريفك أو فئاتك أو أهدافك أو مجموعاتك.",
           "يمكنهم إيقاف حساب يُساء استخدامه، أو تسجيل خروجه من كل الأجهزة، أو إعادة إرسال رابط تأكيد البريد. كل إجراء من هذه يُسجَّل، ويظهر لك أيضاً في سجل الأمان في الإعدادات.",
+          "عندما تكتب لنا (المساعدة والملاحظات، أو تواصل معنا)، يقرأ الفريق رسالتك مع نسخة التطبيق ونوع الجهاز ليرد عليها. تُحفظ المحادثات حتى تحذف حسابك، وهي ضمن تصدير بياناتك.",
+          "صورة الفاتورة التي تمسحها تُقرأ على خادمنا ثم تُنسى فوراً، ولا تُخزَّن أبداً. الجملة التي تقولها يحوّلها هاتفك أو متصفحك إلى نص، ولا يصلنا إلا هذا النص.",
         ],
       },
       {
@@ -197,7 +201,7 @@ const POLICY: Record<Locale, LegalDocument> = {
   },
   tr: {
     title: "Gizlilik politikası",
-    updated: "Son güncelleme: 28 Ekim 2026",
+    updated: "Son güncelleme: 31 Ekim 2026",
     intro:
       "Budget Analysis'i Mouhammed Altaweel yürütür. Bu sayfa senin hakkında neyin saklandığını, neden, başka kimlerin işlediğini, ne kadar süre tutulduğunu ve onu nasıl görebileceğini, indirebileceğini veya silebileceğini anlatır.",
     sections: [
@@ -229,6 +233,8 @@ const POLICY: Record<Locale, LegalDocument> = {
           "Küçük bir destek ekibi (Budget Analysis'i yürüten kişiler), giriş veya güvenlik sorunlarında yardım etmek için bir hesaba bakabilir. Yalnızca hesap bilgilerini görürler: ad, e-posta adresi, telefon numarası, kullanıcı adı, giriş yöntemleri, dil, para birimleri, cihazlar ve güvenlik etkinliği.",
           "Bütçelerini, harcamalarını, kategorilerini, hedeflerini veya gruplarını asla görmezler.",
           "Kötüye kullanılan bir hesabı devre dışı bırakabilir, tüm cihazlardan çıkış yaptırabilir veya e-posta doğrulama bağlantısını yeniden gönderebilirler. Bu işlemlerin her biri kaydedilir ve Ayarlar'daki kendi güvenlik etkinliğinde de görünür.",
+          "Bize yazdığında (Yardım ve geri bildirim ya da Bize ulaş), ekip mesajını, uygulama sürümü ve cihaz türüyle birlikte, yanıtlamak için okur. Konuşmalar hesabını silene kadar saklanır ve veri dışa aktarımında yer alır.",
+          "Taradığın fiş fotoğrafı sunucumuzda okunur ve hemen unutulur; asla saklanmaz. Söylediğin cümleyi telefonun ya da tarayıcın metne çevirir; bize yalnızca bu metin ulaşır.",
         ],
       },
       {

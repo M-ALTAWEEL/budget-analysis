@@ -41,6 +41,7 @@ export const SHARED = [
   "services/recurring.ts",
   "services/reports.ts",
   "services/security.ts",
+  "services/support.ts",
   "services/system.ts",
   "components/auth/AuthProvider.tsx",
   "components/settings/useChangeLocale.ts",

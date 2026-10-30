@@ -24,6 +24,7 @@ from app.domain.goal.model import SavingsGoal
 from app.domain.group.service import GroupService
 from app.domain.income.model import Income
 from app.domain.recurring.model import RecurringExpense
+from app.domain.support.model import SupportTicket
 from app.domain.user.model import (
     OneTimeToken,
     SecurityEvent,
@@ -222,6 +223,11 @@ class AccountService:
         challenges = (
             await self.session.scalars(select(Challenge).where(Challenge.user_id == user.id))
         ).all()
+        tickets = (
+            await self.session.scalars(
+                select(SupportTicket).where(SupportTicket.user_id == user.id)
+            )
+        ).all()
         incomes = (
             await self.session.scalars(
                 select(Income).where(Income.user_id == user.id).order_by(Income.received_on)
@@ -335,6 +341,18 @@ class AccountService:
                     "note": i.note,
                 }
                 for i in incomes
+            ],
+            "support_messages": [
+                {
+                    "topic": t.topic,
+                    "subject": t.subject,
+                    "status": t.status,
+                    "messages": [
+                        {"from_support": m.from_support, "text": m.body, "at": when(m.created_at)}
+                        for m in t.messages
+                    ],
+                }
+                for t in tickets
             ],
             "challenges": [
                 {

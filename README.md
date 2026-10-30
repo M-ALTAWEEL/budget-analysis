@@ -25,6 +25,16 @@ Students get an allowance at the start of the month and find out at the end whet
 - **Ask the assistant.** "How much did I spend on food last month?", "كم تبقّى؟", "Ne kadar kaldı?" Answered from your own numbers, inside the app, with no paid AI service.
 - **Sign in with Google** or with email and password.
 - **Three languages** with their own number formats, dates and plural rules, a full right-to-left layout for Arabic, and a dark theme.
+- **Recurring expenses and subscriptions** added on their day, with a reminder the day before.
+- **Income** from a job, a scholarship or family, and what is left after spending.
+- **Debts** with friends outside groups, paid back in parts.
+- **Month report** ("Wrapped") and **PDF / Excel reports** of a month or a year.
+- **Savings challenges** alone or with your group, with badges and a no-spend streak.
+- **Household budget** for a shared flat, on top of split group expenses.
+- **Inflation view:** your spending in a steady currency at each month's rate, and the things that got more expensive.
+- **Voice and receipts:** say "coffee 45 lira yesterday" or snap a receipt, and the form fills itself.
+- **Works offline:** expenses added without a connection are sent when it is back.
+- **Help and feedback** built in, answered from the admin dashboard.
 
 ## Machine learning, built from scratch
 

@@ -31,6 +31,8 @@ from app.domain.notify.router import router as push_devices_router
 from app.domain.recurring.router import internal_router
 from app.domain.recurring.router import router as recurring_router
 from app.domain.report.router import router as reports_router
+from app.domain.support.router import admin_router as support_admin_router
+from app.domain.support.router import router as support_router
 from app.domain.user.router import auth_router, me_router, users_router
 
 
@@ -131,6 +133,8 @@ def create_app() -> FastAPI:
     app.include_router(assistant_router, prefix=settings.api_prefix)
     app.include_router(push_devices_router, prefix=settings.api_prefix)
     app.include_router(admin_router, prefix=settings.api_prefix)
+    app.include_router(support_router, prefix=settings.api_prefix)
+    app.include_router(support_admin_router, prefix=settings.api_prefix)
     app.include_router(recurring_router, prefix=settings.api_prefix)
     app.include_router(debts_router, prefix=settings.api_prefix)
     app.include_router(incomes_router, prefix=settings.api_prefix)
