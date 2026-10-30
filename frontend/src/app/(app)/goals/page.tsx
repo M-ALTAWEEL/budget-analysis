@@ -1,7 +1,8 @@
 "use client";
 
 import { AnimatePresence } from "motion/react";
-import { Plus } from "lucide-react";
+import { ChevronRight, Flame, Plus } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { ContributionSheet } from "@/components/goals/ContributionSheet";
@@ -10,7 +11,7 @@ import { GoalSheet } from "@/components/goals/GoalSheet";
 import { Button } from "@/components/ui/Button";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
-import { useGoals } from "@/hooks/queries";
+import { useChallenges, useGoals } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import type { Goal } from "@/types/api";
@@ -37,6 +38,7 @@ export default function GoalsPage() {
           {t.goals.add}
         </Button>
       </header>
+      <ChallengesLink />
 
       {goals.isPending ? (
         <PageLoader />
@@ -66,5 +68,28 @@ export default function GoalsPage() {
         {open.kind === "money" && <ContributionSheet key={open.goal.uuid} goal={open.goal} onClose={close} />}
       </AnimatePresence>
     </>
+  );
+}
+
+/** The way to savings challenges (feature F6), with how many are running. */
+function ChallengesLink() {
+  const challenges = useChallenges();
+  const { t } = useI18n();
+  const running = challenges.data?.items.filter((c) => c.status === "active" || c.status === "upcoming").length ?? 0;
+  const invites = challenges.data?.open.length ?? 0;
+  return (
+    <Link
+      href="/challenges"
+      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+    >
+      <Flame className="size-5 shrink-0 text-marigold" aria-hidden />
+      <span className="min-w-0 flex-1 truncate font-semibold">
+        {running > 0 ? t.challenges.linkSummary(running) : t.challenges.title}
+      </span>
+      {invites > 0 && (
+        <span className="grid size-6 place-items-center rounded-full bg-pine text-xs font-semibold text-white">{invites}</span>
+      )}
+      <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
   );
 }

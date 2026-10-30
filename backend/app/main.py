@@ -18,6 +18,7 @@ from app.database import get_db
 from app.domain.admin.router import router as admin_router
 from app.domain.assistant.router import router as assistant_router
 from app.domain.budget.router import budgets_router, categories_router
+from app.domain.challenge.router import router as challenges_router
 from app.domain.currency.router import router as currency_router
 from app.domain.debt.router import router as debts_router
 from app.domain.expense.router import router as expenses_router
@@ -133,6 +134,7 @@ def create_app() -> FastAPI:
     app.include_router(debts_router, prefix=settings.api_prefix)
     app.include_router(incomes_router, prefix=settings.api_prefix)
     app.include_router(reports_router, prefix=settings.api_prefix)
+    app.include_router(challenges_router, prefix=settings.api_prefix)
     app.include_router(internal_router, prefix=settings.api_prefix)
 
     return app

@@ -27,6 +27,7 @@ export default function AppLayout() {
             <Stack.Screen name="debts" />
             <Stack.Screen name="income" />
             <Stack.Screen name="wrapped" />
+            <Stack.Screen name="challenges" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>
