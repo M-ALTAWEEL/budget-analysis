@@ -1,4 +1,4 @@
-import { Users } from "lucide-react-native";
+import { Repeat, Users } from "lucide-react-native";
 import { Pressable, View } from "react-native";
 import Animated, { FadeIn, FadeOut, LinearTransition } from "react-native-reanimated";
 
@@ -40,6 +40,12 @@ export function ExpenseRow({ expense, budgetCurrency }: { expense: Expense; budg
               <View accessible accessibilityLabel={t.groups.fromGroup} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
                 <Text size={14} tone="muted">·</Text>
                 <Users size={14} color={colors.muted} />
+              </View>
+            )}
+            {expense.source === "recurring" && (
+              <View accessible accessibilityLabel={t.recurring.open} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                <Text size={14} tone="muted">·</Text>
+                <Repeat size={14} color={colors.muted} />
               </View>
             )}
           </View>

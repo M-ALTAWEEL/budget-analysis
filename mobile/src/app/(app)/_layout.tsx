@@ -23,6 +23,7 @@ export default function AppLayout() {
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="categories" />
             <Stack.Screen name="expenses-category" />
+            <Stack.Screen name="recurring" />
           </Stack>
         </ExpenseSheetProvider>
       </MonthProvider>

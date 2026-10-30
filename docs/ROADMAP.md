@@ -128,6 +128,23 @@ Design in [`design/admin.md`](design/admin.md).
 - [x] Currencies: the list moves into the database; admins add currencies (only ones the rates provider knows) and hide or show them, never delete; the website and app pickers read the list from the server
 - [ ] Privacy policy: a sentence that support can see account details (not budget data), checked by the owner
 
+## Extra features (before phase 7)
+Thirteen features that make the product stronger, one pull request each, easiest first.
+Features meant for Plus are built free now and gated by entitlements in phase 7.
+- [x] **F1 Recurring expenses and subscriptions**: rules added on their day each month, reminders the day before, a monthly total; "Repeat every month" on a new expense
+- [ ] F2 Personal debts (lent / borrowed)
+- [ ] F3 Income and its sources
+- [ ] F4 Month-end report (Wrapped)
+- [ ] F5 PDF and Excel reports (Plus)
+- [ ] F6 Savings challenges
+- [ ] F7 Shared household budget (Plus)
+- [ ] F8 Inflation and currency view (Plus)
+- [ ] F9 Add an expense by voice
+- [ ] F10 Receipt scan (Plus)
+- [ ] F11 Bank statement import (Plus)
+- [ ] F12 Home-screen widget
+- [ ] F13 Offline mode
+
 ## Phase 7: Subscriptions, payments and coupons
 - [ ] An **entitlements** table: what is free and what is paid. Code asks "is this allowed?", never "did they pay?"
   Sources: `apple`, `google`, `web` and `admin_grant`

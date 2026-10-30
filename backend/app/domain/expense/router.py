@@ -19,6 +19,7 @@ from app.domain.expense.schema import (
 from app.domain.expense.service import ExpenseService
 from app.domain.notify.budget_alerts import BudgetAlerts
 from app.domain.notify.service import deliver
+from app.domain.recurring.service import RecurringService
 
 router = APIRouter(prefix="/expenses", tags=["expenses"])
 
@@ -51,6 +52,7 @@ async def list_expenses(
     limit: Annotated[int, Query(ge=1, le=100)] = 50,
     offset: Annotated[int, Query(ge=0)] = 0,
 ) -> list[ExpenseRead]:
+    await RecurringService(db, fx).catch_up(user)  # rent day may have come since last time
     expenses = await ExpenseService(db, fx).list(
         user, parse_month(month) if month else None, category_uuid, limit, offset
     )

@@ -19,6 +19,7 @@ from app.domain.group.model import (
     GroupSettlement,
 )
 from app.domain.notify.model import PushDevice
+from app.domain.recurring.model import RecurringExpense
 from app.domain.user.model import (
     BackupCode,
     OneTimeToken,
@@ -50,6 +51,7 @@ __all__ = [
     "PhoneCode",
     "PlatformAdmin",
     "PushDevice",
+    "RecurringExpense",
     "RefreshToken",
     "SavingsGoal",
     "SecurityEvent",

@@ -3,7 +3,7 @@
 from datetime import date
 from decimal import Decimal
 
-from sqlalchemy import Date, ForeignKey, Index, Numeric, String
+from sqlalchemy import Date, ForeignKey, Index, Numeric, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.base import BaseModel
@@ -13,7 +13,11 @@ from app.domain.budget.model import Category
 class Expense(BaseModel):
     __tablename__ = "expenses"
     # Almost every query is "this user's expenses in this date range": one index serves them all.
-    __table_args__ = (Index("ix_expenses_user_id_spent_at", "user_id", "spent_at"),)
+    __table_args__ = (
+        Index("ix_expenses_user_id_spent_at", "user_id", "spent_at"),
+        # A recurring expense is added once per day it falls on, however often it's checked.
+        UniqueConstraint("recurring_id", "spent_at"),
+    )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
     category_id: Mapped[int] = mapped_column(ForeignKey("categories.id"), index=True)
@@ -35,7 +39,11 @@ class Expense(BaseModel):
     categorized_by: Mapped[str] = mapped_column(String(10), server_default="user")
     # "manual": typed by the student. "group": their share of a group expense, copied here
     # by the system (phase 3d); the group expense's share points at this row.
+    # "recurring": added by a recurring expense rule (recurring_id points at it).
     source: Mapped[str] = mapped_column(String(10), server_default="manual")
+    recurring_id: Mapped[int | None] = mapped_column(
+        ForeignKey("recurring_expenses.id", ondelete="SET NULL"), index=True
+    )
     ai_confidence: Mapped[Decimal | None] = mapped_column(Numeric(3, 2))
 
     category: Mapped[Category] = relationship(lazy="joined")

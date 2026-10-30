@@ -104,6 +104,16 @@ Production **refuses to start** with `console`: anyone reading the logs could si
 
 `EXPO_ACCESS_TOKEN` is only needed if "enhanced push security" is turned on in the Expo account.
 
+### 10b. `CRON_SECRET`: the daily job (feature F1)
+Every morning `.github/workflows/daily.yml` calls `POST /api/v1/internal/daily` on each API,
+which adds the recurring expenses that fell due and sends tomorrow's reminders.
+- One **different** secret per environment, generated like `EDGE_SECRET`.
+- Render: `CRON_SECRET` on `budgetbuddy-api` and on `budget-analysis-api-staging`.
+- GitHub → Settings → Secrets and variables → Actions: secrets `CRON_SECRET` (production)
+  and `STAGING_CRON_SECRET`; variable `STAGING_API_URL` (`API_URL` already exists).
+- Without `CRON_SECRET` the endpoint answers 404; people still get their recurring expenses
+  when they open the app, but no reminders.
+
 ### 11. The mobile app (EAS, phase 6)
 - `mobile/eas.json` sets `EXPO_PUBLIC_API_URL` per build profile: `development` and `preview`
   use the staging API; `production` uses `https://budgetanalysis.vercel.app/api/v1`.

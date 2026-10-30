@@ -9,9 +9,10 @@ import { DateField } from "@/components/ui/DateField";
 import { CurrencySelect } from "@/components/ui/CurrencySelect";
 import { Field, FormError } from "@/components/ui/Field";
 import { Sheet } from "@/components/ui/Sheet";
+import { SwitchRow } from "@/components/ui/SwitchRow";
 import { Text } from "@/components/ui/Text";
 import { toast } from "@/components/ui/Toast";
-import { useCategories, useCategorySuggestion, useDeleteExpense, useSaveExpense } from "@/hooks/queries";
+import { useCategories, useCategorySuggestion, useDeleteExpense, useSaveExpense, useSaveRecurring } from "@/hooks/queries";
 import { useDebouncedValue } from "@/hooks/useDebouncedValue";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
@@ -47,6 +48,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const categories = useCategories();
   const save = useSaveExpense();
   const remove = useDeleteExpense();
+  const saveRecurring = useSaveRecurring();
   const { t, categoryName } = useI18n();
   const colors = useColors();
   const errorMessage = useErrorMessage();
@@ -58,6 +60,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
   const [spentAt, setSpentAt] = useState(expense?.spent_at ?? todayISO());
   const [error, setError] = useState<string | null>(null);
   const [confirmingDelete, setConfirmingDelete] = useState(false);
+  const [repeat, setRepeat] = useState(false); // "Repeat every month" (feature F1)
 
   const typed = useDebouncedValue(description.trim());
   const asking = !expense && !pickedUuid ? typed : "";
@@ -73,10 +76,22 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
     if (!description.trim()) return setError(t.expenses.needDescription);
     if (!categoryUuid) return setError(t.expenses.needCategory);
     try {
-      await save.mutateAsync({
+      const saved = await save.mutateAsync({
         uuid: expense?.uuid,
         input: { amount: amount.trim(), currency, description: description.trim(), category_uuid: categoryUuid, spent_at: spentAt },
       });
+      if (!expense && repeat) {
+        await saveRecurring.mutateAsync({
+          input: {
+            description: saved.description,
+            amount: saved.amount,
+            currency: saved.currency,
+            category_uuid: saved.category.uuid,
+            day_of_month: Number(saved.spent_at.slice(8, 10)),
+            from_expense_uuid: saved.uuid, // this month's: not added a second time
+          },
+        });
+      }
       toast.success(expense ? t.expenses.saved : t.expenses.added);
       onClose();
     } catch (err) {
@@ -102,7 +117,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
       onClose={onClose}
       footer={
         <>
-          <Button onPress={submit} loading={save.isPending}>{expense ? t.expenses.saveChanges : t.expenses.add}</Button>
+          <Button onPress={submit} loading={save.isPending || saveRecurring.isPending}>{expense ? t.expenses.saveChanges : t.expenses.add}</Button>
           {expense && (
             <Button variant="danger" onPress={handleDelete} loading={remove.isPending}>
               {confirmingDelete ? t.common.tapAgainToDelete : t.common.delete}
@@ -181,6 +196,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
         </View>
 
         <DateField label={t.expenses.date} value={spentAt} max={todayISO()} onChange={setSpentAt} />
+        {!expense && <SwitchRow label={t.expenses.repeatMonthly} hint={t.expenses.repeatHint} value={repeat} onChange={setRepeat} />}
         <FormError message={error} />
       </View>
     </Sheet>

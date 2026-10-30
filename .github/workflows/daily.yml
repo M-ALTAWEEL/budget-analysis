@@ -1,0 +1,44 @@
+# The daily job (feature F1): every morning, ask each API to add the recurring expenses
+# that fell due for everyone and to send tomorrow's reminders. People who open the app
+# get theirs added anyway; this covers the reminders and those who don't open it.
+#
+# Repository variables (Settings > Secrets and variables > Actions > Variables):
+#   API_URL           the production API, e.g. https://budgetbuddy-api-p1a3.onrender.com
+#   STAGING_API_URL   the staging API (optional)
+# Repository secrets (… > Secrets): CRON_SECRET and STAGING_CRON_SECRET, the same values as
+# the CRON_SECRET environment variable of each Render service (docs/ENVIRONMENTS.md).
+name: Daily job
+
+on:
+  schedule:
+    - cron: "17 5 * * *" # 05:17 UTC = 08:17 in Istanbul
+  workflow_dispatch:
+
+permissions: {} # needs nothing from the repository
+
+jobs:
+  production:
+    runs-on: ubuntu-latest
+    if: ${{ vars.API_URL != '' }}
+    steps:
+      - name: Run the daily job
+        env:
+          SECRET: ${{ secrets.CRON_SECRET }}
+        run: >
+          curl --fail --silent --show-error --max-time 120
+          --retry 2 --retry-delay 30 --retry-all-errors
+          -X POST -H "X-Cron-Secret: $SECRET"
+          "${{ vars.API_URL }}/api/v1/internal/daily"
+
+  staging:
+    runs-on: ubuntu-latest
+    if: ${{ vars.STAGING_API_URL != '' }}
+    steps:
+      - name: Run the daily job
+        env:
+          SECRET: ${{ secrets.STAGING_CRON_SECRET }}
+        run: >
+          curl --fail --silent --show-error --max-time 120
+          --retry 2 --retry-delay 30 --retry-all-errors
+          -X POST -H "X-Cron-Secret: $SECRET"
+          "${{ vars.STAGING_API_URL }}/api/v1/internal/daily"

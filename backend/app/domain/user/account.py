@@ -20,6 +20,7 @@ from app.domain.budget.model import Budget, Category
 from app.domain.expense.model import Expense
 from app.domain.goal.model import SavingsGoal
 from app.domain.group.service import GroupService
+from app.domain.recurring.model import RecurringExpense
 from app.domain.user.model import (
     OneTimeToken,
     SecurityEvent,
@@ -209,6 +210,11 @@ class AccountService:
         goals = (
             await self.session.scalars(select(SavingsGoal).where(SavingsGoal.user_id == user.id))
         ).all()
+        recurring = (
+            await self.session.scalars(
+                select(RecurringExpense).where(RecurringExpense.user_id == user.id)
+            )
+        ).all()
         identities = (
             await self.session.scalars(select(UserIdentity).where(UserIdentity.user_id == user.id))
         ).all()
@@ -277,6 +283,19 @@ class AccountService:
                     ],
                 }
                 for g in goals
+            ],
+            "recurring_expenses": [
+                {
+                    "description": r.description,
+                    "amount": str(r.amount),
+                    "currency": r.currency,
+                    "category": category_name(r.category),
+                    "day_of_month": r.day_of_month,
+                    "starts_on": r.starts_on.isoformat(),
+                    "ends_on": when(r.ends_on),
+                    "paused": r.paused,
+                }
+                for r in recurring
             ],
             "devices": [
                 {

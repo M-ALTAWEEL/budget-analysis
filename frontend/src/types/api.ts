@@ -119,7 +119,8 @@ export interface Expense {
   category: Category;
   spent_at: string; // "2026-10-05"
   categorized_by: string;
-  source: "manual" | "group"; // "group": my share of a group expense, added by itself
+  // "group": my share of a group expense; "recurring": added by a recurring expense rule
+  source: "manual" | "group" | "recurring";
   created_at: string;
 }
 
@@ -221,4 +222,37 @@ export interface AssistantAnswer {
   through_day: number | null;
   categories: { category: Category; spent: string }[];
   goals: Goal[];
+}
+
+/** Rent, bills, subscriptions: added by themselves on their day each month (feature F1). */
+export interface RecurringExpense {
+  uuid: string;
+  description: string;
+  amount: string;
+  currency: Currency;
+  category: Category;
+  day_of_month: number; // 1–31; the 31st falls on the last day of a shorter month
+  starts_on: string;
+  ends_on: string | null;
+  remind: boolean; // a notification the day before (phone app)
+  paused: boolean;
+  next_on: string | null; // the next day it will be added; null when paused or ended
+}
+
+export interface RecurringList {
+  items: RecurringExpense[];
+  monthly_total: string; // the active ones, in the person's main currency
+  currency: Currency;
+}
+
+export interface RecurringInput {
+  description: string;
+  amount: string;
+  currency: Currency;
+  category_uuid: string;
+  day_of_month: number;
+  ends_on?: string | null;
+  remind?: boolean;
+  paused?: boolean;
+  from_expense_uuid?: string; // "repeat every month" on an expense just added
 }

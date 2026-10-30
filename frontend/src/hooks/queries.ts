@@ -23,6 +23,12 @@ import {
 } from "@/services/expenses";
 import { getRates, listCurrencies } from "@/services/currency";
 import {
+  createRecurring,
+  deleteRecurring,
+  listRecurring,
+  updateRecurring,
+} from "@/services/recurring";
+import {
   addContribution,
   archiveGoal,
   createGoal,
@@ -31,7 +37,13 @@ import {
   removeContribution,
   updateGoal,
 } from "@/services/goals";
-import type { ContributionInput, Currency, ExpenseInput, GoalInput } from "@/types/api";
+import type {
+  ContributionInput,
+  Currency,
+  ExpenseInput,
+  GoalInput,
+  RecurringInput,
+} from "@/types/api";
 
 // One place for cache keys, so invalidation can never miss a spelling.
 export const queryKeys = {
@@ -44,6 +56,7 @@ export const queryKeys = {
   goal: (uuid: string) => ["goals", uuid] as const,
   rates: (base: Currency) => ["rates", base] as const,
   currencies: ["currencies"] as const,
+  recurring: ["recurring"] as const,
   suggestion: (description: string) => ["category-suggestion", description] as const,
 };
 
@@ -80,7 +93,41 @@ function useInvalidateMoney() {
       queryClient.invalidateQueries({ queryKey: ["daily"] }),
       queryClient.invalidateQueries({ queryKey: ["tips"] }),
       queryClient.invalidateQueries({ queryKey: ["expenses"] }),
+      queryClient.invalidateQueries({ queryKey: ["recurring"] }),
     ]);
+}
+
+/** Rent, bills and subscriptions (feature F1). */
+export function useRecurring() {
+  return useQuery({ queryKey: queryKeys.recurring, queryFn: listRecurring });
+}
+
+/** Creating or changing a rule may add this month's expense: money views refresh too. */
+export function useSaveRecurring() {
+  const invalidate = useInvalidateMoney();
+  return useMutation({
+    mutationFn: ({ uuid, input }: { uuid?: string; input: RecurringInput }) => {
+      if (!uuid) return createRecurring(input);
+      const changes: Partial<RecurringInput> = { ...input };
+      delete changes.from_expense_uuid; // only when creating
+      return updateRecurring(uuid, changes);
+    },
+    onSuccess: invalidate,
+  });
+}
+
+export function useSetRecurringPaused() {
+  const invalidate = useInvalidateMoney();
+  return useMutation({
+    mutationFn: ({ uuid, paused }: { uuid: string; paused: boolean }) =>
+      updateRecurring(uuid, { paused }),
+    onSuccess: invalidate,
+  });
+}
+
+export function useDeleteRecurring() {
+  const invalidate = useInvalidateMoney();
+  return useMutation({ mutationFn: deleteRecurring, onSuccess: invalidate });
 }
 
 export function useSaveExpense() {
