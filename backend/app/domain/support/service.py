@@ -72,7 +72,7 @@ def team_email(ticket: SupportTicket, who: str, body: str) -> EmailMessage | Non
         return None
     text = (
         f"{ticket.topic.upper()} from {who}\n{ticket.platform or ''}\n\n{body}\n\n"
-        f"Answer it: {settings.frontend_urls[0]}/admin/support/{ticket.uuid}"
+        f"Answer it: {settings.cors_origins[0]}/admin/support/{ticket.uuid}"
     )
     return EmailMessage(
         to=settings.support_email,
@@ -243,7 +243,7 @@ class SupportDesk:
         if ticket.email:
             subject, intro, outro = _ANSWER.get(ticket.locale, _ANSWER["en"])
             intro = intro.format(subject=ticket.subject)
-            text = f"{intro}\n\n{data.message}\n\n{outro}\n{settings.frontend_urls[0]}/support"
+            text = f"{intro}\n\n{data.message}\n\n{outro}\n{settings.cors_origins[0]}/support"
             safe = data.message.replace("&", "&amp;").replace("<", "&lt;")
             email = EmailMessage(
                 to=ticket.email,
@@ -251,7 +251,7 @@ class SupportDesk:
                 text=text,
                 html=f"<p>{intro}</p><blockquote style='white-space:pre-wrap'>{safe}</blockquote>"
                 f"<p>{outro}</p>",
-                link=f"{settings.frontend_urls[0]}/support",
+                link=f"{settings.cors_origins[0]}/support",
             )
         return await self.detail(ticket_uuid), pushes, email
 
