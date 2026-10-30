@@ -23,6 +23,7 @@ export const SHARED = [
   "lib/money.ts",
   "lib/insights.ts",
   "lib/challenges.ts",
+  "lib/offline.ts",
   "lib/errors.ts",
   "hooks/queries.ts",
   "hooks/useDebouncedValue.ts",

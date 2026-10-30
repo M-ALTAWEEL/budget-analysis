@@ -4,6 +4,7 @@ import { Pressable, View } from "react-native";
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { PendingSharesBanner } from "@/components/groups/PendingShares";
+import { PendingExpenses } from "@/components/offline/Offline";
 import { AlertList } from "@/components/insights/AlertList";
 import { MonthCompare } from "@/components/insights/MonthCompare";
 import { PaceChart } from "@/components/insights/PaceChart";
@@ -53,6 +54,7 @@ export default function OverviewScreen() {
       </View>
 
       <PendingSharesBanner />
+      <PendingExpenses />
       {month === currentMonth() && <WrappedBanner />}
 
       {summary.isPending ? (

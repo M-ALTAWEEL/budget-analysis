@@ -9,6 +9,7 @@ import { Suspense } from "react";
 import { CategoryBreakdown } from "@/components/expense/CategoryBreakdown";
 import { useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
+import { PendingExpenses } from "@/components/offline/Offline";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { Button } from "@/components/ui/Button";
 import { CategoryIcon } from "@/components/ui/CategoryIcon";
@@ -55,6 +56,7 @@ function Expenses() {
       <header className="mb-10">
         <MonthSwitcher />
       </header>
+      <PendingExpenses />
 
       {categoryUuid !== null && (
         <CategoryHeader category={category} uuid={categoryUuid} summary={summary.data} />

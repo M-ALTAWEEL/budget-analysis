@@ -17,6 +17,9 @@ class Expense(BaseModel):
         Index("ix_expenses_user_id_spent_at", "user_id", "spent_at"),
         # A recurring expense is added once per day it falls on, however often it's checked.
         UniqueConstraint("recurring_id", "spent_at"),
+        # An expense added offline is sent again until the app hears back (feature F13):
+        # the id the app gave it makes the second time a no-op.
+        UniqueConstraint("user_id", "client_id"),
     )
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
@@ -45,5 +48,6 @@ class Expense(BaseModel):
         ForeignKey("recurring_expenses.id", ondelete="SET NULL"), index=True
     )
     ai_confidence: Mapped[Decimal | None] = mapped_column(Numeric(3, 2))
+    client_id: Mapped[str | None] = mapped_column(String(36))  # set by the app, see above
 
     category: Mapped[Category] = relationship(lazy="joined")

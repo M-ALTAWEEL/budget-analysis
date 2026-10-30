@@ -81,6 +81,12 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
         uuid: expense?.uuid,
         input: { amount: amount.trim(), currency, description: description.trim(), category_uuid: categoryUuid, spent_at: spentAt },
       });
+      if (saved === null) {
+        // No connection: it waits on the device and is sent when the connection is back.
+        toast.success(t.offline.queued);
+        onClose();
+        return;
+      }
       if (!expense && repeat) {
         await saveRecurring.mutateAsync({
           input: {

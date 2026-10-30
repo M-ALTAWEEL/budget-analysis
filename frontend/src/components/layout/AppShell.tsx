@@ -21,6 +21,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
 import { ExpenseSheetProvider, useExpenseSheet } from "@/components/expense/ExpenseSheet";
 import { MonthProvider, useMonth } from "@/components/layout/MonthProvider";
+import { OfflineSync } from "@/components/offline/Offline";
 import { Logo } from "@/components/ui/Logo";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useSummary } from "@/hooks/queries";
@@ -59,6 +60,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Sidebar />
           <main className="mx-auto w-full max-w-3xl px-4 pt-6 pb-44 sm:px-8 lg:pt-10 lg:pb-32">
             <VerifyEmailBanner />
+            <OfflineSync />
             <PageFade>{children}</PageFade>
           </main>
         </div>

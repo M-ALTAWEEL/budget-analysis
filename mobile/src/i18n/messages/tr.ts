@@ -566,6 +566,15 @@ export const tr: Messages = {
     scanFailed: "Toplam bulunamadı. Fotoğrafı kontrol et ya da yaz.",
   },
 
+  offline: {
+    queued: "Bağlantı yok: bu cihaza kaydedildi. İnternet gelince eklenecek.",
+    waiting: (count: number) => `${count} harcama bağlantı bekliyor`,
+    waitingHint: "İnternet gelince kendiliğinden eklenirler.",
+    synced: (count: number) => `Çevrimdışı ${count} harcama eklendi`,
+    refused: (count: number) => `Çevrimdışı ${count} harcama eklenemedi (o ayın bütçesi var mı?)`,
+    retry: "Şimdi dene",
+  },
+
   budget: {
     totalLabel: (month) => `${month} bütçesi`,
     update: "Bütçeyi güncelle",

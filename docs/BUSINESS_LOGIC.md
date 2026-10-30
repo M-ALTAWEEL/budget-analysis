@@ -231,6 +231,22 @@ server, website and app):
 4. Free for now; in phase 7 it becomes part of Plus. The app's camera arrives with the next
    app build (expo-image-picker); until then its scan button says so.
 
+### 6.8 Adding expenses offline (feature F13)
+**Rules** (`frontend/src/lib/offline.ts`, shared with the app; `expenses.client_id`):
+
+1. A **new expense** that gets no answer from the server (no connection) is kept on the
+   device (a file in the app, the browser's storage on the website) and shown as
+   "waiting for a connection" on the overview and the expenses page.
+2. It is sent again on its own: when the app comes back to the front or the browser is
+   back online, and every 20 seconds while some wait. "Try now" sends them at once.
+3. Each one carries an **id made on the device** (`client_id`). The server keeps one expense
+   per person and id, so an expense whose first try did arrive is never added twice.
+4. One the server refuses (say, no budget for its month) is dropped, and the person is told.
+5. Waiting expenses belong to the signed-in person: signing out removes them, and another
+   person signing in on the same device never sends them.
+6. Only adding works offline; editing, deleting and opening the app signed out still need a
+   connection. Pages already open keep showing what they last loaded.
+
 ## 7. Categories and automatic categorization
 
 ### Categories
@@ -660,6 +676,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Spending in the steady currency uses each month's own rate, fetched once | `test_inflation.py` |
 | A sentence gives the same amount, currency, day and description in all three languages, and saves nothing | `test_quick_add.py` |
 | A receipt's total is never the tax, subtotal or change; the photo is never kept | `test_receipt.py` |
+| The same expense sent twice from offline is added once, and only for its own person | `test_offline.py` |
 
 ## 17. Admin dashboard
 

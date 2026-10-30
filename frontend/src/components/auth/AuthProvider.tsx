@@ -4,6 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 
 import { onSessionExpired, refreshAccessToken } from "@/lib/api";
+import { forgetPending } from "@/lib/offline";
 import * as authService from "@/services/auth";
 import type { User } from "@/types/api";
 
@@ -138,6 +139,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     await authService.logout();
     restoring = null;
     queryClient.clear(); // never show one student's data to the next
+    forgetPending(); // nor leave their offline expenses on the device
     setState({ status: "anonymous", user: null });
   }, [queryClient]);
 

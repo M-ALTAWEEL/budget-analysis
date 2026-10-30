@@ -579,6 +579,15 @@ export const ar: Messages = {
     scanFailed: "لم أجد المجموع. تأكد من الصورة، أو اكتبه.",
   },
 
+  offline: {
+    queued: "لا يوجد اتصال: حُفظ على هذا الجهاز، وسيُضاف عندما يعود الإنترنت.",
+    waiting: (count: number) => `${count} مصاريف تنتظر الاتصال`,
+    waitingHint: "تُضاف وحدها عندما يعود الإنترنت.",
+    synced: (count: number) => `أُضيف ${count} مصاريف كانت بدون اتصال`,
+    refused: (count: number) => `تعذّر إضافة ${count} مصاريف من وقت عدم الاتصال (هل توجد ميزانية لشهرها؟)`,
+    retry: "حاول الآن",
+  },
+
   budget: {
     totalLabel: (month) => `ميزانية ${month}`,
     update: "تحديث الميزانية",

@@ -4,6 +4,7 @@ from datetime import date
 from decimal import Decimal
 
 from fastapi import HTTPException, status
+from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.core.dates import BudgetCalendar, format_month
@@ -30,6 +31,14 @@ class ExpenseService:
         self.suggester = CategorySuggester(session)
 
     async def create(self, user: User, data: ExpenseCreate) -> Expense:
+        if data.client_id:
+            already = await self.session.scalar(
+                select(Expense).where(
+                    Expense.user_id == user.id, Expense.client_id == data.client_id
+                )
+            )
+            if already is not None:  # sent again after going offline: already here
+                return already
         category = await self._category(user, data.category_uuid)
         currency = data.currency or user.base_currency
         await self.currency.catalog.require_offered(currency, current=user.base_currency)
@@ -45,6 +54,7 @@ class ExpenseService:
             fx_rate=rate,
             description=data.description,
             spent_at=data.spent_at,
+            client_id=data.client_id,
         )
         await self._record_who_categorized(user, expense)
         self.expenses.add(expense)

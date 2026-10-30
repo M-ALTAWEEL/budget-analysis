@@ -25,6 +25,9 @@ class ExpenseCreate(BaseModel):
     description: str = Field(min_length=1, max_length=200)
     category_uuid: str  # the frontend fills it in from /expenses/category-suggestion
     spent_at: date = Field(default_factory=date.today)
+    # Feature F13: an id the app makes, so an expense sent twice (offline, then again) is
+    # added once.
+    client_id: str | None = Field(default=None, pattern=r"^[0-9a-fA-F-]{8,36}$")
 
     _check_date = field_validator("spent_at")(_not_in_future)
 

@@ -137,6 +137,7 @@ export interface ExpenseInput {
   description: string;
   category_uuid: string;
   spent_at: string;
+  client_id?: string; // feature F13: the same expense sent twice is added once
 }
 
 export interface GoalContribution {
