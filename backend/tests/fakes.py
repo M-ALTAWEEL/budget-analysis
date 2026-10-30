@@ -34,6 +34,13 @@ class FakeFxClient:
         rates = await self.fetch_all(base)
         return {quote: rates[quote] for quote in quotes if quote in rates}
 
+    # Past rates (feature F8): {(day, base, quote): rate}; anything else has no rate.
+    history: dict = {}
+
+    async def fetch_on(self, day, base: str, quote: str) -> Decimal | None:
+        self.calls += 1
+        return self.history.get((day, base, quote))
+
 
 class FakeEmailSender:
     """Keeps the emails instead of sending them, so tests can open the links."""

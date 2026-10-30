@@ -105,6 +105,8 @@ class Settings(BaseSettings):
     # Exchange rates (ExchangeRate-API open access endpoint, no key needed)
     fx_api_url: str = "https://open.er-api.com/v6/latest"
     fx_cache_hours: int = 12
+    # Past exchange rates (feature F8): ECB reference rates, no key needed.
+    fx_history_url: str = "https://api.frankfurter.dev/v1"
     fx_timeout_seconds: float = 10.0
 
     @field_validator("database_url")

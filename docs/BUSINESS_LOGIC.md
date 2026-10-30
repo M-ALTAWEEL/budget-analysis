@@ -319,6 +319,26 @@ Overspending the whole budget is not an alert: the tank already says it prominen
    The website downloads it; the app opens the share sheet (save to Files, send by mail...).
 5. Free for now; in phase 7 it becomes part of Plus.
 
+### 8.9 Inflation and currencies (feature F8, Plus)
+**Rules** (`app/domain/inflation/`):
+
+1. The **steady currency** is the person's second currency, or USD when there is none (EUR
+   for someone who spends in USD).
+2. For each of the last **6 budget months** (up to the current one): what was spent, and the
+   same in the steady currency at the rate of the month's **last day** (today's rate for
+   the month still going). Past rates come from the European Central Bank's reference rates
+   (Frankfurter, about 30 currencies) and are kept once fetched; a month without a rate is
+   shown without the converted amount.
+3. **Change**: from the first to the last finished month with spending, in both currencies,
+   when both months use the same budget currency. Different numbers mean prices and the
+   exchange rate moved more than the person's habits.
+4. **Prices that went up**: the same purchase (same words, as for tips) bought in at least
+   two of those months in the same currency; its average price in the first and the last
+   of them. Rises of 5% or more, the biggest five.
+5. Only the person's own expenses are used; nothing is sent to the rates provider but two
+   currency codes and a date.
+6. Free for now; in phase 7 it becomes part of Plus.
+
 ## 9. Savings goals
 
 **Rules** (`app/domain/goal/service.py`):
@@ -608,6 +628,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | Report files carry the same numbers as the app and never mix currencies | `test_report_files.py` |
 | A challenge is won or missed exactly by its rule; only group members can see or join a shared one | `test_challenges.py` |
 | Only group admins set the household budget; its limits never exceed the total | `test_group_budget.py` |
+| Spending in the steady currency uses each month's own rate, fetched once | `test_inflation.py` |
 
 ## 17. Admin dashboard
 

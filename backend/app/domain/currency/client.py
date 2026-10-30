@@ -6,6 +6,7 @@ free and without an API key. Rates update once a day.
 
 import logging
 import re
+from datetime import date
 from decimal import Decimal, InvalidOperation
 
 import httpx
@@ -21,9 +22,10 @@ class FxUnavailableError(Exception):
 
 
 class ExchangeRateClient:
-    def __init__(self, base_url: str, timeout: float) -> None:
+    def __init__(self, base_url: str, timeout: float, history_url: str = "") -> None:
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
+        self.history_url = history_url.rstrip("/")
 
     def rates_url(self, base: str) -> str:
         # The caller only passes a code from our `currencies` table (CurrencyService checks
@@ -61,8 +63,26 @@ class ExchangeRateClient:
             logger.warning("fx provider has no rate", extra={"fields": {"missing": missing}})
         return {quote: rates[quote] for quote in quotes if quote in rates}
 
+    async def fetch_on(self, day: date, base: str, quote: str) -> Decimal | None:
+        """The rate on a past day (feature F8), from the European Central Bank's reference
+        rates through Frankfurter. None when it has no rate for one of the two currencies
+        (it quotes about 30) or is unreachable: the caller shows the month without it."""
+        if not (re.fullmatch(CURRENCY_PATTERN, base) and re.fullmatch(CURRENCY_PATTERN, quote)):
+            raise ValueError("Not a currency code.")
+        url = f"{self.history_url}/{day.isoformat()}"
+        try:
+            async with httpx.AsyncClient(timeout=self.timeout) as client:
+                response = await client.get(url, params={"base": base, "symbols": quote})
+                if response.status_code != 200:
+                    return None
+                return Decimal(str(response.json()["rates"][quote]))
+        except (httpx.HTTPError, KeyError, ValueError, InvalidOperation, TypeError):
+            return None
 
-exchange_rate_client = ExchangeRateClient(settings.fx_api_url, settings.fx_timeout_seconds)
+
+exchange_rate_client = ExchangeRateClient(
+    settings.fx_api_url, settings.fx_timeout_seconds, settings.fx_history_url
+)
 
 
 def get_fx_client() -> ExchangeRateClient:

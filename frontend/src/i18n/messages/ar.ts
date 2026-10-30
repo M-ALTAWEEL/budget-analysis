@@ -545,6 +545,25 @@ export const ar: Messages = {
     limitsTooHigh: "مجموع الحدود أكبر من المجموع الشهري.",
   },
 
+  inflation: {
+    title: "التضخم والعملات",
+    intro: (stable: string) =>
+      `الأسعار تتغير دائماً. هنا مصاريفك شهراً بشهر بعملتك وبـ ${stable} حسب سعر الصرف في كل شهر، والأشياء التي تشتريها وصار سعرها أعلى.`,
+    monthsTitle: "شهراً بشهر",
+    local: "عملتك",
+    stable: (code: string) => `بـ ${code}`,
+    noRate: "لا يوجد سعر",
+    soFar: "حتى الآن",
+    summary: (local: number, stable: number, code: string) =>
+      `تغيّرت مصاريفك ${local > 0 ? "+" : ""}${local}% بعملتك، لكن ${stable > 0 ? "+" : ""}${stable}% بـ ${code}.`,
+    explain: "عندما يختلف الرقمان كثيراً، فالأسعار وسعر الصرف تغيّرت أكثر من عاداتك.",
+    pricesTitle: "أسعار ارتفعت",
+    pricesEmpty: "لا شيء مما تشتريه بانتظام صار أغلى في هذه الأشهر.",
+    priceLine: (before: string, after: string) => `${before} ← ${after}`,
+    empty: "حدّد ميزانيات وأضف مصاريف لعدة أشهر لترى هذا.",
+    link: "التضخم والعملات",
+  },
+
   budget: {
     totalLabel: (month) => `ميزانية ${month}`,
     update: "تحديث الميزانية",

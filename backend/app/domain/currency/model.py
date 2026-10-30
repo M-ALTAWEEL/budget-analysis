@@ -1,9 +1,17 @@
 """Cached exchange rates, and the currencies people can use. Shared by all users."""
 
-from datetime import datetime
+from datetime import date, datetime
 from decimal import Decimal
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, Numeric, String, UniqueConstraint
+from sqlalchemy import (
+    Boolean,
+    CheckConstraint,
+    Date,
+    DateTime,
+    Numeric,
+    String,
+    UniqueConstraint,
+)
 from sqlalchemy.orm import Mapped, mapped_column
 
 from app.base import BaseModel
@@ -17,6 +25,19 @@ class ExchangeRate(BaseModel):
     quote: Mapped[str] = mapped_column(String(3))  # ... equals `rate` units of quote
     rate: Mapped[Decimal] = mapped_column(Numeric(18, 8))
     fetched_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class PastRate(BaseModel):
+    """An exchange rate on a past day (feature F8), kept once fetched: the past doesn't
+    change. `rate` is null when the provider has none for that pair, so it isn't asked again."""
+
+    __tablename__ = "past_rates"
+    __table_args__ = (UniqueConstraint("day", "base", "quote"),)
+
+    day: Mapped[date] = mapped_column(Date)
+    base: Mapped[str] = mapped_column(String(3))
+    quote: Mapped[str] = mapped_column(String(3))
+    rate: Mapped[Decimal | None] = mapped_column(Numeric(18, 8))
 
 
 class SupportedCurrency(BaseModel):

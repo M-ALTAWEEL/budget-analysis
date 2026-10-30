@@ -532,6 +532,25 @@ export const en = {
     limitsTooHigh: "The limits add up to more than the total.",
   },
 
+  inflation: {
+    title: "Inflation and currencies",
+    intro: (stable: string) =>
+      `Prices keep moving. Here is your spending month by month in your currency and in ${stable}, at each month's exchange rate, and the things you buy that got more expensive.`,
+    monthsTitle: "Month by month",
+    local: "Your currency",
+    stable: (code: string) => `In ${code}`,
+    noRate: "no rate",
+    soFar: "so far",
+    summary: (local: number, stable: number, code: string) =>
+      `Your spending changed ${local > 0 ? "+" : ""}${local}% in your currency, but ${stable > 0 ? "+" : ""}${stable}% in ${code}.`,
+    explain: "When the two differ a lot, prices and the exchange rate moved more than your habits did.",
+    pricesTitle: "Prices that went up",
+    pricesEmpty: "Nothing you buy again and again got more expensive in these months.",
+    priceLine: (before: string, after: string) => `${before} → ${after}`,
+    empty: "Set budgets and add expenses for a few months to see this.",
+    link: "Inflation and currencies",
+  },
+
   budget: {
     totalLabel: (month: string) => `Budget for ${month}`,
     update: "Update budget",
