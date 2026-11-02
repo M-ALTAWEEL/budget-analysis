@@ -1,0 +1,257 @@
+/* The ibudgi launch animation (components/brand/preloaderScript.ts) and loader
+   (components/brand/IbudgiLoader.tsx). Plain CSS: the preloader runs before React. */
+
+/* First visit only: indigo over everything from the first paint until the overlay exists. */
+html[data-preload]::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 2147483646;
+  background: #3a36db;
+}
+
+.ib-pre {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  background: #3a36db;
+  overflow: hidden;
+}
+
+/* The mark is 72 px wide (64 × 81 units), centred; the name hangs 14 px below it. */
+.ib-pre__mark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72px;
+  height: 91.125px;
+  margin: -45.5625px 0 0 -36px;
+  overflow: visible;
+}
+
+.ib-pre__bar {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  transform: scaleY(0);
+  animation: ib-rise 500ms cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+}
+.ib-pre__b2 {
+  animation-delay: 100ms;
+}
+.ib-pre__b3 {
+  animation-delay: 200ms;
+}
+@keyframes ib-rise {
+  to {
+    transform: scaleY(1);
+  }
+}
+
+/* Lands at 55%, bounces 9 px up at 72%, settles at 100%. In SVG units: 70 px = 62.2 units. */
+.ib-pre__coin {
+  opacity: 0;
+  animation: ib-drop 500ms 600ms both;
+}
+@keyframes ib-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-62.2px);
+    animation-timing-function: ease-in;
+  }
+  55% {
+    opacity: 1;
+    transform: translateY(0);
+    animation-timing-function: ease-out;
+  }
+  72% {
+    opacity: 1;
+    transform: translateY(-8px);
+    animation-timing-function: ease-in;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ib-pre__name {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 45.5625px + 14px);
+  width: 75.84px;
+  height: 23.36px;
+  margin-left: -37.92px;
+}
+.ib-pre__name svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  animation: ib-name 350ms 950ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+@keyframes ib-name {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+
+/* Still loading at 1750 ms: the bars breathe, staggered by 150 ms. */
+.ib-pre--wave .ib-pre__bar {
+  transform: scaleY(1);
+  animation: ib-wave 1100ms ease-in-out infinite;
+}
+.ib-pre--wave .ib-pre__b2 {
+  animation-delay: 150ms;
+}
+.ib-pre--wave .ib-pre__b3 {
+  animation-delay: 300ms;
+}
+@keyframes ib-wave {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.85);
+  }
+}
+
+/* Leaving: everything but the tall bar fades; the tall bar becomes .ib-pre__stretch. */
+.ib-pre__fade,
+.ib-pre__name {
+  transition: opacity 200ms;
+}
+.ib-pre--leave .ib-pre__fade,
+.ib-pre--leave .ib-pre__name {
+  opacity: 0;
+}
+.ib-pre__stretch {
+  position: absolute;
+  background: #ffffff;
+}
+
+/* The page under the overlay fades in and settles 10 px. */
+html.ib-reveal body > * {
+  animation: ib-reveal 450ms cubic-bezier(0.215, 0.61, 0.355, 1) both;
+}
+@keyframes ib-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+}
+
+/* The loader ("fill up"): indigo on light pages, white in dark mode and on indigo. */
+.ib-loader {
+  --ib-track: 0.15;
+  color: #3a36db;
+}
+:root[data-theme="dark"] .ib-loader,
+.ib-loader--brand {
+  --ib-track: 0.22;
+  color: #ffffff;
+}
+.ib-loader--inherit,
+:root[data-theme="dark"] .ib-loader--inherit {
+  --ib-track: 0.22;
+  color: inherit;
+}
+.ib-loader__track {
+  opacity: var(--ib-track);
+}
+.ib-loader__fill,
+.ib-loader__coin {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: 2800ms linear infinite;
+}
+.ib-loader__coin {
+  transform-origin: 50% 50%;
+  animation-name: ib-coin;
+}
+.ib-loader__f1 {
+  animation-name: ib-fill-1;
+}
+.ib-loader__f2 {
+  animation-name: ib-fill-2;
+}
+.ib-loader__f3 {
+  animation-name: ib-fill-3;
+}
+/* Each bar: empty for the first 10% of the cycle (plus its 200 ms stagger = 7.14%), full by
+   70%, then all of it empties in the last 150 ms (from 94.64%). */
+@keyframes ib-fill-1 {
+  0%,
+  10% {
+    transform: scaleY(0);
+    animation-timing-function: ease-in-out;
+  }
+  70%,
+  94.64% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+@keyframes ib-fill-2 {
+  0%,
+  17.14% {
+    transform: scaleY(0);
+    animation-timing-function: ease-in-out;
+  }
+  77.14%,
+  94.64% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+@keyframes ib-fill-3 {
+  0%,
+  24.29% {
+    transform: scaleY(0);
+    animation-timing-function: ease-in-out;
+  }
+  84.29%,
+  94.64% {
+    transform: scaleY(1);
+  }
+  100% {
+    transform: scaleY(0);
+  }
+}
+@keyframes ib-coin {
+  0%,
+  68% {
+    transform: scale(0);
+  }
+  78% {
+    transform: scale(1.35);
+  }
+  86%,
+  94.64% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+
+/* Reduced motion: the full logo, gently pulsing. */
+@media (prefers-reduced-motion: reduce) {
+  .ib-loader {
+    animation: ib-pulse 1800ms ease-in-out infinite;
+  }
+  .ib-loader__fill,
+  .ib-loader__coin {
+    animation: none;
+    transform: none;
+  }
+}
+@keyframes ib-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import { Bricolage_Grotesque, Instrument_Sans, Readex_Pro } from "next/font/google";
 
+import { PRELOADER_SCRIPT } from "@/components/brand/preloaderScript";
+
 import { Providers } from "./providers";
 import "./globals.css";
+import "./brand.css";
 
 // Display face for headings and big numbers; a calm grotesque for everything else.
 // "latin-ext" adds Turkish letters (ğ, ş, ı, İ). Arabic gets its own font.
@@ -65,6 +68,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: EARLY_SCRIPT }} />
+        {/* First visit only: the ibudgi launch animation, before React (preloaderScript.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: PRELOADER_SCRIPT }} />
       </head>
       <body className="min-h-full">
         <Providers>{children}</Providers>

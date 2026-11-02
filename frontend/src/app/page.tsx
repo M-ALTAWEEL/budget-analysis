@@ -16,5 +16,5 @@ export default function Home() {
     if (status === "authenticated") router.replace("/overview");
   }, [status, router]);
 
-  return status === "anonymous" ? <Landing /> : <PageLoader />;
+  return status === "anonymous" ? <Landing /> : <PageLoader size={72} />;
 }
