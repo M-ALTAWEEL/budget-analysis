@@ -744,6 +744,32 @@ export const ar: Messages = {
     budgetAlmostGone: (percent, count) => `صُرف ${percent} من الميزانية وما زال أمامك ${days(count)}.`,
   },
 
+  // The spending skyline on the Overview: a year of daily spending, flat or in 3D.
+  skyline: {
+    title: "سنتك في الإنفاق",
+    intro: "كل يوم من آخر 12 شهرًا: كلما أنفقت أكثر في يوم، صار لونه أقوى (وفي العرض الثلاثي الأبعاد صار عموده أطول).",
+    total: "إنفاق 12 شهرًا",
+    biggest: "أكبر يوم إنفاق",
+    longestFree: "أطول مدة بلا إنفاق",
+    currentFree: "بلا إنفاق حتى الآن",
+    days: (count: number) =>
+      count === 1 ? "يوم" : count === 2 ? "يومان" : count >= 3 && count <= 10 ? "أيام" : "يومًا",
+    spentOn: (amount: string, date: string) => `${amount} في ${date}`,
+    nothingOn: (date: string) => `لا إنفاق في ${date}`,
+    levels: ["لا شيء", "قليل", "متوسط", "كثير", "الأكثر"],
+    less: "أقل",
+    more: "أكثر",
+    view: "طريقة العرض",
+    flat: "خريطة حرارية مسطحة",
+    skyline: "أفق ثلاثي الأبعاد",
+    hintFlat: "مرّر المؤشر فوق يوم أو اضغط عليه لترى المبلغ · الأسهم تنقلك بين الأيام",
+    hintSkyline: "اسحب لتدويره · انقر مرتين لإعادته",
+    hintApp: "اضغط على يوم لترى المبلغ",
+    chartLabel: (total: string, from: string, to: string) =>
+      `أنفقت ${total} بين ${from} و${to}. استخدم الأسهم لقراءة كل يوم.`,
+    empty: "حدّد ميزانياتك وأضف مصاريفك لترى سنتك هنا.",
+  },
+
   goals: {
     title: "أهداف الادخار",
     intro: "خصّص مالًا لشيء أكبر: لابتوب، رحلة، أو رسوم الفصل القادم. كل هدف يوضح لك كم تحتاج أن تدّخر كل شهر لتصل إليه في الوقت.",
