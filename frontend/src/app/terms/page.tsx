@@ -3,7 +3,7 @@
 import { LegalPage, type LegalDocument } from "@/components/legal/LegalPage";
 import type { Locale } from "@/i18n/config";
 
-// The rules for using Budget Analysis, in plain words. Paid plans (phase 7) will add
+// The rules for using ibudgi, in plain words. Paid plans (phase 7) will add
 // their own section before anyone is asked to pay. To be reviewed by a lawyer before
 // the commercial launch.
 const TERMS: Record<Locale, LegalDocument> = {
@@ -11,12 +11,12 @@ const TERMS: Record<Locale, LegalDocument> = {
     title: "Terms of use",
     updated: "Last updated 25 October 2026",
     intro:
-      "These terms are the agreement between you and Mouhammed Altaweel, who runs Budget Analysis. By creating an account or using the app, you accept them.",
+      "These terms are the agreement between you and Mouhammed Altaweel, who runs ibudgi. By creating an account or using the app, you accept them.",
     sections: [
       {
         heading: "The service",
         body: [
-          "Budget Analysis helps you plan a monthly budget, record expenses and follow savings goals. It is free today and still growing, so features may change.",
+          "ibudgi helps you plan a monthly budget, record expenses and follow savings goals. It is free today and still growing, so features may change.",
           "If paid plans are added, what they cost and include will be shown clearly before you pay anything. Nothing you use for free today will be charged without your agreement.",
         ],
       },
@@ -30,14 +30,14 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "Fair use",
         body: [
-          "Do not try to break, overload or get around the security of Budget Analysis, read other people's data, send automated requests in bulk, or use it for anything illegal.",
+          "Do not try to break, overload or get around the security of ibudgi, read other people's data, send automated requests in bulk, or use it for anything illegal.",
           "If you find a security problem, please tell us privately through the contact links below instead of using it.",
         ],
       },
       {
         heading: "Your data",
         body: [
-          "What you enter stays yours. We use it only to run Budget Analysis for you, as described in the privacy policy. You can download it or delete it at any time from Settings.",
+          "What you enter stays yours. We use it only to run ibudgi for you, as described in the privacy policy. You can download it or delete it at any time from Settings.",
         ],
       },
       {
@@ -50,7 +50,7 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "Availability",
         body: [
-          "We work to keep Budget Analysis running and your data safe, but it is provided “as is”, without a promise that it will never stop or never have mistakes. Download your data from time to time if you want your own copy.",
+          "We work to keep ibudgi running and your data safe, but it is provided “as is”, without a promise that it will never stop or never have mistakes. Download your data from time to time if you want your own copy.",
         ],
       },
       {
@@ -74,18 +74,18 @@ const TERMS: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "Contact",
-    back: "Back to Budget Analysis",
+    back: "Back to ibudgi",
   },
   ar: {
     title: "شروط الاستخدام",
     updated: "آخر تحديث: 25 أكتوبر 2026",
     intro:
-      "هذه الشروط اتفاق بينك وبين محمد الطويل الذي يدير Budget Analysis. بإنشاء حساب أو استخدام التطبيق، فأنت توافق عليها.",
+      "هذه الشروط اتفاق بينك وبين محمد الطويل الذي يدير ibudgi. بإنشاء حساب أو استخدام التطبيق، فأنت توافق عليها.",
     sections: [
       {
         heading: "الخدمة",
         body: [
-          "يساعدك Budget Analysis على تخطيط ميزانية شهرية وتسجيل المصاريف ومتابعة أهداف الادخار. هو مجاني اليوم وما زال يتطوّر، لذا قد تتغيّر بعض الميزات.",
+          "يساعدك ibudgi على تخطيط ميزانية شهرية وتسجيل المصاريف ومتابعة أهداف الادخار. هو مجاني اليوم وما زال يتطوّر، لذا قد تتغيّر بعض الميزات.",
           "إذا أُضيفت خطط مدفوعة، فستُعرض تكلفتها وما تتضمنه بوضوح قبل أن تدفع أي شيء. ولن يُفرض أي مبلغ على ما تستخدمه مجاناً اليوم دون موافقتك.",
         ],
       },
@@ -99,14 +99,14 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "الاستخدام العادل",
         body: [
-          "لا تحاول تعطيل Budget Analysis أو إثقاله أو تجاوز حمايته، أو الاطّلاع على بيانات الآخرين، أو إرسال طلبات آلية بكميات كبيرة، أو استخدامه لأي شيء غير قانوني.",
+          "لا تحاول تعطيل ibudgi أو إثقاله أو تجاوز حمايته، أو الاطّلاع على بيانات الآخرين، أو إرسال طلبات آلية بكميات كبيرة، أو استخدامه لأي شيء غير قانوني.",
           "إذا وجدت مشكلة أمنية، أخبرنا بها بشكل خاص عبر روابط التواصل أدناه بدلاً من استغلالها.",
         ],
       },
       {
         heading: "بياناتك",
         body: [
-          "ما تُدخله يبقى ملكك. نستخدمه فقط لتشغيل Budget Analysis لك كما هو موضّح في سياسة الخصوصية. يمكنك تنزيله أو حذفه في أي وقت من الإعدادات.",
+          "ما تُدخله يبقى ملكك. نستخدمه فقط لتشغيل ibudgi لك كما هو موضّح في سياسة الخصوصية. يمكنك تنزيله أو حذفه في أي وقت من الإعدادات.",
         ],
       },
       {
@@ -119,7 +119,7 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "التوفّر",
         body: [
-          "نعمل على إبقاء Budget Analysis يعمل وبياناتك آمنة، لكنه يُقدَّم «كما هو»، دون وعد بأنه لن يتوقف أبداً أو لن تحدث فيه أخطاء. نزّل بياناتك من حين لآخر إذا أردت نسختك الخاصة.",
+          "نعمل على إبقاء ibudgi يعمل وبياناتك آمنة، لكنه يُقدَّم «كما هو»، دون وعد بأنه لن يتوقف أبداً أو لن تحدث فيه أخطاء. نزّل بياناتك من حين لآخر إذا أردت نسختك الخاصة.",
         ],
       },
       {
@@ -143,18 +143,18 @@ const TERMS: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "تواصل",
-    back: "العودة إلى Budget Analysis",
+    back: "العودة إلى ibudgi",
   },
   tr: {
     title: "Kullanım koşulları",
     updated: "Son güncelleme: 25 Ekim 2026",
     intro:
-      "Bu koşullar, seninle Budget Analysis'i yürüten Mouhammed Altaweel arasındaki sözleşmedir. Hesap oluşturarak veya uygulamayı kullanarak bunları kabul etmiş olursun.",
+      "Bu koşullar, seninle ibudgi'yi yürüten Mouhammed Altaweel arasındaki sözleşmedir. Hesap oluşturarak veya uygulamayı kullanarak bunları kabul etmiş olursun.",
     sections: [
       {
         heading: "Hizmet",
         body: [
-          "Budget Analysis aylık bütçe planlamana, harcamalarını kaydetmene ve birikim hedeflerini takip etmene yardım eder. Bugün ücretsizdir ve gelişmeye devam ediyor; bu yüzden özellikler değişebilir.",
+          "ibudgi aylık bütçe planlamana, harcamalarını kaydetmene ve birikim hedeflerini takip etmene yardım eder. Bugün ücretsizdir ve gelişmeye devam ediyor; bu yüzden özellikler değişebilir.",
           "Ücretli planlar eklenirse, ne kadar tuttukları ve neleri içerdikleri sen bir şey ödemeden önce açıkça gösterilir. Bugün ücretsiz kullandığın hiçbir şey onayın olmadan ücretlendirilmez.",
         ],
       },
@@ -168,14 +168,14 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "Adil kullanım",
         body: [
-          "Budget Analysis'i bozmaya, aşırı yüklemeye veya güvenliğini aşmaya, başkalarının verilerini okumaya, toplu otomatik istek göndermeye ya da yasa dışı herhangi bir şey için kullanmaya çalışma.",
+          "ibudgi'yi bozmaya, aşırı yüklemeye veya güvenliğini aşmaya, başkalarının verilerini okumaya, toplu otomatik istek göndermeye ya da yasa dışı herhangi bir şey için kullanmaya çalışma.",
           "Bir güvenlik sorunu bulursan, onu kullanmak yerine aşağıdaki iletişim bağlantılarından bize gizlice bildir.",
         ],
       },
       {
         heading: "Verilerin",
         body: [
-          "Girdiklerin senin kalır. Onları yalnızca, gizlilik politikasında anlatıldığı gibi, Budget Analysis'i senin için çalıştırmak için kullanırız. İstediğin zaman Ayarlar'dan indirebilir veya silebilirsin.",
+          "Girdiklerin senin kalır. Onları yalnızca, gizlilik politikasında anlatıldığı gibi, ibudgi'yi senin için çalıştırmak için kullanırız. İstediğin zaman Ayarlar'dan indirebilir veya silebilirsin.",
         ],
       },
       {
@@ -188,7 +188,7 @@ const TERMS: Record<Locale, LegalDocument> = {
       {
         heading: "Erişilebilirlik",
         body: [
-          "Budget Analysis'i çalışır ve verilerini güvende tutmak için çalışıyoruz, ancak hizmet “olduğu gibi” sunulur; hiç durmayacağı veya hiç hata olmayacağı sözü verilmez. Kendi kopyanı istersen verilerini zaman zaman indir.",
+          "ibudgi'yi çalışır ve verilerini güvende tutmak için çalışıyoruz, ancak hizmet “olduğu gibi” sunulur; hiç durmayacağı veya hiç hata olmayacağı sözü verilmez. Kendi kopyanı istersen verilerini zaman zaman indir.",
         ],
       },
       {
@@ -212,7 +212,7 @@ const TERMS: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "İletişim",
-    back: "Budget Analysis'e dön",
+    back: "ibudgi'ye dön",
   },
 };
 

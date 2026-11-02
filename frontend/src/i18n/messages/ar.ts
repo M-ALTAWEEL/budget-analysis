@@ -466,7 +466,7 @@ export const ar: Messages = {
     goalsSaved: (amount: string) => `وضعت في أهداف الادخار: ${amount}`,
     share: "مشاركة",
     shareText: (month: string, spent: string, budget: string) =>
-      `شهري ${month} مع Budget Analysis: صرفت ${spent} من ${budget}.`,
+      `شهري ${month} مع ibudgi: صرفت ${spent} من ${budget}.`,
     copied: "تم النسخ",
     noBudget: "لا توجد ميزانية لهذا الشهر، فلا يوجد تقرير.",
     ready: (month: string) => `شهرك ${month} بالأرقام جاهز`,
@@ -891,7 +891,7 @@ export const ar: Messages = {
         "2fa_disabled": "تم إيقاف المصادقة الثنائية",
         backup_codes_created: "تم إنشاء رموز احتياطية جديدة",
         backup_code_used: "تم استخدام رمز احتياطي",
-        admin_action: "إجراء على حسابك من فريق دعم Budget Analysis",
+        admin_action: "إجراء على حسابك من فريق دعم ibudgi",
       } as Record<string, string>,
       otherEvent: "تغيير أمني",
     },
@@ -900,7 +900,7 @@ export const ar: Messages = {
   landing: {
     heroTitle: "اعرف كم تبقّى من مصروفك، وهل سيكفيك حتى آخر الشهر.",
     heroText:
-      "سجّل ما تصرفه، و Budget Analysis يضعه في الفئة الصحيحة، وينبّهك قبل أن تنفد فئة، ويُريك إلى أين يتجه شهرك.",
+      "سجّل ما تصرفه، و ibudgi يضعه في الفئة الصحيحة، وينبّهك قبل أن تنفد فئة، ويُريك إلى أين يتجه شهرك.",
     heroNote: "مجاني، بالعربية والإنجليزية والتركية.",
     demoLabel: "شهر طالب في ثوانٍ: الخزان يفرغ مع كل مصروف جديد.",
     dayOf: (day, days) => `اليوم ${day} من ${days}`,
@@ -933,7 +933,7 @@ export const ar: Messages = {
     f3Text:
       "العربية والإنجليزية والتركية، لكلٍّ منها أرقامها وتواريخها وصيغ الجمع فيها. والعربية تُقرأ من اليمين إلى اليسار، حتى الرسوم البيانية.",
     endTitle: "ابدأ بمصروف هذا الشهر. يكفيك دقيقة واحدة.",
-    footer: "Budget Analysis مشروع من أعمال محمد الطويل.",
+    footer: "ibudgi مشروع من أعمال محمد الطويل.",
     source: "الكود المصدري على GitHub",
     privacy: "الخصوصية",
     terms: "شروط الاستخدام",
@@ -942,7 +942,7 @@ export const ar: Messages = {
   assistant: {
     title: "المساعد",
     intro: "اسأل عن مصروفك بالعربية أو الإنجليزية أو التركية. الإجابات محسوبة من مصاريفك أنت.",
-    local: "يعمل داخل Budget Analysis نفسه. لا ترى بياناتك أي خدمة ذكاء اصطناعي خارجية.",
+    local: "يعمل داخل ibudgi نفسه. لا ترى بياناتك أي خدمة ذكاء اصطناعي خارجية.",
     placeholder: "اكتب سؤالك…",
     send: "إرسال",
     thinking: "جارٍ الحساب…",
@@ -1001,9 +1001,9 @@ export const ar: Messages = {
     text: "اطلب Face ID أو البصمة أو رمز الهاتف في كل مرة تعود فيها إلى التطبيق.",
     toggle: "اقفل التطبيق",
     unavailable: "فعّل Face ID أو البصمة أو رمز قفل على هاتفك أولًا.",
-    locked: "Budget Analysis مقفل",
+    locked: "ibudgi مقفل",
     unlock: "افتح القفل",
-    reason: "افتح قفل Budget Analysis",
+    reason: "افتح قفل ibudgi",
   },
 
   notifications: {
@@ -1012,19 +1012,19 @@ export const ar: Messages = {
     groupsText: "عندما يضيف أحدهم مصروفًا لك حصة فيه، أو يردّ لك مبلغًا، أو يدعوك إلى مجموعة.",
     budget: "تنبيهات الميزانية",
     budgetText: "عندما تقترب فئة من حدّها أو تتجاوزه، أو يوشك مال هذا الشهر على النفاد، أو تستحق دفعة متكررة غداً.",
-    denied: "الإشعارات متوقفة لتطبيق Budget Analysis في إعدادات هاتفك.",
+    denied: "الإشعارات متوقفة لتطبيق ibudgi في إعدادات هاتفك.",
     openSettings: "افتح إعدادات الهاتف",
   },
 
   errors: {
-    network: "تعذّر الوصول إلى خادم Budget Analysis. تحقق من اتصالك وحاول مرة أخرى.",
+    network: "تعذّر الوصول إلى خادم ibudgi. تحقق من اتصالك وحاول مرة أخرى.",
     tooMany: "محاولات كثيرة. انتظر دقيقة ثم حاول مرة أخرى.",
     generic: "حدث خطأ ما. حاول مرة أخرى.",
     invalid: "بعض القيم غير صحيحة. راجعها وحاول مرة أخرى.",
     invalidLogin: "البريد الإلكتروني أو كلمة المرور غير صحيحة.",
     forbidden: "لا يمكنك تعديل هذا.",
     notFound: "لم نجد ما تبحث عنه. ربما تم حذفه.",
-    server: "حدثت مشكلة في خادم Budget Analysis. حاول بعد قليل.",
+    server: "حدثت مشكلة في خادم ibudgi. حاول بعد قليل.",
     emailTaken: "يوجد حساب بهذا البريد الإلكتروني مسبقًا.",
     needBudget: "حدّد ميزانية لذلك الشهر قبل إضافة مصاريف إليه.",
   },

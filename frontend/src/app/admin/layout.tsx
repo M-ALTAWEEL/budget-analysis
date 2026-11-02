@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { AdminShell } from "@/components/admin/AdminShell";
 
 export const metadata: Metadata = {
-  title: "Admin · Budget Analysis",
+  title: "Admin · ibudgi",
   robots: { index: false, follow: false },
 };
 

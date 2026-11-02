@@ -11,7 +11,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     [
       "expo-image-picker",
       {
-        cameraPermission: "Budget Analysis uses the camera to read the total on a receipt.",
+        cameraPermission: "ibudgi uses the camera to read the total on a receipt.",
         photosPermission: false,
         microphonePermission: false,
       },

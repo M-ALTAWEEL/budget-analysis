@@ -1,7 +1,7 @@
 /**
  * The website's fonts (frontend/src/app/layout.tsx): Bricolage Grotesque for headings and
- * numbers, Instrument Sans for text, Readex Pro for Arabic (both roles), Montserrat for
- * the logo. On a phone every weight is its own font file, so a weight is a family name.
+ * numbers, Instrument Sans for text, Readex Pro for Arabic (both roles). The logo's name
+ * is an outlined path (lib/brand.ts), so it needs no font. On a phone every weight is its own font file, so a weight is a family name.
  */
 import {
   BricolageGrotesque_600SemiBold,
@@ -13,7 +13,6 @@ import {
   InstrumentSans_600SemiBold,
   InstrumentSans_700Bold,
 } from "@expo-google-fonts/instrument-sans";
-import { Montserrat_400Regular, Montserrat_700Bold } from "@expo-google-fonts/montserrat";
 import {
   ReadexPro_400Regular,
   ReadexPro_500Medium,
@@ -28,8 +27,6 @@ export const FONT_FILES = {
   InstrumentSans_500Medium,
   InstrumentSans_600SemiBold,
   InstrumentSans_700Bold,
-  Montserrat_400Regular,
-  Montserrat_700Bold,
   ReadexPro_400Regular,
   ReadexPro_500Medium,
   ReadexPro_600SemiBold,

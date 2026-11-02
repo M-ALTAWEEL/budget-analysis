@@ -12,7 +12,7 @@ from urllib.parse import quote, urlencode
 
 STEP_SECONDS = 30
 DIGITS = 6
-ISSUER = "Budget Analysis"
+ISSUER = "ibudgi"
 
 
 def new_secret() -> str:

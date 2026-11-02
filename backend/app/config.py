@@ -13,7 +13,7 @@ DEV_SECRET_KEY = "dev-only-secret-key-change-me-before-deploying-0123456789"
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
 
-    app_name: str = "Budget Analysis API"
+    app_name: str = "ibudgi API"
     app_env: str = "development"
     api_prefix: str = "/api/v1"
 
@@ -72,7 +72,7 @@ class Settings(BaseSettings):
     email_backend: Literal["none", "console", "smtp"] = "none"
     smtp_host: str = "localhost"
     smtp_port: int = 1025
-    email_from: str = "Budget Analysis <no-reply@budgetanalysis.app>"
+    email_from: str = "ibudgi <no-reply@budgetanalysis.app>"
     # The team's inbox: a copy of every new support message goes here (empty: none).
     support_email: str = ""
     # The website address used in email links. Empty = the first FRONTEND_URL.

@@ -11,7 +11,7 @@ const POLICY: Record<Locale, LegalDocument> = {
     title: "Privacy policy",
     updated: "Last updated 31 October 2026",
     intro:
-      "Budget Analysis is run by Mouhammed Altaweel. This page explains what it stores about you, why, who else handles it, for how long, and how you can see, download or delete it.",
+      "ibudgi is run by Mouhammed Altaweel. This page explains what it stores about you, why, who else handles it, for how long, and how you can see, download or delete it.",
     sections: [
       {
         heading: "Your account",
@@ -38,7 +38,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "Account support",
         body: [
-          "A small support team (the people who run Budget Analysis) can look up an account to help with sign-in or security problems. They see only account details: name, email address, phone number, username, sign-in methods, language, currencies, devices and security activity.",
+          "A small support team (the people who run ibudgi) can look up an account to help with sign-in or security problems. They see only account details: name, email address, phone number, username, sign-in methods, language, currencies, devices and security activity.",
           "They never see your budgets, expenses, categories, goals or groups.",
           "They can disable an account that is being misused, sign it out of every device, or resend an email-confirmation link. Every such action is recorded, and it also appears in your own security activity in Settings.",
           "When you write to us (Help and feedback, or Contact us), the team reads your message, with the app version and the kind of device, to answer it. Conversations are kept until you delete your account, and they are in your data export.",
@@ -55,7 +55,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "Who else handles your data",
         body: [
-          "Vercel runs the website, Render runs the server and Neon keeps the database, in Frankfurt (EU). They process data only to run Budget Analysis.",
+          "Vercel runs the website, Render runs the server and Neon keeps the database, in Frankfurt (EU). They process data only to run ibudgi.",
           "Sentry receives error reports (in the EU), set up not to include personal data.",
           "When you choose a password, Have I Been Pwned receives the first 5 characters of a fingerprint (hash) of it, never the password, so we can warn you if it appeared in a known data breach.",
           "Exchange rates come from a public rates service, and none of your data is sent to it.",
@@ -85,12 +85,12 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
       {
         heading: "Age",
-        body: ["Budget Analysis is meant for people aged 16 and over."],
+        body: ["ibudgi is meant for people aged 16 and over."],
       },
       {
         heading: "What is never done",
         body: [
-          "Your data is not sold, not shared with advertisers, and not used for anything other than running Budget Analysis for you.",
+          "Your data is not sold, not shared with advertisers, and not used for anything other than running ibudgi for you.",
         ],
       },
       {
@@ -101,13 +101,13 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "Contact",
-    back: "Back to Budget Analysis",
+    back: "Back to ibudgi",
   },
   ar: {
     title: "سياسة الخصوصية",
     updated: "آخر تحديث: 31 أكتوبر 2026",
     intro:
-      "يدير Budget Analysis محمد الطويل. توضّح هذه الصفحة ما يحفظه Budget Analysis عنك، ولماذا، ومن يتعامل معه غيرنا، وإلى متى، وكيف تطّلع عليه أو تنزّله أو تحذفه.",
+      "يدير ibudgi محمد الطويل. توضّح هذه الصفحة ما يحفظه ibudgi عنك، ولماذا، ومن يتعامل معه غيرنا، وإلى متى، وكيف تطّلع عليه أو تنزّله أو تحذفه.",
     sections: [
       {
         heading: "حسابك",
@@ -134,7 +134,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "دعم الحسابات",
         body: [
-          "يمكن لفريق دعم صغير (القائمون على Budget Analysis) الاطلاع على حساب للمساعدة في مشاكل الدخول أو الأمان. يرون بيانات الحساب فقط: الاسم، والبريد الإلكتروني، ورقم الهاتف، واسم المستخدم، وطرق الدخول، واللغة، والعملات، والأجهزة، وسجل الأمان.",
+          "يمكن لفريق دعم صغير (القائمون على ibudgi) الاطلاع على حساب للمساعدة في مشاكل الدخول أو الأمان. يرون بيانات الحساب فقط: الاسم، والبريد الإلكتروني، ورقم الهاتف، واسم المستخدم، وطرق الدخول، واللغة، والعملات، والأجهزة، وسجل الأمان.",
           "لا يرون أبداً ميزانياتك أو مصاريفك أو فئاتك أو أهدافك أو مجموعاتك.",
           "يمكنهم إيقاف حساب يُساء استخدامه، أو تسجيل خروجه من كل الأجهزة، أو إعادة إرسال رابط تأكيد البريد. كل إجراء من هذه يُسجَّل، ويظهر لك أيضاً في سجل الأمان في الإعدادات.",
           "عندما تكتب لنا (المساعدة والملاحظات، أو تواصل معنا)، يقرأ الفريق رسالتك مع نسخة التطبيق ونوع الجهاز ليرد عليها. تُحفظ المحادثات حتى تحذف حسابك، وهي ضمن تصدير بياناتك.",
@@ -151,7 +151,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "من يتعامل مع بياناتك غيرنا",
         body: [
-          "Vercel يشغّل الموقع، وRender يشغّل الخادم، وNeon يحفظ قاعدة البيانات في فرانكفورت (الاتحاد الأوروبي). يعالجون البيانات فقط لتشغيل Budget Analysis.",
+          "Vercel يشغّل الموقع، وRender يشغّل الخادم، وNeon يحفظ قاعدة البيانات في فرانكفورت (الاتحاد الأوروبي). يعالجون البيانات فقط لتشغيل ibudgi.",
           "Sentry يستلم تقارير الأخطاء (في الاتحاد الأوروبي)، وهو مضبوط بحيث لا تتضمن بيانات شخصية.",
           "عندما تختار كلمة مرور، تستلم خدمة Have I Been Pwned أول 5 أحرف من بصمتها المشفّرة (hash) فقط، لا كلمة المرور، لنحذّرك إذا ظهرت في تسريب بيانات معروف.",
           "أسعار الصرف تأتي من خدمة عامة، ولا يُرسل إليها شيء من بياناتك.",
@@ -181,12 +181,12 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
       {
         heading: "العمر",
-        body: ["Budget Analysis مخصّص لمن هم في سن 16 عاماً فما فوق."],
+        body: ["ibudgi مخصّص لمن هم في سن 16 عاماً فما فوق."],
       },
       {
         heading: "ما لا يحدث أبداً",
         body: [
-          "بياناتك لا تُباع، ولا تُشارك مع المعلنين، ولا تُستخدم لأي شيء غير تشغيل Budget Analysis لك.",
+          "بياناتك لا تُباع، ولا تُشارك مع المعلنين، ولا تُستخدم لأي شيء غير تشغيل ibudgi لك.",
         ],
       },
       {
@@ -197,13 +197,13 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "تواصل",
-    back: "العودة إلى Budget Analysis",
+    back: "العودة إلى ibudgi",
   },
   tr: {
     title: "Gizlilik politikası",
     updated: "Son güncelleme: 31 Ekim 2026",
     intro:
-      "Budget Analysis'i Mouhammed Altaweel yürütür. Bu sayfa senin hakkında neyin saklandığını, neden, başka kimlerin işlediğini, ne kadar süre tutulduğunu ve onu nasıl görebileceğini, indirebileceğini veya silebileceğini anlatır.",
+      "ibudgi'yi Mouhammed Altaweel yürütür. Bu sayfa senin hakkında neyin saklandığını, neden, başka kimlerin işlediğini, ne kadar süre tutulduğunu ve onu nasıl görebileceğini, indirebileceğini veya silebileceğini anlatır.",
     sections: [
       {
         heading: "Hesabın",
@@ -230,7 +230,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "Hesap desteği",
         body: [
-          "Küçük bir destek ekibi (Budget Analysis'i yürüten kişiler), giriş veya güvenlik sorunlarında yardım etmek için bir hesaba bakabilir. Yalnızca hesap bilgilerini görürler: ad, e-posta adresi, telefon numarası, kullanıcı adı, giriş yöntemleri, dil, para birimleri, cihazlar ve güvenlik etkinliği.",
+          "Küçük bir destek ekibi (ibudgi'yi yürüten kişiler), giriş veya güvenlik sorunlarında yardım etmek için bir hesaba bakabilir. Yalnızca hesap bilgilerini görürler: ad, e-posta adresi, telefon numarası, kullanıcı adı, giriş yöntemleri, dil, para birimleri, cihazlar ve güvenlik etkinliği.",
           "Bütçelerini, harcamalarını, kategorilerini, hedeflerini veya gruplarını asla görmezler.",
           "Kötüye kullanılan bir hesabı devre dışı bırakabilir, tüm cihazlardan çıkış yaptırabilir veya e-posta doğrulama bağlantısını yeniden gönderebilirler. Bu işlemlerin her biri kaydedilir ve Ayarlar'daki kendi güvenlik etkinliğinde de görünür.",
           "Bize yazdığında (Yardım ve geri bildirim ya da Bize ulaş), ekip mesajını, uygulama sürümü ve cihaz türüyle birlikte, yanıtlamak için okur. Konuşmalar hesabını silene kadar saklanır ve veri dışa aktarımında yer alır.",
@@ -247,7 +247,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       {
         heading: "Verilerini başka kimler işler",
         body: [
-          "Siteyi Vercel, sunucuyu Render çalıştırır; veritabanı Neon'da, Frankfurt'ta (AB) tutulur. Verileri yalnızca Budget Analysis'i çalıştırmak için işlerler.",
+          "Siteyi Vercel, sunucuyu Render çalıştırır; veritabanı Neon'da, Frankfurt'ta (AB) tutulur. Verileri yalnızca ibudgi'yi çalıştırmak için işlerler.",
           "Sentry hata raporlarını alır (AB'de) ve kişisel veri içermeyecek şekilde ayarlanmıştır.",
           "Bir şifre seçtiğinde Have I Been Pwned, şifrenin değil, özetinin (hash) yalnızca ilk 5 karakterini alır; böylece şifren bilinen bir veri sızıntısında görüldüyse seni uyarabiliriz.",
           "Döviz kurları herkese açık bir servisten gelir ve ona hiçbir verin gönderilmez.",
@@ -277,12 +277,12 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
       {
         heading: "Yaş",
-        body: ["Budget Analysis 16 yaş ve üzeri kişiler içindir."],
+        body: ["ibudgi 16 yaş ve üzeri kişiler içindir."],
       },
       {
         heading: "Asla yapılmayanlar",
         body: [
-          "Verilerin satılmaz, reklamcılarla paylaşılmaz ve Budget Analysis'i senin için çalıştırmak dışında hiçbir şey için kullanılmaz.",
+          "Verilerin satılmaz, reklamcılarla paylaşılmaz ve ibudgi'yi senin için çalıştırmak dışında hiçbir şey için kullanılmaz.",
         ],
       },
       {
@@ -293,7 +293,7 @@ const POLICY: Record<Locale, LegalDocument> = {
       },
     ],
     contact: "İletişim",
-    back: "Budget Analysis'e dön",
+    back: "ibudgi'ye dön",
   },
 };
 
