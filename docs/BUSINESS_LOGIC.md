@@ -1,8 +1,8 @@
 # Business Logic
 
-**Budget Analysis** · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
+**ibudgi** (formerly Budget Analysis) · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
 
-This document states the business rules of Budget Analysis: what the product calculates,
+This document states the business rules of ibudgi: what the product calculates,
 what it allows, what it refuses, and why. It is the reference for product decisions, tests
 and support. Where a rule is enforced, the module is named so it can be checked in code.
 
@@ -34,7 +34,7 @@ Related documents: [`SAD.docx`](SAD.docx) (architecture), [`design/accounts.md`]
 
 ## 1. Product scope
 
-Budget Analysis helps students and young people living away from home see **how much of
+ibudgi helps students and young people living away from home see **how much of
 their allowance is left, whether it will last the month, and where it goes**, and share
 costs with the people they live with.
 
@@ -715,6 +715,21 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    Android when it is installed (App Links), and the website otherwise; opened while signed
    out, the app asks for sign-in first, then shows the invitation.
 4. The admin dashboard is **website only** (section 17).
+5. **Brand, launch and loading.** The product is called **ibudgi** everywhere people see it
+   (both apps, emails, SMS, push, the 2FA issuer); the app's bundle identifier, Android
+   package and slug keep the old name. Brand colours and the logo's shapes are one shared
+   file (`lib/brand.ts`); the app's own theme (pine, marigold, berry) is unchanged.
+   - **Launch** (app: `components/brand/Preloader.tsx`; website: `components/brand/preloaderScript.ts`):
+     the bars rise, the coin drops, the name appears; if the app is not ready at 1.75 s the
+     bars wave until it is; then the tall bar stretches over the screen in the first screen's
+     background and the page fades in. The app shows it once per cold start (the native
+     splash is plain indigo, hidden on the preloader's first frame); the website only on the
+     first visit (`localStorage` flag `ib-preloaded`), never longer than 3.5 s, and the page
+     is in the HTML underneath. With reduced motion: the app shows the still logo and fades;
+     the website skips it.
+   - **Loading:** every loading state uses the "fill up" loader (`IbudgiLoader`): 48 by
+     default, 72 for a whole page, 24 inside buttons. With reduced motion it is the still
+     logo, gently pulsing.
 
 ## 16. Invariants checked by tests
 
