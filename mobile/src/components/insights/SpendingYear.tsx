@@ -5,6 +5,8 @@ import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-na
 import Svg, { Polygon, Rect, Text as SvgText } from "react-native-svg";
 
 import { LoadError, PageLoader } from "@/components/ui/Layout";
+import { Segmented } from "@/components/ui/Segmented";
+import { StatTile } from "@/components/ui/StatTile";
 import { Text } from "@/components/ui/Text";
 import { useSpendingYear } from "@/hooks/queries";
 import { LOCALE_INFO } from "@/i18n/config";
@@ -22,8 +24,6 @@ import {
   depthOf,
   hexToRGB,
   localDate,
-  luminance,
-  mixRGB,
   monthChange,
   monthLabels,
   project,
@@ -139,13 +139,12 @@ export function SpendingYear({ month }: { month: string }) {
   }, []);
 
   // Colours: nothing spent, then healthy → caution → overspent, all from the theme.
-  const palette = useMemo(() => {
-    const surface = hexToRGB(colors.surface);
-    const ink = hexToRGB(colors.ink);
-    const dark = luminance(surface) < 0.45;
-    const empty = mixRGB(surface, ink, dark ? 0.11 : 0.075);
-    return [empty, hexToRGB(colors.lv1), hexToRGB(colors.ok), hexToRGB(colors.marigold), hexToRGB(colors.berry)];
-  }, [colors]);
+  const palette = useMemo(
+    () => [colors.cell0, colors.lv1, colors.ok, colors.marigold, colors.berry].map(hexToRGB),
+    [colors],
+  );
+  // Today's cell is ringed in coral, the logo's coin (when today is on the chart).
+  const todayIndex = useMemo(() => grid.cells.findIndex((c) => c.date === today), [grid, today]);
 
   const cell = width > 0 && grid.weeks > 0 ? width / grid.weeks : 0;
   const gap = Math.max(1, cell * 0.16);
@@ -181,11 +180,13 @@ export function SpendingYear({ month }: { month: string }) {
             height={cell - gap}
             rx={(cell - gap) * 0.22}
             fill={rgbString(palette[c.level])}
+            stroke={i === todayIndex ? colors.coral : undefined}
+            strokeWidth={i === todayIndex ? 2 : 0}
           />
         ))}
       </Svg>
     );
-  }, [cell, gap, width, flatHeight, months, grid, palette, colors.muted]);
+  }, [cell, gap, width, flatHeight, months, grid, palette, todayIndex, colors.muted, colors.coral]);
 
   const skyLayer = useMemo(() => {
     if (!scene) return null;
@@ -198,7 +199,13 @@ export function SpendingYear({ month }: { month: string }) {
           return [
             <Polygon key={`l${i}`} points={pts(b.left)} fill={rgbString(shade(c, 0.84))} />,
             <Polygon key={`r${i}`} points={pts(b.right)} fill={rgbString(shade(c, 0.68))} />,
-            <Polygon key={`t${i}`} points={pts(b.top)} fill={rgbString(c)} />,
+            <Polygon
+              key={`t${i}`}
+              points={pts(b.top)}
+              fill={rgbString(c)}
+              stroke={i === todayIndex ? colors.coral : undefined}
+              strokeWidth={i === todayIndex ? 2 : 0}
+            />,
           ];
         })}
         {months.map((m) => {
@@ -213,7 +220,7 @@ export function SpendingYear({ month }: { month: string }) {
         })}
       </Svg>
     );
-  }, [scene, width, months, grid, palette, colors.muted]);
+  }, [scene, width, months, grid, palette, todayIndex, colors.muted, colors.coral]);
 
   if (year.isPending) return <PageLoader />;
   if (year.isError) return <LoadError message={errorMessage(year.error)} onRetry={year.refetch} />;
@@ -251,20 +258,34 @@ export function SpendingYear({ month }: { month: string }) {
   const chosen = selected >= 0 ? grid.cells[selected] : null;
   const longDate = new Intl.DateTimeFormat(intl, { weekday: "long", day: "numeric", month: "long" });
 
+  // Spending less is the good direction: green; more is berry; about the same stays neutral.
+  const badge =
+    change.direction === "up"
+      ? { bg: colors.berrySoft, fg: colors.berry }
+      : change.direction === "down"
+        ? { bg: colors.okSoft, fg: colors.ok }
+        : { bg: colors.sunken, fg: colors.muted };
+
   return (
     <View>
-      <View style={{ flexDirection: row, alignItems: "center", gap: 6 }}>
-        {change.direction && <ChangeIcon size={20} color={colors.ink} />}
-        <Text size={17} weight="semibold" style={{ flexShrink: 1 }}>
-          {change.text}
-        </Text>
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+        {change.direction && (
+          <View style={{ width: 38, height: 38, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: badge.bg }}>
+            <ChangeIcon size={20} color={badge.fg} />
+          </View>
+        )}
+        <View style={{ flex: 1, minWidth: 0 }}>
+          <Text size={18} weight="semibold" style={{ letterSpacing: -0.3 }}>
+            {change.text}
+          </Text>
+          {change.note && (
+            <Text size={14} tone="muted" style={{ marginTop: 2 }}>
+              {change.note}
+            </Text>
+          )}
+        </View>
       </View>
-      {change.note && (
-        <Text size={14} tone="muted" style={{ marginTop: 4 }}>
-          {change.note}
-        </Text>
-      )}
-      <Text size={15} tone="muted" style={{ marginTop: 16, marginBottom: 16 }}>
+      <Text size={14} tone="muted" style={{ marginTop: 16, marginBottom: 14 }}>
         {t.skyline.intro}
       </Text>
 
@@ -276,29 +297,17 @@ export function SpendingYear({ month }: { month: string }) {
           {t.skyline.empty}
         </Text>
       ) : (
-        <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 12 }}>
-          <View style={{ flexDirection: row, justifyContent: "flex-end", marginBottom: 8 }}>
-            <View
-              accessibilityRole="radiogroup"
-              accessibilityLabel={t.skyline.view}
-              style={{ flexDirection: "row", borderRadius: 8, borderWidth: 1, borderColor: colors.line, padding: 2 }}>
-              {(["2d", "3d"] as const).map((v) => {
-                const on = view === v;
-                const Icon = v === "2d" ? LayoutGrid : Box;
-                return (
-                  <Pressable
-                    key={v}
-                    onPress={() => setView(v)}
-                    accessibilityRole="radio"
-                    accessibilityState={{ selected: on }}
-                    accessibilityLabel={v === "2d" ? t.skyline.flat : t.skyline.skyline}
-                    hitSlop={8}
-                    style={{ width: 40, height: 32, borderRadius: 6, alignItems: "center", justifyContent: "center", backgroundColor: on ? colors.ink : "transparent" }}>
-                    <Icon size={16} color={on ? colors.surface : colors.muted} />
-                  </Pressable>
-                );
-              })}
-            </View>
+        <View style={{ borderRadius: 20, backgroundColor: colors.sunken, padding: 12 }}>
+          <View style={{ alignItems: "flex-end", marginBottom: 10 }}>
+            <Segmented
+              label={t.skyline.view}
+              value={view}
+              onChange={setView}
+              options={[
+                { value: "2d", label: "2D", icon: (color) => <LayoutGrid size={15} color={color} /> },
+                { value: "3d", label: "3D", icon: (color) => <Box size={15} color={color} /> },
+              ]}
+            />
           </View>
 
           <View onLayout={(e: LayoutChangeEvent) => setWidth(Math.floor(e.nativeEvent.layout.width))}>
@@ -323,30 +332,37 @@ export function SpendingYear({ month }: { month: string }) {
               : t.skyline.hintApp}
           </Text>
 
-          <View style={{ flexDirection: row, alignItems: "center", gap: 5, marginTop: 10 }}>
+          <View style={{ flexDirection: row, flexWrap: "wrap", alignItems: "center", gap: 5, marginTop: 10 }}>
             <Text size={12} tone="muted">{t.skyline.less}</Text>
             {palette.map((c, level) => (
               <View
                 key={level}
                 accessibilityLabel={t.skyline.levels[level]}
-                style={{ width: 12, height: 12, borderRadius: 3, backgroundColor: rgbString(c) }}
+                style={{ width: 14, height: 14, borderRadius: 5, backgroundColor: rgbString(c) }}
               />
             ))}
             <Text size={12} tone="muted">{t.skyline.more}</Text>
+            {todayIndex >= 0 && (
+              <View style={{ flexDirection: row, alignItems: "center", gap: 6, marginStart: 10 }}>
+                <View style={{ width: 10, height: 10, borderRadius: 4, borderWidth: 2, borderColor: colors.coral }} />
+                <Text size={12} tone="muted">{t.tank.today}</Text>
+              </View>
+            )}
           </View>
         </View>
       )}
 
       {stats.total > 0 && (
-        <View style={{ flexDirection: row, flexWrap: "wrap", marginTop: 16, rowGap: 16 }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10, marginTop: 12 }}>
           {skylineStats(stats, t, format).map((block) => (
-            <View key={block.label} style={{ width: "50%", paddingEnd: 8 }}>
-              <Text size={13} tone="muted">{block.label}</Text>
-              <Text size={20} weight="semibold" tone="brand" style={{ marginTop: 2 }}>
-                {block.unit ? `${block.value} ${block.unit}` : block.value}
-              </Text>
-              <Text size={12} tone="muted" numberOfLines={1}>{block.sub}</Text>
-            </View>
+            <StatTile
+              key={block.label}
+              label={block.label}
+              value={block.value}
+              unit={block.unit}
+              note={block.sub}
+              style={{ flexBasis: "45%", flexGrow: 1 }}
+            />
           ))}
         </View>
       )}
