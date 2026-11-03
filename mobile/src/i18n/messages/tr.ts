@@ -28,6 +28,18 @@ export const tr: Messages = {
     assistant: "Asistan",
     settings: "Ayarlar",
     logout: "Çıkış yap",
+    more: "Daha fazla",
+  },
+
+  search: {
+    open: "Ara",
+    placeholder: "Ara veya bir sayfaya git…",
+    empty: "Sonuç yok",
+    actions: "İşlemler",
+    places: "Git",
+    darkTheme: "Koyu temaya geç",
+    lightTheme: "Açık temaya geç",
+    hint: "↑ ↓ ile gezin, Enter ile aç, Esc ile kapat",
   },
 
   auth: {

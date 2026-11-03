@@ -26,6 +26,18 @@ export const en = {
     assistant: "Assistant",
     settings: "Settings",
     logout: "Log out",
+    more: "More",
+  },
+
+  search: {
+    open: "Search",
+    placeholder: "Search or jump to…",
+    empty: "Nothing found",
+    actions: "Actions",
+    places: "Go to",
+    darkTheme: "Switch to dark",
+    lightTheme: "Switch to light",
+    hint: "↑ ↓ to move, Enter to open, Esc to close",
   },
 
   auth: {

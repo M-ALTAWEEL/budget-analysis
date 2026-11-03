@@ -39,6 +39,18 @@ export const ar: Messages = {
     assistant: "المساعد",
     settings: "الإعدادات",
     logout: "تسجيل الخروج",
+    more: "المزيد",
+  },
+
+  search: {
+    open: "بحث",
+    placeholder: "ابحث أو انتقل إلى…",
+    empty: "لا توجد نتائج",
+    actions: "إجراءات",
+    places: "انتقل إلى",
+    darkTheme: "التبديل إلى الوضع الداكن",
+    lightTheme: "التبديل إلى الوضع الفاتح",
+    hint: "↑ ↓ للتنقل، Enter للفتح، Esc للإغلاق",
   },
 
   auth: {

@@ -44,7 +44,7 @@ export function Toaster() {
     <Animated.View
       pointerEvents="none"
       accessibilityLiveRegion="polite"
-      style={{ position: "absolute", left: 16, right: 16, bottom: insets.bottom + 80, opacity }}>
+      style={{ position: "absolute", left: 16, right: 16, bottom: insets.bottom + 100, opacity }}>
       <View
         style={{
           alignSelf: "center",

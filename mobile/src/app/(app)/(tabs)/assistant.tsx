@@ -6,6 +6,7 @@ import Animated, { FadeInDown } from "react-native-reanimated";
 import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { AnswerText, Suggestions } from "@/components/assistant/AnswerText";
+import { useDockSpace } from "@/components/layout/dock";
 import { fontFamily } from "@/components/ui/fonts";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -59,6 +60,7 @@ export default function AssistantScreen() {
   }, [messages.length, ask.isPending]);
 
   const disabled = !draft.trim() || ask.isPending;
+  const dockSpace = useDockSpace();
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: colors.paper }} edges={["top"]}>
       <KeyboardAvoidingView
@@ -109,7 +111,7 @@ export default function AssistantScreen() {
           </View>
         </ScrollView>
 
-        <View style={{ flexDirection: "row", gap: 8, borderTopWidth: 1, borderColor: colors.line, backgroundColor: colors.paper, paddingHorizontal: 16, paddingVertical: 12 }}>
+        <View style={{ flexDirection: "row", gap: 8, borderTopWidth: 1, borderColor: colors.line, backgroundColor: colors.paper, paddingHorizontal: 16, paddingTop: 12, paddingBottom: 12 + dockSpace }}>
           <TextInput
             value={draft}
             onChangeText={setDraft}
