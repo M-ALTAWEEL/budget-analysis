@@ -34,13 +34,36 @@
   --color-brand-coral: #ff7a59;
   --color-brand-ink: #15172a;
   --color-brand-cream: #f4f3ee;
+
+  /* Shapes: rounded-card, rounded-tile, rounded-control (buttons, fields); bars are full pills. */
+  --radius-card: 24px;
+  --radius-tile: 18px;
+  --radius-control: 14px;
+
+  /* Motion: ease-smooth for most changes, ease-spring for a small overshoot (a switch, a
+     pressed tile). Movement goes behind motion-safe: so reduced motion stays still. */
+  --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Shadows change with the theme, so the utilities point at variables:
+   shadow-card for cards on the page, shadow-float for what floats (the dock, menus, sheets). */
+:root {
+  --elevation-card: 0 1px 2px rgb(21 23 42 / 0.04), 0 14px 34px -18px rgb(58 54 219 / 0.22);
+  --elevation-float: 0 2px 6px rgb(21 23 42 / 0.06), 0 24px 48px -20px rgb(21 23 42 / 0.28);
+}
+:root[data-theme="dark"] {
+  --elevation-card: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 14px 34px -22px rgb(0 0 0 / 0.6);
+  --elevation-float: 0 24px 48px -16px rgb(0 0 0 / 0.7);
 }
 
 @theme inline {
+  --shadow-card: var(--elevation-card);
+  --shadow-float: var(--elevation-float);
   /* Readex Pro as a fallback: Arabic words (a category named "عائدات") look right
      even when the interface is in English or Turkish. */
   --font-sans: var(--font-body), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-face), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-body), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -150,11 +173,10 @@
   background: #3d4a5c;
 }
 
-/* Arabic: the Latin fonts have no Arabic letters, so both roles use Readex Pro.
+/* Arabic: Geist has no Arabic letters, so the whole page uses Readex Pro.
    (Same element as the next/font variables, higher specificity, so this wins.) */
 html[lang="ar"] {
   --font-body: var(--font-arabic);
-  --font-display-face: var(--font-arabic);
 }
 
 body {
