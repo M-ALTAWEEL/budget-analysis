@@ -1,6 +1,6 @@
 # Design: the ibudgi design system
 
-Status: being built (redesign PRs 1 and 2 of 3: foundations, building blocks, Overview) · Owner: Mouhammed Altaweel · November 2026
+Status: built (redesign PRs 1–3, November 2026) · Owner: Mouhammed Altaweel · November 2026
 
 The approved previews: colours https://claude.ai/artifact/PxVZGoHBDwFXk4oNAhoWkZ and style
 https://claude.ai/artifact/R5NLmjyo21R1ULwQ1cy3Py (private to the owner).
@@ -77,7 +77,11 @@ Places and commands come from `lib/commands.ts` (shared). Phones: a floating doc
 Expenses, "+", Budget, More); wide screens: an icon rail and a top bar. Search: Ctrl/⌘K, a
 native `<dialog>` on the website, a Sheet in the app. Rules: BUSINESS_LOGIC 15.7.
 
-## 5. Still to come
+## 5. Every screen
 
-- PR 3: every other screen moves to these blocks (expenses, budget, goals, groups,
-  settings, sign-in, admin, landing), then new store screenshots.
+All screens use the tokens: framed boxes are cards (radius 24, `shadow-card`), empty states
+and inner tiles radius 18, controls 14, menus and popovers `shadow-float`, page titles Geist
+semibold with tight tracking. In the app, framed boxes use the same radii (the shared Card
+adds the shadow).
+
+Store screenshots must be taken again after this redesign (docs/STORE_REQUIREMENTS.md).

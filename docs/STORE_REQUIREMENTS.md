@@ -117,4 +117,5 @@ Precise Location, Other Data.
 - [ ] Demo account created on production, without 2FA, with some sample data.
 - [ ] Play app signing SHA-1/SHA-256 added to Google sign-in and `assetlinks.json`
       (`docs/ENVIRONMENTS.md`, section 11).
-- [ ] Screenshots and descriptions in three languages (phase 8).
+- [ ] Screenshots and descriptions in three languages (phase 8). Take them after the ibudgi
+  design (November 2026): screenshots from before it show the old green look.
