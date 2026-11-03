@@ -8,8 +8,8 @@ import { PendingExpenses } from "@/components/offline/Offline";
 import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
-import { MonthCompare } from "@/components/insights/MonthCompare";
 import { PaceChart } from "@/components/insights/PaceChart";
+import { SpendingYear } from "@/components/insights/SpendingYear";
 import { TipList } from "@/components/insights/TipList";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { BudgetSetup } from "@/components/overview/BudgetSetup";
@@ -20,9 +20,8 @@ import { PageLoader } from "@/components/ui/PageLoader";
 import { useDaily, useExpenses, useSummary, useTips, useWrapped } from "@/hooks/queries";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
-import { compareWithPrevious, daysElapsed, findAlerts } from "@/lib/insights";
+import { findAlerts } from "@/lib/insights";
 import { currentMonth, monthProgress, shiftMonth } from "@/lib/month";
-import type { DailySpending } from "@/types/api";
 
 /** A titled block of the overview. */
 function Section({
@@ -54,7 +53,6 @@ export default function OverviewPage() {
   const summary = useSummary(month);
   const expenses = useExpenses(month);
   const daily = useDaily(month);
-  const previousDaily = useDaily(shiftMonth(month, -1));
   const tips = useTips(month);
   const user = useCurrentUser();
   const { t } = useI18n();
@@ -100,12 +98,9 @@ export default function OverviewPage() {
             </Section>
           )}
 
-          {/* nothing to compare before the month has started */}
-          {daily.data && previousDaily.isSuccess && daysElapsed(month) > 0 && (
-            <Section id="compare" title={t.insights.compareTitle}>
-              <Comparison current={daily.data} previous={previousDaily.data} month={month} />
-            </Section>
-          )}
+          <Section id="year" title={t.skyline.title}>
+            <SpendingYear month={month} />
+          </Section>
 
           <Section
             id="by-category"
@@ -141,27 +136,6 @@ export default function OverviewPage() {
         </>
       )}
     </>
-  );
-}
-
-/** The comparison, or one honest sentence about why there isn't one. */
-function Comparison({
-  current,
-  previous,
-  month,
-}: {
-  current: DailySpending;
-  previous: DailySpending | null;
-  month: string;
-}) {
-  const { t } = useI18n();
-  const comparison = compareWithPrevious(current, previous, month);
-  if (comparison) return <MonthCompare comparison={comparison} month={month} currency={current.currency} />;
-
-  const reason =
-    previous && previous.currency !== current.currency ? t.insights.differentCurrency : t.insights.noComparison;
-  return (
-    <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">{reason}</p>
   );
 }
 

@@ -334,13 +334,23 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 3. Forecast = spent so far + (average everyday spending × days left).
 4. Days are counted from the budget month's start day, not from the 1st.
 
-### 8.4 Comparison with last month
-1. Compares the **same number of days** of both months (days 1–18 against days 1–18), never
-   a partial month against a whole one.
-2. Shown only if last month has a budget in the **same currency** and at least one day of
-   this month has passed. A fresh start hides it.
-3. Changes within **±5%** are shown as "about the same". Spending less is the positive
-   direction.
+### 8.4 Your year of spending (comparison with last month)
+The Overview section "Your year of spending" (`lib/skyline.ts`, shared by the website and the
+app) starts with **one line** comparing this month with last month, then shows the year:
+1. The line compares the **same number of days** of both months (days 1–18 against days
+   1–18), never a partial month against a whole one. Changes within **±5%** read "about the
+   same"; spending less is the positive direction. Without a budget last month, or with one in
+   another currency, the line says why there is nothing to compare.
+2. The chart shows **every day of the last 12 budget months** (up to today), coloured, and in
+   3D raised, by what was spent that day: four levels split by the day's share of a big day
+   (the 95th percentile, so one huge purchase doesn't flatten the rest). Colours go from
+   healthy to caution to overspent (pine, marigold, berry). Months without a budget, or
+   budgeted in another currency than this month, are left empty.
+3. Under it: spent in 12 months, the biggest day, the longest run of days without spending,
+   and the run without spending that reaches today. A month without a budget ends a run.
+4. The website draws it on a canvas (`components/ui/ContributionSkyline.tsx`, adapted from
+   21st.dev's Contribution Skyline) with a camera swing between the flat map and the skyline;
+   the app draws the same scene with SVG and fades between the two views.
 
 ### 8.5 Tips
 **Rules** (`app/domain/budget/tips.py`):

@@ -730,6 +730,31 @@ export const tr: Messages = {
     budgetAlmostGone: (percent, days) => `Bütçenin ${percent} kadarı harcandı ve daha ${days} gün var.`,
   },
 
+  // The spending skyline on the Overview: a year of daily spending, flat or in 3D.
+  skyline: {
+    title: "Bir yıllık harcaman",
+    intro: "Son 12 ayın her günü: o gün ne kadar çok harcadıysan rengi o kadar koyu (3B görünümde de çubuğu o kadar uzun).",
+    total: "12 ayda harcanan",
+    biggest: "En çok harcanan gün",
+    longestFree: "En uzun harcamasız dönem",
+    currentFree: "Şu anki harcamasız dönem",
+    days: () => "gün",
+    spentOn: (amount: string, date: string) => `${date}: ${amount}`,
+    nothingOn: (date: string) => `${date}: harcama yok`,
+    levels: ["Hiç", "Az", "Orta", "Çok", "En çok"],
+    less: "Az",
+    more: "Çok",
+    view: "Görünüm",
+    flat: "Düz ısı haritası",
+    skyline: "3B silüet",
+    hintFlat: "Tutarı görmek için bir günün üzerine gel ya da dokun · ok tuşlarıyla günler arasında gezin",
+    hintSkyline: "Döndürmek için sürükle · sıfırlamak için çift tıkla",
+    hintApp: "Tutarı görmek için bir güne dokun",
+    chartLabel: (total: string, from: string, to: string) =>
+      `${from} ile ${to} arasında ${total} harcandı. Her günü okumak için ok tuşlarını kullan.`,
+    empty: "Yılını burada görmek için bütçe belirle ve harcama ekle.",
+  },
+
   goals: {
     title: "Birikim hedefleri",
     intro: "Daha büyük bir şey için para biriktir: laptop, tatil, gelecek dönemin harcı. Her hedef, zamanında ulaşmak için her ay ne kadar biriktirmen gerektiğini gösterir.",

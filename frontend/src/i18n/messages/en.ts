@@ -734,6 +734,31 @@ export const en = {
       `${percent} of the budget is already spent, with ${days} days still to go.`,
   },
 
+  // The spending skyline on the Overview: a year of daily spending, flat or in 3D.
+  skyline: {
+    title: "Your year of spending",
+    intro: "Every day of the last 12 months: the more you spent that day, the stronger its colour (and in 3D, the taller its bar).",
+    total: "Spent in 12 months",
+    biggest: "Biggest day",
+    longestFree: "Longest no-spend run",
+    currentFree: "No-spend run now",
+    days: (count: number): string => (count === 1 ? "day" : "days"),
+    spentOn: (amount: string, date: string) => `${amount} on ${date}`,
+    nothingOn: (date: string) => `Nothing spent on ${date}`,
+    levels: ["Nothing", "A little", "Some", "A lot", "The most"],
+    less: "Less",
+    more: "More",
+    view: "Chart view",
+    flat: "Flat heat map",
+    skyline: "3D skyline",
+    hintFlat: "Hover or tap a day for the amount · the arrow keys move between days",
+    hintSkyline: "Drag to turn it · double-click to reset",
+    hintApp: "Tap a day for the amount",
+    chartLabel: (total: string, from: string, to: string) =>
+      `${total} spent between ${from} and ${to}. Use the arrow keys to read each day.`,
+    empty: "Set budgets and add expenses to see your year here.",
+  },
+
   goals: {
     title: "Savings goals",
     intro: "Put money aside for something bigger: a laptop, a trip, next semester's fees. Each goal shows how much to save every month to get there on time.",
