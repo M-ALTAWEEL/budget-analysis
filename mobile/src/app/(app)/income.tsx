@@ -107,7 +107,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
   }
 
   const stats = [
-    { label: t.income.total, value: data.total, color: colors.brand },
+    { label: t.income.total, value: data.total, color: colors.ok },
     { label: t.income.spent, value: data.spent, color: colors.ink },
     { label: t.income.net, value: data.net, color: negative ? colors.berry : colors.ink },
   ];
@@ -172,7 +172,7 @@ function IncomeRow({ income, first, monthCurrency, onEdit }: { income: Income; f
         {other && income.converted === null && <Text size={12} tone="berry">{t.income.noRate}</Text>}
       </View>
       <View style={{ alignItems: "flex-end" }}>
-        <Text weight="semibold" tone="brand">+{money(income.amount, income.currency)}</Text>
+        <Text weight="semibold" tone="ok">+{money(income.amount, income.currency)}</Text>
         {other && income.converted !== null && <Text size={12} tone="muted">≈ {money(income.converted, monthCurrency)}</Text>}
       </View>
     </Pressable>

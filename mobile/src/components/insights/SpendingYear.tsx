@@ -144,7 +144,7 @@ export function SpendingYear({ month }: { month: string }) {
     const ink = hexToRGB(colors.ink);
     const dark = luminance(surface) < 0.45;
     const empty = mixRGB(surface, ink, dark ? 0.11 : 0.075);
-    return [empty, hexToRGB(colors.brandSoft), hexToRGB(colors.brand), hexToRGB(colors.marigold), hexToRGB(colors.berry)];
+    return [empty, hexToRGB(colors.lv1), hexToRGB(colors.ok), hexToRGB(colors.marigold), hexToRGB(colors.berry)];
   }, [colors]);
 
   const cell = width > 0 && grid.weeks > 0 ? width / grid.weeks : 0;

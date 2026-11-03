@@ -135,7 +135,7 @@ export default function ImportPage() {
                         {!row.has_budget && row.direction === "out" && <span className="font-semibold text-berry"> · {t.imports.noBudget}</span>}
                       </p>
                     </div>
-                    <p className={`tabular shrink-0 font-semibold ${row.direction === "in" ? "text-brand" : ""}`}>
+                    <p className={`tabular shrink-0 font-semibold ${row.direction === "in" ? "text-ok" : ""}`}>
                       {row.direction === "in" ? "+" : "−"}
                       {money(row.amount, preview.currency)}
                     </p>

@@ -102,7 +102,7 @@ export default function SettingsPage() {
           <h2 id="accent" className="mb-3 font-display text-lg font-semibold">
             {t.settings.accent}
           </h2>
-          <div role="radiogroup" aria-labelledby="accent" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div role="radiogroup" aria-labelledby="accent" className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {ACCENTS.map((value) => (
               <Choice key={value} selected={value === accent} onSelect={() => setAccent(value)}>
                 {/* The swatch shows the colour as it looks in the current theme */}

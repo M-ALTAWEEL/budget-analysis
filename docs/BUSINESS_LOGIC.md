@@ -344,7 +344,7 @@ app) starts with **one line** comparing this month with last month, then shows t
 2. The chart shows **every day of the last 12 budget months** (up to today), coloured, and in
    3D raised, by what was spent that day: four levels split by the day's share of a big day
    (the 95th percentile, so one huge purchase doesn't flatten the rest). Colours go from
-   healthy to caution to overspent (pine, marigold, berry). Months without a budget, or
+   healthy to caution to overspent (ok green, marigold, berry). Months without a budget, or
    budgeted in another currency than this month, are left empty.
 3. Under it: spent in 12 months, the biggest day, the longest run of days without spending,
    and the run without spending that reaches today. A month without a budget ends a run.
@@ -718,7 +718,7 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 5. **Brand, launch and loading.** The product is called **ibudgi** everywhere people see it
    (both apps, emails, SMS, push, the 2FA issuer); the app's bundle identifier, Android
    package and slug keep the old name. Brand colours and the logo's shapes are one shared
-   file (`lib/brand.ts`); the app's own theme (pine, marigold, berry) is unchanged.
+   file (`lib/brand.ts`); the theme uses the same indigo and coral (15.6).
    - **Launch** (app: `components/brand/Preloader.tsx`; website: `components/brand/preloaderScript.ts`):
      the bars rise, the coin drops, the name appears; if the app is not ready at 1.75 s the
      bars wave until it is; then the tall bar stretches over the screen in white, and the white
@@ -730,6 +730,17 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    - **Loading:** every loading state uses the "fill up" loader (`IbudgiLoader`): 48 by
      default, 72 for a whole page, 24 inside buttons. With reduced motion it is the still
      logo, gently pulsing.
+6. **Colours and theme** (`globals.css` on the website, `theme/ThemeProvider.tsx` in the app,
+   the same values; `docs/design/design-system.md`). White page, light or dark.
+   - **Brand** (buttons, links, selection) is the logo's indigo by default. Settings > Colour
+     offers indigo, pine (green), ocean, plum and graphite; the choice is kept on the device.
+     Nothing saved means indigo; a saved "pine" stays green.
+   - **Meanings never change with the accent:** ok green = a healthy budget, money coming in
+     or owed to you, a goal reached, a challenge won; marigold = caution; berry = overspent
+     or owed by you.
+   - **Coral** (the logo's coin) is only for small highlights such as "today"; never a warning
+     and never a large fill.
+   - Every text colour reaches 4.5:1 on its background in both themes and every accent.
 
 ## 16. Invariants checked by tests
 

@@ -86,7 +86,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   const [showPayments, setShowPayments] = useState(false);
   const settled = debt.settled_on !== null;
   const lent = debt.direction === "lent";
-  const accent = lent ? colors.brand : colors.berry;
+  const accent = lent ? colors.ok : colors.berry;
   const status = settled
     ? t.debts.settledOn(shortDate(debt.settled_on!))
     : debt.overdue

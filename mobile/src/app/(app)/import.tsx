@@ -123,7 +123,7 @@ export default function ImportScreen() {
                       {!row.has_budget && row.direction === "out" ? ` · ${t.imports.noBudget}` : ""}
                     </Text>
                   </View>
-                  <Text weight="semibold" tone={row.direction === "in" ? "brand" : "ink"}>
+                  <Text weight="semibold" tone={row.direction === "in" ? "ok" : "ink"}>
                     {row.direction === "in" ? "+" : "−"}{money(row.amount, preview.currency)}
                   </Text>
                 </View>

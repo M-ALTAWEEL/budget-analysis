@@ -63,7 +63,7 @@ export function GoalCard({ goal, onAddMoney, onEdit }: { goal: Goal; onAddMoney:
       </View>
       <Text size={14} tone="muted" end style={{ marginTop: 4 }}>{percent(Number(goal.progress))}</Text>
 
-      <Text size={15} weight={goal.achieved ? "semibold" : "regular"} tone={goal.achieved ? "brand" : "ink"} style={{ marginTop: 8 }}>{status}</Text>
+      <Text size={15} weight={goal.achieved ? "semibold" : "regular"} tone={goal.achieved ? "ok" : "ink"} style={{ marginTop: 8 }}>{status}</Text>
 
       <View style={{ marginTop: 20, flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
         <Button small icon={<Plus size={16} color={colors.onBrand} />} onPress={onAddMoney}>{t.goals.addMoney}</Button>

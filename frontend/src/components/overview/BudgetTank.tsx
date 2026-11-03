@@ -44,10 +44,10 @@ export function TankView({
   const spentRatio = total > 0 ? Math.min(spent / total, 1) : 0;
   const shownLeft = useCountUp(Math.max(remaining, 0), quick ? 0.3 : 0.8);
   const fillColor =
-    pace === "over" ? "bg-berry" : pace === "fast" ? "bg-marigold" : inverse ? "bg-white" : "bg-brand";
+    pace === "over" ? "bg-berry" : pace === "fast" ? "bg-marigold" : inverse ? "bg-white" : "bg-ok";
   // The same colour for the moving liquid edge (an SVG drawn with currentColor).
   const edgeColor =
-    pace === "over" ? "text-berry" : pace === "fast" ? "text-marigold" : inverse ? "text-white" : "text-brand";
+    pace === "over" ? "text-berry" : pace === "fast" ? "text-marigold" : inverse ? "text-white" : "text-ok";
   const muted = inverse ? "text-white/75" : "text-muted";
   const daily = daysLeft > 0 && remaining > 0 ? remaining / daysLeft : null;
   const reduceMotion = useReducedMotion();
@@ -89,7 +89,7 @@ export function TankView({
           </div>
         )}
         <div
-          className={`relative h-16 overflow-hidden rounded-[1.25rem] ${inverse ? "bg-white/15" : "bg-brand-soft"}`}
+          className={`relative h-16 overflow-hidden rounded-[1.25rem] ${inverse ? "bg-white/15" : "bg-ok-soft"}`}
           role="meter"
           aria-label={t.tank.meterLabel}
           aria-valuemin={0}

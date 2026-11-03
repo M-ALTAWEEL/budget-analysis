@@ -827,7 +827,7 @@ export const en = {
     dark: "Dark",
     system: "Same as device",
     accent: "Colour",
-    accents: { pine: "Pine", ocean: "Ocean", plum: "Plum", graphite: "Graphite" },
+    accents: { indigo: "Indigo", pine: "Pine", ocean: "Ocean", plum: "Plum", graphite: "Graphite" },
     account: "Account",
     mainCurrency: "Main currency",
     mainCurrencyHint: "Used for new budgets and expenses. Months you already set up keep their currency.",

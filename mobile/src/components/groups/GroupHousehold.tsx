@@ -97,7 +97,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
       </View>
       <Text size={14} tone="muted">{t.household.spentOf(m(data.spent), m(data.total_amount!))}</Text>
       <View style={{ height: 8, borderRadius: 999, backgroundColor: colors.line, overflow: "hidden" }}>
-        <View style={{ height: "100%", width: `${Math.min(total ? Number(data.spent) / total : 0, 1) * 100}%`, borderRadius: 999, backgroundColor: over ? colors.berry : colors.brand }} />
+        <View style={{ height: "100%", width: `${Math.min(total ? Number(data.spent) / total : 0, 1) * 100}%`, borderRadius: 999, backgroundColor: over ? colors.berry : colors.ok }} />
       </View>
       {data.categories.map((row) => {
         const meta = GROUP_CATEGORIES.find((c) => c.slug === row.category) ?? GROUP_CATEGORIES[7];
@@ -111,7 +111,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
             </View>
             {row.limit && (
               <View style={{ height: 6, borderRadius: 999, backgroundColor: colors.line, overflow: "hidden" }}>
-                <View style={{ height: "100%", width: `${Math.min(ratio, 1) * 100}%`, borderRadius: 999, backgroundColor: ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.brand }} />
+                <View style={{ height: "100%", width: `${Math.min(ratio, 1) * 100}%`, borderRadius: 999, backgroundColor: ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.ok }} />
               </View>
             )}
           </View>

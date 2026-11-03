@@ -105,7 +105,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   return (
     <li className={`rounded-2xl border border-line bg-surface px-5 py-4 ${settled ? "opacity-60" : ""}`}>
       <button type="button" onClick={onEdit} className="flex w-full items-start gap-4 text-start">
-        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${lent ? "bg-brand/10 text-brand" : "bg-berry/10 text-berry"}`}>
+        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${lent ? "bg-ok/10 text-ok" : "bg-berry/10 text-berry"}`}>
           <HandCoins className="size-5" aria-hidden />
         </span>
         <span className="min-w-0 flex-1">

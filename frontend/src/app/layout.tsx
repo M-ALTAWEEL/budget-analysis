@@ -54,7 +54,7 @@ var t=localStorage.getItem("bb-theme");
 var dark=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
 d.dataset.theme=dark?"dark":"light";
 var a=localStorage.getItem("bb-accent");
-if(a==="ocean"||a==="plum"||a==="graphite")d.dataset.accent=a;
+if(a==="pine"||a==="ocean"||a==="plum"||a==="graphite")d.dataset.accent=a;
 }catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

@@ -113,7 +113,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
       </div>
       <p className="tabular text-sm text-muted">{t.household.spentOf(m(data.spent), m(data.total_amount!))}</p>
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
-        <div className={`h-full rounded-full ${over ? "bg-berry" : "bg-brand"}`} style={{ width: `${Math.min(total ? spent / total : 0, 1) * 100}%` }} />
+        <div className={`h-full rounded-full ${over ? "bg-berry" : "bg-ok"}`} style={{ width: `${Math.min(total ? spent / total : 0, 1) * 100}%` }} />
       </div>
       {data.categories.length > 0 && (
         <ul className="mt-4 space-y-3">
@@ -129,7 +129,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
                 </div>
                 {row.limit && (
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
-                    <div className={`h-full rounded-full ${ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-brand"}`} style={{ width: `${Math.min(ratio, 1) * 100}%` }} />
+                    <div className={`h-full rounded-full ${ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-ok"}`} style={{ width: `${Math.min(ratio, 1) * 100}%` }} />
                   </div>
                 )}
               </li>

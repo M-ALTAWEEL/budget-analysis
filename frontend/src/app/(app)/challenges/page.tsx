@@ -119,8 +119,8 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
   const remove = useDeleteChallenge();
   const [confirming, setConfirming] = useState(false);
   const progress = challengeProgress(c, words);
-  const tone = c.status === "won" ? "text-brand" : c.status === "lost" ? "text-berry" : "text-muted";
-  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? "bg-berry" : "bg-brand";
+  const tone = c.status === "won" ? "text-ok" : c.status === "lost" ? "text-berry" : "text-muted";
+  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? "bg-berry" : "bg-ok";
   const when =
     c.status === "upcoming"
       ? t.challenges.startsOn(shortDate(c.starts_on))

@@ -5,8 +5,8 @@ import { createContext, useContext, useEffect, useMemo, useState } from "react";
 export type ThemePreference = "light" | "dark" | "system";
 export const THEME_STORAGE_KEY = "bb-theme";
 
-/** The main colour (buttons, the tank, highlights). Pine is the default; see globals.css. */
-export const ACCENTS = ["pine", "ocean", "plum", "graphite"] as const;
+/** The main colour (buttons, links, highlights). Indigo, the logo's colour, is the default; see globals.css. */
+export const ACCENTS = ["indigo", "pine", "ocean", "plum", "graphite"] as const;
 export type Accent = (typeof ACCENTS)[number];
 export const ACCENT_STORAGE_KEY = "bb-accent";
 
@@ -21,9 +21,9 @@ interface ThemeValue {
 function readAccent(): Accent {
   try {
     const saved = localStorage.getItem(ACCENT_STORAGE_KEY);
-    return ACCENTS.includes(saved as Accent) ? (saved as Accent) : "pine";
+    return ACCENTS.includes(saved as Accent) ? (saved as Accent) : "indigo";
   } catch {
-    return "pine";
+    return "indigo";
   }
 }
 
@@ -43,7 +43,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [preference, setPreference] = useState<ThemePreference>("system");
   const [systemDark, setSystemDark] = useState(false);
   const [ready, setReady] = useState(false);
-  const [accent, setAccent] = useState<Accent>("pine");
+  const [accent, setAccent] = useState<Accent>("indigo");
 
   // Read the saved choice and follow the device's setting live (e.g. auto dark at night).
   useEffect(() => {
@@ -75,10 +75,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!ready) return;
     const root = document.documentElement;
-    if (accent === "pine") delete root.dataset.accent;
+    if (accent === "indigo") delete root.dataset.accent;
     else root.dataset.accent = accent;
     try {
-      if (accent === "pine") localStorage.removeItem(ACCENT_STORAGE_KEY);
+      if (accent === "indigo") localStorage.removeItem(ACCENT_STORAGE_KEY);
       else localStorage.setItem(ACCENT_STORAGE_KEY, accent);
     } catch {
       // not saved, still applied for this visit

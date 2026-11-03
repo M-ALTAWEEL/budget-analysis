@@ -823,7 +823,7 @@ export const tr: Messages = {
     dark: "Koyu",
     system: "Cihazla aynı",
     accent: "Renk",
-    accents: { pine: "Çam yeşili", ocean: "Okyanus", plum: "Erik", graphite: "Grafit" },
+    accents: { indigo: "Çivit", pine: "Çam yeşili", ocean: "Okyanus", plum: "Erik", graphite: "Grafit" },
     account: "Hesap",
     mainCurrency: "Ana para birimi",
     mainCurrencyHint: "Yeni bütçeler ve harcamalar için kullanılır. Daha önce ayarladığın aylar kendi para birimini korur.",

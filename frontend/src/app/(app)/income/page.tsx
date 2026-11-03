@@ -114,7 +114,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
   return (
     <section className="mb-8 space-y-4">
       <div className="grid grid-cols-3 gap-3">
-        <Stat label={t.income.total} value={money(data.total, data.currency)} tone="text-brand" />
+        <Stat label={t.income.total} value={money(data.total, data.currency)} tone="text-ok" />
         <Stat label={t.income.spent} value={money(data.spent, data.currency)} />
         <Stat label={t.income.net} value={money(data.net, data.currency)} tone={negative ? "text-berry" : "text-ink"} />
       </div>
@@ -181,7 +181,7 @@ function IncomeRow({ income, monthCurrency, onEdit }: { income: Income; monthCur
           {other && income.converted === null && <span className="block text-xs text-berry">{t.income.noRate}</span>}
         </span>
         <span className="tabular shrink-0 text-end">
-          <span className="block font-semibold text-brand">+{money(income.amount, income.currency)}</span>
+          <span className="block font-semibold text-ok">+{money(income.amount, income.currency)}</span>
           {other && income.converted !== null && (
             <span className="block text-xs text-muted">≈ {money(income.converted, monthCurrency)}</span>
           )}

@@ -1,24 +1,33 @@
 @import "tailwindcss";
 
-/* ibudgi design tokens.
-   A cool, calm palette: money stress is the problem, so the interface stays quiet.
-   Pine = healthy budget, marigold = "today" and caution, berry = overspent. */
+/* ibudgi design tokens (docs/design/design-system.md).
+   A white page with the logo's indigo as the main colour; the logo's coral only for small
+   highlights (today, a new badge), never for warnings.
+   Brand = buttons, links, selection. Ok = a healthy budget, marigold = caution,
+   berry = overspent: these three keep their meaning whatever accent is picked. */
 @theme {
-  --color-paper: #f2f5f3;
-  --color-surface: #ffffff;
-  --color-ink: #16302b;
-  --color-muted: #5b6f69;
-  --color-line: #d5ded9;
-  --color-brand: #1e6b57;
-  --color-brand-dark: #17543f;
-  --color-brand-soft: #dcebe5;
+  --color-paper: #ffffff;
+  --color-surface: #ffffff; /* cards: white on white, held by the line and a soft shadow */
+  --color-sunken: #f6f6fb; /* wells inside a card: the chart panel, the search box */
+  --color-ink: #15172a;
+  --color-muted: #5e6178;
+  --color-line: #e4e4f0;
+  --color-brand: #3a36db;
+  --color-brand-dark: #2d29b8;
+  --color-brand-soft: #ecebfc;
+  --color-on-brand: #ffffff; /* text on brand buttons */
+  --color-coral: #ff7a59; /* fills only: the "today" ring, a dot */
+  --color-coral-ink: #b8421f; /* coral as text: 4.5:1 on white */
+  --color-ok: #1e7a55; /* a healthy budget, money coming in */
+  --color-ok-soft: #e3f4ec;
   --color-marigold: #c98516; /* fills: bars, the tank when spending is fast */
   --color-marigold-ink: #9a6408; /* small text and icons: 4.5:1 on paper */
   --color-marigold-soft: #f8ecd6;
   --color-berry: #b23c63;
   --color-berry-soft: #f6e3ea;
-  --color-on-brand: #ffffff; /* text on pine buttons */
-  --color-panel: #1e6b57; /* the green panel on the sign-in screen (same in both themes) */
+  --color-cell0: #e5e5ef; /* the year chart: a day with no spending */
+  --color-lv1: #b7e0cb; /* the year chart: the lightest level */
+  --color-panel: #3a36db; /* the panel on the sign-in screen */
   --color-logo: #15172a; /* the logo's name (brand ink); white in dark mode */
   /* The ibudgi brand (lib/brand.ts): the icon tile, preloader and loader only. */
   --color-brand-indigo: #3a36db;
@@ -40,30 +49,43 @@
 
 /* Dark theme: the same names with new values, so every component switches without
    changes. data-theme is set on <html> by the early script in layout.tsx and then by
-   ThemeProvider. Pine gets lighter (readable on dark) and text on it turns dark. */
+   ThemeProvider. A deep indigo night; brand gets lighter (readable on dark) and text on it
+   turns dark. */
 :root[data-theme="dark"] {
   color-scheme: dark; /* native inputs, date pickers and scrollbars go dark too */
   --color-logo: #ffffff;
-  --color-paper: #0e1715;
-  --color-surface: #15211e;
-  --color-ink: #e4ece9;
-  --color-muted: #93a69f;
-  --color-line: #2a3934;
-  --color-brand: #5cc4a0;
-  --color-brand-dark: #7fd6b7;
-  --color-brand-soft: #1c3a31;
+  --color-paper: #0f1020;
+  --color-surface: #181a33;
+  --color-sunken: #13152b;
+  --color-ink: #ecedf7;
+  --color-muted: #9a9dba;
+  --color-line: #2a2d4d;
+  --color-brand: #8b88ff;
+  --color-brand-dark: #a9a7ff;
+  --color-brand-soft: #23245a;
+  --color-on-brand: #0f1020;
+  --color-coral-ink: #ff9c82;
+  --color-ok: #5cc4a0;
+  --color-ok-soft: #1c3a31;
   --color-marigold: #e5a53c;
   --color-marigold-ink: #e5a53c; /* already 8.5:1 on the dark paper */
   --color-marigold-soft: #3a2e17;
   --color-berry: #ef7fa3;
   --color-berry-soft: #3a1f2a;
-  --color-on-brand: #0b1f19;
-  --color-panel: #12443a;
+  --color-cell0: #24274a;
+  --color-lv1: #2b5a48;
+  --color-panel: #24217a;
 }
 
-/* Accent colours (Settings > Colour). Only the "pine" family changes: berry (overspent)
-   and marigold (caution) keep their meaning whatever colour the student picks.
-   Each accent has a light and a dark version, checked for text contrast like pine. */
+/* Accent colours (Settings > Colour). Indigo is the default (no attribute). Only the brand
+   family changes: ok, marigold and berry keep their meaning whatever colour the student
+   picks. Each accent has a light and a dark version, checked for text contrast. */
+:root[data-accent="pine"] {
+  --color-brand: #1e6b57;
+  --color-brand-dark: #17543f;
+  --color-brand-soft: #dcebe5;
+  --color-panel: #1e6b57;
+}
 :root[data-accent="ocean"] {
   --color-brand: #1d5fa8;
   --color-brand-dark: #164a85;
@@ -81,6 +103,13 @@
   --color-brand-dark: #2c3644;
   --color-brand-soft: #e3e7ed;
   --color-panel: #3d4a5c;
+}
+:root[data-theme="dark"][data-accent="pine"] {
+  --color-brand: #5cc4a0;
+  --color-brand-dark: #7fd6b7;
+  --color-brand-soft: #1c3a31;
+  --color-on-brand: #0b1f19;
+  --color-panel: #12443a;
 }
 :root[data-theme="dark"][data-accent="ocean"] {
   --color-brand: #6aa7ec;
@@ -105,6 +134,9 @@
 }
 
 /* The round samples in Settings. */
+[data-accent-swatch="indigo"] {
+  background: #3a36db;
+}
 [data-accent-swatch="pine"] {
   background: #1e6b57;
 }

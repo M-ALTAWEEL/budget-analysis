@@ -72,7 +72,7 @@ export function GoalCard({
       </div>
       <p className="mt-1 text-end text-sm text-muted tabular">{percent(progress)}</p>
 
-      <p className={`mt-2 text-[15px] ${goal.achieved ? "font-semibold text-brand" : ""}`}>{status}</p>
+      <p className={`mt-2 text-[15px] ${goal.achieved ? "font-semibold text-ok" : ""}`}>{status}</p>
 
       <div className="mt-5 flex flex-wrap gap-2">
         <Button onClick={onAddMoney} className="h-10 px-4">

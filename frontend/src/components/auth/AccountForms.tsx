@@ -48,10 +48,10 @@ function Notice({ icon: Icon, tone, children }: { icon: typeof MailCheck; tone: 
     <div
       role="status"
       className={`flex gap-3 rounded-2xl border px-4 py-3 text-[15px] ${
-        tone === "ok" ? "border-brand/30 bg-brand-soft" : "border-berry/30 bg-berry-soft"
+        tone === "ok" ? "border-ok/30 bg-ok-soft" : "border-berry/30 bg-berry-soft"
       }`}
     >
-      <Icon className={`mt-0.5 size-5 shrink-0 ${tone === "ok" ? "text-brand" : "text-berry"}`} aria-hidden />
+      <Icon className={`mt-0.5 size-5 shrink-0 ${tone === "ok" ? "text-ok" : "text-berry"}`} aria-hidden />
       <div>{children}</div>
     </div>
   );

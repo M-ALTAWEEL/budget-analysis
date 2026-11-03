@@ -838,7 +838,7 @@ export const ar: Messages = {
     dark: "داكن",
     system: "حسب الجهاز",
     accent: "اللون",
-    accents: { pine: "أخضر", ocean: "أزرق", plum: "بنفسجي", graphite: "رمادي" },
+    accents: { indigo: "نيلي", pine: "أخضر", ocean: "أزرق", plum: "بنفسجي", graphite: "رمادي" },
     account: "الحساب",
     mainCurrency: "العملة الأساسية",
     mainCurrencyHint: "تُستخدم للميزانيات والمصاريف الجديدة. الأشهر التي حدّدتها سابقًا تحتفظ بعملتها.",
