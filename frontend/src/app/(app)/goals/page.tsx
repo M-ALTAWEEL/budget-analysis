@@ -30,7 +30,7 @@ export default function GoalsPage() {
     <>
       <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.goals.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.goals.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.goals.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setOpen({ kind: "goal", goal: null })}>
@@ -45,7 +45,7 @@ export default function GoalsPage() {
       ) : goals.isError ? (
         <LoadError message={errorMessage(goals.error)} onRetry={() => goals.refetch()} />
       ) : goals.data.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-line px-5 py-8 text-[15px] text-muted">
+        <p className="rounded-tile border border-dashed border-line px-5 py-8 text-[15px] text-muted">
           {t.goals.empty}
         </p>
       ) : (
@@ -80,7 +80,7 @@ function ChallengesLink() {
   return (
     <Link
       href="/challenges"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-8 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Flame className="size-5 shrink-0 text-marigold" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">

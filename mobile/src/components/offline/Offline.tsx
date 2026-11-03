@@ -81,7 +81,7 @@ export function PendingExpenses() {
   const { t, money } = useI18n();
   if (pending.length === 0) return null;
   return (
-    <View style={{ marginBottom: 24, borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.marigold, padding: 16, gap: 10 }}>
+    <View style={{ marginBottom: 24, borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.marigold, padding: 16, gap: 10 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
         <CloudOff size={20} color={colors.marigold} />
         <View style={{ flex: 1 }}>

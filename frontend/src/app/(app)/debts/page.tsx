@@ -33,7 +33,7 @@ export default function DebtsPage() {
       </Link>
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.debts.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.debts.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.debts.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setOpen({ kind: "debt", debt: null })}>
@@ -47,20 +47,20 @@ export default function DebtsPage() {
       ) : debts.isError ? (
         <LoadError message={errorMessage(debts.error)} onRetry={() => debts.refetch()} />
       ) : debts.data.items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line px-6 py-10">
+        <div className="rounded-tile border border-dashed border-line px-6 py-10">
           <p className="font-display text-xl font-semibold">{t.debts.empty}</p>
           <p className="mt-1 text-[15px] text-muted">{t.debts.emptyHint}</p>
         </div>
       ) : (
         <>
           <section className="mb-8 grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-line bg-surface px-5 py-5">
+            <div className="rounded-card border border-line bg-surface shadow-card px-5 py-5">
               <h2 className="text-sm text-muted">{t.debts.owedToYou}</h2>
               <p className="tabular font-display text-2xl font-semibold text-brand">
                 {money(debts.data.owed_to_you, debts.data.currency)}
               </p>
             </div>
-            <div className="rounded-2xl border border-line bg-surface px-5 py-5">
+            <div className="rounded-card border border-line bg-surface shadow-card px-5 py-5">
               <h2 className="text-sm text-muted">{t.debts.youOwe}</h2>
               <p className="tabular font-display text-2xl font-semibold text-berry">
                 {money(debts.data.you_owe, debts.data.currency)}
@@ -103,9 +103,9 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   const paidRatio = Number(debt.amount) > 0 ? Number(debt.paid) / Number(debt.amount) : 0;
 
   return (
-    <li className={`rounded-2xl border border-line bg-surface px-5 py-4 ${settled ? "opacity-60" : ""}`}>
+    <li className={`rounded-card border border-line bg-surface shadow-card px-5 py-4 ${settled ? "opacity-60" : ""}`}>
       <button type="button" onClick={onEdit} className="flex w-full items-start gap-4 text-start">
-        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${lent ? "bg-ok/10 text-ok" : "bg-berry/10 text-berry"}`}>
+        <span className={`grid size-10 shrink-0 place-items-center rounded-control ${lent ? "bg-ok/10 text-ok" : "bg-berry/10 text-berry"}`}>
           <HandCoins className="size-5" aria-hidden />
         </span>
         <span className="min-w-0 flex-1">

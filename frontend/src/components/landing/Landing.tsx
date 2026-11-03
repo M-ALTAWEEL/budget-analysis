@@ -83,7 +83,7 @@ export function Landing() {
             <Link
               href="/login"
               // On phones the hero's own buttons are right below: keep the header short.
-              className="hidden h-10 items-center rounded-xl px-4 text-[15px] font-semibold hover:bg-ink/5 sm:inline-flex"
+              className="hidden h-10 items-center rounded-control px-4 text-[15px] font-semibold hover:bg-ink/5 sm:inline-flex"
             >
               {t.auth.logIn}
             </Link>
@@ -112,7 +112,7 @@ export function Landing() {
             </h2>
             <Link
               href="/register"
-              className="mt-8 inline-flex h-12 items-center rounded-xl bg-white px-6 text-[15px] font-semibold text-panel transition-transform active:scale-[0.97]"
+              className="mt-8 inline-flex h-12 items-center rounded-control bg-white px-6 text-[15px] font-semibold text-panel transition-transform active:scale-[0.97]"
             >
               {t.auth.createAccount}
             </Link>
@@ -153,13 +153,13 @@ function Hero() {
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/register"
-            className="inline-flex h-12 items-center rounded-xl bg-brand px-6 text-[15px] font-semibold text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-[0.97]"
+            className="inline-flex h-12 items-center rounded-control bg-brand px-6 text-[15px] font-semibold text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-[0.97]"
           >
             {t.auth.createAccount}
           </Link>
           <Link
             href="/login"
-            className="inline-flex h-12 items-center rounded-xl border border-line bg-surface px-6 text-[15px] font-semibold transition-[border-color,transform] hover:border-ink/40 active:scale-[0.97]"
+            className="inline-flex h-12 items-center rounded-control border border-line bg-surface px-6 text-[15px] font-semibold transition-[border-color,transform] hover:border-ink/40 active:scale-[0.97]"
           >
             {t.auth.logIn}
           </Link>
@@ -209,7 +209,7 @@ function MonthDemo() {
   return (
     <div
       ref={ref}
-      className="rounded-[2rem] bg-panel p-6 text-white shadow-2xl shadow-brand/20 sm:p-8"
+      className="rounded-[2rem] bg-panel p-6 text-white shadow-float sm:p-8"
       role="img"
       aria-label={t.landing.demoLabel}
     >
@@ -253,7 +253,7 @@ function MonthDemo() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96 }}
               transition={{ duration: 0.25 }}
-              className="flex items-center gap-3 rounded-xl bg-white/10 px-3 py-2"
+              className="flex items-center gap-3 rounded-control bg-white/10 px-3 py-2"
             >
               <span className="rounded-lg bg-white">
                 <CategoryIcon category={CATEGORY[expense.category]} size="sm" />
@@ -320,7 +320,7 @@ function CategoryDemo() {
   return (
     <div ref={ref} className="rounded-[2rem] border border-line bg-surface p-6 sm:p-8" aria-hidden>
       <p className="mb-1.5 text-sm font-medium">{t.expenses.what}</p>
-      <div className="flex h-12 items-center rounded-xl border border-brand px-4 ring-1 ring-brand">
+      <div className="flex h-12 items-center rounded-control border border-brand px-4 ring-1 ring-brand">
         <span className="text-[15px]">{typed.slice(0, shown)}</span>
         {!done && <span className="ms-0.5 h-5 w-0.5 animate-pulse bg-ink" />}
       </div>
@@ -346,7 +346,7 @@ function CategoryDemo() {
           return (
             <div
               key={slug}
-              className={`flex items-center gap-2 rounded-xl border p-2 text-sm transition-[border-color,background-color,box-shadow] duration-300 ${
+              className={`flex items-center gap-2 rounded-control border p-2 text-sm transition-[border-color,background-color,box-shadow] duration-300 ${
                 picked ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line"
               }`}
             >

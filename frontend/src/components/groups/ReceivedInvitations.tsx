@@ -47,7 +47,7 @@ export function ReceivedInvitations({ onJoined }: { onJoined: (groupUuid: string
         {requests.data.map((request) => (
           <li
             key={request.uuid}
-            className="flex flex-col gap-3 rounded-2xl border border-brand/40 bg-surface px-5 py-4 sm:flex-row sm:items-center"
+            className="flex flex-col gap-3 rounded-tile border border-brand/40 bg-surface px-5 py-4 sm:flex-row sm:items-center"
           >
             <div className="min-w-0 flex-1">
               <p className="truncate font-semibold">

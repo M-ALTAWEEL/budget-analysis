@@ -42,7 +42,7 @@ function Choice({
       aria-checked={selected}
       lang={lang}
       onClick={onSelect}
-      className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-start text-[15px] transition-colors ${
+      className={`flex items-center gap-3 rounded-control border px-4 py-3 text-start text-[15px] transition-colors ${
         selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line bg-surface hover:border-ink/30"
       }`}
     >
@@ -65,7 +65,7 @@ export default function SettingsPage() {
 
   return (
     <>
-      <h1 className="mb-10 font-display text-2xl font-semibold">{t.settings.title}</h1>
+      <h1 className="mb-10 font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.settings.title}</h1>
 
       <div className="space-y-10">
         <ProfileSection />
@@ -121,7 +121,7 @@ export default function SettingsPage() {
 
         <Link
           href="/categories"
-          className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 text-[15px] font-semibold hover:border-ink/30"
+          className="flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 text-[15px] font-semibold hover:border-ink/30"
         >
           <Shapes className="size-5 text-muted" aria-hidden />
           <span className="flex-1">{t.settings.manageCategories}</span>
@@ -134,7 +134,7 @@ export default function SettingsPage() {
           <h2 id="account" className="mb-3 font-display text-lg font-semibold">
             {t.settings.account}
           </h2>
-          <div className="rounded-2xl border border-line bg-surface px-5 py-4">
+          <div className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
             <p className="font-semibold">{user?.full_name}</p>
             <p className="text-sm text-muted" dir="ltr">
               {user?.username ? `@${user.username} · ` : ""}
@@ -249,7 +249,7 @@ function SupportLink() {
   return (
     <Link
       href="/support"
-      className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 text-[15px] hover:border-ink/30"
+      className="flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 text-[15px] hover:border-ink/30"
     >
       <LifeBuoy className="size-5 text-muted" aria-hidden />
       <span className="flex-1">

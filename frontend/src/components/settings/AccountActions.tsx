@@ -141,7 +141,7 @@ export function AccountActions() {
         <h2 id="your-data" className="mb-3 font-display text-lg font-semibold">
           {t.account.dataTitle}
         </h2>
-        <div className="space-y-4 rounded-2xl border border-line bg-surface px-5 py-4">
+        <div className="space-y-4 rounded-card border border-line bg-surface shadow-card px-5 py-4">
           <ExportData run={run} />
           <hr className="border-line" />
           <DeleteAccount run={run} />
@@ -183,7 +183,7 @@ function ChangeEmail({ run }: { run: Run }) {
       <h2 id="email" className="mb-3 font-display text-lg font-semibold">
         {t.account.emailTitle}
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+      <form onSubmit={handleSubmit} className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
         {user?.email && (
           <p className="text-sm text-muted" dir="ltr">
             {user.email}

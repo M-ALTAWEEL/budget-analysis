@@ -49,7 +49,7 @@ export function LanguageMenu() {
       {open && (
         <ul
           id={menuId}
-          className="absolute end-0 z-40 mt-2 w-44 overflow-hidden rounded-xl border border-line bg-surface py-1 shadow-lg"
+          className="absolute end-0 z-40 mt-2 w-44 overflow-hidden rounded-control border border-line bg-surface py-1 shadow-float"
         >
           {LOCALES.map((code) => (
             <li key={code}>

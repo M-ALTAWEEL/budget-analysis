@@ -38,7 +38,7 @@ export default function ChallengesPage() {
       </Link>
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.challenges.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.challenges.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.challenges.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setCreating(true)}>
@@ -54,11 +54,11 @@ export default function ChallengesPage() {
       ) : (
         <div className="space-y-8">
           <section className="grid grid-cols-2 gap-3">
-            <div className="rounded-2xl border border-line bg-surface px-5 py-4">
+            <div className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
               <Flame className="mb-2 size-5 text-marigold" aria-hidden />
               <p className="font-semibold">{t.challenges.streak(data!.streak)}</p>
             </div>
-            <div className="rounded-2xl border border-line bg-surface px-5 py-4">
+            <div className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
               <Trophy className="mb-2 size-5 text-brand" aria-hidden />
               <p className="font-semibold">{t.challenges.wins(data!.wins)}</p>
               {data!.badges.length > 0 && (
@@ -84,7 +84,7 @@ export default function ChallengesPage() {
           )}
 
           {data!.items.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-line px-6 py-10">
+            <div className="rounded-tile border border-dashed border-line px-6 py-10">
               <p className="font-display text-xl font-semibold">{t.challenges.empty}</p>
               <p className="mt-1 text-[15px] text-muted">{t.challenges.emptyHint}</p>
             </div>
@@ -135,12 +135,12 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
   }
 
   return (
-    <li className={`rounded-2xl border border-line bg-surface px-5 py-4 ${c.status === "lost" ? "opacity-70" : ""}`}>
+    <li className={`rounded-card border border-line bg-surface shadow-card px-5 py-4 ${c.status === "lost" ? "opacity-70" : ""}`}>
       <div className="flex items-start gap-3">
         {c.category ? (
           <CategoryIcon category={c.category} />
         ) : (
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
+          <span className="grid size-10 shrink-0 place-items-center rounded-control bg-brand/10 text-brand">
             <Flame className="size-5" aria-hidden />
           </span>
         )}
@@ -203,7 +203,7 @@ function OpenCard({ challenge: c }: { challenge: OpenChallenge }) {
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-dashed border-brand/50 bg-brand-soft/40 px-5 py-4">
+    <li className="flex items-center gap-3 rounded-tile border border-dashed border-brand/50 bg-brand-soft/40 px-5 py-4">
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{describeChallenge(c, words, user.base_currency)}</p>
         <p className="text-sm text-muted"><bdi>{t.challenges.openBy(c.by, c.group)}</bdi></p>

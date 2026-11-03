@@ -43,7 +43,7 @@ export default function GoalsScreen() {
       ) : goals.isError ? (
         <LoadError message={errorMessage(goals.error)} onRetry={() => void goals.refetch()} />
       ) : goals.data.length === 0 ? (
-        <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
+        <Text size={15} tone="muted" style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
           {t.goals.empty}
         </Text>
       ) : (
@@ -73,13 +73,13 @@ function ChallengesLink() {
       onPress={() => router.push("/challenges" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Flame size={20} color={colors.marigold} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{running > 0 ? t.challenges.linkSummary(running) : t.challenges.title}</Text>
       {invites > 0 && (
-        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
+        <View style={{ minWidth: 24, height: 24, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
           <Text size={12} weight="semibold" tone="onBrand">{invites}</Text>
         </View>
       )}

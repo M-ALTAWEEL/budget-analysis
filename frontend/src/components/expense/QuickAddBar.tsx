@@ -93,7 +93,7 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   }
 
   return (
-    <div className="rounded-xl border border-dashed border-brand/50 bg-brand-soft/40 p-3">
+    <div className="rounded-control border border-dashed border-brand/50 bg-brand-soft/40 p-3">
       <label htmlFor="quick-add" className="mb-1.5 block text-sm font-semibold">
         {t.quickAdd.label}
       </label>

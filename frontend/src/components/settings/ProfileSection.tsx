@@ -51,7 +51,7 @@ export function ProfileSection() {
       <h2 id="profile" className="mb-3 font-display text-lg font-semibold">
         {t.profile.title}
       </h2>
-      <form onSubmit={handleSubmit} className="space-y-4 rounded-2xl border border-line bg-surface px-5 py-4">
+      <form onSubmit={handleSubmit} className="space-y-4 rounded-card border border-line bg-surface shadow-card px-5 py-4">
         <Field
           label={t.profile.name}
           hint={t.profile.nameHint}

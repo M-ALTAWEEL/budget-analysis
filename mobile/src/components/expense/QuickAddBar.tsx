@@ -53,7 +53,7 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   }
 
   return (
-    <View style={{ borderRadius: 12, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 12, gap: 8 }}>
+    <View style={{ borderRadius: 14, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 12, gap: 8 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
         <Mic size={16} color={colors.brand} />
         <Text size={14} weight="semibold">{t.quickAdd.label}</Text>

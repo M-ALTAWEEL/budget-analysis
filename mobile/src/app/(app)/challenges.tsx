@@ -29,7 +29,7 @@ export default function ChallengesScreen() {
   const data = challenges.data;
   const running = data?.items.filter((c) => c.status === "active" || c.status === "upcoming") ?? [];
   const finished = data?.items.filter((c) => c.status === "won" || c.status === "lost") ?? [];
-  const box = { flex: 1, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 6 } as const;
+  const box = { flex: 1, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 6 } as const;
 
   return (
     <>
@@ -83,7 +83,7 @@ export default function ChallengesScreen() {
             )}
 
             {data!.items.length === 0 ? (
-              <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
+              <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
                 <Text display weight="semibold" size={20}>{t.challenges.empty}</Text>
                 <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.challenges.emptyHint}</Text>
               </View>
@@ -129,12 +129,12 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
   }
 
   return (
-    <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 10, opacity: c.status === "lost" ? 0.7 : 1 }}>
+    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 10, opacity: c.status === "lost" ? 0.7 : 1 }}>
       <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
         {c.category ? (
           <CategoryIcon category={c.category} />
         ) : (
-          <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+          <View style={{ width: 40, height: 40, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
             <Flame size={20} color={colors.brand} />
           </View>
         )}
@@ -196,7 +196,7 @@ function OpenCard({ challenge: c }: { challenge: OpenChallenge }) {
   }
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 16 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 16 }}>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text weight="semibold">{describeChallenge(c, words, user.base_currency)}</Text>
         <Text size={14} tone="muted">{t.challenges.openBy(c.by, c.group)}</Text>

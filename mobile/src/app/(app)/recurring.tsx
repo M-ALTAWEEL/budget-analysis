@@ -49,13 +49,13 @@ export default function RecurringScreen() {
         ) : recurring.isError ? (
           <LoadError message={errorMessage(recurring.error)} onRetry={() => void recurring.refetch()} />
         ) : recurring.data.items.length === 0 ? (
-          <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
+          <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
             <Text display weight="semibold" size={20}>{t.recurring.empty}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.recurring.emptyHint}</Text>
           </View>
         ) : (
           <>
-            <View style={{ marginBottom: 24, alignItems: "center", gap: 8, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 24, paddingVertical: 28 }}>
+            <View style={{ marginBottom: 24, alignItems: "center", gap: 8, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 24, paddingVertical: 28 }}>
               <Repeat size={24} color={colors.brand} />
               <Text tone="muted" accessibilityRole="header">{t.recurring.monthlyTotal}</Text>
               <Text display weight="semibold" size={30}>{money(recurring.data.monthly_total, recurring.data.currency)}</Text>

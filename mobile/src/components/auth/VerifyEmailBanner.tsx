@@ -34,7 +34,7 @@ export function VerifyEmailBanner() {
   }
 
   return (
-    <View accessibilityLiveRegion="polite" style={{ marginBottom: 24, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 12, rowGap: 4, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
+    <View accessibilityLiveRegion="polite" style={{ marginBottom: 24, flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 12, rowGap: 4, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
       <MailWarning size={20} color={colors.brand} />
       <Text size={14} style={{ flex: 1, minWidth: 160 }}>{error ?? (state === "sent" ? t.account.resent : t.account.banner)}</Text>
       {state !== "sent" && (

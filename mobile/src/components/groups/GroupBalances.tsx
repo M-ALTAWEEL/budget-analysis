@@ -34,7 +34,7 @@ export function GroupBalances({ group }: { group: GroupDetail }) {
         <Text display weight="semibold" size={18} accessibilityRole="header">{t.groups.balances}</Text>
       </View>
       {!balances.data ? (
-        <View style={{ height: 96, borderRadius: 16, backgroundColor: `${colors.ink}0d` }} />
+        <View style={{ height: 96, borderRadius: 18, backgroundColor: `${colors.ink}0d` }} />
       ) : (
         <BalanceCard data={balances.data} me={me} money={money} name={name} onPay={setPaying} />
       )}

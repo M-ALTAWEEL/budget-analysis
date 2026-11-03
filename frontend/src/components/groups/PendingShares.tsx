@@ -69,7 +69,7 @@ export function PendingShares() {
         )}
       </div>
       <p className="mb-3 text-sm text-muted">{t.groups.pendingText}</p>
-      <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+      <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
         {shares.data.map((share) => (
           <li key={share.uuid} className="flex flex-wrap items-center gap-3 px-5 py-3.5">
             <div className="min-w-0 flex-1">
@@ -123,7 +123,7 @@ export function PendingSharesBanner() {
   return (
     <Link
       href="/groups"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-brand/40 bg-brand-soft px-5 py-3.5 text-[15px] font-semibold"
+      className="mb-8 flex items-center gap-3 rounded-tile border border-brand/40 bg-brand-soft px-5 py-3.5 text-[15px] font-semibold"
     >
       <Wallet className="size-5 text-brand" aria-hidden />
       {t.groups.pendingCount(count)}

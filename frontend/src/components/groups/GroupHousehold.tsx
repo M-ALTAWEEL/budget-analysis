@@ -41,7 +41,7 @@ export function GroupHousehold({ group }: { group: GroupDetail }) {
   const m = (amount: string) => money(amount, group.currency);
 
   return (
-    <section aria-labelledby="household" className="rounded-2xl border border-line bg-surface px-5 py-5">
+    <section aria-labelledby="household" className="rounded-card border border-line bg-surface shadow-card px-5 py-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 id="household" className="flex items-center gap-2 font-display text-lg font-semibold">
           <Home className="size-5 text-brand" aria-hidden />
@@ -182,7 +182,7 @@ function HouseholdSheet({ group, month, data, onClose }: { group: GroupDetail; m
           <legend className="mb-2 text-sm font-semibold">{t.household.limits}</legend>
           <div className="grid grid-cols-2 gap-2">
             {GROUP_CATEGORIES.map((c) => (
-              <label key={c.slug} className="flex items-center gap-2 rounded-xl border border-line px-2 py-1.5">
+              <label key={c.slug} className="flex items-center gap-2 rounded-control border border-line px-2 py-1.5">
                 <CategoryIcon category={c} size="sm" />
                 <span className="min-w-0 flex-1 truncate text-sm">{t.categories.names[c.slug as keyof typeof t.categories.names]}</span>
                 <input

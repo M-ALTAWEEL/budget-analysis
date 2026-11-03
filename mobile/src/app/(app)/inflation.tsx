@@ -42,19 +42,19 @@ function Body({ data }: { data: InflationView }) {
   const colors = useColors();
   const maxLocal = Math.max(...data.months.map((m) => Number(m.spent)), 1);
   const maxStable = Math.max(...data.months.map((m) => Number(m.spent_stable ?? 0)), 1);
-  const card = { borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16 } as const;
+  const card = { borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16 } as const;
 
   return (
     <View style={{ gap: 24, marginTop: 4 }}>
       <Text size={15} tone="muted">{t.inflation.intro(data.stable_currency)}</Text>
       {data.months.length === 0 ? (
-        <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24 }}>
+        <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24 }}>
           <Text tone="muted">{t.inflation.empty}</Text>
         </View>
       ) : (
         <>
           {data.change_local !== null && data.change_stable !== null && (
-            <View style={{ borderRadius: 16, backgroundColor: colors.brand, padding: 20, gap: 4 }}>
+            <View style={{ borderRadius: 18, backgroundColor: colors.brand, padding: 20, gap: 4 }}>
               <Text display weight="semibold" size={17} tone="onBrand">{t.inflation.summary(data.change_local, data.change_stable, data.stable_currency)}</Text>
               <Text size={14} tone="onBrand" style={{ opacity: 0.85 }}>{t.inflation.explain}</Text>
             </View>

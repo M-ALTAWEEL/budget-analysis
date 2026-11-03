@@ -50,17 +50,17 @@ function WrappedView() {
       <header className="mb-8 flex items-center justify-between gap-3">
         <div>
           <p className="text-sm font-semibold text-brand">{t.wrapped.title}</p>
-          <h1 className="font-display text-3xl font-semibold">{t.wrapped.heading(monthLabel(month))}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.wrapped.heading(monthLabel(month))}</h1>
         </div>
         <div className="flex gap-1">
-          <button type="button" onClick={() => go(-1)} className="rounded-xl p-2 hover:bg-ink/5" aria-label="←">
+          <button type="button" onClick={() => go(-1)} className="rounded-control p-2 hover:bg-ink/5" aria-label="←">
             <ChevronLeft className="size-5 rtl:-scale-x-100" aria-hidden />
           </button>
           <button
             type="button"
             onClick={() => go(1)}
             disabled={month >= currentMonth()}
-            className="rounded-xl p-2 hover:bg-ink/5 disabled:opacity-30"
+            className="rounded-control p-2 hover:bg-ink/5 disabled:opacity-30"
             aria-label="→"
           >
             <ChevronRight className="size-5 rtl:-scale-x-100" aria-hidden />
@@ -71,7 +71,7 @@ function WrappedView() {
       {report.isPending ? (
         <PageLoader />
       ) : notFound ? (
-        <p className="rounded-2xl border border-dashed border-line px-6 py-8 text-muted">{t.wrapped.noBudget}</p>
+        <p className="rounded-tile border border-dashed border-line px-6 py-8 text-muted">{t.wrapped.noBudget}</p>
       ) : report.isError ? (
         <LoadError message={errorMessage(report.error)} onRetry={() => report.refetch()} />
       ) : (
@@ -83,7 +83,7 @@ function WrappedView() {
 
 function Card({ title, children, brand = false }: { title?: string; children: React.ReactNode; brand?: boolean }) {
   return (
-    <section className={`rounded-3xl px-6 py-6 ${brand ? "bg-brand text-white" : "border border-line bg-surface"}`}>
+    <section className={`rounded-card px-6 py-6 ${brand ? "bg-brand text-white" : "border border-line bg-surface"}`}>
       {title && <h2 className="mb-4 text-sm font-semibold tracking-wide text-muted uppercase">{title}</h2>}
       {children}
     </section>

@@ -52,7 +52,7 @@ export default function CategoriesScreen() {
           <View>
             <Text display weight="semibold" size={20} accessibilityRole="header" style={{ marginBottom: 16 }}>{t.categories.yours}</Text>
             {own.length === 0 ? (
-              <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
+              <Text size={15} tone="muted" style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
                 {t.categories.yoursEmpty}
               </Text>
             ) : (
@@ -72,7 +72,7 @@ export default function CategoriesScreen() {
             <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 16 }}>{t.categories.builtInHint}</Text>
             <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
               {builtIn.map((category) => (
-                <View key={category.uuid} style={{ width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 8 }}>
+                <View key={category.uuid} style={{ width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 8 }}>
                   <CategoryIcon category={category} size="sm" />
                   <Text size={14} numberOfLines={1} style={{ flex: 1 }}>{categoryName(category)}</Text>
                 </View>

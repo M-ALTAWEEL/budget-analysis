@@ -66,13 +66,13 @@ export function GroupExpenses({ group }: { group: GroupDetail }) {
       {activity.isError ? (
         <LoadError message={errorMessage(activity.error)} onRetry={() => activity.refetch()} />
       ) : activity.isPending ? (
-        <div className="h-32 animate-pulse rounded-2xl bg-ink/5" />
+        <div className="h-32 animate-pulse rounded-tile bg-ink/5" />
       ) : items.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-line px-5 py-8 text-[15px] text-muted">
+        <p className="rounded-tile border border-dashed border-line px-5 py-8 text-[15px] text-muted">
           {t.groups.noExpenses}
         </p>
       ) : (
-        <div className="space-y-3 rounded-2xl border border-line bg-ink/[0.02] p-3 sm:p-4">
+        <div className="space-y-3 rounded-tile border border-line bg-ink/[0.02] p-3 sm:p-4">
           {activity.hasNextPage && (
             <div className="text-center">
               <Button
@@ -138,7 +138,7 @@ function Message({
   return (
     <li className={`flex ${mine ? "justify-end" : "justify-start"}`}>
       <div
-        className={`w-full max-w-md rounded-2xl border px-4 py-3 ${
+        className={`w-full max-w-md rounded-tile border px-4 py-3 ${
           mine ? "rounded-ee-md border-brand/30 bg-brand-soft" : "rounded-es-md border-line bg-surface"
         }`}
       >
@@ -219,7 +219,7 @@ function ExpenseBody({
         )}
       </div>
       {showShares && (
-        <ul className="space-y-1 rounded-xl bg-surface/70 px-3 py-2 text-sm">
+        <ul className="space-y-1 rounded-control bg-surface/70 px-3 py-2 text-sm">
           {expense.shares.map((share) => (
             <li key={share.member.uuid} className="flex justify-between gap-3">
               <bdi className="truncate">

@@ -84,7 +84,7 @@ export function ChallengeSheet({ onClose }: { onClose: () => void }) {
               role="radio"
               aria-checked={kind === value}
               onClick={() => setKind(value)}
-              className={`rounded-xl border px-4 py-3 text-start font-semibold transition-colors ${
+              className={`rounded-control border px-4 py-3 text-start font-semibold transition-colors ${
                 kind === value ? "border-brand bg-brand-soft ring-1 ring-brand" : "border-line hover:border-ink/30"
               }`}
             >
@@ -98,7 +98,7 @@ export function ChallengeSheet({ onClose }: { onClose: () => void }) {
             <legend className="mb-1.5 text-sm font-semibold">{t.challenges.category}</legend>
             <div role="radiogroup" className="grid grid-cols-2 gap-2 sm:grid-cols-3">
               {!needsCategory && (
-                <button type="button" role="radio" aria-checked={categoryUuid === null} onClick={() => setCategoryUuid(null)} className={`rounded-xl border p-2 text-sm ${categoryUuid === null ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line"}`}>
+                <button type="button" role="radio" aria-checked={categoryUuid === null} onClick={() => setCategoryUuid(null)} className={`rounded-control border p-2 text-sm ${categoryUuid === null ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line"}`}>
                   {t.challenges.anyCategory}
                 </button>
               )}
@@ -109,7 +109,7 @@ export function ChallengeSheet({ onClose }: { onClose: () => void }) {
                   role="radio"
                   aria-checked={categoryUuid === category.uuid}
                   onClick={() => setCategoryUuid(category.uuid)}
-                  className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm ${
+                  className={`flex items-center gap-2 rounded-control border p-2 text-start text-sm ${
                     categoryUuid === category.uuid ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line hover:border-ink/30"
                   }`}
                 >

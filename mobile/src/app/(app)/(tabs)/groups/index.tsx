@@ -44,14 +44,14 @@ export default function GroupsScreen() {
       ) : groups.isError ? (
         <LoadError message={errorMessage(groups.error)} onRetry={() => void groups.refetch()} />
       ) : groups.data.length === 0 ? (
-        <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
+        <Text size={15} tone="muted" style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
           {t.groups.empty}
         </Text>
       ) : (
         <List>
           {groups.data.map((group) => (
             <Row key={group.uuid} onPress={() => open(group.uuid)} style={{ paddingVertical: 16 }}>
-              <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+              <View style={{ width: 40, height: 40, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
                 <Users size={20} color={colors.brand} />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
@@ -95,7 +95,7 @@ function DebtsLink() {
       onPress={() => router.push("/debts" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <HandCoins size={20} color={colors.brand} />

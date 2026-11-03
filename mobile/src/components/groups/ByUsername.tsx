@@ -59,7 +59,7 @@ export function ByUsername({ group }: { group: GroupDetail }) {
       <Text size={14} weight="semibold">{t.groups.byUsername}</Text>
       <Text size={14} tone="muted">{t.groups.byUsernameText}</Text>
       <View style={{ flexDirection: "row", gap: 8 }}>
-        <View style={{ flex: 1, height: 44, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 12, gap: 6, direction: "ltr", opacity: full ? 0.5 : 1 }}>
+        <View style={{ flex: 1, height: 44, flexDirection: "row", alignItems: "center", borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 12, gap: 6, direction: "ltr", opacity: full ? 0.5 : 1 }}>
           <AtSign size={16} color={colors.muted} />
           <TextInput
             accessibilityLabel={t.groups.byUsername}

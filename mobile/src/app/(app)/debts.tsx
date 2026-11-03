@@ -48,7 +48,7 @@ export default function DebtsScreen() {
         ) : debts.isError ? (
           <LoadError message={errorMessage(debts.error)} onRetry={() => void debts.refetch()} />
         ) : debts.data.items.length === 0 ? (
-          <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
+          <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
             <Text display weight="semibold" size={20}>{t.debts.empty}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.debts.emptyHint}</Text>
           </View>
@@ -59,7 +59,7 @@ export default function DebtsScreen() {
                 { label: t.debts.owedToYou, value: debts.data.owed_to_you, color: colors.brand },
                 { label: t.debts.youOwe, value: debts.data.you_owe, color: colors.berry },
               ].map((box) => (
-                <View key={box.label} style={{ flex: 1, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16 }}>
+                <View key={box.label} style={{ flex: 1, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16 }}>
                   <Text size={14} tone="muted">{box.label}</Text>
                   <Text display weight="semibold" size={22} style={{ color: box.color }}>{money(box.value, debts.data.currency)}</Text>
                 </View>
@@ -97,9 +97,9 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   const paidRatio = Number(debt.amount) > 0 ? Math.min(Number(debt.paid) / Number(debt.amount), 1) : 0;
 
   return (
-    <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 12, opacity: settled ? 0.6 : 1 }}>
+    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 12, opacity: settled ? 0.6 : 1 }}>
       <Pressable onPress={onEdit} accessibilityRole="button" style={{ flexDirection: "row", alignItems: "flex-start", gap: 16 }}>
-        <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${accent}1a` }}>
+        <View style={{ width: 40, height: 40, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: `${accent}1a` }}>
           <HandCoins size={20} color={accent} />
         </View>
         <View style={{ flex: 1, minWidth: 0 }}>

@@ -30,7 +30,7 @@ export function GroupBalances({ group }: { group: GroupDetail }) {
   const money = (value: string | number) => formatMoney(value, group.currency, intl);
   const name = (m: MemberRef) => (m.uuid === me ? t.groups.you : m.display_name);
 
-  if (!balances.data) return <div className="h-24 animate-pulse rounded-2xl bg-ink/5" />;
+  if (!balances.data) return <div className="h-24 animate-pulse rounded-tile bg-ink/5" />;
   const myNet = Number(balances.data.my_net);
   const mine = balances.data.debts.filter((d) => d.from_member.uuid === me || d.to_member.uuid === me);
   const others = balances.data.debts.filter((d) => !mine.includes(d));
@@ -41,7 +41,7 @@ export function GroupBalances({ group }: { group: GroupDetail }) {
         <ArrowLeftRight className="size-5 text-muted" aria-hidden />
         {t.groups.balances}
       </h2>
-      <div className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+      <div className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
         <p className={`font-semibold ${myNet < 0 ? "text-berry" : myNet > 0 ? "text-ok" : ""}`}>
           {myNet < 0 ? t.groups.youOwe(money(-myNet)) : myNet > 0 ? t.groups.youAreOwed(money(myNet)) : t.groups.allSettled}
         </p>

@@ -121,7 +121,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
 
       <div
         ref={boxRef}
-        className="relative touch-pan-y rounded-2xl outline-offset-4"
+        className="relative touch-pan-y rounded-tile outline-offset-4"
         style={{ height: TOP + PLOT_HEIGHT + AXIS_BAND }}
         tabIndex={0}
         role="group"
@@ -279,7 +279,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
         {/* tooltip: value first, label second */}
         {active !== null && (
           <div
-            className="pointer-events-none absolute top-0 z-10 w-40 -translate-x-1/2 rounded-xl border border-line bg-surface px-3 py-2 text-sm shadow-lg"
+            className="pointer-events-none absolute top-0 z-10 w-40 -translate-x-1/2 rounded-control border border-line bg-surface px-3 py-2 text-sm shadow-float"
             style={{ left: tooltipLeft }}
             role="status"
           >
@@ -306,7 +306,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
       {running.length > 0 && (
         <details className="mt-3 text-sm">
           <summary className="cursor-pointer text-muted hover:text-ink">{t.insights.showTable}</summary>
-          <div className="mt-2 max-h-64 overflow-y-auto rounded-xl border border-line">
+          <div className="mt-2 max-h-64 overflow-y-auto rounded-control border border-line">
             <table className="tabular w-full text-start">
               <thead className="sticky top-0 bg-surface text-muted">
                 <tr>

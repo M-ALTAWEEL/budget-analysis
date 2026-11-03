@@ -64,7 +64,7 @@ export function TwoFactorSection() {
       <h2 id="two-factor" className="mb-3 font-display text-lg font-semibold">
         {t.account.twoFactorTitle}
       </h2>
-      <div className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+      <div className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
         <p className="flex items-start gap-2 text-sm">
           <ShieldCheck className={`mt-0.5 size-4 shrink-0 ${enabled ? "text-brand" : "text-muted"}`} aria-hidden />
           <span className={enabled ? "" : "text-muted"}>
@@ -175,7 +175,7 @@ function SetupSheet({
           alt={t.account.setupTitle}
           width={200}
           height={200}
-          className="mx-auto rounded-xl bg-white p-2"
+          className="mx-auto rounded-control bg-white p-2"
         />
         <p className="text-sm text-muted">{t.account.setupManual}</p>
         <p dir="ltr" className="break-all rounded-lg bg-ink/5 px-3 py-2 text-center font-mono text-sm tracking-wider">
@@ -227,7 +227,7 @@ function CodesSheet({ codes, onClose }: { codes: string[]; onClose: () => void }
     >
       <div className="space-y-4">
         <p className="text-sm text-muted">{t.account.codesText}</p>
-        <ul dir="ltr" className="grid grid-cols-2 gap-2 rounded-xl bg-ink/5 p-4 font-mono text-sm">
+        <ul dir="ltr" className="grid grid-cols-2 gap-2 rounded-control bg-ink/5 p-4 font-mono text-sm">
           {codes.map((code) => (
             <li key={code}>{code}</li>
           ))}

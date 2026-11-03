@@ -155,7 +155,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
     >
       <div className="space-y-4">
         {expense?.source === "group" && (
-          <p className="rounded-xl bg-brand-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
+          <p className="rounded-control bg-brand-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
         )}
         {!expense && (
           <QuickAddBar
@@ -220,7 +220,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
                     role="radio"
                     aria-checked={selected}
                     onClick={() => setPickedUuid(category.uuid)}
-                    className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
+                    className={`flex items-center gap-2 rounded-control border p-2 text-start text-sm transition-colors ${
                       selected
                         ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand"
                         : "border-line hover:border-ink/30"
@@ -245,7 +245,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
         />
 
         {!expense && (
-          <label className="flex cursor-pointer items-start gap-4 rounded-xl border border-line px-4 py-3">
+          <label className="flex cursor-pointer items-start gap-4 rounded-control border border-line px-4 py-3">
             <span className="min-w-0 flex-1">
               <span className="block font-semibold">{t.expenses.repeatMonthly}</span>
               <span className="mt-0.5 block text-sm text-muted">{t.expenses.repeatHint}</span>

@@ -81,7 +81,7 @@ export function ByUsername({ group }: { group: GroupDetail }) {
             autoCorrect="off"
             spellCheck={false}
             disabled={full}
-            className="h-11 w-full rounded-xl border border-line bg-surface ps-9 pe-3 text-[15px]"
+            className="h-11 w-full rounded-control border border-line bg-surface ps-9 pe-3 text-[15px]"
           />
         </label>
         <Button type="submit" variant="secondary" loading={send.isPending} disabled={full || !username.trim()}>

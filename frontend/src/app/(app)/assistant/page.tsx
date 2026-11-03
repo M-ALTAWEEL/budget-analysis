@@ -50,7 +50,7 @@ export default function AssistantPage() {
   return (
     <>
       <header className="mb-8">
-        <h1 className="font-display text-2xl font-semibold">{t.assistant.title}</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.assistant.title}</h1>
         <p className="mt-1 max-w-prose text-[15px] text-muted">{t.assistant.intro}</p>
         <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-brand">
           <Sparkles className="size-4" aria-hidden />
@@ -71,12 +71,12 @@ export default function AssistantPage() {
               className={message.from === "student" ? "flex justify-end" : "flex justify-start"}
             >
               {message.from === "student" ? (
-                <p className="max-w-[85%] rounded-2xl rounded-ee-md bg-brand px-4 py-2.5 text-[15px] text-on-brand">
+                <p className="max-w-[85%] rounded-tile rounded-ee-md bg-brand px-4 py-2.5 text-[15px] text-on-brand">
                   <span className="sr-only">{t.assistant.you}: </span>
                   {message.text}
                 </p>
               ) : (
-                <div className="max-w-[90%] rounded-2xl rounded-es-md border border-line bg-surface px-4 py-3 text-[15px] leading-relaxed">
+                <div className="max-w-[90%] rounded-tile rounded-es-md border border-line bg-surface px-4 py-3 text-[15px] leading-relaxed">
                   {message.from === "assistant" ? (
                     <AnswerText answer={message.answer} onAsk={send} />
                   ) : (
@@ -89,7 +89,7 @@ export default function AssistantPage() {
         </AnimatePresence>
         {ask.isPending && (
           <li className="flex justify-start">
-            <p className="rounded-2xl border border-line bg-surface px-4 py-2.5 text-[15px] text-muted">
+            <p className="rounded-card border border-line bg-surface shadow-card px-4 py-2.5 text-[15px] text-muted">
               <span className="inline-flex gap-1" aria-hidden>
                 <span className="size-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.3s]" />
                 <span className="size-1.5 animate-bounce rounded-full bg-muted [animation-delay:-0.15s]" />
@@ -122,13 +122,13 @@ export default function AssistantPage() {
             maxLength={300}
             autoComplete="off"
             dir="auto"
-            className="h-12 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 text-[16px] outline-none focus:border-brand"
+            className="h-12 min-w-0 flex-1 rounded-control border border-line bg-surface px-4 text-[16px] outline-none focus:border-brand"
           />
           <button
             type="submit"
             disabled={!draft.trim() || ask.isPending}
             aria-label={t.assistant.send}
-            className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-95 disabled:opacity-50"
+            className="inline-flex size-12 shrink-0 items-center justify-center rounded-control bg-brand text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-95 disabled:opacity-50"
           >
             <SendHorizontal className="size-5 rtl:-scale-x-100" aria-hidden />
           </button>

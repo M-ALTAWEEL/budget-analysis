@@ -11,14 +11,14 @@ export function CategoryBreakdown({ summary, plain = false }: { summary: BudgetS
 
   if (summary.categories.length === 0) {
     return (
-      <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">
+      <p className="rounded-tile border border-dashed border-line px-5 py-6 text-[15px] text-muted">
         {t.overview.nothingSpent}
       </p>
     );
   }
 
   return (
-    <ul className={plain ? "-mx-5 divide-y divide-line" : "divide-y divide-line rounded-2xl border border-line bg-surface"}>
+    <ul className={plain ? "-mx-5 divide-y divide-line" : "divide-y divide-line rounded-card border border-line bg-surface shadow-card"}>
       {summary.categories.map(({ category, limit_amount, spent }) => {
         const limit = limit_amount === null ? null : Number(limit_amount);
         const ratio = limit ? Number(spent) / limit : null;

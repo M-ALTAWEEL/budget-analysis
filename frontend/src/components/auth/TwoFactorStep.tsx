@@ -39,7 +39,7 @@ export function TwoFactorStep() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <ShieldCheck className="size-10 text-brand" aria-hidden />
-      <h1 className="font-display text-3xl font-semibold">{t.account.stepTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.account.stepTitle}</h1>
       <p className="text-muted">{t.account.stepText}</p>
       <Field
         label={t.account.stepCode}

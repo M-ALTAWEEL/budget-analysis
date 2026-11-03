@@ -52,7 +52,7 @@ export function ContributionSheet({ goal, onClose }: { goal: Goal; onClose: () =
     <Sheet title={t.goals.moneyTitle(goal.name)} onClose={onClose} onSubmit={handleSubmit}>
       <div className="space-y-4">
         {/* Segmented control: one of two */}
-        <div role="radiogroup" className="grid grid-cols-2 gap-1 rounded-xl bg-ink/5 p-1">
+        <div role="radiogroup" className="grid grid-cols-2 gap-1 rounded-control bg-ink/5 p-1">
           {kinds.map(({ value, label, icon: Icon }) => (
             <button
               key={value}

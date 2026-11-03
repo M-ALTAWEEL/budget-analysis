@@ -47,7 +47,7 @@ function Notice({ icon: Icon, tone, children }: { icon: typeof MailCheck; tone: 
   return (
     <div
       role="status"
-      className={`flex gap-3 rounded-2xl border px-4 py-3 text-[15px] ${
+      className={`flex gap-3 rounded-tile border px-4 py-3 text-[15px] ${
         tone === "ok" ? "border-ok/30 bg-ok-soft" : "border-berry/30 bg-berry-soft"
       }`}
     >
@@ -81,7 +81,7 @@ export function ForgotPasswordForm() {
 
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-3xl font-semibold">{t.account.forgotTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.account.forgotTitle}</h1>
       {sent ? (
         <Notice icon={MailCheck} tone="ok">
           {t.account.linkSent}
@@ -145,7 +145,7 @@ export function ResetPasswordForm() {
   if (token === undefined) return null;
   return (
     <div className="space-y-4">
-      <h1 className="font-display text-3xl font-semibold">{t.account.resetTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.account.resetTitle}</h1>
       {state === "saved" ? (
         <>
           <Notice icon={CheckCircle2} tone="ok">
@@ -228,10 +228,10 @@ function LinkActionView({
 
   return (
     <div className="space-y-4">
-      {shown === "working" && <h1 className="font-display text-3xl font-semibold">{text.working}</h1>}
+      {shown === "working" && <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{text.working}</h1>}
       {shown === "done" && (
         <>
-          <h1 className="font-display text-3xl font-semibold">{text.doneTitle}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{text.doneTitle}</h1>
           <Notice icon={CheckCircle2} tone="ok">
             {text.done}
           </Notice>
@@ -242,7 +242,7 @@ function LinkActionView({
       )}
       {shown === "invalid" && (
         <>
-          <h1 className="font-display text-3xl font-semibold">{text.failedTitle}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{text.failedTitle}</h1>
           <Notice icon={TriangleAlert} tone="bad">
             {t.account.linkInvalid}
           </Notice>

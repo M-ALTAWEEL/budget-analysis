@@ -53,7 +53,7 @@ export function GroupView({ uuid, onBack }: { uuid: string; onBack: () => void }
     <>
       <BackLink onBack={onBack} />
       <header className="mb-8">
-        <h1 className="font-display text-2xl font-semibold">{g.name}</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{g.name}</h1>
         <p className="mt-1 text-[15px] text-muted">
           {g.currency} · {t.groups.members(g.member_count, g.member_limit)}
         </p>
@@ -111,7 +111,7 @@ function Members({ group }: { group: GroupDetail }) {
         <Users className="size-5 text-muted" aria-hidden />
         {t.groups.members(group.member_count, group.member_limit)}
       </h2>
-      <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+      <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
         {group.members.map((member) => {
           const canManage =
             !member.is_me &&
@@ -204,7 +204,7 @@ function Invites({ group }: { group: GroupDetail }) {
         {t.groups.invite}
       </h2>
       <p className="mb-3 text-sm text-muted">{full ? t.groups.full : t.groups.inviteText}</p>
-      <div className="space-y-4 rounded-2xl border border-line bg-surface px-5 py-4">
+      <div className="space-y-4 rounded-card border border-line bg-surface shadow-card px-5 py-4">
         {fresh?.url ? (
           <div className="space-y-3">
             {fresh.qr_svg && (
@@ -214,7 +214,7 @@ function Invites({ group }: { group: GroupDetail }) {
                 alt=""
                 width={180}
                 height={180}
-                className="mx-auto rounded-xl bg-white p-2"
+                className="mx-auto rounded-control bg-white p-2"
               />
             )}
             <p dir="ltr" className="break-all rounded-lg bg-ink/5 px-3 py-2 font-mono text-xs">
@@ -286,7 +286,7 @@ function AutoAdd({ group }: { group: GroupDetail }) {
   const on = change.isPending ? Boolean(change.variables) : group.my_auto_add;
 
   return (
-    <section className="rounded-2xl border border-line bg-surface px-5 py-4">
+    <section className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
       <label className="flex cursor-pointer items-start gap-4">
         <span className="min-w-0 flex-1">
           <span className="block font-semibold">{t.groups.autoAdd}</span>
@@ -329,7 +329,7 @@ function GroupSettings({ group }: { group: GroupDetail }) {
         {t.groups.settings}
       </h2>
       <form
-        className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4"
+        className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4"
         onSubmit={(event) => {
           event.preventDefault();
           setError(null);
@@ -376,7 +376,7 @@ function Leave({ group, onLeft }: { group: GroupDetail; onLeft: () => void }) {
   return (
     <section>
       {confirming ? (
-        <div className="space-y-3 rounded-2xl border border-berry/40 bg-surface px-5 py-4">
+        <div className="space-y-3 rounded-tile border border-berry/40 bg-surface px-5 py-4">
           <p>{t.groups.leaveConfirm}</p>
           <div className="flex gap-2">
             <Button variant="danger" loading={leave.isPending} onClick={() => leave.mutate()}>

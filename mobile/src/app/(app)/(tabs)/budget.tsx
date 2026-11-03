@@ -77,7 +77,7 @@ function IncomeLink({ month }: { month: string }) {
       onPress={() => router.push("/income" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Wallet size={20} color={colors.brand} />
@@ -97,7 +97,7 @@ function WrappedLink({ month }: { month: string }) {
       onPress={() => router.push(`/wrapped?month=${month}` as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Sparkles size={20} color={colors.brand} />
@@ -117,7 +117,7 @@ function InflationLink() {
       onPress={() => router.push("/inflation" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <TrendingUp size={20} color={colors.brand} />

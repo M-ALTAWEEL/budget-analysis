@@ -3,7 +3,7 @@ import type { DayCount } from "@/types/admin";
 export function PageTitle({ children, hint }: { children: React.ReactNode; hint?: string }) {
   return (
     <header className="mb-8">
-      <h1 className="font-display text-2xl font-semibold">{children}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{children}</h1>
       {hint && <p className="mt-1 text-[15px] text-muted">{hint}</p>}
     </header>
   );
@@ -11,7 +11,7 @@ export function PageTitle({ children, hint }: { children: React.ReactNode; hint?
 
 export function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="rounded-2xl border border-line bg-surface px-5 py-4">
+    <section className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
       <h2 className="mb-3 font-display text-lg font-semibold">{title}</h2>
       {children}
     </section>
@@ -20,7 +20,7 @@ export function Panel({ title, children }: { title: string; children: React.Reac
 
 export function StatCard({ label, value, note }: { label: string; value: number | string; note?: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface px-5 py-4">
+    <div className="rounded-card border border-line bg-surface shadow-card px-5 py-4">
       <p className="text-sm text-muted">{label}</p>
       <p className="tabular mt-1 font-display text-2xl font-semibold">{value}</p>
       {note && <p className="mt-0.5 text-xs text-muted">{note}</p>}

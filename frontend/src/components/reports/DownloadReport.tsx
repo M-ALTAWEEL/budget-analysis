@@ -40,7 +40,7 @@ export function DownloadReport({ month }: { month: string }) {
             type="button"
             disabled={busy !== null}
             onClick={() => get(period, format)}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-line px-3 py-1.5 text-sm font-semibold hover:bg-ink/5 disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-control border border-line px-3 py-1.5 text-sm font-semibold hover:bg-ink/5 disabled:opacity-50"
           >
             {format === "pdf" ? <FileText className="size-4" aria-hidden /> : <FileSpreadsheet className="size-4" aria-hidden />}
             {busy === `${period}-${format}` ? "…" : format === "pdf" ? t.reports.pdf : t.reports.excel}
@@ -51,7 +51,7 @@ export function DownloadReport({ month }: { month: string }) {
   );
 
   return (
-    <section className="rounded-3xl border border-line bg-surface px-6 py-5">
+    <section className="rounded-card border border-line bg-surface px-6 py-5">
       <h2 className="text-sm font-semibold tracking-wide text-muted uppercase">{t.reports.title}</h2>
       <p className="mt-1 mb-2 text-sm text-muted">{t.reports.intro}</p>
       <div className="divide-y divide-line">

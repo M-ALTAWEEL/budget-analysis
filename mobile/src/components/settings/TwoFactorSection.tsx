@@ -135,7 +135,7 @@ function SetupSheet({ setup, onClose, onEnabled }: { setup: TwoFactorSetup; onCl
       <View style={{ gap: 16 }}>
         <Text size={14} tone="muted">{t.account.setupScan}</Text>
         {/* White behind the QR in dark mode too: scanners need the contrast. */}
-        <View style={{ alignSelf: "center", borderRadius: 12, backgroundColor: "#fff", padding: 8 }}>
+        <View style={{ alignSelf: "center", borderRadius: 14, backgroundColor: "#fff", padding: 8 }}>
           <Image source={{ uri: setup.qr_svg }} style={{ width: 200, height: 200 }} accessibilityLabel={t.account.setupTitle} contentFit="contain" />
         </View>
         <Text size={14} tone="muted">{t.account.setupManual}</Text>
@@ -162,7 +162,7 @@ function CodesSheet({ codes, onClose }: { codes: string[]; onClose: () => void }
     <Sheet title={t.account.codesTitle} onClose={onClose} footer={<Button onPress={onClose}>{t.account.done}</Button>}>
       <View style={{ gap: 16 }}>
         <Text size={14} tone="muted">{t.account.codesText}</Text>
-        <View style={{ flexDirection: "row", flexWrap: "wrap", rowGap: 8, borderRadius: 12, backgroundColor: `${colors.ink}0d`, padding: 16, direction: "ltr" }}>
+        <View style={{ flexDirection: "row", flexWrap: "wrap", rowGap: 8, borderRadius: 14, backgroundColor: `${colors.ink}0d`, padding: 16, direction: "ltr" }}>
           {codes.map((code) => (
             <Text key={code} size={14} selectable style={{ ...mono, width: "50%" }}>{code}</Text>
           ))}

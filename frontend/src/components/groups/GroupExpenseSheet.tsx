@@ -205,7 +205,7 @@ export function GroupExpenseSheet({
                   role="radio"
                   aria-checked={selected}
                   onClick={() => setCategory(c.slug)}
-                  className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
+                  className={`flex items-center gap-2 rounded-control border p-2 text-start text-sm transition-colors ${
                     selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line hover:border-ink/30"
                   }`}
                 >
@@ -238,7 +238,7 @@ export function GroupExpenseSheet({
 
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium">{t.groups.splitHow}</legend>
-          <div role="radiogroup" className="grid grid-cols-4 gap-1 rounded-xl bg-ink/5 p-1">
+          <div role="radiogroup" className="grid grid-cols-4 gap-1 rounded-control bg-ink/5 p-1">
             {METHODS.map((m) => (
               <button
                 key={m}
@@ -258,7 +258,7 @@ export function GroupExpenseSheet({
 
         <fieldset>
           <legend className="mb-1.5 text-sm font-medium">{t.groups.splitBetween}</legend>
-          <ul className="divide-y divide-line rounded-xl border border-line">
+          <ul className="divide-y divide-line rounded-control border border-line">
             {people.map((m) => {
               const on = included.has(m.uuid);
               const at = chosen.findIndex((c) => c.uuid === m.uuid);

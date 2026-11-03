@@ -75,7 +75,7 @@ export default function ImportPage() {
         <ArrowLeft className="size-4 rtl:-scale-x-100" aria-hidden />
         {t.nav.expenses}
       </Link>
-      <h1 className="font-display text-2xl font-semibold">{t.imports.title}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.imports.title}</h1>
       <p className="mt-1 mb-6 max-w-prose text-[15px] text-muted">{t.imports.intro}</p>
 
       <input
@@ -91,7 +91,7 @@ export default function ImportPage() {
       />
 
       {result && (
-        <section className="mb-6 rounded-2xl bg-brand-soft px-5 py-4">
+        <section className="mb-6 rounded-tile bg-brand-soft px-5 py-4">
           <p className="font-semibold text-brand">{t.imports.done(result.expenses, result.income)}</p>
           {(result.already_there > 0 || result.no_budget > 0) && (
             <p className="text-sm text-muted">{t.imports.skipped(result.already_there, result.no_budget)}</p>
@@ -100,7 +100,7 @@ export default function ImportPage() {
       )}
 
       {!preview ? (
-        <div className="rounded-2xl border border-dashed border-line px-6 py-10 text-center">
+        <div className="rounded-tile border border-dashed border-line px-6 py-10 text-center">
           <Button type="button" onClick={() => input.current?.click()} loading={busy}>
             <FileUp className="size-5" aria-hidden />
             {busy ? t.imports.reading : result ? t.imports.another : t.imports.choose}
@@ -109,7 +109,7 @@ export default function ImportPage() {
         </div>
       ) : (
         <>
-          <section className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-line bg-surface px-5 py-4">
+          <section className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
             <div>
               <p className="font-semibold">{t.imports.period(shortDate(preview.first_day), shortDate(preview.last_day))}</p>
               <p className="tabular text-sm text-muted">
@@ -120,7 +120,7 @@ export default function ImportPage() {
               {t.imports.add} ({count})
             </Button>
           </section>
-          <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+          <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
             {preview.rows.map((row, i) => {
               const choice = choices[i];
               const options = row.direction === "out" ? (["expense", "skip"] as const) : (["income", "skip"] as const);

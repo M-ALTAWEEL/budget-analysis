@@ -71,7 +71,7 @@ export function BudgetCycleSection() {
         <h2 id="fresh-start" className="mb-3 font-display text-lg font-semibold">
           {t.settings.freshTitle}
         </h2>
-        <div className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+        <div className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
           {user.fresh_start_on ? (
             <>
               <p className="text-[15px]">{t.settings.freshOn(dayLabel(user.fresh_start_on))}</p>

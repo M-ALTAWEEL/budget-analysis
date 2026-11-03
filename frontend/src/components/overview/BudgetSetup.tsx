@@ -75,7 +75,7 @@ export function BudgetSetup({ month }: { month: string }) {
         {t.setup.intro}
       </p>
       {previous && (
-        <div className="mt-6 rounded-2xl border border-line bg-surface p-5">
+        <div className="mt-6 rounded-card border border-line bg-surface shadow-card p-5">
           <p className="font-semibold">{t.setup.sameAsLast(monthName(shiftMonth(month, -1)))}</p>
           <p className="mt-1 text-sm text-muted">
             {t.setup.sameAsLastDetail(money(previous.total_amount, previous.currency), previousLimits.length)}

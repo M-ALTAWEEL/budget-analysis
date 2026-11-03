@@ -37,7 +37,7 @@ export function AlertList({ alerts, currency }: { alerts: Alert[]; currency: Cur
             <View
               key={`${alert.kind}-${"category" in alert ? alert.category.uuid : ""}`}
               style={{
-                flexDirection: "row", alignItems: "flex-start", gap: 12, borderRadius: 12,
+                flexDirection: "row", alignItems: "flex-start", gap: 12, borderRadius: 14,
                 paddingHorizontal: 16, paddingVertical: 12,
                 backgroundColor: critical ? colors.berrySoft : colors.marigoldSoft,
               }}>

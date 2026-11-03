@@ -159,7 +159,7 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
                   accessibilityState={{ checked: selected }}
                   onPress={() => setCategory(c.slug)}
                   style={{
-                    width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, padding: 8,
+                    width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 14, padding: 8,
                     borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
                     backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>
@@ -181,7 +181,7 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
 
         <View>
           <Text size={14} weight="medium" style={{ marginBottom: 6 }}>{t.groups.splitHow}</Text>
-          <View accessibilityRole="radiogroup" style={{ flexDirection: "row", gap: 4, borderRadius: 12, backgroundColor: `${colors.ink}0d`, padding: 4 }}>
+          <View accessibilityRole="radiogroup" style={{ flexDirection: "row", gap: 4, borderRadius: 14, backgroundColor: `${colors.ink}0d`, padding: 4 }}>
             {METHODS.map((m) => {
               const selected = method === m;
               return (
@@ -200,7 +200,7 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
 
         <View>
           <Text size={14} weight="medium" style={{ marginBottom: 6 }}>{t.groups.splitBetween}</Text>
-          <View style={{ borderRadius: 12, borderWidth: 1, borderColor: colors.line, overflow: "hidden" }}>
+          <View style={{ borderRadius: 14, borderWidth: 1, borderColor: colors.line, overflow: "hidden" }}>
             {people.map((m, index) => {
               const on = included.has(m.uuid);
               const at = chosen.findIndex((c) => c.uuid === m.uuid);

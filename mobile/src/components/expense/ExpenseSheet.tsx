@@ -134,7 +134,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
       }>
       <View style={{ gap: 16 }}>
         {expense?.source === "group" && (
-          <Text size={14} style={{ borderRadius: 12, backgroundColor: colors.brandSoft, paddingHorizontal: 14, paddingVertical: 10, overflow: "hidden" }}>
+          <Text size={14} style={{ borderRadius: 14, backgroundColor: colors.brandSoft, paddingHorizontal: 14, paddingVertical: 10, overflow: "hidden" }}>
             {t.groups.copyNote}
           </Text>
         )}
@@ -200,7 +200,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
                     accessibilityState={{ checked: selected }}
                     onPress={() => setPickedUuid(category.uuid)}
                     style={{
-                      width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, padding: 8,
+                      width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 14, padding: 8,
                       borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
                       backgroundColor: selected ? colors.brandSoft : colors.surface, margin: selected ? 0 : 0,
                     }}>

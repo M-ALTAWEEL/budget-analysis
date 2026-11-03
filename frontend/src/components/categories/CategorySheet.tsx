@@ -59,7 +59,7 @@ export function CategorySheet({ category, onClose }: { category: Category | null
     >
       <div className="space-y-5">
         {/* Live preview: exactly how it will look in lists */}
-        <div className="flex items-center gap-3 rounded-2xl border border-line px-4 py-3" aria-hidden>
+        <div className="flex items-center gap-3 rounded-tile border border-line px-4 py-3" aria-hidden>
           <CategoryIcon category={{ icon, color }} />
           <span className="truncate font-semibold">{name.trim() || t.categories.namePlaceholder}</span>
         </div>
