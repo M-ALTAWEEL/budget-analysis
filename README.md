@@ -1,12 +1,12 @@
-# Budget Analysis
+# ibudgi
 
 **An expense tracker for students that knows where the allowance is going, and whether it will last the month.**
 
 [![CI](https://github.com/M-ALTAWEEL/budget-analysis/actions/workflows/ci.yml/badge.svg)](https://github.com/M-ALTAWEEL/budget-analysis/actions/workflows/ci.yml)
 
-![Budget Analysis landing page](docs/screenshots/landing.png)
+![ibudgi landing page](docs/screenshots/landing.png)
 
-Students get an allowance at the start of the month and find out at the end whether it was enough. Budget Analysis shows what is left at any moment, picks the category of each expense as it is typed, warns before a category runs out, and forecasts where the month is heading. It works in English, Arabic (right to left) and Turkish.
+Students get an allowance at the start of the month and find out at the end whether it was enough. ibudgi shows what is left at any moment, picks the category of each expense as it is typed, warns before a category runs out, and forecasts where the month is heading. It works in English, Arabic (right to left) and Turkish.
 
 | Overview | Adding an expense | Arabic, dark |
 |---|---|---|

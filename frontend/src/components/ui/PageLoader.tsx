@@ -1,15 +1,10 @@
-"use client";
+import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 
-import { LoaderCircle } from "lucide-react";
-
-import { useI18n } from "@/i18n/I18nProvider";
-
-export function PageLoader() {
-  const { t } = useI18n();
+/** A page or section that is still loading: the ibudgi "fill up" loader. */
+export function PageLoader({ size = 48 }: { size?: number }) {
   return (
-    <div className="flex min-h-[50vh] items-center justify-center text-muted" role="status">
-      <LoaderCircle className="size-6 animate-spin" aria-hidden />
-      <span className="sr-only">{t.common.loading}</span>
+    <div className="flex min-h-[50vh] items-center justify-center">
+      <IbudgiLoader size={size} />
     </div>
   );
 }

@@ -1,8 +1,8 @@
 # Business Logic
 
-**Budget Analysis** · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
+**ibudgi** (formerly Budget Analysis) · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
 
-This document states the business rules of Budget Analysis: what the product calculates,
+This document states the business rules of ibudgi: what the product calculates,
 what it allows, what it refuses, and why. It is the reference for product decisions, tests
 and support. Where a rule is enforced, the module is named so it can be checked in code.
 
@@ -34,7 +34,7 @@ Related documents: [`SAD.docx`](SAD.docx) (architecture), [`design/accounts.md`]
 
 ## 1. Product scope
 
-Budget Analysis helps students and young people living away from home see **how much of
+ibudgi helps students and young people living away from home see **how much of
 their allowance is left, whether it will last the month, and where it goes**, and share
 costs with the people they live with.
 
@@ -334,13 +334,23 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 3. Forecast = spent so far + (average everyday spending × days left).
 4. Days are counted from the budget month's start day, not from the 1st.
 
-### 8.4 Comparison with last month
-1. Compares the **same number of days** of both months (days 1–18 against days 1–18), never
-   a partial month against a whole one.
-2. Shown only if last month has a budget in the **same currency** and at least one day of
-   this month has passed. A fresh start hides it.
-3. Changes within **±5%** are shown as "about the same". Spending less is the positive
-   direction.
+### 8.4 Your year of spending (comparison with last month)
+The Overview section "Your year of spending" (`lib/skyline.ts`, shared by the website and the
+app) starts with **one line** comparing this month with last month, then shows the year:
+1. The line compares the **same number of days** of both months (days 1–18 against days
+   1–18), never a partial month against a whole one. Changes within **±5%** read "about the
+   same"; spending less is the positive direction. Without a budget last month, or with one in
+   another currency, the line says why there is nothing to compare.
+2. The chart shows **every day of the last 12 budget months** (up to today), coloured, and in
+   3D raised, by what was spent that day: four levels split by the day's share of a big day
+   (the 95th percentile, so one huge purchase doesn't flatten the rest). Colours go from
+   healthy to caution to overspent (pine, marigold, berry). Months without a budget, or
+   budgeted in another currency than this month, are left empty.
+3. Under it: spent in 12 months, the biggest day, the longest run of days without spending,
+   and the run without spending that reaches today. A month without a budget ends a run.
+4. The website draws it on a canvas (`components/ui/ContributionSkyline.tsx`, adapted from
+   21st.dev's Contribution Skyline) with a camera swing between the flat map and the skyline;
+   the app draws the same scene with SVG and fades between the two views.
 
 ### 8.5 Tips
 **Rules** (`app/domain/budget/tips.py`):
@@ -705,6 +715,21 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    Android when it is installed (App Links), and the website otherwise; opened while signed
    out, the app asks for sign-in first, then shows the invitation.
 4. The admin dashboard is **website only** (section 17).
+5. **Brand, launch and loading.** The product is called **ibudgi** everywhere people see it
+   (both apps, emails, SMS, push, the 2FA issuer); the app's bundle identifier, Android
+   package and slug keep the old name. Brand colours and the logo's shapes are one shared
+   file (`lib/brand.ts`); the app's own theme (pine, marigold, berry) is unchanged.
+   - **Launch** (app: `components/brand/Preloader.tsx`; website: `components/brand/preloaderScript.ts`):
+     the bars rise, the coin drops, the name appears; if the app is not ready at 1.75 s the
+     bars wave until it is; then the tall bar stretches over the screen in white, and the white
+     fades out as the page fades in. The app shows it once per cold start (the native
+     splash is plain indigo, hidden on the preloader's first frame); the website only on the
+     first visit (`localStorage` flag `ib-preloaded`), never longer than 3.5 s, and the page
+     is in the HTML underneath. With reduced motion: the app shows the still logo and fades;
+     the website skips it.
+   - **Loading:** every loading state uses the "fill up" loader (`IbudgiLoader`): 48 by
+     default, 72 for a whole page, 24 inside buttons. With reduced motion it is the still
+     logo, gently pulsing.
 
 ## 16. Invariants checked by tests
 

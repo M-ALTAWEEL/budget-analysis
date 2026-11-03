@@ -18,7 +18,7 @@ export function BudgetWidget({ snapshot }: { snapshot: WidgetSnapshot | null }) 
       <FlexWidget
         clickAction="OPEN_APP"
         style={{ height: "match_parent", width: "match_parent", backgroundColor: PAPER, borderRadius: 20, padding: 16, justifyContent: "center", alignItems: "center" }}>
-        <TextWidget text="Budget Analysis" style={{ fontSize: 16, color: PINE, fontWeight: "bold" }} />
+        <TextWidget text="ibudgi" style={{ fontSize: 16, color: PINE, fontWeight: "bold" }} />
         <TextWidget text={snapshot?.empty ?? "Open the app"} style={{ fontSize: 13, color: MUTED, marginTop: 4 }} />
       </FlexWidget>
     );

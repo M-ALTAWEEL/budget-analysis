@@ -51,7 +51,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     if (status === "anonymous") router.replace("/login");
   }, [status, router]);
 
-  if (status !== "authenticated") return <PageLoader />;
+  if (status !== "authenticated") return <PageLoader size={72} />;
 
   return (
     <MonthProvider>

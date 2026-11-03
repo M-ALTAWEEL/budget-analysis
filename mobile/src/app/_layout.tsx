@@ -8,6 +8,7 @@ import { View } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
 import { AuthProvider, useAuth } from "@/components/auth/AuthProvider";
+import { Preloader } from "@/components/brand/Preloader";
 import { setRestoredAtLaunch } from "@/components/security/AppLock";
 import { takeLocalePickedWhileSignedOut } from "@/components/settings/useChangeLocale";
 import { FONT_FILES } from "@/components/ui/fonts";
@@ -37,7 +38,7 @@ function AccountLocale() {
   return null;
 }
 
-/** Signed in → the app; signed out → the sign-in screen. The splash stays until we know. */
+/** Signed in → the app; signed out → the sign-in screen, once fonts and the account are known. */
 function Routes({ fontsReady }: { fontsReady: boolean }) {
   const { status } = useAuth();
   const { dir } = useI18n();
@@ -48,23 +49,26 @@ function Routes({ fontsReady }: { fontsReady: boolean }) {
   }
   const { colors, dark } = useTheme();
   const ready = fontsReady && status !== "loading";
-  useEffect(() => {
-    if (ready) void SplashScreen.hideAsync();
-  }, [ready]);
-  if (!ready) return null;
   return (
     // direction: rows, paddings and icons follow the language (Arabic: right to left).
     <View style={{ flex: 1, direction: dir, backgroundColor: colors.paper }}>
-      <StatusBar style={dark ? "light" : "dark"} />
-      <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
-        <Stack.Protected guard={status === "authenticated"}>
-          <Stack.Screen name="(app)" />
-        </Stack.Protected>
-        <Stack.Protected guard={status === "anonymous"}>
-          <Stack.Screen name="sign-in" />
-        </Stack.Protected>
-      </Stack>
-      <Toaster />
+      {/* The launch animation hides the native splash and stays until we know. */}
+      <Preloader ready={ready}>
+        {ready && (
+          <>
+            <StatusBar style={dark ? "light" : "dark"} />
+            <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.paper } }}>
+              <Stack.Protected guard={status === "authenticated"}>
+                <Stack.Screen name="(app)" />
+              </Stack.Protected>
+              <Stack.Protected guard={status === "anonymous"}>
+                <Stack.Screen name="sign-in" />
+              </Stack.Protected>
+            </Stack>
+            <Toaster />
+          </>
+        )}
+      </Preloader>
     </View>
   );
 }

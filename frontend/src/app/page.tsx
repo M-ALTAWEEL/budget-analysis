@@ -7,7 +7,7 @@ import { useAuth } from "@/components/auth/AuthProvider";
 import { Landing } from "@/components/landing/Landing";
 import { PageLoader } from "@/components/ui/PageLoader";
 
-// Visitors see what Budget Analysis is; signed-in students go straight to their overview.
+// Visitors see what ibudgi is; signed-in students go straight to their overview.
 export default function Home() {
   const { status } = useAuth();
   const router = useRouter();
@@ -16,5 +16,5 @@ export default function Home() {
     if (status === "authenticated") router.replace("/overview");
   }, [status, router]);
 
-  return status === "anonymous" ? <Landing /> : <PageLoader />;
+  return status === "anonymous" ? <Landing /> : <PageLoader size={72} />;
 }

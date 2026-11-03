@@ -173,7 +173,7 @@ function CodesSheet({ codes, onClose }: { codes: string[]; onClose: () => void }
             {copied ? t.account.copied : t.account.copy}
           </Button>
           <Button variant="secondary" icon={<Share2 size={16} color={colors.ink} />}
-            onPress={() => void Share.share({ message: `Budget Analysis backup codes\n\n${text}\n` })}>
+            onPress={() => void Share.share({ message: `ibudgi backup codes\n\n${text}\n` })}>
             {t.account.download}
           </Button>
         </View>

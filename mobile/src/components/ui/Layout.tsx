@@ -1,7 +1,6 @@
 /** Page building blocks: the screen, sections, cards and lists, like the website's. */
 import { Children, Fragment, isValidElement, type ReactNode } from "react";
 import {
-  ActivityIndicator,
   Pressable,
   RefreshControl,
   ScrollView,
@@ -11,6 +10,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 import { VerifyEmailBanner } from "@/components/auth/VerifyEmailBanner";
+import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
@@ -152,11 +152,11 @@ export function Empty({ title, text, children }: { title?: string; text: string;
   );
 }
 
-export function PageLoader() {
-  const colors = useColors();
+/** A screen or section that is still loading: the ibudgi "fill up" loader. */
+export function PageLoader({ size = 48 }: { size?: number }) {
   return (
     <View style={{ paddingVertical: 60, alignItems: "center" }}>
-      <ActivityIndicator color={colors.pine} />
+      <IbudgiLoader size={size} />
     </View>
   );
 }

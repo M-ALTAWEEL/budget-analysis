@@ -33,11 +33,11 @@ PAGE = 30
 SUPPORT = "Support"
 
 _ANSWER = {
-    "en": ("Budget Analysis support answered you", "We answered your message “{subject}”:",
+    "en": ("ibudgi support answered you", "We answered your message “{subject}”:",
            "Open the app or the website to reply."),
-    "ar": ("ردّ عليك دعم Budget Analysis", "رددنا على رسالتك «{subject}»:",
+    "ar": ("ردّ عليك دعم ibudgi", "رددنا على رسالتك «{subject}»:",
            "افتح التطبيق أو الموقع للرد."),
-    "tr": ("Budget Analysis destek ekibi yanıtladı", "“{subject}” mesajını yanıtladık:",
+    "tr": ("ibudgi destek ekibi yanıtladı", "“{subject}” mesajını yanıtladık:",
            "Yanıtlamak için uygulamayı ya da web sitesini aç."),
 }  # fmt: skip
 _PUSH = {"en": "Support answered you", "ar": "ردّ عليك الدعم", "tr": "Destek yanıtladı"}
