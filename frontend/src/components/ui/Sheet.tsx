@@ -39,7 +39,7 @@ export function Sheet({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center">
       <motion.div
-        className="absolute inset-0 bg-black/45"
+        className="absolute inset-0 bg-black/45 backdrop-blur-[2px]"
         onClick={onClose}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -51,7 +51,7 @@ export function Sheet({
         aria-modal="true"
         aria-labelledby={titleId}
         onSubmit={onSubmit}
-        className="relative max-h-[92vh] w-full overflow-y-auto rounded-t-3xl bg-surface p-6 shadow-2xl sm:max-w-lg sm:rounded-3xl"
+        className="relative max-h-[92vh] w-full overflow-y-auto rounded-t-card bg-surface p-6 shadow-float sm:max-w-lg sm:rounded-card"
         initial={{ y: 40, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: 40, opacity: 0 }}
@@ -64,7 +64,7 @@ export function Sheet({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg p-1.5 text-muted hover:bg-ink/5"
+            className="grid size-9 place-items-center rounded-control text-muted hover:bg-sunken hover:text-ink"
             aria-label={t.common.close}
           >
             <X className="size-5" />

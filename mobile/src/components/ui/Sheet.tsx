@@ -5,7 +5,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useColors } from "@/theme/ThemeProvider";
+import { useTheme } from "@/theme/ThemeProvider";
+import { RADIUS, elevation } from "@/theme/tokens";
 
 /**
  * The website's Sheet: a form that slides up from the bottom. The backdrop and the
@@ -16,7 +17,7 @@ export function Sheet({
 }: {
   title: string; onClose: () => void; children: ReactNode; footer?: ReactNode;
 }) {
-  const colors = useColors();
+  const { colors, dark } = useTheme();
   const { t, dir } = useI18n();
   const insets = useSafeAreaInsets();
   return (
@@ -27,12 +28,12 @@ export function Sheet({
           accessibilityViewIsModal
           style={{
             direction: dir, maxHeight: "92%", backgroundColor: colors.surface,
-            borderTopLeftRadius: 24, borderTopRightRadius: 24, paddingTop: 20,
-            shadowColor: "#000", shadowOpacity: 0.25, shadowRadius: 24, elevation: 24,
+            borderTopLeftRadius: RADIUS.card, borderTopRightRadius: RADIUS.card, paddingTop: 20,
+            boxShadow: elevation(dark).float,
           }}>
           <View style={{ marginBottom: 16, paddingHorizontal: 24, flexDirection: "row", alignItems: "center", justifyContent: "space-between" }}>
             <Text display weight="semibold" size={20} accessibilityRole="header" style={{ flex: 1 }}>{title}</Text>
-            <Pressable onPress={onClose} hitSlop={10} accessibilityRole="button" accessibilityLabel={t.common.close} style={{ padding: 6, borderRadius: 8 }}>
+            <Pressable onPress={onClose} hitSlop={10} accessibilityRole="button" accessibilityLabel={t.common.close} style={{ padding: 8, borderRadius: RADIUS.control }}>
               <X size={20} color={colors.muted} />
             </Pressable>
           </View>

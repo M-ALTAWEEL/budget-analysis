@@ -14,7 +14,8 @@ import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 import { Button } from "@/components/ui/Button";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
-import { useColors } from "@/theme/ThemeProvider";
+import { useColors, useTheme } from "@/theme/ThemeProvider";
+import { RADIUS, elevation } from "@/theme/tokens";
 
 /** A page: safe from the notch, scrolls, pulls to refresh. */
 export function Screen({
@@ -77,12 +78,13 @@ export function Section({
   );
 }
 
+/** A white card: hairline border, soft shadow, rounded-card corners (the website's Card). */
 export function Card({ children, style }: { children: ReactNode; style?: ViewStyle }) {
-  const colors = useColors();
+  const { colors, dark } = useTheme();
   return (
     <View
       style={[
-        { borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 18, gap: 12 },
+        { borderRadius: RADIUS.card, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 20, gap: 14, boxShadow: elevation(dark).card },
         style,
       ]}>
       {children}
@@ -97,7 +99,7 @@ export function List({ children, style }: { children: ReactNode; style?: ViewSty
   return (
     <View
       style={[
-        { borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" },
+        { borderRadius: RADIUS.tile, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" },
         style,
       ]}>
       {rows.map((row, index) => (
@@ -138,7 +140,7 @@ export function Row({
 export function Empty({ title, text, children }: { title?: string; text: string; children?: ReactNode }) {
   const colors = useColors();
   return (
-    <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 22, gap: 6 }}>
+    <View style={{ borderRadius: RADIUS.tile, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 22, gap: 6 }}>
       {title && (
         <Text display weight="semibold" size={19}>
           {title}
@@ -165,7 +167,7 @@ export function LoadError({ message, onRetry }: { message: string; onRetry: () =
   const colors = useColors();
   const { t } = useI18n();
   return (
-    <View accessibilityRole="alert" style={{ borderRadius: 16, borderWidth: 1, borderColor: `${colors.berry}4d`, backgroundColor: colors.berrySoft, padding: 18, gap: 14 }}>
+    <View accessibilityRole="alert" style={{ borderRadius: RADIUS.tile, borderWidth: 1, borderColor: `${colors.berry}4d`, backgroundColor: colors.berrySoft, padding: 18, gap: 14 }}>
       <Text size={15} tone="berry">
         {message}
       </Text>
@@ -198,7 +200,7 @@ export function Chip({
         flexDirection: "row",
         alignItems: "center",
         gap: 8,
-        borderRadius: 12,
+        borderRadius: RADIUS.control,
         borderWidth: selected ? 2 : 1,
         borderColor: selected ? colors.brand : colors.line,
         backgroundColor: selected ? colors.brandSoft : colors.surface,
