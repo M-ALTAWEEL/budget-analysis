@@ -3,7 +3,7 @@
 Guidance for Claude (and any AI assistant) working in this repository.
 
 ## The project
-**Budget Analysis**: personal and group budgeting for students, in English, Arabic (right to
+**ibudgi** (formerly Budget Analysis): personal and group budgeting for students, in English, Arabic (right to
 left) and Turkish.
 
 | Part | Folder | Stack | Hosting |

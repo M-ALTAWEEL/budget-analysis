@@ -35,7 +35,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
     if (status === "anonymous") router.replace("/login");
   }, [status, router]);
 
-  if (status !== "authenticated" || me.isPending) return <PageLoader />;
+  if (status !== "authenticated" || me.isPending) return <PageLoader size={72} />;
   if (me.isError && isNotFound(me.error)) return <NotFoundPage />;
   if (me.isError && isTwoFactorRequired(me.error)) return <TwoFactorFirst />;
   if (me.isError) {

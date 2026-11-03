@@ -37,7 +37,7 @@ class _Copy:
 _COPY: dict[str, dict[Purpose, _Copy]] = {
     "en": {
         "verify_email": _Copy(
-            subject="Confirm your email for Budget Analysis",
+            subject="Confirm your email for ibudgi",
             hello="Hi {name},",
             body="Please confirm that this is your email address.",
             button="Confirm my email",
@@ -45,7 +45,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="If you didn't create an account, you can ignore this email.",
         ),
         "reset_password": _Copy(
-            subject="Reset your Budget Analysis password",
+            subject="Reset your ibudgi password",
             hello="Hi {name},",
             body="Someone asked to reset the password of your account. "
             "Choose a new password with the link below.",
@@ -54,35 +54,35 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="If this wasn't you, ignore this email: your password stays the same.",
         ),
         "change_email": _Copy(
-            subject="Confirm your new email for Budget Analysis",
+            subject="Confirm your new email for ibudgi",
             hello="Hi {name},",
-            body="You asked to use this address for your Budget Analysis account.",
+            body="You asked to use this address for your ibudgi account.",
             button="Use this email",
             expires="This link works for 1 hour, once.",
             not_you="If you didn't ask for this, ignore this email: nothing changes.",
         ),
         "email_changed": _Copy(
-            subject="Your Budget Analysis email is changing",
+            subject="Your ibudgi email is changing",
             hello="Hi {name},",
-            body="Someone asked to move your Budget Analysis account to another email address. "
+            body="Someone asked to move your ibudgi account to another email address. "
             "It changes only when the new address is confirmed.",
             button="",
             expires="",
             not_you="If this wasn't you, sign in and change your password right away.",
         ),
         "account_deleted": _Copy(
-            subject="Your Budget Analysis account was deleted",
+            subject="Your ibudgi account was deleted",
             hello="Hi {name},",
             body="Your account and all its data were deleted, as you asked. "
-            "Thank you for using Budget Analysis.",
+            "Thank you for using ibudgi.",
             button="",
             expires="",
             not_you="If you didn't do this, reply to this email.",
         ),
         "password_changed": _Copy(
-            subject="Your Budget Analysis password was changed",
+            subject="Your ibudgi password was changed",
             hello="Hi {name},",
-            body="The password of your Budget Analysis account was just changed, "
+            body="The password of your ibudgi account was just changed, "
             "and the other devices were signed out.",
             button="",
             expires="",
@@ -90,7 +90,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             "account back.",
         ),
         "two_factor_on": _Copy(
-            subject="Two-step sign-in is on for Budget Analysis",
+            subject="Two-step sign-in is on for ibudgi",
             hello="Hi {name},",
             body="Two-step sign-in was turned on: signing in now also needs a code from "
             "your authenticator app.",
@@ -99,7 +99,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="If this wasn't you, use “Forgot password” right away.",
         ),
         "two_factor_off": _Copy(
-            subject="Two-step sign-in was turned off for Budget Analysis",
+            subject="Two-step sign-in was turned off for ibudgi",
             hello="Hi {name},",
             body="Two-step sign-in was turned off: signing in needs only your password now.",
             button="",
@@ -109,7 +109,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
     },
     "ar": {
         "verify_email": _Copy(
-            subject="أكّد بريدك الإلكتروني في Budget Analysis",
+            subject="أكّد بريدك الإلكتروني في ibudgi",
             hello="مرحباً {name}،",
             body="يرجى تأكيد أن هذا البريد الإلكتروني بريدك.",
             button="تأكيد بريدي",
@@ -117,7 +117,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="إذا لم تُنشئ حساباً، يمكنك تجاهل هذه الرسالة.",
         ),
         "reset_password": _Copy(
-            subject="إعادة تعيين كلمة السر في Budget Analysis",
+            subject="إعادة تعيين كلمة السر في ibudgi",
             hello="مرحباً {name}،",
             body="طلب أحدهم إعادة تعيين كلمة السر لحسابك. اختر كلمة سر جديدة من الرابط أدناه.",
             button="اختيار كلمة سر جديدة",
@@ -125,41 +125,40 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="إذا لم تكن أنت، تجاهل هذه الرسالة: كلمة السر لن تتغير.",
         ),
         "change_email": _Copy(
-            subject="أكّد بريدك الجديد في Budget Analysis",
+            subject="أكّد بريدك الجديد في ibudgi",
             hello="مرحباً {name}،",
-            body="طلبت استخدام هذا العنوان لحسابك في Budget Analysis.",
+            body="طلبت استخدام هذا العنوان لحسابك في ibudgi.",
             button="استخدام هذا البريد",
             expires="يعمل هذا الرابط مرة واحدة لمدة ساعة.",
             not_you="إذا لم تطلب ذلك، تجاهل هذه الرسالة: لن يتغير شيء.",
         ),
         "email_changed": _Copy(
-            subject="بريد حسابك في Budget Analysis سيتغير",
+            subject="بريد حسابك في ibudgi سيتغير",
             hello="مرحباً {name}،",
-            body="طلب أحدهم نقل حسابك في Budget Analysis إلى بريد آخر. "
+            body="طلب أحدهم نقل حسابك في ibudgi إلى بريد آخر. "
             "لن يتغير شيء إلا بعد تأكيد العنوان الجديد.",
             button="",
             expires="",
             not_you="إذا لم تكن أنت، سجّل الدخول وغيّر كلمة السر فوراً.",
         ),
         "account_deleted": _Copy(
-            subject="تم حذف حسابك في Budget Analysis",
+            subject="تم حذف حسابك في ibudgi",
             hello="مرحباً {name}،",
-            body="تم حذف حسابك وكل بياناته كما طلبت. شكراً لاستخدامك Budget Analysis.",
+            body="تم حذف حسابك وكل بياناته كما طلبت. شكراً لاستخدامك ibudgi.",
             button="",
             expires="",
             not_you="إذا لم تقم بذلك، ردّ على هذه الرسالة.",
         ),
         "password_changed": _Copy(
-            subject="تم تغيير كلمة سر حسابك في Budget Analysis",
+            subject="تم تغيير كلمة سر حسابك في ibudgi",
             hello="مرحباً {name}،",
-            body="تم الآن تغيير كلمة سر حسابك في Budget Analysis، وتم تسجيل الخروج من "
-            "الأجهزة الأخرى.",
+            body="تم الآن تغيير كلمة سر حسابك في ibudgi، وتم تسجيل الخروج من الأجهزة الأخرى.",
             button="",
             expires="",
             not_you="إذا لم تكن أنت، استخدم «نسيت كلمة السر» فوراً لاستعادة حسابك.",
         ),
         "two_factor_on": _Copy(
-            subject="تم تفعيل التحقق بخطوتين في Budget Analysis",
+            subject="تم تفعيل التحقق بخطوتين في ibudgi",
             hello="مرحباً {name}،",
             body="تم تفعيل التحقق بخطوتين: تسجيل الدخول يحتاج الآن أيضاً رمزاً من تطبيق المصادقة.",
             button="",
@@ -167,7 +166,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="إذا لم تكن أنت، استخدم «نسيت كلمة السر» فوراً.",
         ),
         "two_factor_off": _Copy(
-            subject="تم إيقاف التحقق بخطوتين في Budget Analysis",
+            subject="تم إيقاف التحقق بخطوتين في ibudgi",
             hello="مرحباً {name}،",
             body="تم إيقاف التحقق بخطوتين: تسجيل الدخول يحتاج كلمة السر فقط الآن.",
             button="",
@@ -177,7 +176,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
     },
     "tr": {
         "verify_email": _Copy(
-            subject="Budget Analysis için e-postanı doğrula",
+            subject="ibudgi için e-postanı doğrula",
             hello="Merhaba {name},",
             body="Lütfen bu e-posta adresinin sana ait olduğunu doğrula.",
             button="E-postamı doğrula",
@@ -185,7 +184,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="Hesap oluşturmadıysan bu e-postayı yok sayabilirsin.",
         ),
         "reset_password": _Copy(
-            subject="Budget Analysis şifreni sıfırla",
+            subject="ibudgi şifreni sıfırla",
             hello="Merhaba {name},",
             body="Hesabının şifresini sıfırlama isteği aldık. "
             "Aşağıdaki bağlantıdan yeni bir şifre seç.",
@@ -194,42 +193,42 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="Bu sen değilsen bu e-postayı yok say: şifren değişmez.",
         ),
         "change_email": _Copy(
-            subject="Budget Analysis için yeni e-postanı doğrula",
+            subject="ibudgi için yeni e-postanı doğrula",
             hello="Merhaba {name},",
-            body="Budget Analysis hesabın için bu adresi kullanmak istedin.",
+            body="ibudgi hesabın için bu adresi kullanmak istedin.",
             button="Bu e-postayı kullan",
             expires="Bu bağlantı 1 saat boyunca ve yalnızca bir kez geçerlidir.",
             not_you="Bunu sen istemediysen bu e-postayı yok say: hiçbir şey değişmez.",
         ),
         "email_changed": _Copy(
-            subject="Budget Analysis e-postan değişiyor",
+            subject="ibudgi e-postan değişiyor",
             hello="Merhaba {name},",
-            body="Budget Analysis hesabını başka bir e-posta adresine taşıma isteği aldık. "
+            body="ibudgi hesabını başka bir e-posta adresine taşıma isteği aldık. "
             "Yeni adres doğrulanmadan hiçbir şey değişmez.",
             button="",
             expires="",
             not_you="Bu sen değilsen hemen giriş yapıp şifreni değiştir.",
         ),
         "account_deleted": _Copy(
-            subject="Budget Analysis hesabın silindi",
+            subject="ibudgi hesabın silindi",
             hello="Merhaba {name},",
             body="İsteğin üzerine hesabın ve tüm verilerin silindi. "
-            "Budget Analysis'i kullandığın için teşekkürler.",
+            "ibudgi'yi kullandığın için teşekkürler.",
             button="",
             expires="",
             not_you="Bunu sen yapmadıysan bu e-postayı yanıtla.",
         ),
         "password_changed": _Copy(
-            subject="Budget Analysis şifren değiştirildi",
+            subject="ibudgi şifren değiştirildi",
             hello="Merhaba {name},",
-            body="Budget Analysis hesabının şifresi az önce değiştirildi ve diğer "
+            body="ibudgi hesabının şifresi az önce değiştirildi ve diğer "
             "cihazlardan çıkış yapıldı.",
             button="",
             expires="",
             not_you="Bu sen değilsen, hesabını geri almak için hemen “Şifremi unuttum”u kullan.",
         ),
         "two_factor_on": _Copy(
-            subject="Budget Analysis için iki adımlı giriş açıldı",
+            subject="ibudgi için iki adımlı giriş açıldı",
             hello="Merhaba {name},",
             body="İki adımlı giriş açıldı: giriş yaparken artık doğrulama uygulamandan "
             "bir kod da gerekiyor.",
@@ -238,7 +237,7 @@ _COPY: dict[str, dict[Purpose, _Copy]] = {
             not_you="Bu sen değilsen, hemen “Şifremi unuttum”u kullan.",
         ),
         "two_factor_off": _Copy(
-            subject="Budget Analysis için iki adımlı giriş kapatıldı",
+            subject="ibudgi için iki adımlı giriş kapatıldı",
             hello="Merhaba {name},",
             body="İki adımlı giriş kapatıldı: giriş için artık sadece şifren gerekiyor.",
             button="",
@@ -257,7 +256,7 @@ def build_email(
     lines = [hello, copy.body]
     if link:
         lines += [f"{copy.button}: {link}", copy.expires]
-    text = "\n\n".join([*lines, copy.not_you, "Budget Analysis"])
+    text = "\n\n".join([*lines, copy.not_you, "ibudgi"])
 
     direction = "rtl" if locale == "ar" else "ltr"
     action = ""
@@ -273,7 +272,7 @@ def build_email(
   <p>{escape(hello)}</p>
   <p>{escape(copy.body)}</p>{action}
   <p style="color:#5b6660;font-size:14px">{escape(copy.not_you)}</p>
-  <p style="color:#5b6660;font-size:14px">Budget Analysis</p>
+  <p style="color:#5b6660;font-size:14px">ibudgi</p>
 </body>
 </html>"""
     return EmailMessage(to=to, subject=copy.subject, text=text, html=html, link=link)

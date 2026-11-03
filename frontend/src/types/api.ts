@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/config";
 
-// Shapes returned by the Budget Analysis API. Money is always a string ("120.50"):
+// Shapes returned by the ibudgi API. Money is always a string ("120.50"):
 // the backend uses exact decimals, and JavaScript numbers are floats.
 
 /** An ISO 4217 code ("TRY"). The list lives on the server, so admins can add currencies:

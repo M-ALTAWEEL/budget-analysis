@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import { ActivityIndicator, Pressable, View, type ViewStyle } from "react-native";
+import { Pressable, View, type ViewStyle } from "react-native";
 
+import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 import { Text } from "@/components/ui/Text";
 import { useColors } from "@/theme/ThemeProvider";
 
@@ -59,7 +60,7 @@ export function Button({
         style,
       ]}>
       {loading ? (
-        <ActivityIndicator color={text === "onPine" ? colors.onPine : colors.pine} />
+        <IbudgiLoader size={24} color={text === "onPine" ? colors.onPine : undefined} />
       ) : (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           {icon}

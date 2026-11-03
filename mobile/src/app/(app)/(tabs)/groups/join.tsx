@@ -34,7 +34,7 @@ function Preview({ token }: { token: string }) {
     },
   });
 
-  if (preview.isPending) return <PageLoader />;
+  if (preview.isPending) return <PageLoader size={72} />;
   if (preview.isError) {
     return isAxiosError(preview.error) && preview.error.response?.status === 404 ? (
       <Invalid />

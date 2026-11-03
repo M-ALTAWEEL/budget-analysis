@@ -27,7 +27,7 @@ export function LegalPage({ documents }: { documents: Record<Locale, LegalDocume
   return (
     <div className="min-h-screen">
       <header className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-5 sm:px-8">
-        <Link href="/" aria-label="Budget Analysis">
+        <Link href="/" aria-label="ibudgi">
           <Logo />
         </Link>
         <div className="flex items-center gap-2">

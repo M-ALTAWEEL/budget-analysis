@@ -453,7 +453,7 @@ export const tr: Messages = {
     goalsSaved: (amount: string) => `Birikim hedeflerine: ${amount}`,
     share: "Paylaş",
     shareText: (month: string, spent: string, budget: string) =>
-      `Budget Analysis ile ${month}: ${budget} bütçenin ${spent} kadarını harcadım.`,
+      `ibudgi ile ${month}: ${budget} bütçenin ${spent} kadarını harcadım.`,
     copied: "Kopyalandı",
     noBudget: "Bu ayın bütçesi yok, rapor da yok.",
     ready: (month: string) => `${month} ayın rakamlarla hazır`,
@@ -871,7 +871,7 @@ export const tr: Messages = {
         "2fa_disabled": "İki adımlı doğrulama kapatıldı",
         backup_codes_created: "Yeni yedek kodlar oluşturuldu",
         backup_code_used: "Bir yedek kod kullanıldı",
-        admin_action: "Budget Analysis destek ekibinin hesabında yaptığı işlem",
+        admin_action: "ibudgi destek ekibinin hesabında yaptığı işlem",
       } as Record<string, string>,
       otherEvent: "Güvenlik değişikliği",
     },
@@ -880,7 +880,7 @@ export const tr: Messages = {
   landing: {
     heroTitle: "Harçlığından ne kaldığını ve ay sonuna yetip yetmeyeceğini bil.",
     heroText:
-      "Harcadığını yaz. Budget Analysis onu doğru kategoriye koyar, bir kategori bitmeden seni uyarır ve ayın nereye gittiğini gösterir.",
+      "Harcadığını yaz. ibudgi onu doğru kategoriye koyar, bir kategori bitmeden seni uyarır ve ayın nereye gittiğini gösterir.",
     heroNote: "Ücretsiz; Türkçe, İngilizce ve Arapça.",
     demoLabel: "Bir öğrencinin ayı birkaç saniyede: harcamalar geldikçe depo boşalır.",
     dayOf: (day, days) => `${days} günün ${day}. günü`,
@@ -913,7 +913,7 @@ export const tr: Messages = {
     f3Text:
       "Türkçe, İngilizce ve Arapça; her birinin kendi sayıları, tarihleri ve çoğulları. Arapça grafikler dahil sağdan sola okunur.",
     endTitle: "Bu ayın harçlığıyla başla. Bir dakikanı alır.",
-    footer: "Budget Analysis, Mouhammed Altaweel'in bir portfolyo projesidir.",
+    footer: "ibudgi, Mouhammed Altaweel'in bir portfolyo projesidir.",
     source: "GitHub'da kaynak kodu",
     privacy: "Gizlilik",
     terms: "Kullanım koşulları",
@@ -922,7 +922,7 @@ export const tr: Messages = {
   assistant: {
     title: "Asistan",
     intro: "Paranı Türkçe, Arapça veya İngilizce sor. Cevaplar kendi harcamalarından hesaplanır.",
-    local: "Budget Analysis'in içinde çalışır. Verilerini hiçbir dış yapay zekâ servisi görmez.",
+    local: "ibudgi'nin içinde çalışır. Verilerini hiçbir dış yapay zekâ servisi görmez.",
     placeholder: "Bir soru yaz…",
     send: "Gönder",
     thinking: "Hesaplanıyor…",
@@ -981,9 +981,9 @@ export const tr: Messages = {
     text: "Uygulamaya her döndüğünde Face ID, parmak izi ya da telefonunun şifresini iste.",
     toggle: "Uygulamayı kilitle",
     unavailable: "Önce telefonunda Face ID, parmak izi ya da bir şifre ayarla.",
-    locked: "Budget Analysis kilitli",
+    locked: "ibudgi kilitli",
     unlock: "Kilidi aç",
-    reason: "Budget Analysis kilidini aç",
+    reason: "ibudgi kilidini aç",
   },
 
   notifications: {
@@ -992,19 +992,19 @@ export const tr: Messages = {
     groupsText: "Biri payın olan bir harcama eklediğinde, sana borcunu ödediğinde ya da seni bir gruba davet ettiğinde.",
     budget: "Bütçe uyarıları",
     budgetText: "Bir kategori limitine yaklaştığında ya da aştığında, bu ayın parası bitmek üzereyken veya yarın tekrarlanan bir ödeme varken.",
-    denied: "Telefonunun ayarlarında Budget Analysis için bildirimler kapalı.",
+    denied: "Telefonunun ayarlarında ibudgi için bildirimler kapalı.",
     openSettings: "Telefon ayarlarını aç",
   },
 
   errors: {
-    network: "Budget Analysis sunucusuna ulaşılamıyor. Bağlantını kontrol edip tekrar dene.",
+    network: "ibudgi sunucusuna ulaşılamıyor. Bağlantını kontrol edip tekrar dene.",
     tooMany: "Çok fazla deneme. Bir dakika bekleyip tekrar dene.",
     generic: "Bir şeyler ters gitti. Tekrar dene.",
     invalid: "Bazı değerler geçersiz. Kontrol edip tekrar dene.",
     invalidLogin: "E-posta veya şifre hatalı.",
     forbidden: "Bunu değiştiremezsin.",
     notFound: "Bulunamadı. Silinmiş olabilir.",
-    server: "Budget Analysis sunucusunda bir sorun oluştu. Birazdan tekrar dene.",
+    server: "ibudgi sunucusunda bir sorun oluştu. Birazdan tekrar dene.",
     emailTaken: "Bu e-posta ile kayıtlı bir hesap zaten var.",
     needBudget: "O aya harcama eklemeden önce bir bütçe belirle.",
   },
