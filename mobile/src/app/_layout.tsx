@@ -53,7 +53,7 @@ function Routes({ fontsReady }: { fontsReady: boolean }) {
     // direction: rows, paddings and icons follow the language (Arabic: right to left).
     <View style={{ flex: 1, direction: dir, backgroundColor: colors.paper }}>
       {/* The launch animation hides the native splash and stays until we know. */}
-      <Preloader ready={ready} background={colors.paper}>
+      <Preloader ready={ready}>
         {ready && (
           <>
             <StatusBar style={dark ? "light" : "dark"} />

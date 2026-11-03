@@ -721,8 +721,8 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    file (`lib/brand.ts`); the app's own theme (pine, marigold, berry) is unchanged.
    - **Launch** (app: `components/brand/Preloader.tsx`; website: `components/brand/preloaderScript.ts`):
      the bars rise, the coin drops, the name appears; if the app is not ready at 1.75 s the
-     bars wave until it is; then the tall bar stretches over the screen in the first screen's
-     background and the page fades in. The app shows it once per cold start (the native
+     bars wave until it is; then the tall bar stretches over the screen in white, and the white
+     fades out as the page fades in. The app shows it once per cold start (the native
      splash is plain indigo, hidden on the preloader's first frame); the website only on the
      first visit (`localStorage` flag `ib-preloaded`), never longer than 3.5 s, and the page
      is in the HTML underneath. With reduced motion: the app shows the still logo and fades;

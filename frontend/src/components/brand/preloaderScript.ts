@@ -10,8 +10,8 @@ import { BRAND, MARK_BAR_RADIUS, MARK_BARS, MARK_COIN, MARK_VIEWBOX, WORDMARK } 
  *   did not render there) and the CSS keyframes raise the bars, drop the coin, show the name.
  * - At 1750 ms it leaves once the page has loaded (window "load"); until then the bars wave.
  *   Leaving: the other pieces fade, a div on the tall bar's frame (getBoundingClientRect)
- *   stretches to the top and bottom, then the sides, in the page's background colour, and
- *   the page fades in underneath.
+ *   stretches in white to the top and bottom, then the sides, and the white fades out as the
+ *   page fades in underneath.
  * - Whatever happens, everything is gone 3.5 s after the script started.
  *
  * The page itself is in the HTML underneath the whole time, for search engines and readers.
@@ -58,17 +58,17 @@ s.className="ib-pre__stretch";
 s.style.cssText="left:"+r.left+"px;top:"+r.top+"px;width:"+r.width+"px;height:"+r.height+"px;border-radius:"+r.width/2+"px";
 el.appendChild(s);tall.style.visibility="hidden";
 void s.offsetWidth;
-s.style.transition="top 420ms "+EASE+",height 420ms "+EASE+",background-color 420ms "+EASE;
+s.style.transition="top 420ms "+EASE+",height 420ms "+EASE;
 s.style.top="0";s.style.height=window.innerHeight+"px";
-s.style.backgroundColor=getComputedStyle(document.body).backgroundColor;
 setTimeout(function(){
 if(done)return;
 s.style.transition="left 420ms "+EASE+",width 420ms "+EASE+",border-radius 420ms "+EASE;
 s.style.left="0";s.style.width=window.innerWidth+"px";s.style.borderRadius="0";
 setTimeout(function(){
 if(done)return;
-d.classList.add("ib-reveal");end();
-setTimeout(function(){d.classList.remove("ib-reveal");},450);
+d.removeAttribute("data-preload");d.classList.add("ib-reveal");
+el.style.transition="opacity 450ms cubic-bezier(0.215,0.61,0.355,1)";el.style.opacity="0";
+setTimeout(function(){end();d.classList.remove("ib-reveal");},450);
 },420);
 },420);
 },200);

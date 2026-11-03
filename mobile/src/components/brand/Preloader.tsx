@@ -5,7 +5,6 @@ import { StyleSheet, View, type LayoutChangeEvent } from "react-native";
 import Animated, {
   cancelAnimation,
   Easing,
-  interpolateColor,
   useAnimatedStyle,
   useReducedMotion,
   useSharedValue,
@@ -51,18 +50,16 @@ type Phase = "intro" | "holding" | "waving" | "settling" | "leaving" | "done";
  * The launch animation ("rise and drop", then "the bar takes over"), on top of the app.
  * It starts on the same plain indigo as the native splash, which it hides on its first
  * frame. The bars rise, the coin drops, the name appears; if the app is still not `ready`
- * the bars wave until it is. Then the tall bar stretches over the whole screen in the first
- * screen's `background`, and the app (the `children`) fades in. Reduce Motion: the static
+ * the bars wave until it is. Then the tall bar stretches over the whole screen in white, and
+ * the white fades out as the app (the `children`) fades in. Reduce Motion: the static
  * logo until ready, then a short fade.
  */
 export function Preloader({
   ready,
-  background,
   onFinish,
   children,
 }: {
   ready: boolean;
-  background: string;
   onFinish?: () => void;
   children: ReactNode;
 }) {
@@ -84,7 +81,6 @@ export function Preloader({
     width: useSharedValue(0),
     height: useSharedValue(0),
     radius: useSharedValue(0),
-    tint: useSharedValue(0),
     shown: useSharedValue(0),
   };
   const cover = useSharedValue(1);
@@ -160,13 +156,12 @@ export function Preloader({
     stretch.shown.set(withDelay(FADE, withTiming(1, { duration: 0 })));
     stretch.top.set(withDelay(FADE, withTiming(0, timing)));
     stretch.height.set(withDelay(FADE, withTiming(height, timing)));
-    stretch.tint.set(withDelay(FADE, withTiming(1, timing)));
     // ...phase B: then both sides, and loses its round ends.
     stretch.left.set(withDelay(FADE + STRETCH, withTiming(0, timing)));
     stretch.width.set(withDelay(FADE + STRETCH, withTiming(width, timing)));
     stretch.radius.set(withDelay(FADE + STRETCH, withTiming(0, timing)));
-    // The screen is now the first screen's background: drop the overlay, fade the app in.
-    cover.set(withDelay(FADE + STRETCH * 2, withTiming(0, { duration: 0 })));
+    // The screen is now white: the overlay fades out as the app fades in.
+    cover.set(withDelay(FADE + STRETCH * 2, withTiming(0, { duration: REVEAL, easing: Easing.out(Easing.cubic) })));
     content.set(
       withDelay(
         FADE + STRETCH * 2,
@@ -227,7 +222,6 @@ export function Preloader({
     width: stretch.width.value,
     height: stretch.height.value,
     borderRadius: stretch.radius.value,
-    backgroundColor: interpolateColor(stretch.tint.value, [0, 1], [BRAND.white, background]),
   }));
 
   const onRootLayout = (event: LayoutChangeEvent) => {
@@ -283,7 +277,7 @@ export function Preloader({
             </Animated.View>
           </View>
         </View>
-        <Animated.View style={[{ position: "absolute" }, stretchStyle]} />
+        <Animated.View style={[{ position: "absolute", backgroundColor: BRAND.white }, stretchStyle]} />
       </Animated.View>
     </View>
   );
