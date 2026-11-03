@@ -103,7 +103,7 @@ function ChangePassword() {
       <Field label={t.account.currentPassword} secureTextEntry autoComplete="current-password" textContentType="password" value={current} onChangeText={setCurrent} />
       <Field label={t.account.newPassword} secureTextEntry autoComplete="new-password" textContentType="newPassword" hint={t.auth.passwordHint} value={next} onChangeText={setNext} />
       <FormError message={error} />
-      {notice && <Text size={14} tone="pine">{notice}</Text>}
+      {notice && <Text size={14} tone="brand">{notice}</Text>}
       <Button variant="secondary" style={{ alignSelf: "flex-start" }} loading={change.isPending} disabled={!current || !next} onPress={submit}>
         {t.account.changePassword}
       </Button>
@@ -179,7 +179,7 @@ function DeviceRow({ session, intl, busy, onSignOut }: { session: DeviceSession;
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text weight="semibold">{name}</Text>
         <Text size={14} tone="muted">
-          {session.current ? <Text size={14} weight="semibold" tone="pine">{t.settings.security.thisDevice}</Text> : null}
+          {session.current ? <Text size={14} weight="semibold" tone="brand">{t.settings.security.thisDevice}</Text> : null}
           {session.current && details.length > 0 ? " · " : null}
           {details.join(" · ")}
         </Text>

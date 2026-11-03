@@ -27,7 +27,7 @@ export function ContactForm() {
         <p className="mt-1 text-muted">{t.support.contactIntro}</p>
       </div>
       {sent ? (
-        <p className="flex items-center gap-2 rounded-xl bg-pine-soft px-4 py-3 font-semibold text-pine">
+        <p className="flex items-center gap-2 rounded-xl bg-brand-soft px-4 py-3 font-semibold text-brand">
           <CheckCircle2 className="size-5" aria-hidden />
           {t.support.contactSent}
         </p>
@@ -58,7 +58,7 @@ export function ContactForm() {
         />
       )}
       <p className="text-sm">
-        <Link href="/login" className="font-semibold text-pine underline-offset-4 hover:underline">
+        <Link href="/login" className="font-semibold text-brand underline-offset-4 hover:underline">
           {t.support.back}
         </Link>
       </p>

@@ -160,8 +160,8 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
                   onPress={() => setCategory(c.slug)}
                   style={{
                     width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, padding: 8,
-                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-                    backgroundColor: selected ? colors.pineSoft : colors.surface,
+                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+                    backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>
                   <CategoryIcon category={c} size="sm" />
                   <Text size={14} weight={selected ? "semibold" : "regular"} numberOfLines={1} style={{ flex: 1 }}>{t.categories.names[c.slug] ?? c.slug}</Text>
@@ -211,8 +211,8 @@ export function GroupExpenseSheet({ group, expense, onClose }: { group: GroupDet
                     accessibilityRole="checkbox"
                     accessibilityState={{ checked: on }}
                     style={{ flex: 1, minWidth: 0, flexDirection: "row", alignItems: "center", gap: 12 }}>
-                    <View style={{ width: 20, height: 20, borderRadius: 5, borderWidth: 2, borderColor: on ? colors.pine : colors.line, backgroundColor: on ? colors.pine : "transparent", alignItems: "center", justifyContent: "center" }}>
-                      {on && <Check size={14} color={colors.onPine} strokeWidth={3} />}
+                    <View style={{ width: 20, height: 20, borderRadius: 5, borderWidth: 2, borderColor: on ? colors.brand : colors.line, backgroundColor: on ? colors.brand : "transparent", alignItems: "center", justifyContent: "center" }}>
+                      {on && <Check size={14} color={colors.onBrand} strokeWidth={3} />}
                     </View>
                     <Text numberOfLines={1} style={{ flex: 1 }}>
                       {m.display_name}

@@ -112,7 +112,7 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
                   aria-checked={selected}
                   onClick={() => setCategoryUuid(category.uuid)}
                   className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
-                    selected ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine" : "border-line hover:border-ink/30"
+                    selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line hover:border-ink/30"
                   }`}
                 >
                   <CategoryIcon category={category} size="sm" />
@@ -148,7 +148,7 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
             role="switch"
             checked={remind}
             onChange={(e) => setRemind(e.target.checked)}
-            className="mt-1 size-5 shrink-0 accent-pine"
+            className="mt-1 size-5 shrink-0 accent-brand"
           />
         </label>
 

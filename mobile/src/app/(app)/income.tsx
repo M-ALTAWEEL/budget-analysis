@@ -52,7 +52,7 @@ export default function IncomeScreen() {
             <Text display weight="semibold" size={24} accessibilityRole="header">{t.income.title}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.income.intro}</Text>
           </View>
-          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setOpen({ kind: "income", income: null })}>
+          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setOpen({ kind: "income", income: null })}>
             {t.income.add}
           </Button>
         </View>
@@ -95,7 +95,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
   const setBudget = useSetBudget(month);
   const negative = Number(data.net) < 0;
   const canUse = Number(data.total) > 0 && (data.budget === null || Number(data.budget) !== Number(data.total));
-  const kindColor = (i: number) => (i === 0 ? colors.pine : KIND_COLORS[(i - 1) % KIND_COLORS.length]);
+  const kindColor = (i: number) => (i === 0 ? colors.brand : KIND_COLORS[(i - 1) % KIND_COLORS.length]);
 
   async function useAsBudget() {
     try {
@@ -107,7 +107,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
   }
 
   const stats = [
-    { label: t.income.total, value: data.total, color: colors.pine },
+    { label: t.income.total, value: data.total, color: colors.ok },
     { label: t.income.spent, value: data.spent, color: colors.ink },
     { label: t.income.net, value: data.net, color: negative ? colors.berry : colors.ink },
   ];
@@ -163,8 +163,8 @@ function IncomeRow({ income, first, monthCurrency, onEdit }: { income: Income; f
         flexDirection: "row", alignItems: "center", gap: 16, paddingHorizontal: 20, paddingVertical: 16,
         borderTopWidth: first ? 0 : 1, borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : "transparent",
       })}>
-      <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.pine}1a` }}>
-        <Wallet size={20} color={colors.pine} />
+      <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+        <Wallet size={20} color={colors.brand} />
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text weight="semibold" numberOfLines={1}>{income.source}</Text>
@@ -172,7 +172,7 @@ function IncomeRow({ income, first, monthCurrency, onEdit }: { income: Income; f
         {other && income.converted === null && <Text size={12} tone="berry">{t.income.noRate}</Text>}
       </View>
       <View style={{ alignItems: "flex-end" }}>
-        <Text weight="semibold" tone="pine">+{money(income.amount, income.currency)}</Text>
+        <Text weight="semibold" tone="ok">+{money(income.amount, income.currency)}</Text>
         {other && income.converted !== null && <Text size={12} tone="muted">≈ {money(income.converted, monthCurrency)}</Text>}
       </View>
     </Pressable>

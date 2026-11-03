@@ -57,8 +57,8 @@ export function BudgetCycleSection() {
         />
         {saved && (
           <View style={{ marginTop: 8, flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Check size={16} color={colors.pine} />
-            <Text size={14} tone="pine" style={{ flex: 1 }}>{t.settings.cycleSaved}</Text>
+            <Check size={16} color={colors.brand} />
+            <Text size={14} tone="brand" style={{ flex: 1 }}>{t.settings.cycleSaved}</Text>
           </View>
         )}
       </SettingsBlock>

@@ -66,7 +66,7 @@ export function TwoFactorSection() {
       </h2>
       <div className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
         <p className="flex items-start gap-2 text-sm">
-          <ShieldCheck className={`mt-0.5 size-4 shrink-0 ${enabled ? "text-pine" : "text-muted"}`} aria-hidden />
+          <ShieldCheck className={`mt-0.5 size-4 shrink-0 ${enabled ? "text-brand" : "text-muted"}`} aria-hidden />
           <span className={enabled ? "" : "text-muted"}>
             {enabled ? t.account.twoFactorOn(status.data?.backup_codes_left ?? 0) : t.account.twoFactorOff}
           </span>

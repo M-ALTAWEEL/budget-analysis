@@ -73,7 +73,7 @@ function ImportLink() {
         marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <FileUp size={20} color={colors.pine} />
+      <FileUp size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{t.imports.link}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>
@@ -98,7 +98,7 @@ function RecurringLink() {
         marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <Repeat size={20} color={colors.pine} />
+      <Repeat size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{label}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>

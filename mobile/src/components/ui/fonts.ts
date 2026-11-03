@@ -1,18 +1,9 @@
 /**
- * The website's fonts (frontend/src/app/layout.tsx): Bricolage Grotesque for headings and
- * numbers, Instrument Sans for text, Readex Pro for Arabic (both roles). The logo's name
- * is an outlined path (lib/brand.ts), so it needs no font. On a phone every weight is its own font file, so a weight is a family name.
+ * The website's fonts (frontend/src/app/layout.tsx): Geist for headings, text and numbers,
+ * Readex Pro for Arabic. The logo's name is an outlined path (lib/brand.ts), so it needs no
+ * font. On a phone every weight is its own font file, so a weight is a family name.
  */
-import {
-  BricolageGrotesque_600SemiBold,
-  BricolageGrotesque_700Bold,
-} from "@expo-google-fonts/bricolage-grotesque";
-import {
-  InstrumentSans_400Regular,
-  InstrumentSans_500Medium,
-  InstrumentSans_600SemiBold,
-  InstrumentSans_700Bold,
-} from "@expo-google-fonts/instrument-sans";
+import { Geist_400Regular, Geist_500Medium, Geist_600SemiBold, Geist_700Bold } from "@expo-google-fonts/geist";
 import {
   ReadexPro_400Regular,
   ReadexPro_500Medium,
@@ -21,12 +12,10 @@ import {
 } from "@expo-google-fonts/readex-pro";
 
 export const FONT_FILES = {
-  BricolageGrotesque_600SemiBold,
-  BricolageGrotesque_700Bold,
-  InstrumentSans_400Regular,
-  InstrumentSans_500Medium,
-  InstrumentSans_600SemiBold,
-  InstrumentSans_700Bold,
+  Geist_400Regular,
+  Geist_500Medium,
+  Geist_600SemiBold,
+  Geist_700Bold,
   ReadexPro_400Regular,
   ReadexPro_500Medium,
   ReadexPro_600SemiBold,
@@ -35,6 +24,7 @@ export const FONT_FILES = {
 
 export type Weight = "regular" | "medium" | "semibold" | "bold";
 
+/** Headings (`display`) use the same face as text, never lighter than semibold. */
 export function fontFamily(display: boolean, weight: Weight, arabic: boolean): string {
   if (arabic) {
     return {
@@ -44,11 +34,11 @@ export function fontFamily(display: boolean, weight: Weight, arabic: boolean): s
       bold: "ReadexPro_700Bold",
     }[weight];
   }
-  if (display) return weight === "bold" ? "BricolageGrotesque_700Bold" : "BricolageGrotesque_600SemiBold";
+  if (display) return weight === "bold" ? "Geist_700Bold" : "Geist_600SemiBold";
   return {
-    regular: "InstrumentSans_400Regular",
-    medium: "InstrumentSans_500Medium",
-    semibold: "InstrumentSans_600SemiBold",
-    bold: "InstrumentSans_700Bold",
+    regular: "Geist_400Regular",
+    medium: "Geist_500Medium",
+    semibold: "Geist_600SemiBold",
+    bold: "Geist_700Bold",
   }[weight];
 }

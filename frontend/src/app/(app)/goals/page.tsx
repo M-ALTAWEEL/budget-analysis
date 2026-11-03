@@ -87,7 +87,7 @@ function ChallengesLink() {
         {running > 0 ? t.challenges.linkSummary(running) : t.challenges.title}
       </span>
       {invites > 0 && (
-        <span className="grid size-6 place-items-center rounded-full bg-pine text-xs font-semibold text-white">{invites}</span>
+        <span className="grid size-6 place-items-center rounded-full bg-brand text-xs font-semibold text-white">{invites}</span>
       )}
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>

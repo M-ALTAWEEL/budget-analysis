@@ -82,7 +82,7 @@ export function ProfileSection() {
         />
         <FormError message={error} />
         {saved && (
-          <p role="status" className="flex items-center gap-2 text-sm text-pine">
+          <p role="status" className="flex items-center gap-2 text-sm text-brand">
             <Check className="size-4" aria-hidden />
             {t.profile.saved}
           </p>

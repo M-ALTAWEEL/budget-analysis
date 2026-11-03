@@ -93,7 +93,7 @@ export function IncomeSheet({ income, onClose }: { income: Income | null; onClos
                 aria-checked={kind === value}
                 onClick={() => setKind(value)}
                 className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold transition-colors ${
-                  kind === value ? "border-pine bg-pine-soft ring-1 ring-pine" : "border-line hover:border-ink/30"
+                  kind === value ? "border-brand bg-brand-soft ring-1 ring-brand" : "border-line hover:border-ink/30"
                 }`}
               >
                 {t.income.kinds[value]}

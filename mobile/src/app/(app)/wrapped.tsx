@@ -41,7 +41,7 @@ export default function WrappedScreen() {
       </Pressable>
       <View style={{ marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 8 }}>
         <View style={{ flex: 1 }}>
-          <Text size={14} weight="semibold" tone="pine">{t.wrapped.title}</Text>
+          <Text size={14} weight="semibold" tone="brand">{t.wrapped.title}</Text>
           <Text display weight="semibold" size={28} accessibilityRole="header">{t.wrapped.heading(monthLabel(month))}</Text>
         </View>
         <Pressable onPress={() => go(-1)} accessibilityRole="button" accessibilityLabel="←" hitSlop={8} style={{ padding: 6 }}>
@@ -67,10 +67,10 @@ export default function WrappedScreen() {
   );
 }
 
-function Card({ title, children, pine = false }: { title?: string; children: ReactNode; pine?: boolean }) {
+function Card({ title, children, brand = false }: { title?: string; children: ReactNode; brand?: boolean }) {
   const colors = useColors();
   return (
-    <View style={{ borderRadius: 24, borderWidth: pine ? 0 : 1, borderColor: colors.line, backgroundColor: pine ? colors.pine : colors.surface, padding: 20 }}>
+    <View style={{ borderRadius: 24, borderWidth: brand ? 0 : 1, borderColor: colors.line, backgroundColor: brand ? colors.brand : colors.surface, padding: 20 }}>
       {title && <Text size={13} weight="semibold" tone="muted" style={{ marginBottom: 14 }}>{title.toUpperCase()}</Text>}
       {children}
     </View>
@@ -95,19 +95,19 @@ function Report({ data }: { data: Wrapped }) {
 
   return (
     <View style={{ gap: 16 }}>
-      <Card pine>
-        {!data.finished && <Text size={14} tone="onPine" style={{ marginBottom: 8, opacity: 0.8 }}>{t.wrapped.soFar}</Text>}
-        <Text display weight="semibold" size={22} tone="onPine">{t.wrapped.spentOf(m(data.spent), m(data.budget))}</Text>
+      <Card brand>
+        {!data.finished && <Text size={14} tone="onBrand" style={{ marginBottom: 8, opacity: 0.8 }}>{t.wrapped.soFar}</Text>}
+        <Text display weight="semibold" size={22} tone="onBrand">{t.wrapped.spentOf(m(data.spent), m(data.budget))}</Text>
         <View style={{ marginTop: 18, height: 8, borderRadius: 999, backgroundColor: "rgba(255,255,255,0.25)", overflow: "hidden" }}>
-          <View style={{ height: "100%", width: `${used * 100}%`, borderRadius: 999, backgroundColor: colors.onPine }} />
+          <View style={{ height: "100%", width: `${used * 100}%`, borderRadius: 999, backgroundColor: colors.onBrand }} />
         </View>
-        <Text weight="semibold" size={18} tone="onPine" style={{ marginTop: 12 }}>
+        <Text weight="semibold" size={18} tone="onBrand" style={{ marginTop: 12 }}>
           {over ? t.wrapped.overspent(m(String(-Number(data.saved)))) : t.wrapped.leftOver(m(data.saved))}
         </Text>
         {change !== null && (
           <View style={{ marginTop: 8, flexDirection: "row", alignItems: "center", gap: 8 }}>
-            {change > 0 ? <TrendingUp size={16} color={colors.onPine} /> : <TrendingDown size={16} color={colors.onPine} />}
-            <Text size={15} tone="onPine">
+            {change > 0 ? <TrendingUp size={16} color={colors.onBrand} /> : <TrendingDown size={16} color={colors.onBrand} />}
+            <Text size={15} tone="onBrand">
               {Math.abs(change) < 3 ? t.wrapped.same : change > 0 ? t.wrapped.more(change) : t.wrapped.less(-change)}
             </Text>
           </View>

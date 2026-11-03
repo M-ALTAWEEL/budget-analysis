@@ -139,11 +139,11 @@ function Message({
     <li className={`flex ${mine ? "justify-end" : "justify-start"}`}>
       <div
         className={`w-full max-w-md rounded-2xl border px-4 py-3 ${
-          mine ? "rounded-ee-md border-pine/30 bg-pine-soft" : "rounded-es-md border-line bg-surface"
+          mine ? "rounded-ee-md border-brand/30 bg-brand-soft" : "rounded-es-md border-line bg-surface"
         }`}
       >
         {!mine && item.by && (
-          <p className="mb-1 text-xs font-semibold text-pine">
+          <p className="mb-1 text-xs font-semibold text-brand">
             <bdi>{item.by.display_name}</bdi>
           </p>
         )}
@@ -208,12 +208,12 @@ function ExpenseBody({
         <span className="text-muted">
           {expense.my_share !== null ? t.groups.yourShare(money(expense.my_share)) : t.groups.notYours}
         </span>
-        {settled && <span className="font-semibold text-pine">{t.groups.paidChip}</span>}
-        <button type="button" onClick={() => setShowShares((v) => !v)} className="text-pine hover:underline" aria-expanded={showShares}>
+        {settled && <span className="font-semibold text-brand">{t.groups.paidChip}</span>}
+        <button type="button" onClick={() => setShowShares((v) => !v)} className="text-brand hover:underline" aria-expanded={showShares}>
           {t.groups.splitBetween}
         </button>
         {expense.can_edit && (
-          <button type="button" onClick={() => onEdit(expense)} className="text-pine hover:underline">
+          <button type="button" onClick={() => onEdit(expense)} className="text-brand hover:underline">
             {t.groups.edit}
           </button>
         )}
@@ -224,7 +224,7 @@ function ExpenseBody({
             <li key={share.member.uuid} className="flex justify-between gap-3">
               <bdi className="truncate">
                 {name(share.member)}
-                {expense.paid_back.includes(share.member.uuid) && <span className="ms-1 text-pine">✓</span>}
+                {expense.paid_back.includes(share.member.uuid) && <span className="ms-1 text-brand">✓</span>}
               </bdi>
               <span className="tabular-nums">{money(share.amount)}</span>
             </li>
@@ -262,7 +262,7 @@ function SettlementBody({
 
   return (
     <div className="flex items-start gap-3">
-      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-pine/15 text-pine">
+      <span className="grid size-8 shrink-0 place-items-center rounded-lg bg-brand/15 text-brand">
         <HandCoins className="size-4" aria-hidden />
       </span>
       <div className="min-w-0 flex-1">

@@ -60,7 +60,7 @@ export function BudgetCycleSection() {
           ))}
         </Select>
         {saved && (
-          <p role="status" className="mt-2 flex items-center gap-2 text-sm text-pine">
+          <p role="status" className="mt-2 flex items-center gap-2 text-sm text-brand">
             <Check className="size-4" aria-hidden />
             {t.settings.cycleSaved}
           </p>

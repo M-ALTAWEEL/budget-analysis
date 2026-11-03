@@ -1,37 +1,69 @@
 @import "tailwindcss";
 
-/* ibudgi design tokens.
-   A cool, calm palette: money stress is the problem, so the interface stays quiet.
-   Pine = healthy budget, marigold = "today" and caution, berry = overspent. */
+/* ibudgi design tokens (docs/design/design-system.md).
+   A white page with the logo's indigo as the main colour; the logo's coral only for small
+   highlights (today, a new badge), never for warnings.
+   Brand = buttons, links, selection. Ok = a healthy budget, marigold = caution,
+   berry = overspent: these three keep their meaning whatever accent is picked. */
 @theme {
-  --color-paper: #f2f5f3;
-  --color-surface: #ffffff;
-  --color-ink: #16302b;
-  --color-muted: #5b6f69;
-  --color-line: #d5ded9;
-  --color-pine: #1e6b57;
-  --color-pine-dark: #17543f;
-  --color-pine-soft: #dcebe5;
+  --color-paper: #ffffff;
+  --color-surface: #ffffff; /* cards: white on white, held by the line and a soft shadow */
+  --color-sunken: #f6f6fb; /* wells inside a card: the chart panel, the search box */
+  --color-ink: #15172a;
+  --color-muted: #5e6178;
+  --color-line: #e4e4f0;
+  --color-brand: #3a36db;
+  --color-brand-dark: #2d29b8;
+  --color-brand-soft: #ecebfc;
+  --color-on-brand: #ffffff; /* text on brand buttons */
+  --color-coral: #ff7a59; /* fills only: the "today" ring, a dot */
+  --color-coral-ink: #b8421f; /* coral as text: 4.5:1 on white */
+  --color-ok: #1e7a55; /* a healthy budget, money coming in */
+  --color-ok-soft: #e3f4ec;
   --color-marigold: #c98516; /* fills: bars, the tank when spending is fast */
   --color-marigold-ink: #9a6408; /* small text and icons: 4.5:1 on paper */
   --color-marigold-soft: #f8ecd6;
   --color-berry: #b23c63;
   --color-berry-soft: #f6e3ea;
-  --color-on-pine: #ffffff; /* text on pine buttons */
-  --color-panel: #1e6b57; /* the green panel on the sign-in screen (same in both themes) */
+  --color-cell0: #e5e5ef; /* the year chart: a day with no spending */
+  --color-lv1: #b7e0cb; /* the year chart: the lightest level */
+  --color-panel: #3a36db; /* the panel on the sign-in screen */
   --color-logo: #15172a; /* the logo's name (brand ink); white in dark mode */
   /* The ibudgi brand (lib/brand.ts): the icon tile, preloader and loader only. */
   --color-brand-indigo: #3a36db;
   --color-brand-coral: #ff7a59;
   --color-brand-ink: #15172a;
   --color-brand-cream: #f4f3ee;
+
+  /* Shapes: rounded-card, rounded-tile, rounded-control (buttons, fields); bars are full pills. */
+  --radius-card: 24px;
+  --radius-tile: 18px;
+  --radius-control: 14px;
+
+  /* Motion: ease-smooth for most changes, ease-spring for a small overshoot (a switch, a
+     pressed tile). Movement goes behind motion-safe: so reduced motion stays still. */
+  --ease-smooth: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Shadows change with the theme, so the utilities point at variables:
+   shadow-card for cards on the page, shadow-float for what floats (the dock, menus, sheets). */
+:root {
+  --elevation-card: 0 1px 2px rgb(21 23 42 / 0.04), 0 14px 34px -18px rgb(58 54 219 / 0.22);
+  --elevation-float: 0 2px 6px rgb(21 23 42 / 0.06), 0 24px 48px -20px rgb(21 23 42 / 0.28);
+}
+:root[data-theme="dark"] {
+  --elevation-card: inset 0 1px 0 rgb(255 255 255 / 0.03), 0 14px 34px -22px rgb(0 0 0 / 0.6);
+  --elevation-float: 0 24px 48px -16px rgb(0 0 0 / 0.7);
 }
 
 @theme inline {
+  --shadow-card: var(--elevation-card);
+  --shadow-float: var(--elevation-float);
   /* Readex Pro as a fallback: Arabic words (a category named "عائدات") look right
      even when the interface is in English or Turkish. */
   --font-sans: var(--font-body), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display-face), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-body), var(--font-arabic), ui-sans-serif, system-ui, sans-serif;
 }
 
 :root {
@@ -40,71 +72,94 @@
 
 /* Dark theme: the same names with new values, so every component switches without
    changes. data-theme is set on <html> by the early script in layout.tsx and then by
-   ThemeProvider. Pine gets lighter (readable on dark) and text on it turns dark. */
+   ThemeProvider. A deep indigo night; brand gets lighter (readable on dark) and text on it
+   turns dark. */
 :root[data-theme="dark"] {
   color-scheme: dark; /* native inputs, date pickers and scrollbars go dark too */
   --color-logo: #ffffff;
-  --color-paper: #0e1715;
-  --color-surface: #15211e;
-  --color-ink: #e4ece9;
-  --color-muted: #93a69f;
-  --color-line: #2a3934;
-  --color-pine: #5cc4a0;
-  --color-pine-dark: #7fd6b7;
-  --color-pine-soft: #1c3a31;
+  --color-paper: #0f1020;
+  --color-surface: #181a33;
+  --color-sunken: #13152b;
+  --color-ink: #ecedf7;
+  --color-muted: #9a9dba;
+  --color-line: #2a2d4d;
+  --color-brand: #8b88ff;
+  --color-brand-dark: #a9a7ff;
+  --color-brand-soft: #23245a;
+  --color-on-brand: #0f1020;
+  --color-coral-ink: #ff9c82;
+  --color-ok: #5cc4a0;
+  --color-ok-soft: #1c3a31;
   --color-marigold: #e5a53c;
   --color-marigold-ink: #e5a53c; /* already 8.5:1 on the dark paper */
   --color-marigold-soft: #3a2e17;
   --color-berry: #ef7fa3;
   --color-berry-soft: #3a1f2a;
-  --color-on-pine: #0b1f19;
-  --color-panel: #12443a;
+  --color-cell0: #24274a;
+  --color-lv1: #2b5a48;
+  --color-panel: #24217a;
 }
 
-/* Accent colours (Settings > Colour). Only the "pine" family changes: berry (overspent)
-   and marigold (caution) keep their meaning whatever colour the student picks.
-   Each accent has a light and a dark version, checked for text contrast like pine. */
+/* Accent colours (Settings > Colour). Indigo is the default (no attribute). Only the brand
+   family changes: ok, marigold and berry keep their meaning whatever colour the student
+   picks. Each accent has a light and a dark version, checked for text contrast. */
+:root[data-accent="pine"] {
+  --color-brand: #1e6b57;
+  --color-brand-dark: #17543f;
+  --color-brand-soft: #dcebe5;
+  --color-panel: #1e6b57;
+}
 :root[data-accent="ocean"] {
-  --color-pine: #1d5fa8;
-  --color-pine-dark: #164a85;
-  --color-pine-soft: #dce7f5;
+  --color-brand: #1d5fa8;
+  --color-brand-dark: #164a85;
+  --color-brand-soft: #dce7f5;
   --color-panel: #1d5fa8;
 }
 :root[data-accent="plum"] {
-  --color-pine: #6b3fa0;
-  --color-pine-dark: #55307f;
-  --color-pine-soft: #ebe2f5;
+  --color-brand: #6b3fa0;
+  --color-brand-dark: #55307f;
+  --color-brand-soft: #ebe2f5;
   --color-panel: #6b3fa0;
 }
 :root[data-accent="graphite"] {
-  --color-pine: #3d4a5c;
-  --color-pine-dark: #2c3644;
-  --color-pine-soft: #e3e7ed;
+  --color-brand: #3d4a5c;
+  --color-brand-dark: #2c3644;
+  --color-brand-soft: #e3e7ed;
   --color-panel: #3d4a5c;
 }
+:root[data-theme="dark"][data-accent="pine"] {
+  --color-brand: #5cc4a0;
+  --color-brand-dark: #7fd6b7;
+  --color-brand-soft: #1c3a31;
+  --color-on-brand: #0b1f19;
+  --color-panel: #12443a;
+}
 :root[data-theme="dark"][data-accent="ocean"] {
-  --color-pine: #6aa7ec;
-  --color-pine-dark: #8dbdf2;
-  --color-pine-soft: #182b44;
-  --color-on-pine: #0b1a2e;
+  --color-brand: #6aa7ec;
+  --color-brand-dark: #8dbdf2;
+  --color-brand-soft: #182b44;
+  --color-on-brand: #0b1a2e;
   --color-panel: #163a66;
 }
 :root[data-theme="dark"][data-accent="plum"] {
-  --color-pine: #b18ce6;
-  --color-pine-dark: #c6a9ee;
-  --color-pine-soft: #2c2140;
-  --color-on-pine: #1c1230;
+  --color-brand: #b18ce6;
+  --color-brand-dark: #c6a9ee;
+  --color-brand-soft: #2c2140;
+  --color-on-brand: #1c1230;
   --color-panel: #3f2766;
 }
 :root[data-theme="dark"][data-accent="graphite"] {
-  --color-pine: #a9b6c8;
-  --color-pine-dark: #c2ccda;
-  --color-pine-soft: #252c36;
-  --color-on-pine: #111720;
+  --color-brand: #a9b6c8;
+  --color-brand-dark: #c2ccda;
+  --color-brand-soft: #252c36;
+  --color-on-brand: #111720;
   --color-panel: #2b3442;
 }
 
 /* The round samples in Settings. */
+[data-accent-swatch="indigo"] {
+  background: #3a36db;
+}
 [data-accent-swatch="pine"] {
   background: #1e6b57;
 }
@@ -118,11 +173,10 @@
   background: #3d4a5c;
 }
 
-/* Arabic: the Latin fonts have no Arabic letters, so both roles use Readex Pro.
+/* Arabic: Geist has no Arabic letters, so the whole page uses Readex Pro.
    (Same element as the next/font variables, higher specificity, so this wins.) */
 html[lang="ar"] {
   --font-body: var(--font-arabic);
-  --font-display-face: var(--font-arabic);
 }
 
 body {
@@ -137,7 +191,7 @@ body {
    in Tailwind v4, CSS outside a layer beats every utility class. */
 @layer base {
   :focus-visible {
-    outline: 2px solid var(--color-pine);
+    outline: 2px solid var(--color-brand);
     outline-offset: 2px;
   }
 }

@@ -45,8 +45,8 @@ function Choice({ selected, onSelect, children, half }: { selected: boolean; onS
       onPress={onSelect}
       style={{
         width: half ? "48.5%" : "100%", flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 12,
-        borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-        backgroundColor: selected ? colors.pineSoft : colors.surface,
+        borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+        backgroundColor: selected ? colors.brandSoft : colors.surface,
         paddingHorizontal: selected ? 15 : 16, paddingVertical: selected ? 11 : 12,
       }}>
       {children}
@@ -238,8 +238,8 @@ function SupportLink() {
         <Text size={13} tone="muted">{t.support.linkHint}</Text>
       </View>
       {unread > 0 && (
-        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.pine }}>
-          <Text size={12} weight="semibold" tone="onPine">{unread}</Text>
+        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
+          <Text size={12} weight="semibold" tone="onBrand">{unread}</Text>
         </View>
       )}
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />

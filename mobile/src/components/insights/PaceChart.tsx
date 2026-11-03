@@ -35,7 +35,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
   const format = (amount: number) => money(amount, daily.currency);
   const forecast = daily.forecast && running.length ? Number(daily.forecast.total) : null;
   const forecastOver = forecast !== null && forecast > total;
-  const forecastColor = forecastOver ? colors.berry : colors.pine;
+  const forecastColor = forecastOver ? colors.berry : colors.brand;
 
   const rtl = dir === "rtl";
   const plotStart = LABEL_SIDE;
@@ -79,7 +79,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
 
       <View style={{ marginBottom: 12, flexDirection: "row", flexWrap: "wrap", columnGap: 20, rowGap: 4 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-          {legendLine(colors.pine)}
+          {legendLine(colors.brand)}
           <Text size={14} tone="muted">{t.insights.yourSpending}</Text>
         </View>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -132,8 +132,8 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
 
             <Line x1={x(0)} y1={y(evenAt(0))} x2={x(count - 1)} y2={y(total)} stroke={colors.muted} strokeOpacity={0.6} strokeWidth={1.5} strokeLinecap="round" />
 
-            {areaPath ? <Path d={areaPath} fill={colors.pine} fillOpacity={0.1} /> : null}
-            {linePath ? <Path d={linePath} fill="none" stroke={colors.pine} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" /> : null}
+            {areaPath ? <Path d={areaPath} fill={colors.brand} fillOpacity={0.1} /> : null}
+            {linePath ? <Path d={linePath} fill="none" stroke={colors.brand} strokeWidth={2} strokeLinejoin="round" strokeLinecap="round" /> : null}
 
             {forecast !== null && (
               <G>
@@ -153,7 +153,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
 
             {running.length > 0 && (
               <G>
-                <Circle cx={x(dot)} cy={y(running[dot])} r={4.5} fill={colors.pine} stroke={colors.surface} strokeWidth={2} />
+                <Circle cx={x(dot)} cy={y(running[dot])} r={4.5} fill={colors.brand} stroke={colors.surface} strokeWidth={2} />
                 {active === null && (
                   <SvgText x={x(last)} y={y(running[last]) - 12} textAnchor={anchor(last > count * 0.75 ? "end" : "middle")} fontSize={12} fontWeight="600" fill={colors.ink}>
                     {format(running[last])}
@@ -177,7 +177,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
             {active <= last && (
               <>
                 <View style={{ marginTop: 4, flexDirection: "row", alignItems: "center", gap: 8 }}>
-                  <View style={{ height: 2, width: 12, borderRadius: 1, backgroundColor: colors.pine }} />
+                  <View style={{ height: 2, width: 12, borderRadius: 1, backgroundColor: colors.brand }} />
                   <Text size={14} weight="semibold">{format(running[active])}</Text>
                 </View>
                 <Text size={12} tone="muted">{t.insights.spentByThisDay}</Text>

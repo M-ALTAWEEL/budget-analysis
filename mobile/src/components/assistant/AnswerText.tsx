@@ -115,7 +115,7 @@ export function Suggestions({ onAsk, style }: { onAsk: (q: string) => void; styl
           onPress={() => onAsk(question)}
           accessibilityRole="button"
           style={({ pressed }) => ({
-            borderRadius: 999, borderWidth: 1, borderColor: pressed ? colors.pine : colors.line, backgroundColor: colors.surface,
+            borderRadius: 999, borderWidth: 1, borderColor: pressed ? colors.brand : colors.line, backgroundColor: colors.surface,
             paddingHorizontal: 14, paddingVertical: 6, transform: [{ scale: pressed ? 0.95 : 1 }],
           })}>
           <Text size={14}>{question}</Text>

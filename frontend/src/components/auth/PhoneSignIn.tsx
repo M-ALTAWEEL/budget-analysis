@@ -169,14 +169,14 @@ function PhoneSteps({
               type="button"
               disabled={wait > 0 || busy}
               onClick={() => void send()}
-              className="font-semibold text-pine underline-offset-4 hover:underline disabled:text-muted disabled:no-underline"
+              className="font-semibold text-brand underline-offset-4 hover:underline disabled:text-muted disabled:no-underline"
             >
               {wait > 0 ? t.account.resendIn(wait) : t.account.resendCode}
             </button>
             <button
               type="button"
               onClick={() => setSentTo(null)}
-              className="font-semibold text-pine underline-offset-4 hover:underline"
+              className="font-semibold text-brand underline-offset-4 hover:underline"
             >
               {t.account.changeNumber}
             </button>

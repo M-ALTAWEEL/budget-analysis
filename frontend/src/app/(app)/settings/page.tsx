@@ -43,7 +43,7 @@ function Choice({
       lang={lang}
       onClick={onSelect}
       className={`flex items-center gap-3 rounded-xl border px-4 py-3 text-start text-[15px] transition-colors ${
-        selected ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine" : "border-line bg-surface hover:border-ink/30"
+        selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line bg-surface hover:border-ink/30"
       }`}
     >
       {children}
@@ -102,7 +102,7 @@ export default function SettingsPage() {
           <h2 id="accent" className="mb-3 font-display text-lg font-semibold">
             {t.settings.accent}
           </h2>
-          <div role="radiogroup" aria-labelledby="accent" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <div role="radiogroup" aria-labelledby="accent" className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
             {ACCENTS.map((value) => (
               <Choice key={value} selected={value === accent} onSelect={() => setAccent(value)}>
                 {/* The swatch shows the colour as it looks in the current theme */}
@@ -257,7 +257,7 @@ function SupportLink() {
         <span className="block text-sm text-muted">{t.support.linkHint}</span>
       </span>
       {unread > 0 && (
-        <span className="grid size-6 place-items-center rounded-full bg-pine text-xs font-semibold text-white">{unread}</span>
+        <span className="grid size-6 place-items-center rounded-full bg-brand text-xs font-semibold text-white">{unread}</span>
       )}
       <ChevronRight className="size-5 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>

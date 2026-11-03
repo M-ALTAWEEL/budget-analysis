@@ -166,8 +166,8 @@ function ChangeEmail({ run }: { run: Run }) {
         <FormError message={error} />
         {sent && (
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Mail size={16} color={colors.pine} />
-            <Text size={14} tone="pine" style={{ flex: 1 }}>{t.account.changeEmailSent}</Text>
+            <Mail size={16} color={colors.brand} />
+            <Text size={14} tone="brand" style={{ flex: 1 }}>{t.account.changeEmailSent}</Text>
           </View>
         )}
         <Button variant="secondary" style={{ alignSelf: "flex-start" }} loading={busy} disabled={!email.trim()} onPress={submit}>
@@ -226,7 +226,7 @@ function ExportData({ run }: { run: Run }) {
       <Button variant="secondary" style={{ alignSelf: "flex-start" }} icon={<Download size={16} color={colors.ink} />} loading={state === "busy"} onPress={() => void download()}>
         {t.account.exportButton}
       </Button>
-      {state === "done" && <Text size={14} tone="pine">{t.account.exportDone}</Text>}
+      {state === "done" && <Text size={14} tone="brand">{t.account.exportDone}</Text>}
       <FormError message={error} />
     </View>
   );

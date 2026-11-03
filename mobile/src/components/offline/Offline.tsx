@@ -89,7 +89,7 @@ export function PendingExpenses() {
           <Text size={14} tone="muted">{t.offline.waitingHint}</Text>
         </View>
         <Pressable onPress={() => void flush()} accessibilityRole="button" hitSlop={8}>
-          <Text size={14} weight="semibold" tone="pine">{t.offline.retry}</Text>
+          <Text size={14} weight="semibold" tone="brand">{t.offline.retry}</Text>
         </Pressable>
       </View>
       {pending.map((p) => (

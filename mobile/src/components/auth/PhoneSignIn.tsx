@@ -99,7 +99,7 @@ function PhoneSteps({ countries, currency, onClose }: { countries: string[]; cur
 
   const link = (label: string, onPress: () => void, disabled = false) => (
     <Pressable onPress={onPress} disabled={disabled} accessibilityRole="button" hitSlop={6}>
-      <Text size={14} weight="semibold" tone={disabled ? "muted" : "pine"}>{label}</Text>
+      <Text size={14} weight="semibold" tone={disabled ? "muted" : "brand"}>{label}</Text>
     </Pressable>
   );
 

@@ -18,7 +18,7 @@ import type { Currency } from "@/types/api";
 function Link({ label, onPress }: { label: string; onPress: () => void }) {
   return (
     <Pressable onPress={onPress} accessibilityRole="link" hitSlop={6}>
-      <Text size={14} weight="semibold" tone="pine">{label}</Text>
+      <Text size={14} weight="semibold" tone="brand">{label}</Text>
     </Pressable>
   );
 }

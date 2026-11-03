@@ -109,7 +109,7 @@ export function AllocationEditor({
             <label htmlFor={`limit-${category.uuid}`} className="flex-1 font-semibold">
               {categoryName(category)}
             </label>
-            <div className="flex w-40 items-center rounded-xl border border-line bg-surface transition-shadow focus-within:border-pine focus-within:ring-3 focus-within:ring-pine/20">
+            <div className="flex w-40 items-center rounded-xl border border-line bg-surface transition-shadow focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
               <input
                 id={`limit-${category.uuid}`}
                 inputMode="decimal"

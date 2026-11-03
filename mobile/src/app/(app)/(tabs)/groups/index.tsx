@@ -32,7 +32,7 @@ export default function GroupsScreen() {
           <Text display weight="semibold" size={24} accessibilityRole="header">{t.groups.title}</Text>
           <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.groups.intro}</Text>
         </View>
-        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setCreating(true)}>{t.groups.create}</Button>
+        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setCreating(true)}>{t.groups.create}</Button>
       </View>
 
       <ReceivedInvitations onJoined={open} />
@@ -51,8 +51,8 @@ export default function GroupsScreen() {
         <List>
           {groups.data.map((group) => (
             <Row key={group.uuid} onPress={() => open(group.uuid)} style={{ paddingVertical: 16 }}>
-              <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.pine}1a` }}>
-                <Users size={20} color={colors.pine} />
+              <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+                <Users size={20} color={colors.brand} />
               </View>
               <View style={{ flex: 1, minWidth: 0 }}>
                 <Text weight="semibold" numberOfLines={1}>{group.name}</Text>
@@ -98,7 +98,7 @@ function DebtsLink() {
         marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <HandCoins size={20} color={colors.pine} />
+      <HandCoins size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{label}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>

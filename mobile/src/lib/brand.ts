@@ -1,11 +1,12 @@
 /**
  * The ibudgi brand (brand/ibudgi-logo-kit): its colours and the logo's shapes, shared by the
  * website and the app so both draw the same logo, preloader and loader.
- * These are brand colours only; the app's theme (pine, marigold, berry) stays as it is.
+ * The theme (globals.css, ThemeProvider) uses the same indigo and coral as its brand and
+ * highlight colours; the values here are fixed, the theme ones change with dark mode.
  */
 export const BRAND = {
   indigo: "#3A36DB", // primary: the icon tile, the splash and the preloader
-  coral: "#FF7A59", // accent: the coin, and nothing else
+  coral: "#FF7A59", // accent: the coin (the theme also uses it for small highlights)
   ink: "#15172A", // text
   cream: "#F4F3EE", // light background
   white: "#FFFFFF",

@@ -91,8 +91,8 @@ export function DebtSheet({ debt, onClose }: { debt: Debt | null; onClose: () =>
                   onPress={() => setDirection(value)}
                   style={{
                     flex: 1, alignItems: "center", borderRadius: 12, paddingVertical: 12,
-                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-                    backgroundColor: selected ? colors.pineSoft : colors.surface,
+                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+                    backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>
                   <Text weight="semibold">{value === "lent" ? t.debts.lent : t.debts.borrowed}</Text>
                 </Pressable>

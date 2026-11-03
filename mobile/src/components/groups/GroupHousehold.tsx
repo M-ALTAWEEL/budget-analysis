@@ -37,7 +37,7 @@ export function GroupHousehold({ group }: { group: GroupDetail }) {
   return (
     <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 12 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <Home size={20} color={colors.pine} />
+        <Home size={20} color={colors.brand} />
         <Text display weight="semibold" size={18} style={{ flex: 1 }}>{t.household.title}</Text>
         <Pressable onPress={() => setMonth(shiftMonth(month, -1))} hitSlop={8} accessibilityRole="button" accessibilityLabel="←">
           <ChevronLeft size={18} color={colors.ink} style={flip} />
@@ -91,13 +91,13 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
         </Text>
         {data.can_edit && (
           <Pressable onPress={onEdit} hitSlop={8} accessibilityRole="button">
-            <Text size={14} weight="semibold" tone="pine">{t.household.edit}</Text>
+            <Text size={14} weight="semibold" tone="brand">{t.household.edit}</Text>
           </Pressable>
         )}
       </View>
       <Text size={14} tone="muted">{t.household.spentOf(m(data.spent), m(data.total_amount!))}</Text>
       <View style={{ height: 8, borderRadius: 999, backgroundColor: colors.line, overflow: "hidden" }}>
-        <View style={{ height: "100%", width: `${Math.min(total ? Number(data.spent) / total : 0, 1) * 100}%`, borderRadius: 999, backgroundColor: over ? colors.berry : colors.pine }} />
+        <View style={{ height: "100%", width: `${Math.min(total ? Number(data.spent) / total : 0, 1) * 100}%`, borderRadius: 999, backgroundColor: over ? colors.berry : colors.ok }} />
       </View>
       {data.categories.map((row) => {
         const meta = GROUP_CATEGORIES.find((c) => c.slug === row.category) ?? GROUP_CATEGORIES[7];
@@ -111,7 +111,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
             </View>
             {row.limit && (
               <View style={{ height: 6, borderRadius: 999, backgroundColor: colors.line, overflow: "hidden" }}>
-                <View style={{ height: "100%", width: `${Math.min(ratio, 1) * 100}%`, borderRadius: 999, backgroundColor: ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.pine }} />
+                <View style={{ height: "100%", width: `${Math.min(ratio, 1) * 100}%`, borderRadius: 999, backgroundColor: ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.ok }} />
               </View>
             )}
           </View>

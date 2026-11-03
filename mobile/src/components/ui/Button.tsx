@@ -7,7 +7,7 @@ import { useColors } from "@/theme/ThemeProvider";
 
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 
-/** The website's buttons: pine, outlined, berry outline, and plain. */
+/** The website's buttons: brand, outlined, berry outline, and plain. */
 export function Button({
   children,
   onPress,
@@ -30,8 +30,8 @@ export function Button({
   accessibilityLabel?: string;
 }) {
   const colors = useColors();
-  const look: Record<Variant, { bg: string; border: string; text: "onPine" | "ink" | "berry" | "muted" }> = {
-    primary: { bg: colors.pine, border: colors.pine, text: "onPine" },
+  const look: Record<Variant, { bg: string; border: string; text: "onBrand" | "ink" | "berry" | "muted" }> = {
+    primary: { bg: colors.brand, border: colors.brand, text: "onBrand" },
     secondary: { bg: colors.surface, border: colors.line, text: "ink" },
     danger: { bg: colors.surface, border: `${colors.berry}66`, text: "berry" },
     ghost: { bg: "transparent", border: "transparent", text: "muted" },
@@ -60,7 +60,7 @@ export function Button({
         style,
       ]}>
       {loading ? (
-        <IbudgiLoader size={24} color={text === "onPine" ? colors.onPine : undefined} />
+        <IbudgiLoader size={24} color={text === "onBrand" ? colors.onBrand : undefined} />
       ) : (
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
           {icon}

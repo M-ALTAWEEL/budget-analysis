@@ -91,8 +91,8 @@ export default function ImportPage() {
       />
 
       {result && (
-        <section className="mb-6 rounded-2xl bg-pine-soft px-5 py-4">
-          <p className="font-semibold text-pine">{t.imports.done(result.expenses, result.income)}</p>
+        <section className="mb-6 rounded-2xl bg-brand-soft px-5 py-4">
+          <p className="font-semibold text-brand">{t.imports.done(result.expenses, result.income)}</p>
           {(result.already_there > 0 || result.no_budget > 0) && (
             <p className="text-sm text-muted">{t.imports.skipped(result.already_there, result.no_budget)}</p>
           )}
@@ -135,7 +135,7 @@ export default function ImportPage() {
                         {!row.has_budget && row.direction === "out" && <span className="font-semibold text-berry"> · {t.imports.noBudget}</span>}
                       </p>
                     </div>
-                    <p className={`tabular shrink-0 font-semibold ${row.direction === "in" ? "text-pine" : ""}`}>
+                    <p className={`tabular shrink-0 font-semibold ${row.direction === "in" ? "text-ok" : ""}`}>
                       {row.direction === "in" ? "+" : "−"}
                       {money(row.amount, preview.currency)}
                     </p>
@@ -146,7 +146,7 @@ export default function ImportPage() {
                         key={value}
                         type="button"
                         onClick={() => set(i, { as: value })}
-                        className={`rounded-full border px-3 py-1 text-xs font-semibold ${choice.as === value ? "border-pine bg-pine-soft" : "border-line"}`}
+                        className={`rounded-full border px-3 py-1 text-xs font-semibold ${choice.as === value ? "border-brand bg-brand-soft" : "border-line"}`}
                       >
                         {t.imports.addAs[value]}
                       </button>

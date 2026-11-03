@@ -14,7 +14,7 @@ export function Field({ label, hint, suffix, className = "", ...props }: FieldPr
       <label htmlFor={id} className="mb-1.5 block text-sm font-medium">
         {label}
       </label>
-      <div className="flex items-center rounded-xl border border-line bg-surface transition-shadow focus-within:border-pine focus-within:ring-3 focus-within:ring-pine/20">
+      <div className="flex items-center rounded-xl border border-line bg-surface transition-shadow focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
         <input
           id={id}
           aria-describedby={hintId}
@@ -46,7 +46,7 @@ export function Select({ label, className = "", children, ...props }: SelectProp
       <select
         id={id}
         {...props}
-        className="h-11 w-full rounded-xl border border-line bg-surface px-3 text-[15px] outline-none transition-shadow focus:border-pine focus:ring-3 focus:ring-pine/20"
+        className="h-11 w-full rounded-xl border border-line bg-surface px-3 text-[15px] outline-none transition-shadow focus:border-brand focus:ring-3 focus:ring-brand/20"
       >
         {children}
       </select>

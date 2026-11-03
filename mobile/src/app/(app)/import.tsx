@@ -74,7 +74,7 @@ export default function ImportScreen() {
   const count = choices.filter((c) => c.as !== "skip").length;
   const pill = (on: boolean) => ({
     borderRadius: 999, paddingHorizontal: 12, paddingVertical: 5,
-    borderWidth: on ? 2 : 1, borderColor: on ? colors.pine : colors.line, backgroundColor: on ? colors.pineSoft : colors.surface,
+    borderWidth: on ? 2 : 1, borderColor: on ? colors.brand : colors.line, backgroundColor: on ? colors.brandSoft : colors.surface,
   });
 
   return (
@@ -87,8 +87,8 @@ export default function ImportScreen() {
       <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 20 }}>{t.imports.intro}</Text>
 
       {result && (
-        <View style={{ borderRadius: 16, backgroundColor: colors.pineSoft, padding: 16, marginBottom: 16, gap: 2 }}>
-          <Text weight="semibold" tone="pine">{t.imports.done(result.expenses, result.income)}</Text>
+        <View style={{ borderRadius: 16, backgroundColor: colors.brandSoft, padding: 16, marginBottom: 16, gap: 2 }}>
+          <Text weight="semibold" tone="brand">{t.imports.done(result.expenses, result.income)}</Text>
           {(result.already_there > 0 || result.no_budget > 0) && (
             <Text size={14} tone="muted">{t.imports.skipped(result.already_there, result.no_budget)}</Text>
           )}
@@ -97,7 +97,7 @@ export default function ImportScreen() {
 
       {!preview ? (
         <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24, gap: 14, alignItems: "center" }}>
-          <Button icon={<FileUp size={20} color={colors.onPine} />} onPress={() => void pick()} loading={busy}>
+          <Button icon={<FileUp size={20} color={colors.onBrand} />} onPress={() => void pick()} loading={busy}>
             {busy ? t.imports.reading : result ? t.imports.another : t.imports.choose}
           </Button>
           <Text size={14} tone="muted" center>{t.imports.howTo}</Text>
@@ -123,7 +123,7 @@ export default function ImportScreen() {
                       {!row.has_budget && row.direction === "out" ? ` · ${t.imports.noBudget}` : ""}
                     </Text>
                   </View>
-                  <Text weight="semibold" tone={row.direction === "in" ? "pine" : "ink"}>
+                  <Text weight="semibold" tone={row.direction === "in" ? "ok" : "ink"}>
                     {row.direction === "in" ? "+" : "−"}{money(row.amount, preview.currency)}
                   </Text>
                 </View>

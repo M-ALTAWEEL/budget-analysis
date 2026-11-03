@@ -52,7 +52,7 @@ export default function AssistantPage() {
       <header className="mb-8">
         <h1 className="font-display text-2xl font-semibold">{t.assistant.title}</h1>
         <p className="mt-1 max-w-prose text-[15px] text-muted">{t.assistant.intro}</p>
-        <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-pine">
+        <p className="mt-2 inline-flex items-center gap-1.5 text-sm text-brand">
           <Sparkles className="size-4" aria-hidden />
           {t.assistant.local}
         </p>
@@ -71,7 +71,7 @@ export default function AssistantPage() {
               className={message.from === "student" ? "flex justify-end" : "flex justify-start"}
             >
               {message.from === "student" ? (
-                <p className="max-w-[85%] rounded-2xl rounded-ee-md bg-pine px-4 py-2.5 text-[15px] text-on-pine">
+                <p className="max-w-[85%] rounded-2xl rounded-ee-md bg-brand px-4 py-2.5 text-[15px] text-on-brand">
                   <span className="sr-only">{t.assistant.you}: </span>
                   {message.text}
                 </p>
@@ -122,13 +122,13 @@ export default function AssistantPage() {
             maxLength={300}
             autoComplete="off"
             dir="auto"
-            className="h-12 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 text-[16px] outline-none focus:border-pine"
+            className="h-12 min-w-0 flex-1 rounded-xl border border-line bg-surface px-4 text-[16px] outline-none focus:border-brand"
           />
           <button
             type="submit"
             disabled={!draft.trim() || ask.isPending}
             aria-label={t.assistant.send}
-            className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-pine text-on-pine transition-[background-color,transform] hover:bg-pine-dark active:scale-95 disabled:opacity-50"
+            className="inline-flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-95 disabled:opacity-50"
           >
             <SendHorizontal className="size-5 rtl:-scale-x-100" aria-hidden />
           </button>

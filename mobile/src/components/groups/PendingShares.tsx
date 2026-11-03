@@ -50,7 +50,7 @@ export function PendingShares() {
     <View style={{ marginBottom: 40 }}>
       <View style={{ marginBottom: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <View style={{ flexDirection: "row", alignItems: "center", gap: 8, flexShrink: 1 }}>
-          <Wallet size={20} color={colors.pine} />
+          <Wallet size={20} color={colors.brand} />
           <Text display weight="semibold" size={18} accessibilityRole="header">{t.groups.pending}</Text>
         </View>
         {shares.data.length > 1 && (
@@ -110,8 +110,8 @@ export function PendingSharesBanner() {
     <Pressable
       onPress={() => router.navigate("/groups")}
       accessibilityRole="link"
-      style={{ marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.pine}66`, backgroundColor: colors.pineSoft, paddingHorizontal: 20, paddingVertical: 14 }}>
-      <Wallet size={20} color={colors.pine} />
+      style={{ marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.brandSoft, paddingHorizontal: 20, paddingVertical: 14 }}>
+      <Wallet size={20} color={colors.brand} />
       <Text size={15} weight="semibold" style={{ flex: 1 }}>{t.groups.pendingCount(count)}</Text>
     </Pressable>
   );

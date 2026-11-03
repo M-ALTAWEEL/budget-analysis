@@ -82,8 +82,8 @@ export function ProfileSection() {
         <FormError message={error} />
         {saved && (
           <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-            <Check size={16} color={colors.pine} />
-            <Text size={14} tone="pine">{t.profile.saved}</Text>
+            <Check size={16} color={colors.brand} />
+            <Text size={14} tone="brand">{t.profile.saved}</Text>
           </View>
         )}
         <Button variant="secondary" style={{ alignSelf: "flex-start" }} loading={busy} disabled={!changed || !name.trim()} onPress={submit}>

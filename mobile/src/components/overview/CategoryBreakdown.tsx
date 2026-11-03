@@ -18,7 +18,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
       {summary.categories.map(({ category, limit_amount, spent }) => {
         const limit = limit_amount === null ? null : Number(limit_amount);
         const ratio = limit ? Number(spent) / limit : null;
-        const bar = ratio === null ? colors.pine : ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.pine;
+        const bar = ratio === null ? colors.brand : ratio > 1 ? colors.berry : ratio > 0.85 ? colors.marigold : colors.ok;
         return (
           <Row key={category.uuid}>
             <CategoryIcon category={category} />
@@ -32,7 +32,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
               </View>
               {ratio !== null && limit !== null ? (
                 <>
-                  <View style={{ marginTop: 8, height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: colors.pineSoft }}>
+                  <View style={{ marginTop: 8, height: 6, borderRadius: 3, overflow: "hidden", backgroundColor: colors.okSoft }}>
                     <View style={{ height: 6, borderRadius: 3, width: `${Math.min(ratio, 1) * 100}%`, backgroundColor: bar }} />
                   </View>
                   {ratio > 0.85 && (

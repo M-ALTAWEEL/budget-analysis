@@ -60,7 +60,7 @@ export function LoginForm() {
       />
       {config.data?.email_enabled && (
         <p className="-mt-2 text-end text-sm">
-          <Link href="/forgot-password" className="font-semibold text-pine underline-offset-4 hover:underline">
+          <Link href="/forgot-password" className="font-semibold text-brand underline-offset-4 hover:underline">
             {t.account.forgotLink}
           </Link>
         </p>
@@ -71,7 +71,7 @@ export function LoginForm() {
       </Button>
       <p className="text-sm text-muted">
         {t.auth.newHere}{" "}
-        <Link href="/register" className="font-semibold text-pine underline-offset-4 hover:underline">
+        <Link href="/register" className="font-semibold text-brand underline-offset-4 hover:underline">
           {t.auth.createOne}
         </Link>
       </p>
@@ -152,7 +152,7 @@ export function RegisterForm() {
       </Button>
       <p className="text-sm text-muted">
         {t.auth.haveAccount}{" "}
-        <Link href="/login" className="font-semibold text-pine underline-offset-4 hover:underline">
+        <Link href="/login" className="font-semibold text-brand underline-offset-4 hover:underline">
           {t.auth.logIn}
         </Link>
       </p>

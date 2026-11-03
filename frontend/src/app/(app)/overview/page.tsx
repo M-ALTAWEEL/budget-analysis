@@ -106,7 +106,7 @@ export default function OverviewPage() {
             id="by-category"
             title={t.overview.whereItWent}
             action={
-              <Link href="/budget" className="text-sm font-semibold text-pine hover:underline">
+              <Link href="/budget" className="text-sm font-semibold text-brand hover:underline">
                 {t.overview.planCategories}
               </Link>
             }
@@ -119,7 +119,7 @@ export default function OverviewPage() {
               id="recent"
               title={t.overview.latest}
               action={
-                <Link href="/expenses" className="text-sm font-semibold text-pine hover:underline">
+                <Link href="/expenses" className="text-sm font-semibold text-brand hover:underline">
                   {t.overview.seeAll}
                 </Link>
               }
@@ -149,7 +149,7 @@ function WrappedBanner() {
   return (
     <Link
       href={`/wrapped?month=${previous}`}
-      className="mb-8 flex items-center justify-between gap-3 rounded-2xl bg-pine px-5 py-4 text-white transition-opacity hover:opacity-90"
+      className="mb-8 flex items-center justify-between gap-3 rounded-2xl bg-brand px-5 py-4 text-white transition-opacity hover:opacity-90"
     >
       <span className="font-semibold">{t.wrapped.ready(monthLabel(previous))}</span>
       <span className="shrink-0 text-sm font-semibold underline">{t.wrapped.see}</span>

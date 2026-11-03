@@ -45,9 +45,9 @@ function BottomNav() {
             accessibilityRole="tab"
             accessibilityState={{ selected: active }}
             style={{ flex: 1, minWidth: 0, height: TAB_HEIGHT, alignItems: "center", justifyContent: "center", gap: 4, paddingHorizontal: 2 }}>
-            {active && <View style={{ position: "absolute", top: 0, left: 12, right: 12, height: 2, borderRadius: 1, backgroundColor: colors.pine }} />}
-            <Icon size={20} color={active ? colors.pine : colors.muted} />
-            <Text size={10} weight={active ? "semibold" : "regular"} tone={active ? "pine" : "muted"} numberOfLines={1} style={{ lineHeight: 13 }}>
+            {active && <View style={{ position: "absolute", top: 0, left: 12, right: 12, height: 2, borderRadius: 1, backgroundColor: colors.brand }} />}
+            <Icon size={20} color={active ? colors.brand : colors.muted} />
+            <Text size={10} weight={active ? "semibold" : "regular"} tone={active ? "brand" : "muted"} numberOfLines={1} style={{ lineHeight: 13 }}>
               {label(t)}
             </Text>
           </Pressable>
@@ -74,11 +74,11 @@ function AddExpenseButton() {
       style={({ pressed }) => ({
         position: "absolute", end: 16, bottom: TAB_HEIGHT + insets.bottom + 16, height: 56, borderRadius: 28,
         flexDirection: "row", alignItems: "center", gap: 8, paddingHorizontal: 24,
-        backgroundColor: pressed ? colors.pineDark : colors.pine, transform: [{ scale: pressed ? 0.95 : 1 }],
-        shadowColor: colors.pine, shadowOpacity: 0.3, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 8,
+        backgroundColor: pressed ? colors.brandDark : colors.brand, transform: [{ scale: pressed ? 0.95 : 1 }],
+        shadowColor: colors.brand, shadowOpacity: 0.3, shadowRadius: 12, shadowOffset: { width: 0, height: 6 }, elevation: 8,
       })}>
-      <Plus size={20} color={colors.onPine} />
-      <Text weight="semibold" tone="onPine">{t.expenses.add}</Text>
+      <Plus size={20} color={colors.onBrand} />
+      <Text weight="semibold" tone="onBrand">{t.expenses.add}</Text>
     </Pressable>
   );
 }

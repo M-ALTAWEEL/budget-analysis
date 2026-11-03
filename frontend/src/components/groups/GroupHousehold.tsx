@@ -44,7 +44,7 @@ export function GroupHousehold({ group }: { group: GroupDetail }) {
     <section aria-labelledby="household" className="rounded-2xl border border-line bg-surface px-5 py-5">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 id="household" className="flex items-center gap-2 font-display text-lg font-semibold">
-          <Home className="size-5 text-pine" aria-hidden />
+          <Home className="size-5 text-brand" aria-hidden />
           {t.household.title}
         </h2>
         <div className="flex items-center gap-1 text-sm">
@@ -106,14 +106,14 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
           {over ? t.household.over(m(String(-Number(data.remaining)))) : t.household.left(m(data.remaining!))}
         </p>
         {data.can_edit && (
-          <button type="button" onClick={onEdit} className="text-sm font-semibold text-pine hover:underline">
+          <button type="button" onClick={onEdit} className="text-sm font-semibold text-brand hover:underline">
             {t.household.edit}
           </button>
         )}
       </div>
       <p className="tabular text-sm text-muted">{t.household.spentOf(m(data.spent), m(data.total_amount!))}</p>
       <div className="mt-2 h-2 overflow-hidden rounded-full bg-line" aria-hidden>
-        <div className={`h-full rounded-full ${over ? "bg-berry" : "bg-pine"}`} style={{ width: `${Math.min(total ? spent / total : 0, 1) * 100}%` }} />
+        <div className={`h-full rounded-full ${over ? "bg-berry" : "bg-ok"}`} style={{ width: `${Math.min(total ? spent / total : 0, 1) * 100}%` }} />
       </div>
       {data.categories.length > 0 && (
         <ul className="mt-4 space-y-3">
@@ -129,7 +129,7 @@ function Summary({ data, m, onEdit }: { data: GroupBudget; m: (a: string) => str
                 </div>
                 {row.limit && (
                   <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
-                    <div className={`h-full rounded-full ${ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-pine"}`} style={{ width: `${Math.min(ratio, 1) * 100}%` }} />
+                    <div className={`h-full rounded-full ${ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-ok"}`} style={{ width: `${Math.min(ratio, 1) * 100}%` }} />
                   </div>
                 )}
               </li>

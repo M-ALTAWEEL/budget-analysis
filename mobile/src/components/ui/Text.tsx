@@ -5,10 +5,10 @@ import { fontFamily, type Weight } from "@/components/ui/fonts";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useColors, type Palette } from "@/theme/ThemeProvider";
 
-type Tone = "ink" | "muted" | "pine" | "berry" | "marigold" | "onPine";
+type Tone = "ink" | "muted" | "brand" | "ok" | "berry" | "marigold" | "onBrand";
 
 /**
- * All text in the app. `display` is the heading font (Bricolage), otherwise the body font.
+ * All text in the app. `display` is a heading (Geist, at least semibold), otherwise body text.
  * It follows the language: Readex Pro and right-to-left in Arabic. Numbers keep their
  * width (tabular) so amounts line up.
  */
@@ -38,10 +38,11 @@ export function Text({
   const toneColor: Record<Tone, keyof Palette> = {
     ink: "ink",
     muted: "muted",
-    pine: "pine",
+    brand: "brand",
+    ok: "ok",
     berry: "berry",
     marigold: "marigoldInk",
-    onPine: "onPine",
+    onBrand: "onBrand",
   };
   const align: TextStyle["textAlign"] = center ? "center" : end !== rtl ? "right" : "left";
   return (

@@ -43,7 +43,7 @@ function TankView({
   const remaining = total - spent;
   const spentRatio = total > 0 ? Math.min(spent / total, 1) : 0;
   const shownLeft = useCountUp(Math.max(remaining, 0));
-  const fill = pace === "over" ? colors.berry : pace === "fast" ? colors.marigold : colors.pine;
+  const fill = pace === "over" ? colors.berry : pace === "fast" ? colors.marigold : colors.ok;
   const daily = daysLeft > 0 && remaining > 0 ? remaining / daysLeft : null;
   const format = (amount: number) => money(amount, currency);
   const width = useRef(new Animated.Value(0)).current;
@@ -84,7 +84,7 @@ function TankView({
           accessibilityRole="progressbar"
           accessibilityLabel={t.tank.meterLabel}
           accessibilityValue={{ min: 0, max: total, now: Math.min(spent, total), text: t.tank.meterText(format(spent), format(total)) }}
-          style={{ height: 64, borderRadius: 20, overflow: "hidden", backgroundColor: colors.pineSoft }}>
+          style={{ height: 64, borderRadius: 20, overflow: "hidden", backgroundColor: colors.okSoft }}>
           <Animated.View
             style={{
               position: "absolute", top: 0, bottom: 0, [start]: 0, backgroundColor: fill,

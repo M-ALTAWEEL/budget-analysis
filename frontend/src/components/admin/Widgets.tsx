@@ -33,7 +33,7 @@ export function Flag({ on, yes = "Yes", no = "No" }: { on: boolean; yes?: string
   return (
     <span
       className={`inline-flex rounded-md px-2 py-0.5 text-xs font-semibold ${
-        on ? "bg-pine-soft text-pine-dark" : "bg-ink/5 text-muted"
+        on ? "bg-brand-soft text-brand-dark" : "bg-ink/5 text-muted"
       }`}
     >
       {on ? yes : no}
@@ -57,7 +57,7 @@ export function DayBars({ title, days }: { title: string; days: DayCount[] }) {
           <div
             key={d.day}
             title={`${label(d.day)}: ${d.count}`}
-            className="flex-1 rounded-t-sm bg-pine/80"
+            className="flex-1 rounded-t-sm bg-brand/80"
             style={{ height: `${d.count === 0 ? 2 : Math.max(6, (d.count / max) * 100)}%`, opacity: d.count ? 1 : 0.25 }}
           />
         ))}

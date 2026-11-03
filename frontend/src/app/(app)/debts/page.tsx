@@ -56,7 +56,7 @@ export default function DebtsPage() {
           <section className="mb-8 grid grid-cols-2 gap-3">
             <div className="rounded-2xl border border-line bg-surface px-5 py-5">
               <h2 className="text-sm text-muted">{t.debts.owedToYou}</h2>
-              <p className="tabular font-display text-2xl font-semibold text-pine">
+              <p className="tabular font-display text-2xl font-semibold text-brand">
                 {money(debts.data.owed_to_you, debts.data.currency)}
               </p>
             </div>
@@ -105,7 +105,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   return (
     <li className={`rounded-2xl border border-line bg-surface px-5 py-4 ${settled ? "opacity-60" : ""}`}>
       <button type="button" onClick={onEdit} className="flex w-full items-start gap-4 text-start">
-        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${lent ? "bg-pine/10 text-pine" : "bg-berry/10 text-berry"}`}>
+        <span className={`grid size-10 shrink-0 place-items-center rounded-xl ${lent ? "bg-ok/10 text-ok" : "bg-berry/10 text-berry"}`}>
           <HandCoins className="size-5" aria-hidden />
         </span>
         <span className="min-w-0 flex-1">
@@ -125,7 +125,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
 
       {Number(debt.paid) > 0 && !settled && (
         <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-line" aria-hidden>
-          <div className="h-full rounded-full bg-pine" style={{ width: `${Math.min(paidRatio, 1) * 100}%` }} />
+          <div className="h-full rounded-full bg-brand" style={{ width: `${Math.min(paidRatio, 1) * 100}%` }} />
         </div>
       )}
 

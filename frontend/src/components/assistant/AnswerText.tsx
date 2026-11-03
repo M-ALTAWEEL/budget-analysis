@@ -147,7 +147,7 @@ export function Suggestions({ onAsk, className = "" }: { onAsk: (q: string) => v
           key={question}
           type="button"
           onClick={() => onAsk(question)}
-          className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-ink transition-[border-color,transform] hover:border-pine active:scale-95"
+          className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-sm text-ink transition-[border-color,transform] hover:border-brand active:scale-95"
         >
           {question}
         </button>

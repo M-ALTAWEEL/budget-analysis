@@ -36,7 +36,7 @@ export function Screen({
         contentContainerStyle={{ padding: padded ? 20 : 0, paddingBottom: 140 }}
         refreshControl={
           onRefresh ? (
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.pine} />
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={colors.brand} />
           ) : undefined
         }>
         <VerifyEmailBanner />
@@ -66,7 +66,7 @@ export function Section({
         </Text>
         {action && (
           <Pressable accessibilityRole="link" onPress={action.onPress} hitSlop={8}>
-            <Text size={14} weight="semibold" tone="pine">
+            <Text size={14} weight="semibold" tone="brand">
               {action.label}
             </Text>
           </Pressable>
@@ -200,8 +200,8 @@ export function Chip({
         gap: 8,
         borderRadius: 12,
         borderWidth: selected ? 2 : 1,
-        borderColor: selected ? colors.pine : colors.line,
-        backgroundColor: selected ? colors.pineSoft : colors.surface,
+        borderColor: selected ? colors.brand : colors.line,
+        backgroundColor: selected ? colors.brandSoft : colors.surface,
         paddingHorizontal: selected ? 11 : 12,
         paddingVertical: selected ? 7 : 8,
       }}>

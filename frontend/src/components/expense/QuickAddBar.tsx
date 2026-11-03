@@ -93,7 +93,7 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   }
 
   return (
-    <div className="rounded-xl border border-dashed border-pine/50 bg-pine-soft/40 p-3">
+    <div className="rounded-xl border border-dashed border-brand/50 bg-brand-soft/40 p-3">
       <label htmlFor="quick-add" className="mb-1.5 block text-sm font-semibold">
         {t.quickAdd.label}
       </label>
@@ -149,7 +149,7 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
           type="button"
           onClick={() => void fill()}
           disabled={busy || !text.trim()}
-          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-pine px-3 text-sm font-semibold text-white disabled:opacity-50"
+          className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-brand px-3 text-sm font-semibold text-white disabled:opacity-50"
         >
           <Wand2 className="size-4" aria-hidden />
           {t.quickAdd.fill}

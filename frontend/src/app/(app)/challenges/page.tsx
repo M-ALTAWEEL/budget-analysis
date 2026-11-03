@@ -59,12 +59,12 @@ export default function ChallengesPage() {
               <p className="font-semibold">{t.challenges.streak(data!.streak)}</p>
             </div>
             <div className="rounded-2xl border border-line bg-surface px-5 py-4">
-              <Trophy className="mb-2 size-5 text-pine" aria-hidden />
+              <Trophy className="mb-2 size-5 text-brand" aria-hidden />
               <p className="font-semibold">{t.challenges.wins(data!.wins)}</p>
               {data!.badges.length > 0 && (
                 <ul className="mt-2 flex flex-wrap gap-1.5">
                   {data!.badges.map((badge) => (
-                    <li key={badge} className="inline-flex items-center gap-1 rounded-full bg-pine-soft px-2.5 py-0.5 text-xs font-semibold text-pine">
+                    <li key={badge} className="inline-flex items-center gap-1 rounded-full bg-brand-soft px-2.5 py-0.5 text-xs font-semibold text-brand">
                       <Award className="size-3.5" aria-hidden />
                       {t.challenges.badges[badge as keyof typeof t.challenges.badges] ?? badge}
                     </li>
@@ -119,8 +119,8 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
   const remove = useDeleteChallenge();
   const [confirming, setConfirming] = useState(false);
   const progress = challengeProgress(c, words);
-  const tone = c.status === "won" ? "text-pine" : c.status === "lost" ? "text-berry" : "text-muted";
-  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? "bg-berry" : "bg-pine";
+  const tone = c.status === "won" ? "text-ok" : c.status === "lost" ? "text-berry" : "text-muted";
+  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? "bg-berry" : "bg-ok";
   const when =
     c.status === "upcoming"
       ? t.challenges.startsOn(shortDate(c.starts_on))
@@ -140,7 +140,7 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
         {c.category ? (
           <CategoryIcon category={c.category} />
         ) : (
-          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-pine/10 text-pine">
+          <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
             <Flame className="size-5" aria-hidden />
           </span>
         )}
@@ -203,7 +203,7 @@ function OpenCard({ challenge: c }: { challenge: OpenChallenge }) {
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-2xl border border-dashed border-pine/50 bg-pine-soft/40 px-5 py-4">
+    <li className="flex items-center gap-3 rounded-2xl border border-dashed border-brand/50 bg-brand-soft/40 px-5 py-4">
       <div className="min-w-0 flex-1">
         <p className="font-semibold">{describeChallenge(c, words, user.base_currency)}</p>
         <p className="text-sm text-muted"><bdi>{t.challenges.openBy(c.by, c.group)}</bdi></p>

@@ -62,7 +62,7 @@ function Invalid() {
     <Card>
       <Text tone="berry">{t.groups.inviteInvalid}</Text>
       <Pressable onPress={() => router.replace("/groups")} accessibilityRole="link" style={{ alignSelf: "flex-start" }}>
-        <Text size={14} weight="semibold" tone="pine">{t.groups.back}</Text>
+        <Text size={14} weight="semibold" tone="brand">{t.groups.back}</Text>
       </Pressable>
     </Card>
   );
@@ -74,7 +74,7 @@ function Card({ children }: { children: ReactNode }) {
   return (
     <View style={{ gap: 20 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
-        <Users size={24} color={colors.pine} />
+        <Users size={24} color={colors.brand} />
         <Text display weight="semibold" size={24} accessibilityRole="header">{t.groups.joinTitle}</Text>
       </View>
       {children}

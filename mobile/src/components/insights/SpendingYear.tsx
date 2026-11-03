@@ -144,7 +144,7 @@ export function SpendingYear({ month }: { month: string }) {
     const ink = hexToRGB(colors.ink);
     const dark = luminance(surface) < 0.45;
     const empty = mixRGB(surface, ink, dark ? 0.11 : 0.075);
-    return [empty, hexToRGB(colors.pineSoft), hexToRGB(colors.pine), hexToRGB(colors.marigold), hexToRGB(colors.berry)];
+    return [empty, hexToRGB(colors.lv1), hexToRGB(colors.ok), hexToRGB(colors.marigold), hexToRGB(colors.berry)];
   }, [colors]);
 
   const cell = width > 0 && grid.weeks > 0 ? width / grid.weeks : 0;
@@ -342,7 +342,7 @@ export function SpendingYear({ month }: { month: string }) {
           {skylineStats(stats, t, format).map((block) => (
             <View key={block.label} style={{ width: "50%", paddingEnd: 8 }}>
               <Text size={13} tone="muted">{block.label}</Text>
-              <Text size={20} weight="semibold" tone="pine" style={{ marginTop: 2 }}>
+              <Text size={20} weight="semibold" tone="brand" style={{ marginTop: 2 }}>
                 {block.unit ? `${block.value} ${block.unit}` : block.value}
               </Text>
               <Text size={12} tone="muted" numberOfLines={1}>{block.sub}</Text>

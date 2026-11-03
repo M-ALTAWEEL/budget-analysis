@@ -59,7 +59,7 @@ export function PendingShares() {
     <section aria-labelledby="pending-shares" className="mb-10">
       <div className="mb-3 flex items-center justify-between gap-3">
         <h2 id="pending-shares" className="flex items-center gap-2 font-display text-lg font-semibold">
-          <Wallet className="size-5 text-pine" aria-hidden />
+          <Wallet className="size-5 text-brand" aria-hidden />
           {t.groups.pending}
         </h2>
         {shares.data.length > 1 && (
@@ -123,9 +123,9 @@ export function PendingSharesBanner() {
   return (
     <Link
       href="/groups"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-pine/40 bg-pine-soft px-5 py-3.5 text-[15px] font-semibold"
+      className="mb-8 flex items-center gap-3 rounded-2xl border border-brand/40 bg-brand-soft px-5 py-3.5 text-[15px] font-semibold"
     >
-      <Wallet className="size-5 text-pine" aria-hidden />
+      <Wallet className="size-5 text-brand" aria-hidden />
       {t.groups.pendingCount(count)}
     </Link>
   );

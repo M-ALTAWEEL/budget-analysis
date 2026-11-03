@@ -16,7 +16,7 @@ const FAR_SIDE = 14;
 
 /**
  * Running total of spending against an "even pace" line that reaches the budget on the
- * last day. One series is the story (pine); the even pace is grey context.
+ * last day. One series is the story (brand); the even pace is grey context.
  * Hover or arrow keys show any day; the table under it has every value without hovering.
  */
 export function PaceChart({ daily, month }: { daily: DailySpending; month: string }) {
@@ -97,7 +97,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
       {/* Legend: line keys, like the marks they name */}
       <div className="mb-3 flex flex-wrap gap-x-5 gap-y-1 text-sm text-muted">
         <span className="inline-flex items-center gap-2">
-          <span className="h-0.5 w-4 rounded-full bg-pine" aria-hidden />
+          <span className="h-0.5 w-4 rounded-full bg-brand" aria-hidden />
           {t.insights.yourSpending}
         </span>
         <span className="inline-flex items-center gap-2">
@@ -107,7 +107,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
         {forecast !== null && (
           <span className="inline-flex items-center gap-2">
             <span
-              className={`w-4 border-t-2 border-dashed ${forecastOver ? "border-berry" : "border-pine"}`}
+              className={`w-4 border-t-2 border-dashed ${forecastOver ? "border-berry" : "border-brand"}`}
               aria-hidden
             />
             {t.insights.forecast}
@@ -187,12 +187,12 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
             />
 
             {/* the student's running total */}
-            {areaPath && <path d={areaPath} fill="var(--color-pine)" fillOpacity={0.1} />}
+            {areaPath && <path d={areaPath} fill="var(--color-brand)" fillOpacity={0.1} />}
             {linePath && (
               <path
                 d={linePath}
                 fill="none"
-                stroke="var(--color-pine)"
+                stroke="var(--color-brand)"
                 strokeWidth={2}
                 strokeLinejoin="round"
                 strokeLinecap="round"
@@ -207,7 +207,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
                   y1={y(running[last])}
                   x2={x(count - 1)}
                   y2={y(forecast)}
-                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-pine)"}
+                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-brand)"}
                   strokeWidth={2}
                   strokeDasharray="5 5"
                   strokeLinecap="round"
@@ -217,7 +217,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
                   cy={y(forecast)}
                   r={3.5}
                   fill="var(--color-surface)"
-                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-pine)"}
+                  stroke={forecastOver ? "var(--color-berry)" : "var(--color-brand)"}
                   strokeWidth={2}
                 />
                 {active === null && last < count * 0.75 && (
@@ -255,7 +255,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
                   cx={x(active !== null && active <= last ? active : last)}
                   cy={y(running[active !== null && active <= last ? active : last])}
                   r={4.5}
-                  fill="var(--color-pine)"
+                  fill="var(--color-brand)"
                   stroke="var(--color-surface)"
                   strokeWidth={2}
                 />
@@ -287,7 +287,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
             {active <= last && (
               <>
                 <p className="mt-1 flex items-center gap-2">
-                  <span className="h-0.5 w-3 shrink-0 rounded-full bg-pine" aria-hidden />
+                  <span className="h-0.5 w-3 shrink-0 rounded-full bg-brand" aria-hidden />
                   <span className="font-semibold">{format(running[active])}</span>
                 </p>
                 <p className="text-xs text-muted">{t.insights.spentByThisDay}</p>

@@ -74,7 +74,7 @@ function Sidebar() {
               href={href}
               aria-current={active ? "page" : undefined}
               className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] ${
-                active ? "bg-pine-soft font-semibold text-pine-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
+                active ? "bg-brand-soft font-semibold text-brand-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
               }`}
             >
               <Icon className="size-5" aria-hidden />
@@ -124,7 +124,7 @@ function TwoFactorFirst() {
         </p>
         <Link
           href="/settings"
-          className="mt-5 inline-flex h-11 items-center rounded-xl bg-pine px-5 text-[15px] font-semibold text-on-pine hover:bg-pine-dark"
+          className="mt-5 inline-flex h-11 items-center rounded-xl bg-brand px-5 text-[15px] font-semibold text-on-brand hover:bg-brand-dark"
         >
           Open Settings
         </Link>

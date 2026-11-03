@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Bricolage_Grotesque, Instrument_Sans, Readex_Pro } from "next/font/google";
+import { Geist, Readex_Pro } from "next/font/google";
 
 import { PRELOADER_SCRIPT } from "@/components/brand/preloaderScript";
 
@@ -7,13 +7,9 @@ import { Providers } from "./providers";
 import "./globals.css";
 import "./brand.css";
 
-// Display face for headings and big numbers; a calm grotesque for everything else.
+// One face for headings, text and numbers (money uses its even-width digits: .tabular).
 // "latin-ext" adds Turkish letters (ğ, ş, ı, İ). Arabic gets its own font.
-const display = Bricolage_Grotesque({
-  variable: "--font-display-face",
-  subsets: ["latin", "latin-ext"],
-});
-const body = Instrument_Sans({ variable: "--font-body", subsets: ["latin", "latin-ext"] });
+const body = Geist({ variable: "--font-body", subsets: ["latin", "latin-ext"] });
 const arabic = Readex_Pro({ variable: "--font-arabic", subsets: ["arabic", "latin"] });
 
 // Vercel sets the production domain at build time; share cards need absolute image links.
@@ -54,7 +50,7 @@ var t=localStorage.getItem("bb-theme");
 var dark=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);
 d.dataset.theme=dark?"dark":"light";
 var a=localStorage.getItem("bb-accent");
-if(a==="ocean"||a==="plum"||a==="graphite")d.dataset.accent=a;
+if(a==="pine"||a==="ocean"||a==="plum"||a==="graphite")d.dataset.accent=a;
 }catch(e){}})();`;
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -64,7 +60,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       lang="en"
       dir="ltr"
       suppressHydrationWarning
-      className={`${display.variable} ${body.variable} ${arabic.variable} h-full`}
+      className={`${body.variable} ${arabic.variable} h-full`}
     >
       <head>
         <script dangerouslySetInnerHTML={{ __html: EARLY_SCRIPT }} />

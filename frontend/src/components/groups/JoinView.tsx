@@ -33,7 +33,7 @@ export function JoinView() {
       <Card>
         <p className="text-muted">{t.groups.signInToJoin}</p>
         <div className="flex flex-wrap gap-2">
-          <Link href="/login" className="inline-flex h-11 items-center rounded-xl bg-pine px-5 font-semibold text-on-pine">
+          <Link href="/login" className="inline-flex h-11 items-center rounded-xl bg-brand px-5 font-semibold text-on-brand">
             {t.auth.logIn}
           </Link>
           <Link
@@ -102,7 +102,7 @@ function Invalid() {
   return (
     <Card>
       <p className="text-berry">{t.groups.inviteInvalid}</p>
-      <Link href="/groups" className="text-sm font-semibold text-pine hover:underline">
+      <Link href="/groups" className="text-sm font-semibold text-brand hover:underline">
         {t.groups.back}
       </Link>
     </Card>
@@ -114,7 +114,7 @@ function Card({ children }: { children: React.ReactNode }) {
   return (
     <div className="space-y-5">
       <h1 className="flex items-center gap-3 font-display text-2xl font-semibold">
-        <Users className="size-6 text-pine" aria-hidden />
+        <Users className="size-6 text-brand" aria-hidden />
         {t.groups.joinTitle}
       </h1>
       {children}

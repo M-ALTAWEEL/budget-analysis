@@ -94,8 +94,8 @@ export function IncomeSheet({ income, onClose }: { income: Income | null; onClos
                   onPress={() => setKind(value)}
                   style={{
                     borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8,
-                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-                    backgroundColor: selected ? colors.pineSoft : colors.surface,
+                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+                    backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>
                   <Text size={14} weight="semibold">{t.income.kinds[value]}</Text>
                 </Pressable>

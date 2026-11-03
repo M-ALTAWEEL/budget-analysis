@@ -54,16 +54,16 @@ function Body({ data }: { data: InflationView }) {
       ) : (
         <>
           {data.change_local !== null && data.change_stable !== null && (
-            <View style={{ borderRadius: 16, backgroundColor: colors.pine, padding: 20, gap: 4 }}>
-              <Text display weight="semibold" size={17} tone="onPine">{t.inflation.summary(data.change_local, data.change_stable, data.stable_currency)}</Text>
-              <Text size={14} tone="onPine" style={{ opacity: 0.85 }}>{t.inflation.explain}</Text>
+            <View style={{ borderRadius: 16, backgroundColor: colors.brand, padding: 20, gap: 4 }}>
+              <Text display weight="semibold" size={17} tone="onBrand">{t.inflation.summary(data.change_local, data.change_stable, data.stable_currency)}</Text>
+              <Text size={14} tone="onBrand" style={{ opacity: 0.85 }}>{t.inflation.explain}</Text>
             </View>
           )}
 
           <View style={[card, { gap: 14 }]}>
             <Text display weight="semibold" size={18}>{t.inflation.monthsTitle}</Text>
             <View style={{ flexDirection: "row", gap: 16 }}>
-              {[{ c: colors.pine, l: t.inflation.local }, { c: colors.marigold, l: t.inflation.stable(data.stable_currency) }].map((k) => (
+              {[{ c: colors.brand, l: t.inflation.local }, { c: colors.marigold, l: t.inflation.stable(data.stable_currency) }].map((k) => (
                 <View key={k.l} style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
                   <View style={{ width: 10, height: 10, borderRadius: 5, backgroundColor: k.c }} />
                   <Text size={12} tone="muted">{k.l}</Text>
@@ -76,7 +76,7 @@ function Body({ data }: { data: InflationView }) {
                   <Text size={14} weight="semibold">{monthLabel(m.month)}{m.partial ? ` · ${t.inflation.soFar}` : ""}</Text>
                   <Text size={13} tone="muted">{money(m.spent, m.currency)} · {m.spent_stable !== null ? money(m.spent_stable, data.stable_currency) : t.inflation.noRate}</Text>
                 </View>
-                <View style={{ height: 8, borderRadius: 999, backgroundColor: colors.pine, width: `${(Number(m.spent) / maxLocal) * 100}%` }} />
+                <View style={{ height: 8, borderRadius: 999, backgroundColor: colors.brand, width: `${(Number(m.spent) / maxLocal) * 100}%` }} />
                 <View style={{ height: 8, borderRadius: 999, backgroundColor: colors.marigold, width: `${(Number(m.spent_stable ?? 0) / maxStable) * 100}%` }} />
               </View>
             ))}

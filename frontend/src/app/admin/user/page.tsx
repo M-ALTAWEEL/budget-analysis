@@ -254,7 +254,7 @@ function BackToUsers({ note }: { note: string }) {
   return (
     <div className="space-y-4">
       <p className="text-muted">{note}</p>
-      <Link href="/admin/users" className="inline-flex items-center gap-1.5 font-semibold text-pine hover:underline">
+      <Link href="/admin/users" className="inline-flex items-center gap-1.5 font-semibold text-brand hover:underline">
         <ArrowLeft className="size-4" aria-hidden />
         Back to users
       </Link>

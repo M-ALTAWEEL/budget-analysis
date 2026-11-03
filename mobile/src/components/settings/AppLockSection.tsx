@@ -37,7 +37,7 @@ export function AppLockSection() {
               setBusy(true);
               void setEnabled(on).finally(() => setBusy(false));
             }}
-            trackColor={{ true: colors.pine, false: colors.line }}
+            trackColor={{ true: colors.brand, false: colors.line }}
             thumbColor="#fff"
           />
         </View>
