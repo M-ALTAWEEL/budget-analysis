@@ -207,7 +207,7 @@ function CodesSheet({ codes, onClose }: { codes: string[]; onClose: () => void }
   const text = codes.join("\n");
 
   function download() {
-    const blob = new Blob([`Budget Analysis backup codes\n\n${text}\n`], { type: "text/plain" });
+    const blob = new Blob([`ibudgi backup codes\n\n${text}\n`], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;

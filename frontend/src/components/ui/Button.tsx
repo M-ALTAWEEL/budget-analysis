@@ -1,4 +1,4 @@
-import { LoaderCircle } from "lucide-react";
+import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 
@@ -29,7 +29,12 @@ export function Button({
       aria-busy={loading || undefined}
       className={`inline-flex h-11 items-center justify-center gap-2 rounded-xl px-5 text-[15px] font-semibold transition-[color,background-color,border-color,transform] active:scale-[0.97] disabled:cursor-not-allowed disabled:active:scale-100 disabled:opacity-60 ${VARIANTS[variant]} ${className}`}
     >
-      {loading && <LoaderCircle className="size-4 animate-spin" aria-hidden />}
+      {loading && (
+        // aria-busy on the button already says it is working.
+        <span aria-hidden className="-my-1 flex">
+          <IbudgiLoader size={24} variant="inherit" />
+        </span>
+      )}
       {children}
     </button>
   );

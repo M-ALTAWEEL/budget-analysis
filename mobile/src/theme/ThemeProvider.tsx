@@ -26,7 +26,7 @@ const LIGHT = {
   berrySoft: "#f6e3ea",
   onPine: "#ffffff",
   panel: "#1e6b57",
-  logo: "#05194b",
+  logo: "#15172A",
 };
 
 const DARK: Palette = {
@@ -45,7 +45,7 @@ const DARK: Palette = {
   berrySoft: "#3a1f2a",
   onPine: "#0b1f19",
   panel: "#12443a",
-  logo: "#e9eef7",
+  logo: "#FFFFFF",
 };
 
 export type Palette = typeof LIGHT;

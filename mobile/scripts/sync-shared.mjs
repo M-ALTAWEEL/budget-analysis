@@ -22,6 +22,8 @@ export const SHARED = [
   "lib/month.ts",
   "lib/money.ts",
   "lib/insights.ts",
+  "lib/skyline.ts",
+  "lib/brand.ts",
   "lib/challenges.ts",
   "lib/offline.ts",
   "lib/statementImport.ts",

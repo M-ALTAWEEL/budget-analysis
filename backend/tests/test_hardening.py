@@ -82,13 +82,13 @@ async def test_changing_or_resetting_the_password_sends_a_notice(client):
     assert changed.status_code == 204
     notice = mail.sent[-1]
     assert notice.to == "sara@example.com"
-    assert notice.subject == "Your Budget Analysis password was changed"
+    assert notice.subject == "Your ibudgi password was changed"
     assert notice.link is None and "token=" not in notice.text
 
     await client.post(f"{API}/auth/password/forgot", json={"email": "sara@example.com"})
     body = {"token": mail.link_token(), "password": "yet-another-one-9"}
     assert (await client.post(f"{API}/auth/password/reset", json=body)).status_code == 204
-    assert mail.sent[-1].subject == "Your Budget Analysis password was changed"
+    assert mail.sent[-1].subject == "Your ibudgi password was changed"
 
 
 async def test_every_endpoint_has_a_limit_per_visitor(client):

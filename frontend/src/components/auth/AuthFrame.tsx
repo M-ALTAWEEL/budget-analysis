@@ -19,7 +19,7 @@ export function AuthFrame({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen lg:grid lg:grid-cols-2">
       <div className="flex flex-col px-6 py-8 sm:px-12">
         <div className="flex items-center justify-between gap-3">
-          <Link href="/" aria-label="Budget Analysis">
+          <Link href="/" aria-label="ibudgi">
             <Logo />
           </Link>
           <div className="flex items-center gap-2">

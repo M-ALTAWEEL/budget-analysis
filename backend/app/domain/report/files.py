@@ -43,7 +43,7 @@ _LABELS: dict[str, dict[str, str]] = {
         "original": "Paid as",
         "months": "Months",
         "summary": "Summary",
-        "made": "Made with Budget Analysis on",
+        "made": "Made with ibudgi on",
         "none": "No expenses.",
     },
     "ar": {
@@ -64,7 +64,7 @@ _LABELS: dict[str, dict[str, str]] = {
         "original": "المدفوع",
         "months": "الأشهر",
         "summary": "الملخص",
-        "made": "صُنع بواسطة Budget Analysis في",
+        "made": "صُنع بواسطة ibudgi في",
         "none": "لا توجد مصاريف.",
     },
     "tr": {
@@ -85,7 +85,7 @@ _LABELS: dict[str, dict[str, str]] = {
         "original": "Ödenen",
         "months": "Aylar",
         "summary": "Özet",
-        "made": "Budget Analysis ile oluşturuldu:",
+        "made": "ibudgi ile oluşturuldu:",
         "none": "Harcama yok.",
     },
 }
@@ -301,7 +301,7 @@ def to_pdf(data: ReportData) -> bytes:
         topMargin=16 * mm,
         bottomMargin=16 * mm,
         title=f"{words['title']} {data.period}",
-        author="Budget Analysis",
+        author="ibudgi",
     )
     width = A4[0] - 32 * mm
     story: list = [

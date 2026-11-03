@@ -453,7 +453,7 @@ export const en = {
     goalsSaved: (amount: string) => `Put into savings goals: ${amount}`,
     share: "Share",
     shareText: (month: string, spent: string, budget: string) =>
-      `My ${month} with Budget Analysis: ${spent} spent of ${budget}.`,
+      `My ${month} with ibudgi: ${spent} spent of ${budget}.`,
     copied: "Copied",
     noBudget: "This month has no budget, so there is nothing to report.",
     ready: (month: string) => `Your ${month} in numbers is ready`,
@@ -734,6 +734,31 @@ export const en = {
       `${percent} of the budget is already spent, with ${days} days still to go.`,
   },
 
+  // The spending skyline on the Overview: a year of daily spending, flat or in 3D.
+  skyline: {
+    title: "Your year of spending",
+    intro: "Every day of the last 12 months: the more you spent that day, the stronger its colour (and in 3D, the taller its bar).",
+    total: "Spent in 12 months",
+    biggest: "Biggest day",
+    longestFree: "Longest no-spend run",
+    currentFree: "No-spend run now",
+    days: (count: number): string => (count === 1 ? "day" : "days"),
+    spentOn: (amount: string, date: string) => `${amount} on ${date}`,
+    nothingOn: (date: string) => `Nothing spent on ${date}`,
+    levels: ["Nothing", "A little", "Some", "A lot", "The most"],
+    less: "Less",
+    more: "More",
+    view: "Chart view",
+    flat: "Flat heat map",
+    skyline: "3D skyline",
+    hintFlat: "Hover or tap a day for the amount · the arrow keys move between days",
+    hintSkyline: "Drag to turn it · double-click to reset",
+    hintApp: "Tap a day for the amount",
+    chartLabel: (total: string, from: string, to: string) =>
+      `${total} spent between ${from} and ${to}. Use the arrow keys to read each day.`,
+    empty: "Set budgets and add expenses to see your year here.",
+  },
+
   goals: {
     title: "Savings goals",
     intro: "Put money aside for something bigger: a laptop, a trip, next semester's fees. Each goal shows how much to save every month to get there on time.",
@@ -851,7 +876,7 @@ export const en = {
         "2fa_disabled": "Two-factor turned off",
         backup_codes_created: "New backup codes created",
         backup_code_used: "A backup code was used",
-        admin_action: "Account action by Budget Analysis support",
+        admin_action: "Account action by ibudgi support",
       } as Record<string, string>,
       otherEvent: "Security change",
     },
@@ -860,7 +885,7 @@ export const en = {
   landing: {
     heroTitle: "Know what's left of your allowance, and whether it will last.",
     heroText:
-      "Write down what you spend. Budget Analysis puts it in the right category, warns you before a category runs out, and shows where the month is heading.",
+      "Write down what you spend. ibudgi puts it in the right category, warns you before a category runs out, and shows where the month is heading.",
     heroNote: "Free, in English, Arabic and Turkish.",
     demoLabel: "A student's month played in a few seconds: the tank empties as expenses come in.",
     dayOf: (day: number, days: number) => `Day ${day} of ${days}`,
@@ -893,7 +918,7 @@ export const en = {
     f3Text:
       "English, Arabic and Turkish, each with its own numbers, dates and plurals. Arabic reads right to left, charts included.",
     endTitle: "Start with this month's allowance. It takes a minute.",
-    footer: "Budget Analysis is a portfolio project by Mouhammed Altaweel.",
+    footer: "ibudgi is a portfolio project by Mouhammed Altaweel.",
     source: "Source code on GitHub",
     privacy: "Privacy",
     terms: "Terms of use",
@@ -902,7 +927,7 @@ export const en = {
   assistant: {
     title: "Assistant",
     intro: "Ask about your money in English, Arabic or Turkish. The answers are worked out from your own expenses.",
-    local: "Runs inside Budget Analysis. No outside AI service sees your data.",
+    local: "Runs inside ibudgi. No outside AI service sees your data.",
     placeholder: "Ask a question…",
     send: "Send",
     thinking: "Working it out…",
@@ -965,9 +990,9 @@ export const en = {
     text: "Ask for Face ID, a fingerprint or your phone's passcode every time you come back to the app.",
     toggle: "Lock the app",
     unavailable: "Set up Face ID, a fingerprint or a passcode on your phone first.",
-    locked: "Budget Analysis is locked",
+    locked: "ibudgi is locked",
     unlock: "Unlock",
-    reason: "Unlock Budget Analysis",
+    reason: "Unlock ibudgi",
   },
 
   // The phone app only: push notifications.
@@ -977,19 +1002,19 @@ export const en = {
     groupsText: "When someone adds an expense you're part of, pays you back, or invites you to a group.",
     budget: "Budget alerts",
     budgetText: "When a category nears or passes its limit, this month's money is almost gone, or a recurring payment is due tomorrow.",
-    denied: "Notifications are turned off for Budget Analysis in your phone's settings.",
+    denied: "Notifications are turned off for ibudgi in your phone's settings.",
     openSettings: "Open phone settings",
   },
 
   errors: {
-    network: "Can't reach the Budget Analysis server. Check your connection and try again.",
+    network: "Can't reach the ibudgi server. Check your connection and try again.",
     tooMany: "Too many attempts. Wait a minute and try again.",
     generic: "Something went wrong. Try again.",
     invalid: "Some of the values aren't valid. Check them and try again.",
     invalidLogin: "Incorrect email or password.",
     forbidden: "You can't change this.",
     notFound: "We couldn't find that. It may have been deleted.",
-    server: "The Budget Analysis server had a problem. Try again in a moment.",
+    server: "The ibudgi server had a problem. Try again in a moment.",
     emailTaken: "An account with this email already exists.",
     needBudget: "Set a budget for that month before adding expenses to it.",
   },

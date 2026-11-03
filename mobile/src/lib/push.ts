@@ -43,7 +43,7 @@ export async function registerForPush(ask: boolean): Promise<PushPermission> {
 
   if (Platform.OS === "android") {
     await Notifications.setNotificationChannelAsync("default", {
-      name: "Budget Analysis",
+      name: "ibudgi",
       importance: Notifications.AndroidImportance.DEFAULT,
     });
   }

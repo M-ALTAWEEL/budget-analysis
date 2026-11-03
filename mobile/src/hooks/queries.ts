@@ -1,6 +1,13 @@
 "use client";
 
-import { keepPreviousData, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import {
+  keepPreviousData,
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+  type UseQueryResult,
+} from "@tanstack/react-query";
 
 import {
   archiveCategory,
@@ -33,6 +40,7 @@ import {
 } from "@/services/debts";
 import { createChallenge, deleteChallenge, joinChallenge, listChallenges } from "@/services/challenges";
 import { flushPending, isOffline, newClientId, queueExpense } from "@/lib/offline";
+import { yearMonths } from "@/lib/skyline";
 import { getInflation } from "@/services/inflation";
 import { getWrapped } from "@/services/reports";
 import { listSupport, openSupport, replyToSupport, writeToSupport } from "@/services/support";
@@ -61,6 +69,7 @@ import {
 import type {
   ContributionInput,
   Currency,
+  DailySpending,
   Expense,
   DebtInput,
   ExpenseInput,
@@ -97,6 +106,27 @@ export function useSummary(month: string) {
 
 export function useDaily(month: string) {
   return useQuery({ queryKey: queryKeys.daily(month), queryFn: () => getDaily(month) });
+}
+
+// Defined once, outside the hook: React Query then keeps the combined result (and its
+// `dailies` array) the same object until a month's data really changes.
+function combineYear(results: UseQueryResult<DailySpending | null>[]) {
+  return {
+    dailies: results.map((r) => r.data),
+    isPending: results.some((r) => r.isPending),
+    isError: results.some((r) => r.isError),
+    error: results.find((r) => r.error)?.error ?? null,
+    refetch: () => results.forEach((r) => void r.refetch()),
+  };
+}
+
+/** The 12 budget months ending with `month`, for the spending skyline: one request per month,
+ *  in the same cache as useDaily (null for a month without a budget). */
+export function useSpendingYear(month: string) {
+  return useQueries({
+    queries: yearMonths(month).map((m) => ({ queryKey: queryKeys.daily(m), queryFn: () => getDaily(m) })),
+    combine: combineYear,
+  });
 }
 
 export function useTips(month: string) {
