@@ -26,6 +26,18 @@ export const en = {
     assistant: "Assistant",
     settings: "Settings",
     logout: "Log out",
+    more: "More",
+  },
+
+  search: {
+    open: "Search",
+    placeholder: "Search or jump to…",
+    empty: "Nothing found",
+    actions: "Actions",
+    places: "Go to",
+    darkTheme: "Switch to dark",
+    lightTheme: "Switch to light",
+    hint: "↑ ↓ to move, Enter to open, Esc to close",
   },
 
   auth: {
@@ -281,6 +293,13 @@ export const en = {
     noLimitSet: "No limit set",
     overLimit: (amount: string) => `${amount} over the limit`,
     onlyLeft: (amount: string) => `Only ${amount} left`,
+    budgetTitle: "This month's budget",
+    used: "used",
+    spentLabel: "Spent",
+    leftLabel: "Left",
+    daysLabel: "Days left",
+    quickTitle: "Quick add",
+    status: { ok: "On track", warn: "Careful", bad: "Over budget" },
   },
 
   setup: {

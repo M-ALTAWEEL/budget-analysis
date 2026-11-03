@@ -7,6 +7,7 @@ import { fontFamily } from "@/components/ui/fonts";
 import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useColors } from "@/theme/ThemeProvider";
+import { RADIUS } from "@/theme/tokens";
 
 /** A labelled text box, like the website's Field (label, hint, suffix such as "TRY"). */
 export function Field({
@@ -30,7 +31,7 @@ export function Field({
           flexDirection: "row",
           alignItems: "center",
           minHeight: 46,
-          borderRadius: 12,
+          borderRadius: RADIUS.control,
           borderWidth: 1,
           borderColor: focused ? colors.brand : colors.line,
           backgroundColor: colors.surface,
@@ -107,7 +108,7 @@ export function Select<T extends string>({
         style={{
           opacity: disabled ? 0.5 : 1,
           minHeight: 46,
-          borderRadius: 12,
+          borderRadius: RADIUS.control,
           borderWidth: 1,
           borderColor: colors.line,
           backgroundColor: colors.surface,
@@ -162,7 +163,7 @@ export function FormError({ message }: { message: string | null | undefined }) {
   return (
     <View
       accessibilityRole="alert"
-      style={{ borderRadius: 12, backgroundColor: colors.berrySoft, paddingHorizontal: 14, paddingVertical: 10 }}>
+      style={{ borderRadius: RADIUS.control, backgroundColor: colors.berrySoft, paddingHorizontal: 14, paddingVertical: 10 }}>
       <Text size={14} tone="berry">
         {message}
       </Text>

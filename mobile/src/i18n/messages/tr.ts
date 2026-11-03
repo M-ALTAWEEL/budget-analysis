@@ -28,6 +28,18 @@ export const tr: Messages = {
     assistant: "Asistan",
     settings: "Ayarlar",
     logout: "Çıkış yap",
+    more: "Daha fazla",
+  },
+
+  search: {
+    open: "Ara",
+    placeholder: "Ara veya bir sayfaya git…",
+    empty: "Sonuç yok",
+    actions: "İşlemler",
+    places: "Git",
+    darkTheme: "Koyu temaya geç",
+    lightTheme: "Açık temaya geç",
+    hint: "↑ ↓ ile gezin, Enter ile aç, Esc ile kapat",
   },
 
   auth: {
@@ -281,6 +293,13 @@ export const tr: Messages = {
     noLimitSet: "Limit belirlenmedi",
     overLimit: (amount) => `Limiti ${amount} aştı`,
     onlyLeft: (amount) => `Sadece ${amount} kaldı`,
+    budgetTitle: "Bu ayın bütçesi",
+    used: "kullanıldı",
+    spentLabel: "Harcanan",
+    leftLabel: "Kalan",
+    daysLabel: "Kalan gün",
+    quickTitle: "Hızlı ekle",
+    status: { ok: "Yolunda", warn: "Dikkat", bad: "Bütçe aşıldı" },
   },
 
   setup: {

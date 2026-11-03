@@ -7,14 +7,15 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { useColors } from "@/theme/ThemeProvider";
 import type { BudgetSummary } from "@/types/api";
 
-export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
+/** Spending per category against its limit. `plain`: no frame of its own, inside a Card. */
+export function CategoryBreakdown({ summary, plain }: { summary: BudgetSummary; plain?: boolean }) {
   const { t, money, categoryName } = useI18n();
   const colors = useColors();
   const format = (amount: string | number) => money(amount, summary.currency);
   if (summary.categories.length === 0) return <Empty text={t.overview.nothingSpent} />;
 
   return (
-    <List>
+    <List plain={plain}>
       {summary.categories.map(({ category, limit_amount, spent }) => {
         const limit = limit_amount === null ? null : Number(limit_amount);
         const ratio = limit ? Number(spent) / limit : null;

@@ -10,7 +10,7 @@ import { useColors } from "@/theme/ThemeProvider";
 import { weekdayName } from "@/lib/month";
 import type { Tips } from "@/types/api";
 
-export function TipList({ tips }: { tips: Tips }) {
+export function TipList({ tips, plain }: { tips: Tips; plain?: boolean }) {
   const { t, money, locale } = useI18n();
   const colors = useColors();
   const format = (amount: number | string) => money(Number(amount), tips.currency);
@@ -18,7 +18,7 @@ export function TipList({ tips }: { tips: Tips }) {
   if (tips.repeated.length === 0 && !weekday) return null;
 
   return (
-    <List>
+    <List plain={plain}>
       {tips.repeated.map((item) => (
         <Row key={item.label} style={{ alignItems: "flex-start" }}>
           <CategoryIcon category={item.category} size="sm" />

@@ -61,20 +61,35 @@ export function SpendingYear({ month }: { month: string }) {
     spentOn: t.skyline.spentOn,
     nothingOn: t.skyline.nothingOn,
     chartLabel: t.skyline.chartLabel,
+    today: t.tank.today,
   };
+  // Spending less is the good direction: green; more is berry; about the same stays neutral.
+  const badge =
+    change.direction === "up"
+      ? "bg-berry-soft text-berry"
+      : change.direction === "down"
+        ? "bg-ok-soft text-ok"
+        : "bg-sunken text-muted";
 
   return (
     <div>
-      <p className="flex items-center gap-1.5 text-[17px] font-semibold">
-        {change.direction && <Icon className="size-5 shrink-0" aria-hidden />}
-        {change.text}
-      </p>
-      {change.note && <p className="mt-1 text-sm text-muted">{change.note}</p>}
-      <p className="mt-4 mb-4 max-w-prose text-[15px] text-muted">{t.skyline.intro}</p>
+      <div className="flex items-center gap-3">
+        {change.direction && (
+          <span className={`grid size-[38px] shrink-0 place-items-center rounded-xl ${badge}`}>
+            <Icon className="size-5" aria-hidden />
+          </span>
+        )}
+        <div className="min-w-0">
+          <p className="text-lg leading-tight font-semibold tracking-tight">{change.text}</p>
+          {change.note && <p className="mt-0.5 text-sm text-muted">{change.note}</p>}
+        </div>
+      </div>
+      <p className="mt-4 mb-4 max-w-prose text-sm text-muted">{t.skyline.intro}</p>
       {stats.total > 0 ? (
         <ContributionSkyline
           data={days}
           endDate={through}
+          today={todayISO()}
           palette={PALETTE}
           stats={skylineStats(stats, t, format)}
           labels={labels}

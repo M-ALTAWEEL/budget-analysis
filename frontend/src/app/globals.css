@@ -218,6 +218,13 @@ body {
   }
 }
 
+/* Bars grow in from their start side (ProgressPill, the pace bar). */
+@keyframes ib-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
 /* People who ask their system for less motion get still pictures. */
 @media (prefers-reduced-motion: reduce) {
   .tank-wave {

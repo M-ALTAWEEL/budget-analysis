@@ -39,6 +39,18 @@ export const ar: Messages = {
     assistant: "المساعد",
     settings: "الإعدادات",
     logout: "تسجيل الخروج",
+    more: "المزيد",
+  },
+
+  search: {
+    open: "بحث",
+    placeholder: "ابحث أو انتقل إلى…",
+    empty: "لا توجد نتائج",
+    actions: "إجراءات",
+    places: "انتقل إلى",
+    darkTheme: "التبديل إلى الوضع الداكن",
+    lightTheme: "التبديل إلى الوضع الفاتح",
+    hint: "↑ ↓ للتنقل، Enter للفتح، Esc للإغلاق",
   },
 
   auth: {
@@ -294,6 +306,13 @@ export const ar: Messages = {
     noLimitSet: "لا يوجد حد",
     overLimit: (amount) => `تجاوزت الحد بمقدار ${amount}`,
     onlyLeft: (amount) => `تبقّى ${amount} فقط`,
+    budgetTitle: "ميزانية هذا الشهر",
+    used: "مُستخدم",
+    spentLabel: "المصروف",
+    leftLabel: "المتبقي",
+    daysLabel: "الأيام المتبقية",
+    quickTitle: "إضافة سريعة",
+    status: { ok: "على المسار", warn: "انتبه", bad: "تجاوزت الميزانية" },
   },
 
   setup: {

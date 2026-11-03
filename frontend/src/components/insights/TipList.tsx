@@ -9,15 +9,18 @@ import { weekdayName } from "@/lib/month";
 import type { Tips } from "@/types/api";
 
 
-/** Plain facts from the student's own spending, one per row. Nothing to show: nothing rendered. */
-export function TipList({ tips }: { tips: Tips }) {
+/**
+ * Plain facts from the student's own spending, one per row. Nothing to show: nothing rendered.
+ * `plain`: no frame of its own, for use inside a Card.
+ */
+export function TipList({ tips, plain = false }: { tips: Tips; plain?: boolean }) {
   const { t, money, locale } = useI18n();
   const format = (amount: number | string) => money(Number(amount), tips.currency);
   const weekday = tips.busiest_weekday;
   if (tips.repeated.length === 0 && !weekday) return null;
 
   return (
-    <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+    <ul className={plain ? "-mx-5 divide-y divide-line" : "divide-y divide-line rounded-2xl border border-line bg-surface"}>
       {tips.repeated.map((item) => (
         <li key={item.label} className="flex items-start gap-3 px-4 py-3 text-[15px]">
           <CategoryIcon category={item.category} size="sm" />

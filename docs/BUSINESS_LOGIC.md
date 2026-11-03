@@ -348,6 +348,7 @@ app) starts with **one line** comparing this month with last month, then shows t
    budgeted in another currency than this month, are left empty.
 3. Under it: spent in 12 months, the biggest day, the longest run of days without spending,
    and the run without spending that reaches today. A month without a budget ends a run.
+   Today's day, when it is on the chart, is ringed in coral.
 4. The website draws it on a canvas (`components/ui/ContributionSkyline.tsx`, adapted from
    21st.dev's Contribution Skyline) with a camera swing between the flat map and the skyline;
    the app draws the same scene with SVG and fades between the two views.
@@ -741,6 +742,27 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    - **Coral** (the logo's coin) is only for small highlights such as "today"; never a warning
      and never a large fill.
    - Every text colour reaches 4.5:1 on its background in both themes and every accent.
+7. **Navigation and search** (`lib/commands.ts`, shared, so both list the same places and
+   actions in the same order).
+   - **Phones** (the app, and the website below 1024 px): a floating dock with Overview,
+     Expenses, the "+", Budget and More. More opens Goals, Groups, Assistant, Categories,
+     Settings and search. The app's dock is solid (no blur) and hides while the keyboard is
+     open; the website's is frosted glass.
+   - **Website, wide screens:** a rail of icons (the names are tooltips and accessible names)
+     with the "+" and log out, and a top bar with the greeting, search and the person's
+     initials (to Settings).
+   - **"+"** opens the expense form; while the month has no budget it opens the Overview,
+     where the budget is set up (an expense needs one: 409).
+   - **Search menu:** Ctrl+K / ⌘K or the search box on the website, the search button on the
+     app's Overview or More. It lists two actions (add an expense, switch light/dark) and
+     every place; typing keeps those whose name contains every word, ignoring case, accents
+     and the dotless ı.
+8. **Overview layout:** the banners (month report, shared expenses, offline queue) stay on
+   top, then cards: what is left (the tank on the brand panel), the budget ring (used %,
+   spent, left, days left, and a chip from the same forecast rule as the tank: on track /
+   careful / over), quick add, alerts, pace, tips, the year of spending, categories, latest
+   expenses and up to three goals. A grid of up to four columns on the website, one column
+   in the app. Only the Overview's existing data and the goals list are loaded.
 
 ## 16. Invariants checked by tests
 

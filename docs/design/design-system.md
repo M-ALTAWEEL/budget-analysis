@@ -1,6 +1,6 @@
 # Design: the ibudgi design system
 
-Status: being built (redesign PR 1 of 3: foundations) · Owner: Mouhammed Altaweel · November 2026
+Status: being built (redesign PRs 1 and 2 of 3: foundations, building blocks, Overview) · Owner: Mouhammed Altaweel · November 2026
 
 The approved previews: colours https://claude.ai/artifact/PxVZGoHBDwFXk4oNAhoWkZ and style
 https://claude.ai/artifact/R5NLmjyo21R1ULwQ1cy3Py (private to the owner).
@@ -55,9 +55,29 @@ dark version. **Motion:** `ease-smooth` `cubic-bezier(0.2, 0.8, 0.2, 1)` and `ea
 **Type:** Geist for headings, text and numbers (amounts use even-width digits, `.tabular`);
 Readex Pro for Arabic.
 
-## 3. Still to come
+## 3. Building blocks
 
-- PR 2: the shared building blocks (Card, StatusChip, Segmented, ProgressPill, StatTile,
-  IconButton), the navigation shell, the search menu, the Overview as a bento grid, and the
-  year chart in the new style.
-- PR 3: every other screen.
+The same names and rules on the website (`components/ui`) and in the app (`components/ui`):
+
+| Block | What it is |
+|---|---|
+| Card (+ CardHeader on the website) | White card, hairline, `shadow-card`, radius 24, padding 20 |
+| StatusChip | Pill with a dot: ok / warn / bad / brand |
+| Segmented | Pill switch, a white thumb slides with ease-spring; radio buttons underneath |
+| ProgressPill | Pill bar that grows in from the start side; `label` makes it a meter |
+| StatTile | Framed number: label, value (+ unit), note |
+| IconButton | 44 × 44 square, `label` required; `dot` = the coral "new" dot |
+| Button, Field, Select, Sheet | Radius 14 for controls, 24 for sheets; secondary buttons use the brand colour |
+
+Lists and tip/category blocks have a `plain` mode for use inside a card (no frame of their own).
+
+## 4. Navigation and search
+
+Places and commands come from `lib/commands.ts` (shared). Phones: a floating dock (Overview,
+Expenses, "+", Budget, More); wide screens: an icon rail and a top bar. Search: Ctrl/⌘K, a
+native `<dialog>` on the website, a Sheet in the app. Rules: BUSINESS_LOGIC 15.7.
+
+## 5. Still to come
+
+- PR 3: every other screen moves to these blocks (expenses, budget, goals, groups,
+  settings, sign-in, admin, landing), then new store screenshots.

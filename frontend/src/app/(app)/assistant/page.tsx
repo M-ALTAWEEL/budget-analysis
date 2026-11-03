@@ -108,7 +108,7 @@ export default function AssistantPage() {
           event.preventDefault();
           send(draft);
         }}
-        className="fixed inset-x-0 bottom-[calc(3.9rem+env(safe-area-inset-bottom))] z-20 border-t border-line bg-paper/90 px-4 py-3 backdrop-blur lg:bottom-0 lg:start-[240px]"
+        className="fixed inset-x-0 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-20 border-t border-line bg-paper/90 px-4 py-3 backdrop-blur lg:bottom-0 lg:start-[104px]"
       >
         <div className="mx-auto flex max-w-3xl gap-2 sm:px-4">
           <label htmlFor="assistant-question" className="sr-only">

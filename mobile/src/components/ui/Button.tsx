@@ -4,6 +4,7 @@ import { Pressable, View, type ViewStyle } from "react-native";
 import { IbudgiLoader } from "@/components/brand/IbudgiLoader";
 import { Text } from "@/components/ui/Text";
 import { useColors } from "@/theme/ThemeProvider";
+import { RADIUS } from "@/theme/tokens";
 
 type Variant = "primary" | "secondary" | "danger" | "ghost";
 
@@ -30,9 +31,9 @@ export function Button({
   accessibilityLabel?: string;
 }) {
   const colors = useColors();
-  const look: Record<Variant, { bg: string; border: string; text: "onBrand" | "ink" | "berry" | "muted" }> = {
+  const look: Record<Variant, { bg: string; border: string; text: "onBrand" | "brand" | "berry" | "muted" }> = {
     primary: { bg: colors.brand, border: colors.brand, text: "onBrand" },
-    secondary: { bg: colors.surface, border: colors.line, text: "ink" },
+    secondary: { bg: colors.surface, border: colors.line, text: "brand" },
     danger: { bg: colors.surface, border: `${colors.berry}66`, text: "berry" },
     ghost: { bg: "transparent", border: "transparent", text: "muted" },
   };
@@ -48,7 +49,7 @@ export function Button({
         {
           minHeight: small ? 38 : 46,
           paddingHorizontal: small ? 14 : 20,
-          borderRadius: 12,
+          borderRadius: RADIUS.control,
           borderWidth: 1,
           borderColor: border,
           backgroundColor: bg,

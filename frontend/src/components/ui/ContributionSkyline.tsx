@@ -2,6 +2,9 @@
 
 import * as React from "react";
 
+import { Segmented } from "@/components/ui/Segmented";
+import { StatTile } from "@/components/ui/StatTile";
+
 import {
   type Cam,
   ELEV_3D,
@@ -52,6 +55,7 @@ export type SkylineLabels = {
   spentOn: (amount: string, date: string) => string;
   nothingOn: (date: string) => string;
   chartLabel: (total: string, from: string, to: string) => string;
+  today: string; // the legend key for the coral ring
 };
 
 export interface ContributionSkylineProps {
@@ -59,6 +63,8 @@ export interface ContributionSkylineProps {
   data: SkylineDay[];
   /** Last day shown ("YYYY-MM-DD"). */
   endDate: string;
+  /** Today ("YYYY-MM-DD"): its cell gets a coral ring when it is on the chart. */
+  today?: string;
   /** Four CSS colours, lightest level → heaviest. `var(--color-…)` is read from the theme. */
   palette: string[];
   /** Exactly four: shown in the corners in 3D, in a row in 2D. */
@@ -169,69 +175,10 @@ const CubeIcon = () => (
   </svg>
 );
 
-function Stat({
-  label,
-  value,
-  unit,
-  sub,
-  accent,
-  size,
-  align,
-}: SkylineStat & { accent: string; size: number; align: "start" | "end" | "stack" }) {
-  if (align === "stack") {
-    return (
-      <div className="min-w-0">
-        <div className="text-[13px] leading-tight" style={{ color: MUTED }}>
-          {label}
-        </div>
-        <div className="mt-1 flex items-baseline gap-1.5">
-          <span
-            className="tabular font-semibold transition-colors duration-500 motion-reduce:transition-none"
-            style={{ color: accent, fontSize: size, lineHeight: 1, letterSpacing: "-0.02em" }}
-          >
-            {value}
-          </span>
-          {unit && <span className="text-[14px]">{unit}</span>}
-        </div>
-        <div className="mt-0.5 truncate text-[12px]" style={{ color: MUTED }}>
-          {sub}
-        </div>
-      </div>
-    );
-  }
-  return (
-    <div className="grid grid-cols-[auto_auto] items-end gap-x-2" style={{ justifyContent: align }}>
-      {align === "end" ? (
-        <>
-          <div className="text-end text-[13px] leading-tight" style={{ color: MUTED }}>
-            {label}
-          </div>
-          <div />
-        </>
-      ) : (
-        <div className="col-span-2 text-[13px] leading-tight" style={{ color: MUTED }}>
-          {label}
-        </div>
-      )}
-      <div
-        className="tabular text-end font-semibold transition-colors duration-500 motion-reduce:transition-none"
-        style={{ color: accent, fontSize: size, lineHeight: 0.95, letterSpacing: "-0.02em" }}
-      >
-        {value}
-      </div>
-      <div className="pb-[0.15em] leading-tight">
-        <div className="text-[15px]">{unit}</div>
-        <div className="whitespace-nowrap text-[13px]" style={{ color: MUTED }}>
-          {sub}
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export default function ContributionSkyline({
   data,
   endDate,
+  today,
   palette,
   stats: statBlocks,
   labels,
@@ -271,12 +218,11 @@ export default function ContributionSkyline({
     swatches: ["transparent", ...palette],
     accent: palette[1], // the healthy colour: a red total would read as a warning
   }));
-  const [width, setWidth] = React.useState(0);
   const [active, setActive] = React.useState(-1);
   const [legendLevel, setLegendLevel] = React.useState(-1);
   const [announce, setAnnounce] = React.useState("");
 
-  const rootRef = React.useRef<HTMLElement>(null);
+  const rootRef = React.useRef<HTMLElement>(null); // the sunken panel
   const stageRef = React.useRef<HTMLDivElement>(null);
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
   const tipRef = React.useRef<HTMLDivElement>(null);
@@ -305,14 +251,14 @@ export default function ContributionSkyline({
 
   // Everything the render loop reads, refreshed after every render so the loop never closes over stale props.
   const cfg = React.useRef({
-    model, duration, heightScale, orbit, palette, legendLevel, onCellClick,
-    target: view === "3d" ? 1 : 0, setActive, setWidth, setTheme, setAnnounce, describe,
+    model, duration, heightScale, orbit, palette, legendLevel, onCellClick, today,
+    target: view === "3d" ? 1 : 0, setActive, setTheme, setAnnounce, describe,
   });
   // Before paint and before the effects below, so the loop always sees this render's values.
   // (The state setters in it never change, so only the values are refreshed.)
   React.useLayoutEffect(() => {
     Object.assign(cfg.current, {
-      model, duration, heightScale, orbit, palette, legendLevel, onCellClick,
+      model, duration, heightScale, orbit, palette, legendLevel, onCellClick, today,
       target: view === "3d" ? 1 : 0, describe,
     });
   });
@@ -355,6 +301,7 @@ export default function ContributionSkyline({
     let colReady = false;
     let fg: RGB = FG_FALLBACK;
     let bg: RGB = BG_FALLBACK;
+    let coral: RGB = [255, 122, 89];
     let isDark = false;
     // cells
     let n = 0;
@@ -378,11 +325,13 @@ export default function ContributionSkyline({
     let tipW = 0;
     let raf = 0;
     let last = 0;
+    let todayIdx = -1; // ringed in coral
 
     const load = () => {
       const m = cfg.current.model;
       n = m.cells.length;
       weeks = m.weeks;
+      todayIdx = m.cells.findIndex((c) => c.date === cfg.current.today);
       if (wk.length !== n) {
         wk = new Float32Array(n);
         dy = new Float32Array(n);
@@ -420,7 +369,9 @@ export default function ContributionSkyline({
       bg = b ?? (luminance(fg) > 0.5 ? [10, 10, 10] : BG_FALLBACK);
       isDark = luminance(bg) < 0.45;
       font = "400 10px " + (cs.fontFamily || "sans-serif");
-      const empty = mixRGB(bg, fg, isDark ? 0.11 : 0.075);
+      // A day without spending: the theme's chart cell colour, or a faint mix as a fallback.
+      const empty = toRGB("var(--color-cell0)", null) ?? mixRGB(bg, fg, isDark ? 0.11 : 0.075);
+      coral = toRGB("var(--color-coral)", null) ?? [255, 122, 89];
       const all: RGB[] = [empty, ...cfg.current.palette.map((c) => toRGB(c, FG_FALLBACK) ?? FG_FALLBACK)];
       for (let k = 0; k < 5; k++) for (let ch = 0; ch < 3; ch++) colGoal[k * 3 + ch] = all[k][ch];
       if (!colReady || reduced) {
@@ -486,7 +437,6 @@ export default function ContributionSkyline({
       canvas.style.width = W + "px";
       canvas.style.height = Hmax + "px";
       lastH = -1;
-      cfg.current.setWidth(W);
       draw();
     };
 
@@ -522,7 +472,7 @@ export default function ContributionSkyline({
 
       const w = lerp(0.78, 0.9, e);
       const off = (1 - w) / 2;
-      const radius = lerp(0.17, 0.03, e) * s;
+      const radius = lerp(0.2, 0.04, e) * s;
       const outline = (1 - e) * 0.07;
       const lift = 0.7 * e;
       const ex = col[0];
@@ -600,6 +550,12 @@ export default function ContributionSkyline({
         if (hv > 0.02) {
           ctx.strokeStyle = "rgba(" + fg[0] + "," + fg[1] + "," + fg[2] + "," + (0.85 * hv).toFixed(3) + ")";
           ctx.lineWidth = 1.5;
+          ctx.stroke();
+        }
+        if (i === todayIdx) {
+          // Today: the logo's coral, a ring around the top face in both views.
+          ctx.strokeStyle = rgbString(coral[0], coral[1], coral[2]);
+          ctx.lineWidth = 2;
           ctx.stroke();
         }
       }
@@ -967,65 +923,42 @@ export default function ContributionSkyline({
   const first = model.cells[0]?.date;
   const lastDay = model.cells[model.cells.length - 1]?.date;
   const is3d = view === "3d";
-  const corners = showStats && width >= 560;
-  const bigSize = Math.round(Math.max(22, Math.min(34, width * 0.04)));
-  const showRow = showStats && !(is3d && corners);
-  const ease = "cubic-bezier(0.65, 0, 0.35, 1)";
   const hint = is3d && orbit ? labels.hintSkyline : labels.hintFlat;
   const activeCell = active >= 0 ? model.cells[active] : undefined;
+  const hasToday = today !== undefined && model.cells.some((c) => c.date === today);
 
   return (
-    <section
-      ref={rootRef}
-      className={"relative w-full rounded-2xl border p-4 sm:p-5 " + className}
-      style={{ background: "var(--color-surface)", color: "var(--color-ink)", borderColor: "var(--color-line)" }}
-    >
+    <div className={"relative w-full " + className}>
       {(title || showToggle) && (
         <header className="mb-3 flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <h3 className="m-0 text-[15px] leading-snug font-normal">{title}</h3>
           {showToggle && (
-            <div
-              role="group"
-              aria-label={labels.view}
-              dir="ltr"
-              className="relative inline-flex rounded-md border p-0.5"
-              style={{ borderColor: "var(--color-line)" }}
-            >
-              <span
-                aria-hidden="true"
-                className="absolute top-0.5 bottom-0.5 left-0.5 w-8 rounded transition-transform duration-500 motion-reduce:transition-none"
-                style={{
-                  background: "var(--color-ink)",
-                  transform: is3d ? "translateX(100%)" : "translateX(0)",
-                  transitionTimingFunction: ease,
-                }}
-              />
-              {(["2d", "3d"] as const).map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  aria-pressed={view === v}
-                  aria-label={v === "2d" ? labels.flat : labels.skyline}
-                  title={v === "2d" ? labels.flat : labels.skyline}
-                  onClick={() => setView(v)}
-                  className="relative z-10 grid h-7 w-8 cursor-pointer place-items-center rounded border-0 bg-transparent p-0 transition-colors duration-500 focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
-                  style={{ color: view === v ? "var(--color-surface)" : MUTED, outlineColor: "var(--color-ink)" }}
-                >
-                  {v === "2d" ? <GridIcon /> : <CubeIcon />}
-                </button>
-              ))}
-            </div>
+            <Segmented
+              label={labels.view}
+              value={view}
+              onChange={setView}
+              options={[
+                { value: "2d", label: "2D", icon: <GridIcon /> },
+                { value: "3d", label: "3D", icon: <CubeIcon /> },
+              ]}
+            />
           )}
         </header>
       )}
 
-      <div className="relative rounded-xl border" style={{ borderColor: "var(--color-line)" }}>
+      {/* The panel: a sunken well inside the card. The engine reads its colours (rootRef). */}
+      <section
+        ref={rootRef}
+        aria-label={labels.view}
+        className="relative rounded-[20px] px-2.5 pt-3 pb-2 sm:px-4 sm:pt-4"
+        style={{ background: "var(--color-sunken)", color: "var(--color-ink)" }}
+      >
         {/* The scene is drawn left (oldest) to right (newest) in every language. */}
-        <div className="relative px-3 pt-3 sm:px-4 sm:pt-4" dir="ltr">
+        <div className="relative" dir="ltr">
           <div
             ref={stageRef}
             className="relative w-full overflow-hidden rounded-md outline-offset-4 has-[:focus-visible]:outline-2"
-            style={{ height: 150, outlineColor: "var(--color-ink)" }}
+            style={{ height: 150, outlineColor: "var(--color-brand)" }}
           >
             <canvas
               ref={canvasRef}
@@ -1035,47 +968,14 @@ export default function ContributionSkyline({
               className="absolute top-0 left-0 block outline-none"
               style={{ maxWidth: "none", touchAction: is3d && orbit ? "pan-y" : "auto" }}
             />
-
-            {showStats && corners && (
-              <>
-                <div
-                  aria-hidden={!is3d}
-                  className="pointer-events-none absolute top-1 right-1 flex flex-col items-end gap-5 transition-[opacity,transform] motion-reduce:transition-none"
-                  style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(-10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.55) + "ms" : "0ms",
-                    transitionTimingFunction: ease,
-                  }}
-                >
-                  <Stat {...statBlocks[0]} accent={theme.accent} size={bigSize} align="end" />
-                  <Stat {...statBlocks[1]} accent={theme.accent} size={bigSize} align="end" />
-                </div>
-                <div
-                  aria-hidden={!is3d}
-                  className="pointer-events-none absolute bottom-1 left-1 flex flex-col items-start gap-5 transition-[opacity,transform] motion-reduce:transition-none"
-                  style={{
-                    opacity: is3d ? 1 : 0,
-                    transform: is3d ? "translateY(0)" : "translateY(10px)",
-                    transitionDuration: is3d ? "600ms" : "300ms",
-                    transitionDelay: is3d ? Math.round(duration * 0.65) + "ms" : "0ms",
-                    transitionTimingFunction: ease,
-                  }}
-                >
-                  <Stat {...statBlocks[2]} accent={theme.accent} size={bigSize} align="start" />
-                  <Stat {...statBlocks[3]} accent={theme.accent} size={bigSize} align="start" />
-                </div>
-              </>
-            )}
           </div>
 
           <div
             ref={tipRef}
             role="tooltip"
             aria-hidden={active < 0}
-            className="pointer-events-none absolute top-3 left-3 z-20 whitespace-nowrap rounded-md px-2.5 py-1.5 text-[12px] shadow-md transition-opacity duration-150 motion-reduce:transition-none sm:top-4 sm:left-4"
-            style={{ opacity: activeCell ? 1 : 0, background: "var(--color-ink)", color: "var(--color-surface)" }}
+            className="pointer-events-none absolute top-0 left-0 z-20 whitespace-nowrap rounded-[10px] px-2.5 py-1.5 text-[12px] shadow-float transition-opacity duration-150 motion-reduce:transition-none"
+            style={{ opacity: activeCell ? 1 : 0, background: "var(--color-ink)", color: "var(--color-paper)" }}
           >
             {activeCell && (
               <>
@@ -1100,11 +1000,8 @@ export default function ContributionSkyline({
         </div>
 
         {(showLegend || footer !== null) && (
-          <div
-            className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-3 pt-2.5 pb-3 text-[12px] sm:px-4"
-            style={{ color: MUTED }}
-          >
-            {footer === undefined ? <span>{hint}</span> : footer}
+          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 pt-2.5 text-[12px]" style={{ color: MUTED }}>
+            {footer === undefined ? <span className="hidden sm:inline">{hint}</span> : footer}
             {showLegend && (
               <div className="flex items-center gap-1.5" onMouseLeave={() => setLegendLevel(-1)}>
                 <span>{labels.less}</span>
@@ -1119,21 +1016,27 @@ export default function ContributionSkyline({
                     onFocus={() => setLegendLevel(level)}
                     onBlur={() => setLegendLevel(-1)}
                     onClick={() => setLegendLevel(legendLevel === level ? -1 : level)}
-                    className="size-3 cursor-pointer rounded-[3px] border-0 p-0 focus-visible:outline-2 focus-visible:outline-offset-1"
+                    className="size-3.5 cursor-pointer rounded-[5px] border-0 p-0 outline-offset-1 aria-pressed:outline-2 focus-visible:outline-2"
                     style={{ background: swatch, outlineColor: "var(--color-ink)" }}
                   />
                 ))}
                 <span>{labels.more}</span>
+                {hasToday && (
+                  <span className="ms-3 inline-flex items-center gap-1.5">
+                    <span aria-hidden className="size-2.5 rounded-[4px] border-2 border-coral" />
+                    {labels.today}
+                  </span>
+                )}
               </div>
             )}
           </div>
         )}
-      </div>
+      </section>
 
-      {showRow && (
-        <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-4 sm:grid-cols-4">
+      {showStats && (
+        <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-4">
           {statBlocks.map((block) => (
-            <Stat key={block.label} {...block} accent={theme.accent} size={22} align="stack" />
+            <StatTile key={block.label} label={block.label} value={block.value} unit={block.unit} note={block.sub} />
           ))}
         </div>
       )}
@@ -1141,6 +1044,6 @@ export default function ContributionSkyline({
       <p className="sr-only" aria-live="polite">
         {announce}
       </p>
-    </section>
+    </div>
   );
 }
