@@ -5,7 +5,6 @@ import Link from "next/link";
 
 import { PendingSharesBanner } from "@/components/groups/PendingShares";
 import { PendingExpenses } from "@/components/offline/Offline";
-import { useCurrentUser } from "@/components/auth/AuthProvider";
 import { ExpenseRow } from "@/components/expense/ExpenseRow";
 import { AlertList } from "@/components/insights/AlertList";
 import { PaceChart } from "@/components/insights/PaceChart";
@@ -13,8 +12,12 @@ import { SpendingYear } from "@/components/insights/SpendingYear";
 import { TipList } from "@/components/insights/TipList";
 import { MonthSwitcher, useMonth } from "@/components/layout/MonthProvider";
 import { BudgetSetup } from "@/components/overview/BudgetSetup";
-import { BudgetTank } from "@/components/overview/BudgetTank";
+import { BudgetRing } from "@/components/overview/BudgetRing";
+import { BudgetTank, budgetPace } from "@/components/overview/BudgetTank";
 import { CategoryBreakdown } from "@/components/overview/CategoryBreakdown";
+import { GoalsCard } from "@/components/overview/GoalsCard";
+import { QuickAdd } from "@/components/overview/QuickAdd";
+import { Card, CardHeader } from "@/components/ui/Card";
 import { LoadError } from "@/components/ui/LoadError";
 import { PageLoader } from "@/components/ui/PageLoader";
 import { useDaily, useExpenses, useSummary, useTips, useWrapped } from "@/hooks/queries";
@@ -22,50 +25,20 @@ import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { findAlerts } from "@/lib/insights";
 import { currentMonth, monthProgress, shiftMonth } from "@/lib/month";
+import type { BudgetSummary, DailySpending, Expense, Tips } from "@/types/api";
 
-/** A titled block of the overview. */
-function Section({
-  id,
-  title,
-  action,
-  children,
-}: {
-  id: string;
-  title: string;
-  action?: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className="mt-14" aria-labelledby={id}>
-      <div className="mb-4 flex items-baseline justify-between gap-3">
-        <h2 id={id} className="font-display text-xl font-semibold">
-          {title}
-        </h2>
-        {action}
-      </div>
-      {children}
-    </section>
-  );
-}
-
+/** The Overview as a grid of cards: one column on phones, two on tablets, four on wide screens. */
 export default function OverviewPage() {
   const { month } = useMonth();
   const summary = useSummary(month);
   const expenses = useExpenses(month);
   const daily = useDaily(month);
   const tips = useTips(month);
-  const user = useCurrentUser();
-  const { t } = useI18n();
-  const hour = new Date().getHours();
-  const firstName = user.full_name.split(" ")[0];
-  const greeting =
-    hour < 12 ? t.overview.morning(firstName) : hour < 18 ? t.overview.afternoon(firstName) : t.overview.evening(firstName);
   const errorMessage = useErrorMessage();
 
   return (
     <>
-      <header className="mb-10">
-        <p className="mb-1 text-[15px] text-muted">{greeting}</p>
+      <header className="mb-6">
         <MonthSwitcher />
       </header>
 
@@ -80,62 +53,129 @@ export default function OverviewPage() {
       ) : summary.data === null ? (
         <BudgetSetup month={month} />
       ) : (
-        <>
-          <BudgetTank summary={summary.data} month={month} forecast={daily.data?.forecast} />
-
-          <AlertList alerts={findAlerts(summary.data, month)} currency={summary.data.currency} />
-
-          {daily.data && (
-            <Section id="pace" title={t.insights.paceTitle}>
-              <p className="-mt-2 mb-4 max-w-prose text-[15px] text-muted">{t.insights.paceIntro}</p>
-              <PaceChart daily={daily.data} month={month} />
-            </Section>
-          )}
-
-          {tips.data && (tips.data.repeated.length > 0 || tips.data.busiest_weekday) && (
-            <Section id="tips" title={t.insights.tipsTitle}>
-              <TipList tips={tips.data} />
-            </Section>
-          )}
-
-          <Section id="year" title={t.skyline.title}>
-            <SpendingYear month={month} />
-          </Section>
-
-          <Section
-            id="by-category"
-            title={t.overview.whereItWent}
-            action={
-              <Link href="/budget" className="text-sm font-semibold text-brand hover:underline">
-                {t.overview.planCategories}
-              </Link>
-            }
-          >
-            <CategoryBreakdown summary={summary.data} />
-          </Section>
-
-          {expenses.data && expenses.data.length > 0 && (
-            <Section
-              id="recent"
-              title={t.overview.latest}
-              action={
-                <Link href="/expenses" className="text-sm font-semibold text-brand hover:underline">
-                  {t.overview.seeAll}
-                </Link>
-              }
-            >
-              <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
-                <AnimatePresence initial={false}>
-                  {expenses.data.slice(0, 5).map((expense) => (
-                    <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={summary.data?.currency} />
-                  ))}
-                </AnimatePresence>
-              </ul>
-            </Section>
-          )}
-        </>
+        <Bento
+          summary={summary.data}
+          month={month}
+          daily={daily.data}
+          tips={tips.data}
+          expenses={expenses.data}
+        />
       )}
     </>
+  );
+}
+
+function Bento({
+  summary,
+  month,
+  daily,
+  tips,
+  expenses,
+}: {
+  summary: BudgetSummary;
+  month: string;
+  daily: DailySpending | null | undefined;
+  tips: Tips | null | undefined;
+  expenses: Expense[] | undefined;
+}) {
+  const { t } = useI18n();
+  const pace = budgetPace(summary, month, daily?.forecast);
+  const alerts = findAlerts(summary, month);
+  const hasTips = tips && (tips.repeated.length > 0 || tips.busiest_weekday);
+
+  return (
+    <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <Hero>
+        <BudgetTank summary={summary} month={month} forecast={daily?.forecast} inverse />
+      </Hero>
+      <BudgetRing summary={summary} month={month} pace={pace} />
+      <QuickAdd />
+
+      {alerts.length > 0 && (
+        <div className="md:col-span-2 xl:col-span-4">
+          <AlertList alerts={alerts} currency={summary.currency} />
+        </div>
+      )}
+
+      {daily && (
+        <Card aria-labelledby="pace" className={hasTips ? "md:col-span-2" : "md:col-span-2 xl:col-span-4"}>
+          <CardHeader id="pace" title={t.insights.paceTitle} />
+          <p className="-mt-1.5 max-w-prose text-sm text-muted">{t.insights.paceIntro}</p>
+          <PaceChart daily={daily} month={month} />
+        </Card>
+      )}
+
+      {tips && hasTips && (
+        <Card aria-labelledby="tips" className={daily ? "md:col-span-2" : "md:col-span-2 xl:col-span-4"}>
+          <CardHeader id="tips" title={t.insights.tipsTitle} />
+          <TipList tips={tips} plain />
+        </Card>
+      )}
+
+      <Card aria-labelledby="year" className="md:col-span-2 xl:col-span-4">
+        <CardHeader id="year" title={t.skyline.title} />
+        <SpendingYear month={month} />
+      </Card>
+
+      <Card aria-labelledby="by-category" className="md:col-span-2">
+        <CardHeader
+          id="by-category"
+          title={t.overview.whereItWent}
+          action={
+            <Link href="/budget" className="text-sm font-semibold text-brand hover:underline">
+              {t.overview.planCategories}
+            </Link>
+          }
+        />
+        <CategoryBreakdown summary={summary} plain />
+      </Card>
+
+      {expenses && expenses.length > 0 && (
+        <Card aria-labelledby="recent" className="md:col-span-2">
+          <CardHeader
+            id="recent"
+            title={t.overview.latest}
+            action={
+              <Link href="/expenses" className="text-sm font-semibold text-brand hover:underline">
+                {t.overview.seeAll}
+              </Link>
+            }
+          />
+          <ul className="-mx-5 -mb-2 divide-y divide-line">
+            <AnimatePresence initial={false}>
+              {expenses.slice(0, 5).map((expense) => (
+                <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={summary.currency} />
+              ))}
+            </AnimatePresence>
+          </ul>
+        </Card>
+      )}
+
+      <GoalsCard />
+    </div>
+  );
+}
+
+/**
+ * The first card: what is left, on the brand panel. Behind the number, the logo's three bars
+ * and coin, ghosted (decoration only).
+ */
+function Hero({ children }: { children: React.ReactNode }) {
+  return (
+    <section className="relative overflow-hidden rounded-card bg-panel p-6 text-white shadow-[0_24px_48px_-24px_color-mix(in_srgb,var(--color-panel)_70%,transparent)] md:col-span-2">
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(120%_150%_at_100%_0%,rgb(255_255_255/0.16)_0%,transparent_55%)] rtl:bg-[radial-gradient(120%_150%_at_0%_0%,rgb(255_255_255/0.16)_0%,transparent_55%)]"
+      />
+      <span aria-hidden className="pointer-events-none absolute end-6 -bottom-5 flex items-end gap-3">
+        <i className="block h-[92px] w-[46px] rounded-full bg-white/10" />
+        <i className="block h-[138px] w-[46px] rounded-full bg-white/10" />
+        <i className="relative block h-[184px] w-[46px] rounded-full bg-white/10">
+          <i className="absolute -top-10 start-[11px] block size-6 rounded-full bg-coral/80" />
+        </i>
+      </span>
+      <div className="relative">{children}</div>
+    </section>
   );
 }
 
@@ -149,7 +189,7 @@ function WrappedBanner() {
   return (
     <Link
       href={`/wrapped?month=${previous}`}
-      className="mb-8 flex items-center justify-between gap-3 rounded-2xl bg-brand px-5 py-4 text-white transition-opacity hover:opacity-90"
+      className="mb-5 flex items-center justify-between gap-3 rounded-card bg-brand px-5 py-4 text-on-brand transition-opacity hover:opacity-90"
     >
       <span className="font-semibold">{t.wrapped.ready(monthLabel(previous))}</span>
       <span className="shrink-0 text-sm font-semibold underline">{t.wrapped.see}</span>

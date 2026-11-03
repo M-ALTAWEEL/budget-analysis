@@ -10,7 +10,22 @@ import { useColors } from "@/theme/ThemeProvider";
 import type { BudgetSummary, Currency, SpendingForecast } from "@/types/api";
 
 const FORECAST_FROM_DAY = 7; // backend/app/ml/forecast.py MIN_DAYS
-type Pace = "on-pace" | "early" | "fast" | "over" | "finished";
+export type Pace = "on-pace" | "early" | "fast" | "over" | "finished";
+
+/**
+ * Is the month heading over budget? Asked of the forecast, which counts rent and other
+ * one-offs once. Before day 7 there is no forecast, so the tank does not judge yet.
+ */
+export function budgetPace(summary: BudgetSummary, month: string, forecast: SpendingForecast | null | undefined): Pace {
+  const total = Number(summary.total_amount);
+  const spent = Number(summary.spent);
+  const progress = monthProgress(month);
+  if (spent > total) return "over";
+  if (!progress.isCurrent && progress.ratio === 1) return "finished";
+  if (progress.isCurrent && forecast) return Number(forecast.total) > total ? "fast" : "on-pace";
+  if (progress.isCurrent && progress.dayOfMonth < FORECAST_FROM_DAY) return "early";
+  return "on-pace";
+}
 
 /** The number counts to its new value (an expense added: "left" visibly goes down). */
 function useCountUp(value: number): number {
@@ -33,17 +48,20 @@ function useCountUp(value: number): number {
  * the forecast (rent on the 1st is paid once, so it doesn't count as "too fast").
  */
 function TankView({
-  currency, total, spent, timeRatio, daysLeft, label, pace,
+  currency, total, spent, timeRatio, daysLeft, label, pace, inverse,
 }: {
   currency: Currency; total: number; spent: number; timeRatio: number | null;
   daysLeft: number; label: string; pace: Pace;
+  inverse?: boolean; // white on the brand panel: the Overview's hero
 }) {
   const colors = useColors();
   const { t, money, dir } = useI18n();
   const remaining = total - spent;
   const spentRatio = total > 0 ? Math.min(spent / total, 1) : 0;
   const shownLeft = useCountUp(Math.max(remaining, 0));
-  const fill = pace === "over" ? colors.berry : pace === "fast" ? colors.marigold : colors.ok;
+  const fill = pace === "over" ? colors.berry : pace === "fast" ? colors.marigold : inverse ? "#ffffff" : colors.ok;
+  const muted = inverse ? "rgba(255, 255, 255, 0.78)" : colors.muted;
+  const ink = inverse ? "#ffffff" : colors.ink;
   const daily = daysLeft > 0 && remaining > 0 ? remaining / daysLeft : null;
   const format = (amount: number) => money(amount, currency);
   const width = useRef(new Animated.Value(0)).current;
@@ -64,19 +82,20 @@ function TankView({
   const start = dir === "rtl" ? "right" : "left";
   return (
     <View>
-      <Text size={15} tone="muted">{label}</Text>
-      <Text display weight="bold" size={46} tone={pace === "over" ? "berry" : "ink"} style={{ marginTop: 4, letterSpacing: -1 }}>
+      <Text size={15} style={{ color: muted }}>{label}</Text>
+      <Text display weight="bold" size={46} style={{ marginTop: 4, letterSpacing: -1, color: pace === "over" && !inverse ? colors.berry : ink }}>
         {format(shownLeft)}
       </Text>
-      <Approx amount={Math.max(remaining, 0)} currency={currency} size={15} />
+      <Approx amount={Math.max(remaining, 0)} currency={currency} size={15} color={muted} />
 
       <View style={{ marginTop: 34 }}>
         {timeRatio !== null && trackWidth > 0 && (
           <View
             pointerEvents="none"
             style={{ position: "absolute", top: -24, bottom: 0, zIndex: 10, alignItems: "center", width: 60, [start]: timeRatio * trackWidth - 30 }}>
-            <Text size={12} weight="semibold" tone="marigold">{t.tank.today}</Text>
-            <View style={{ marginTop: 4, width: 2, flex: 1, borderRadius: 1, backgroundColor: colors.ink }} />
+            <Text size={12} weight="semibold" style={{ color: inverse ? "#ffffff" : colors.coralInk }}>{t.tank.today}</Text>
+            {/* Coral, the logo's coin: "today". The ring keeps it visible on any fill colour. */}
+            <View style={{ marginTop: 4, width: 4, flex: 1, borderRadius: 2, backgroundColor: colors.coral, borderWidth: 0, boxShadow: `0 0 0 3px ${inverse ? colors.panel : colors.surface}` }} />
           </View>
         )}
         <View
@@ -84,7 +103,7 @@ function TankView({
           accessibilityRole="progressbar"
           accessibilityLabel={t.tank.meterLabel}
           accessibilityValue={{ min: 0, max: total, now: Math.min(spent, total), text: t.tank.meterText(format(spent), format(total)) }}
-          style={{ height: 64, borderRadius: 20, overflow: "hidden", backgroundColor: colors.okSoft }}>
+          style={{ height: 64, borderRadius: 20, overflow: "hidden", backgroundColor: inverse ? "rgba(255, 255, 255, 0.15)" : colors.okSoft }}>
           <Animated.View
             style={{
               position: "absolute", top: 0, bottom: 0, [start]: 0, backgroundColor: fill,
@@ -105,28 +124,24 @@ function TankView({
       </View>
 
       <View style={{ marginTop: 8, flexDirection: "row", justifyContent: "space-between" }}>
-        <Text size={14} tone="muted">{t.tank.spent(format(spent))}</Text>
-        <Text size={14} tone="muted">{t.tank.of(format(total))}</Text>
+        <Text size={14} style={{ color: muted }}>{t.tank.spent(format(spent))}</Text>
+        <Text size={14} style={{ color: muted }}>{t.tank.of(format(total))}</Text>
       </View>
-      <Text size={15} style={{ marginTop: 14 }}>{sentence}</Text>
+      <Text size={15} style={{ marginTop: 14, color: ink }}>{sentence}</Text>
     </View>
   );
 }
 
 export function BudgetTank({
-  summary, month, forecast,
+  summary, month, forecast, inverse,
 }: {
-  summary: BudgetSummary; month: string; forecast: SpendingForecast | null | undefined;
+  summary: BudgetSummary; month: string; forecast: SpendingForecast | null | undefined; inverse?: boolean;
 }) {
   const total = Number(summary.total_amount);
   const spent = Number(summary.spent);
   const progress = monthProgress(month);
   const { t, monthName } = useI18n();
-  let pace: Pace = "on-pace";
-  if (spent > total) pace = "over";
-  else if (!progress.isCurrent && progress.ratio === 1) pace = "finished";
-  else if (progress.isCurrent && forecast) pace = Number(forecast.total) > total ? "fast" : "on-pace";
-  else if (progress.isCurrent && progress.dayOfMonth < FORECAST_FROM_DAY) pace = "early";
+  const pace = budgetPace(summary, month, forecast);
   return (
     <TankView
       currency={summary.currency}
@@ -136,6 +151,7 @@ export function BudgetTank({
       daysLeft={progress.daysLeft}
       label={t.tank.leftToSpend(monthName(month))}
       pace={pace}
+      inverse={inverse}
     />
   );
 }

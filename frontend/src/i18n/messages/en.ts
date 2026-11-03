@@ -293,6 +293,13 @@ export const en = {
     noLimitSet: "No limit set",
     overLimit: (amount: string) => `${amount} over the limit`,
     onlyLeft: (amount: string) => `Only ${amount} left`,
+    budgetTitle: "This month's budget",
+    used: "used",
+    spentLabel: "Spent",
+    leftLabel: "Left",
+    daysLabel: "Days left",
+    quickTitle: "Quick add",
+    status: { ok: "On track", warn: "Careful", bad: "Over budget" },
   },
 
   setup: {

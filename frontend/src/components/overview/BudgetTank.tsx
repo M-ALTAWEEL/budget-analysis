@@ -10,7 +10,26 @@ import type { BudgetSummary, Currency, SpendingForecast } from "@/types/api";
 
 // "early": the first days of the month, before there is a forecast.
 const FORECAST_FROM_DAY = 7; // backend/app/ml/forecast.py MIN_DAYS
-type Pace = "on-pace" | "early" | "fast" | "over" | "finished";
+export type Pace = "on-pace" | "early" | "fast" | "over" | "finished";
+
+/**
+ * Is the month heading over budget? Asked of the forecast, which counts rent and other
+ * one-offs once. Before day 7 there is no forecast, so the tank does not judge yet.
+ */
+export function budgetPace(
+  summary: BudgetSummary,
+  month: string,
+  forecast: SpendingForecast | null | undefined,
+): Pace {
+  const total = Number(summary.total_amount);
+  const spent = Number(summary.spent);
+  const progress = monthProgress(month);
+  if (spent > total) return "over";
+  if (!progress.isCurrent && progress.ratio === 1) return "finished";
+  if (progress.isCurrent && forecast) return Number(forecast.total) > total ? "fast" : "on-pace";
+  if (progress.isCurrent && progress.dayOfMonth < FORECAST_FROM_DAY) return "early";
+  return "on-pace";
+}
 
 interface TankViewProps {
   currency: Currency;
@@ -20,7 +39,7 @@ interface TankViewProps {
   daysLeft: number;
   label: string;
   pace: Pace;
-  inverse?: boolean; // white-on-brand version for the sign-in screen
+  inverse?: boolean; // white on the brand panel: the sign-in screen and the Overview's hero
   quick?: boolean; // the landing page demo moves day by day: shorter fill animation
 }
 
@@ -72,7 +91,7 @@ export function TankView({
       >
         {format(shownLeft)}
       </p>
-      {!inverse && <Approx amount={Math.max(remaining, 0)} currency={currency} className="mt-1 text-[15px] text-muted" />}
+      <Approx amount={Math.max(remaining, 0)} currency={currency} className={`mt-1 text-[15px] ${muted}`} />
 
       <div className="relative mt-8">
         {timeRatio !== null && (
@@ -81,11 +100,11 @@ export function TankView({
             className="absolute -top-6 bottom-0 z-10 flex -translate-x-1/2 flex-col items-center rtl:translate-x-1/2"
             style={{ insetInlineStart: `${timeRatio * 100}%` }}
           >
-            <span className={`text-xs font-semibold whitespace-nowrap ${inverse ? "text-white" : "text-marigold-ink"}`}>
+            <span className={`text-xs font-semibold whitespace-nowrap ${inverse ? "text-white" : "text-coral-ink"}`}>
               {t.tank.today}
             </span>
-            {/* ink, not marigold: it must stay visible on top of any fill colour */}
-            <span className={`mt-1 w-0.5 flex-1 rounded-full ${inverse ? "bg-white" : "bg-ink"}`} />
+            {/* Coral, the logo's coin: "today". The ring keeps it visible on any fill colour. */}
+            <span className={`mt-1 w-1 flex-1 rounded-full bg-coral ring-[3px] ${inverse ? "ring-panel" : "ring-surface"}`} />
           </div>
         )}
         <div
@@ -138,23 +157,18 @@ export function BudgetTank({
   summary,
   month,
   forecast,
+  inverse,
 }: {
   summary: BudgetSummary;
   month: string;
   forecast: SpendingForecast | null | undefined; // undefined while it loads
+  inverse?: boolean;
 }) {
   const total = Number(summary.total_amount);
   const spent = Number(summary.spent);
   const progress = monthProgress(month);
   const { t, monthName } = useI18n();
-
-  // Is the month heading over budget? Asked of the forecast, which counts rent and other
-  // one-offs once. Before day 7 there is no forecast, so the tank does not judge yet.
-  let pace: Pace = "on-pace";
-  if (spent > total) pace = "over";
-  else if (!progress.isCurrent && progress.ratio === 1) pace = "finished";
-  else if (progress.isCurrent && forecast) pace = Number(forecast.total) > total ? "fast" : "on-pace";
-  else if (progress.isCurrent && progress.dayOfMonth < FORECAST_FROM_DAY) pace = "early";
+  const pace = budgetPace(summary, month, forecast);
 
   return (
     <TankView
@@ -165,6 +179,7 @@ export function BudgetTank({
       daysLeft={progress.daysLeft}
       label={t.tank.leftToSpend(monthName(month))}
       pace={pace}
+      inverse={inverse}
     />
   );
 }

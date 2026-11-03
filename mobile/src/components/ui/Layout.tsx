@@ -92,14 +92,19 @@ export function Card({ children, style }: { children: ReactNode; style?: ViewSty
   );
 }
 
-/** A rounded list with a line between rows (the website's divide-y lists). */
-export function List({ children, style }: { children: ReactNode; style?: ViewStyle }) {
+/**
+ * A rounded list with a line between rows (the website's divide-y lists).
+ * `plain`: no frame of its own, edge to edge inside a Card.
+ */
+export function List({ children, style, plain }: { children: ReactNode; style?: ViewStyle; plain?: boolean }) {
   const colors = useColors();
   const rows = Children.toArray(children).filter(Boolean);
   return (
     <View
       style={[
-        { borderRadius: RADIUS.tile, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" },
+        plain
+          ? { marginHorizontal: -20 }
+          : { borderRadius: RADIUS.tile, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" },
         style,
       ]}>
       {rows.map((row, index) => (

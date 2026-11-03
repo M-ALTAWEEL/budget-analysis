@@ -293,6 +293,13 @@ export const tr: Messages = {
     noLimitSet: "Limit belirlenmedi",
     overLimit: (amount) => `Limiti ${amount} aştı`,
     onlyLeft: (amount) => `Sadece ${amount} kaldı`,
+    budgetTitle: "Bu ayın bütçesi",
+    used: "kullanıldı",
+    spentLabel: "Harcanan",
+    leftLabel: "Kalan",
+    daysLabel: "Kalan gün",
+    quickTitle: "Hızlı ekle",
+    status: { ok: "Yolunda", warn: "Dikkat", bad: "Bütçe aşıldı" },
   },
 
   setup: {

@@ -306,6 +306,13 @@ export const ar: Messages = {
     noLimitSet: "لا يوجد حد",
     overLimit: (amount) => `تجاوزت الحد بمقدار ${amount}`,
     onlyLeft: (amount) => `تبقّى ${amount} فقط`,
+    budgetTitle: "ميزانية هذا الشهر",
+    used: "مُستخدم",
+    spentLabel: "المصروف",
+    leftLabel: "المتبقي",
+    daysLabel: "الأيام المتبقية",
+    quickTitle: "إضافة سريعة",
+    status: { ok: "على المسار", warn: "انتبه", bad: "تجاوزت الميزانية" },
   },
 
   setup: {

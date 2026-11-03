@@ -4,7 +4,8 @@ import { CategoryIcon } from "@/components/ui/CategoryIcon";
 import { useI18n } from "@/i18n/I18nProvider";
 import type { BudgetSummary } from "@/types/api";
 
-export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
+/** Spending per category against its limit. `plain`: no frame of its own, for use inside a Card. */
+export function CategoryBreakdown({ summary, plain = false }: { summary: BudgetSummary; plain?: boolean }) {
   const { t, money, categoryName } = useI18n();
   const formatMoney = (amount: string | number) => money(amount, summary.currency);
 
@@ -17,7 +18,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
   }
 
   return (
-    <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+    <ul className={plain ? "-mx-5 divide-y divide-line" : "divide-y divide-line rounded-2xl border border-line bg-surface"}>
       {summary.categories.map(({ category, limit_amount, spent }) => {
         const limit = limit_amount === null ? null : Number(limit_amount);
         const ratio = limit ? Number(spent) / limit : null;
