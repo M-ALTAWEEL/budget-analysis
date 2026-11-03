@@ -38,7 +38,7 @@ export default function CategoriesScreen() {
           <Text display weight="semibold" size={24} accessibilityRole="header">{t.categories.title}</Text>
           <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.categories.intro}</Text>
         </View>
-        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setEditing({ open: true, category: null })}>
+        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setEditing({ open: true, category: null })}>
           {t.categories.add}
         </Button>
       </View>

@@ -65,7 +65,7 @@ export function LanguageMenu() {
               >
                 <Flag code={LOCALE_INFO[code].flag} />
                 <span className="flex-1">{LOCALE_INFO[code].label}</span>
-                {code === locale && <Check className="size-4 text-pine" aria-hidden />}
+                {code === locale && <Check className="size-4 text-brand" aria-hidden />}
               </button>
             </li>
           ))}

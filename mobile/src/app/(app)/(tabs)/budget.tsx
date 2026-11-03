@@ -52,7 +52,7 @@ export default function BudgetScreen() {
             <View style={{ flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
               <Text display weight="semibold" size={20} accessibilityRole="header" style={{ flexShrink: 1 }}>{t.budget.limitsTitle}</Text>
               <Pressable onPress={() => router.push("/categories")} accessibilityRole="link" hitSlop={8}>
-                <Text size={14} weight="semibold" tone="pine">{t.settings.manageCategories}</Text>
+                <Text size={14} weight="semibold" tone="brand">{t.settings.manageCategories}</Text>
               </Pressable>
             </View>
             <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 16 }}>{t.budget.limitsIntro}</Text>
@@ -80,7 +80,7 @@ function IncomeLink({ month }: { month: string }) {
         marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <Wallet size={20} color={colors.pine} />
+      <Wallet size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{label}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>
@@ -100,7 +100,7 @@ function WrappedLink({ month }: { month: string }) {
         marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <Sparkles size={20} color={colors.pine} />
+      <Sparkles size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{t.wrapped.title}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>
@@ -120,7 +120,7 @@ function InflationLink() {
         marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
-      <TrendingUp size={20} color={colors.pine} />
+      <TrendingUp size={20} color={colors.brand} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{t.inflation.link}</Text>
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
     </Pressable>

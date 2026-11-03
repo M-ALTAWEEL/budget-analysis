@@ -57,7 +57,7 @@ function Inbox() {
               setStatus(f.value);
               setPage(1);
             }}
-            className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold ${status === f.value ? "border-pine bg-pine-soft" : "border-line"}`}
+            className={`rounded-full border px-3.5 py-1.5 text-sm font-semibold ${status === f.value ? "border-brand bg-brand-soft" : "border-line"}`}
           >
             {f.label}
           </button>
@@ -144,7 +144,7 @@ function Ticket({ uuid }: { uuid: string }) {
             <p className="text-[15px]">
               {ticket.data.who}{" "}
               {ticket.data.user_uuid ? (
-                <Link href={`/admin/user?id=${ticket.data.user_uuid}`} className="font-semibold text-pine hover:underline">
+                <Link href={`/admin/user?id=${ticket.data.user_uuid}`} className="font-semibold text-brand hover:underline">
                   Open the account
                 </Link>
               ) : (
@@ -155,7 +155,7 @@ function Ticket({ uuid }: { uuid: string }) {
           <Panel title="Conversation">
             <ul className="space-y-3">
               {ticket.data.thread.map((m, i) => (
-                <li key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[15px] ${m.from_support ? "ms-auto bg-pine-soft" : "bg-ink/5"}`}>
+                <li key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[15px] ${m.from_support ? "ms-auto bg-brand-soft" : "bg-ink/5"}`}>
                   <p className="mb-0.5 text-xs font-semibold text-muted">
                     {m.author} · {formatDateTime(m.created_at)}
                   </p>

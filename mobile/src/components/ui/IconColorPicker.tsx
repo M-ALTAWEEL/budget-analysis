@@ -29,10 +29,10 @@ export function IconColorPicker({
                 onPress={() => onIcon(choice)}
                 style={{
                   width: "11.4%", aspectRatio: 1, alignItems: "center", justifyContent: "center", borderRadius: 8,
-                  borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-                  backgroundColor: selected ? colors.pineSoft : "transparent",
+                  borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+                  backgroundColor: selected ? colors.brandSoft : "transparent",
                 }}>
-                <IconGlyph name={choice} color={selected ? colors.pineDark : colors.muted} size={20} />
+                <IconGlyph name={choice} color={selected ? colors.brandDark : colors.muted} size={20} />
               </Pressable>
             );
           })}

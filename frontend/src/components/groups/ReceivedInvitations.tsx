@@ -40,14 +40,14 @@ export function ReceivedInvitations({ onJoined }: { onJoined: (groupUuid: string
   return (
     <section aria-labelledby="invitations" className="mb-10">
       <h2 id="invitations" className="mb-3 flex items-center gap-2 font-display text-lg font-semibold">
-        <Mail className="size-5 text-pine" aria-hidden />
+        <Mail className="size-5 text-brand" aria-hidden />
         {t.groups.invitations}
       </h2>
       <ul className="space-y-3">
         {requests.data.map((request) => (
           <li
             key={request.uuid}
-            className="flex flex-col gap-3 rounded-2xl border border-pine/40 bg-surface px-5 py-4 sm:flex-row sm:items-center"
+            className="flex flex-col gap-3 rounded-2xl border border-brand/40 bg-surface px-5 py-4 sm:flex-row sm:items-center"
           >
             <div className="min-w-0 flex-1">
               <p className="truncate font-semibold">

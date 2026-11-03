@@ -43,7 +43,7 @@ export function LanguageMenu() {
                 style={({ pressed }) => ({ flexDirection: "row", alignItems: "center", gap: 12, paddingHorizontal: 16, paddingVertical: 12, backgroundColor: pressed ? `${colors.ink}0d` : "transparent" })}>
                 <Text size={16}>{FLAG[code]}</Text>
                 <Text size={15} style={{ flex: 1 }}>{LOCALE_INFO[code].label}</Text>
-                {code === locale && <Check size={16} color={colors.pine} />}
+                {code === locale && <Check size={16} color={colors.brand} />}
               </Pressable>
             ))}
           </View>

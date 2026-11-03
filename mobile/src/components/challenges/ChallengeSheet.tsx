@@ -71,8 +71,8 @@ export function ChallengeSheet({ onClose }: { onClose: () => void }) {
 
   const pill = (selected: boolean) => ({
     borderRadius: 999, paddingHorizontal: 14, paddingVertical: 8,
-    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-    backgroundColor: selected ? colors.pineSoft : colors.surface,
+    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+    backgroundColor: selected ? colors.brandSoft : colors.surface,
   });
 
   return (
@@ -87,7 +87,7 @@ export function ChallengeSheet({ onClose }: { onClose: () => void }) {
                 accessibilityRole="radio"
                 accessibilityState={{ checked: selected }}
                 onPress={() => setKind(value)}
-                style={{ borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line, backgroundColor: selected ? colors.pineSoft : colors.surface }}>
+                style={{ borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line, backgroundColor: selected ? colors.brandSoft : colors.surface }}>
                 <Text weight="semibold">{t.challenges.kinds[value]}</Text>
               </Pressable>
             );

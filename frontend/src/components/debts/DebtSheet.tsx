@@ -83,7 +83,7 @@ export function DebtSheet({ debt, onClose }: { debt: Debt | null; onClose: () =>
                 aria-checked={direction === value}
                 onClick={() => setDirection(value)}
                 className={`rounded-xl border px-3 py-2.5 text-[15px] font-semibold transition-colors ${
-                  direction === value ? "border-pine bg-pine-soft ring-1 ring-pine" : "border-line hover:border-ink/30"
+                  direction === value ? "border-brand bg-brand-soft ring-1 ring-brand" : "border-line hover:border-ink/30"
                 }`}
               >
                 {value === "lent" ? t.debts.lent : t.debts.borrowed}

@@ -48,7 +48,7 @@ function Body({ data }: { data: InflationView }) {
       ) : (
         <div className="space-y-8">
           {data.change_local !== null && data.change_stable !== null && (
-            <section className="rounded-2xl bg-pine px-6 py-5 text-white">
+            <section className="rounded-2xl bg-brand px-6 py-5 text-white">
               <p className="font-display text-lg font-semibold">
                 {t.inflation.summary(data.change_local, data.change_stable, data.stable_currency)}
               </p>
@@ -60,7 +60,7 @@ function Body({ data }: { data: InflationView }) {
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-display text-lg font-semibold">{t.inflation.monthsTitle}</h2>
               <div className="flex gap-4 text-xs text-muted">
-                <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-pine" />{t.inflation.local}</span>
+                <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-brand" />{t.inflation.local}</span>
                 <span className="flex items-center gap-1.5"><span className="size-2.5 rounded-full bg-marigold" />{t.inflation.stable(data.stable_currency)}</span>
               </div>
             </div>
@@ -77,7 +77,7 @@ function Body({ data }: { data: InflationView }) {
                     </span>
                   </div>
                   <div className="space-y-1" aria-hidden>
-                    <div className="h-2 rounded-full bg-pine" style={{ width: `${(Number(m.spent) / maxLocal) * 100}%` }} />
+                    <div className="h-2 rounded-full bg-brand" style={{ width: `${(Number(m.spent) / maxLocal) * 100}%` }} />
                     <div className="h-2 rounded-full bg-marigold" style={{ width: `${(Number(m.spent_stable ?? 0) / maxStable) * 100}%` }} />
                   </div>
                 </li>

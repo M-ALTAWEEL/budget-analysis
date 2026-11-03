@@ -51,7 +51,7 @@ export default function BudgetPage() {
               <h2 id="limits" className="font-display text-xl font-semibold">
                 {t.budget.limitsTitle}
               </h2>
-              <Link href="/categories" className="text-sm font-semibold text-pine hover:underline">
+              <Link href="/categories" className="text-sm font-semibold text-brand hover:underline">
                 {t.settings.manageCategories}
               </Link>
             </div>
@@ -78,7 +78,7 @@ function IncomeLink({ month }: { month: string }) {
       href="/income"
       className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <Wallet className="size-5 shrink-0 text-pine" aria-hidden />
+      <Wallet className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>
@@ -93,7 +93,7 @@ function WrappedLink({ month }: { month: string }) {
       href={`/wrapped?month=${month}`}
       className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <Sparkles className="size-5 shrink-0 text-pine" aria-hidden />
+      <Sparkles className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.wrapped.title}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>
@@ -108,7 +108,7 @@ function InflationLink() {
       href="/inflation"
       className="mb-10 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <TrendingUp className="size-5 shrink-0 text-pine" aria-hidden />
+      <TrendingUp className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.inflation.link}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>

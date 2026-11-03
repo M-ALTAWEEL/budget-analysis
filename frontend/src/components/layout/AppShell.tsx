@@ -109,14 +109,14 @@ function Sidebar() {
               href={href}
               aria-current={active ? "page" : undefined}
               className={`relative flex items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] ${
-                active ? "font-semibold text-pine-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
+                active ? "font-semibold text-brand-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
               }`}
             >
               {/* One highlight that slides to the page you open. */}
               {active && (
                 <motion.span
                   layoutId="sidebar-active"
-                  className="absolute inset-0 rounded-xl bg-pine-soft"
+                  className="absolute inset-0 rounded-xl bg-brand-soft"
                   transition={{ type: "spring", stiffness: 500, damping: 40 }}
                   aria-hidden
                 />
@@ -162,13 +162,13 @@ function BottomNav() {
             href={href}
             aria-current={active ? "page" : undefined}
             className={`relative flex min-w-0 flex-col items-center gap-1 px-0.5 py-2.5 text-[10px] leading-tight ${
-              active ? "font-semibold text-pine" : "text-muted"
+              active ? "font-semibold text-brand" : "text-muted"
             }`}
           >
             {active && (
               <motion.span
                 layoutId="tab-active"
-                className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-pine"
+                className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-brand"
                 transition={{ type: "spring", stiffness: 500, damping: 40 }}
                 aria-hidden
               />
@@ -197,7 +197,7 @@ function AddExpenseButton() {
     <button
       type="button"
       onClick={() => openSheet()}
-      className="fixed end-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-pine px-6 font-semibold text-on-pine shadow-lg shadow-pine/30 transition-[background-color,transform] hover:bg-pine-dark active:scale-95 lg:end-10 lg:bottom-10"
+      className="fixed end-4 bottom-20 z-30 inline-flex h-14 items-center gap-2 rounded-full bg-brand px-6 font-semibold text-on-brand shadow-lg shadow-brand/30 transition-[background-color,transform] hover:bg-brand-dark active:scale-95 lg:end-10 lg:bottom-10"
     >
       <Plus className="size-5" aria-hidden />
       {t.expenses.add}

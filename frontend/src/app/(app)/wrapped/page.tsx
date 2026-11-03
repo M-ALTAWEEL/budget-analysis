@@ -49,7 +49,7 @@ function WrappedView() {
       </Link>
       <header className="mb-8 flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-pine">{t.wrapped.title}</p>
+          <p className="text-sm font-semibold text-brand">{t.wrapped.title}</p>
           <h1 className="font-display text-3xl font-semibold">{t.wrapped.heading(monthLabel(month))}</h1>
         </div>
         <div className="flex gap-1">
@@ -81,9 +81,9 @@ function WrappedView() {
   );
 }
 
-function Card({ title, children, pine = false }: { title?: string; children: React.ReactNode; pine?: boolean }) {
+function Card({ title, children, brand = false }: { title?: string; children: React.ReactNode; brand?: boolean }) {
   return (
-    <section className={`rounded-3xl px-6 py-6 ${pine ? "bg-pine text-white" : "border border-line bg-surface"}`}>
+    <section className={`rounded-3xl px-6 py-6 ${brand ? "bg-brand text-white" : "border border-line bg-surface"}`}>
       {title && <h2 className="mb-4 text-sm font-semibold tracking-wide text-muted uppercase">{title}</h2>}
       {children}
     </section>
@@ -111,7 +111,7 @@ function Report({ data }: { data: Wrapped }) {
 
   return (
     <div className="space-y-4">
-      <Card pine>
+      <Card brand>
         {!data.finished && <p className="mb-2 text-sm opacity-80">{t.wrapped.soFar}</p>}
         <p className="font-display text-2xl leading-snug font-semibold">{t.wrapped.spentOf(m(data.spent), m(data.budget))}</p>
         <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/25" aria-hidden>

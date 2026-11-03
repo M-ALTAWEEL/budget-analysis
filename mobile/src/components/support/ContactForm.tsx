@@ -28,9 +28,9 @@ export function ContactForm({ onBack }: { onBack: () => void }) {
         <Text tone="muted" style={{ marginTop: 4 }}>{t.support.contactIntro}</Text>
       </View>
       {sent ? (
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, backgroundColor: colors.pineSoft, padding: 14 }}>
-          <CheckCircle2 size={20} color={colors.pine} />
-          <Text weight="semibold" tone="pine" style={{ flex: 1 }}>{t.support.contactSent}</Text>
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, backgroundColor: colors.brandSoft, padding: 14 }}>
+          <CheckCircle2 size={20} color={colors.brand} />
+          <Text weight="semibold" tone="brand" style={{ flex: 1 }}>{t.support.contactSent}</Text>
         </View>
       ) : (
         <SupportForm
@@ -59,7 +59,7 @@ export function ContactForm({ onBack }: { onBack: () => void }) {
         />
       )}
       <Pressable onPress={onBack} accessibilityRole="link" hitSlop={6}>
-        <Text size={14} weight="semibold" tone="pine">{t.support.back}</Text>
+        <Text size={14} weight="semibold" tone="brand">{t.support.back}</Text>
       </Pressable>
     </View>
   );

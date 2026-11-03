@@ -22,7 +22,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
         const limit = limit_amount === null ? null : Number(limit_amount);
         const ratio = limit ? Number(spent) / limit : null;
         const barColor =
-          ratio === null ? "" : ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-pine";
+          ratio === null ? "" : ratio > 1 ? "bg-berry" : ratio > 0.85 ? "bg-marigold" : "bg-brand";
         return (
           <li key={category.uuid} className="flex items-center gap-4 px-4 py-3.5 sm:px-5">
             <CategoryIcon category={category} />
@@ -36,7 +36,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
               </div>
               {ratio !== null && limit !== null ? (
                 <>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-pine-soft">
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-brand-soft">
                     <div
                       className={`h-full rounded-full transition-[width] duration-700 ease-out ${barColor}`}
                       style={{ width: `${Math.min(ratio, 1) * 100}%` }}

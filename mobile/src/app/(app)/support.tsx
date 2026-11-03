@@ -31,7 +31,7 @@ export default function SupportScreen() {
         <Text size={14} weight="semibold" tone="muted">{t.nav.settings}</Text>
       </Pressable>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <LifeBuoy size={24} color={colors.pine} />
+        <LifeBuoy size={24} color={colors.brand} />
         <Text display weight="semibold" size={24} accessibilityRole="header">{t.support.title}</Text>
       </View>
       <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 24 }}>{t.support.intro}</Text>
@@ -80,7 +80,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
   const reply = useReplyToSupport();
   const [expanded, setExpanded] = useState(false);
   const [text, setText] = useState("");
-  const tone = ticket.status === "answered" ? "pine" : ticket.status === "closed" ? "muted" : "marigold";
+  const tone = ticket.status === "answered" ? "brand" : ticket.status === "closed" ? "muted" : "marigold";
 
   function toggle() {
     if (!expanded && ticket.unread) open.mutate(ticket.uuid);
@@ -104,8 +104,8 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
             <Text weight="semibold" numberOfLines={1} style={{ flexShrink: 1 }}>{ticket.subject}</Text>
             {ticket.unread && (
-              <View style={{ borderRadius: 999, backgroundColor: colors.pine, paddingHorizontal: 8, paddingVertical: 2 }}>
-                <Text size={12} weight="semibold" tone="onPine">{t.support.newAnswer}</Text>
+              <View style={{ borderRadius: 999, backgroundColor: colors.brand, paddingHorizontal: 8, paddingVertical: 2 }}>
+                <Text size={12} weight="semibold" tone="onBrand">{t.support.newAnswer}</Text>
               </View>
             )}
           </View>
@@ -123,7 +123,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
               style={{
                 maxWidth: "85%", borderRadius: 16, paddingHorizontal: 14, paddingVertical: 10,
                 alignSelf: m.from_support ? "flex-start" : "flex-end",
-                backgroundColor: m.from_support ? colors.pineSoft : `${colors.ink}0d`,
+                backgroundColor: m.from_support ? colors.brandSoft : `${colors.ink}0d`,
               }}>
               <Text size={12} weight="semibold" tone="muted">{m.from_support ? t.support.team : t.support.you}</Text>
               <Text size={15}>{m.body}</Text>

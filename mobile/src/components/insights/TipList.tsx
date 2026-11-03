@@ -31,8 +31,8 @@ export function TipList({ tips }: { tips: Tips }) {
       ))}
       {weekday && (
         <Row style={{ alignItems: "flex-start" }}>
-          <View style={{ width: 32, height: 32, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: colors.pineSoft }}>
-            <CalendarDays size={16} color={colors.pine} />
+          <View style={{ width: 32, height: 32, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: colors.brandSoft }}>
+            <CalendarDays size={16} color={colors.brand} />
           </View>
           <Text size={15} style={{ flex: 1 }}>
             {t.insights.busiestDay(weekdayName(weekday.weekday, LOCALE_INFO[locale].intl), format(weekday.average), format(weekday.usual))}

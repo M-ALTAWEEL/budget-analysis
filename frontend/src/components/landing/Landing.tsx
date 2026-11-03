@@ -153,7 +153,7 @@ function Hero() {
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <Link
             href="/register"
-            className="inline-flex h-12 items-center rounded-xl bg-pine px-6 text-[15px] font-semibold text-on-pine transition-[background-color,transform] hover:bg-pine-dark active:scale-[0.97]"
+            className="inline-flex h-12 items-center rounded-xl bg-brand px-6 text-[15px] font-semibold text-on-brand transition-[background-color,transform] hover:bg-brand-dark active:scale-[0.97]"
           >
             {t.auth.createAccount}
           </Link>
@@ -209,7 +209,7 @@ function MonthDemo() {
   return (
     <div
       ref={ref}
-      className="rounded-[2rem] bg-panel p-6 text-white shadow-2xl shadow-pine/20 sm:p-8"
+      className="rounded-[2rem] bg-panel p-6 text-white shadow-2xl shadow-brand/20 sm:p-8"
       role="img"
       aria-label={t.landing.demoLabel}
     >
@@ -320,7 +320,7 @@ function CategoryDemo() {
   return (
     <div ref={ref} className="rounded-[2rem] border border-line bg-surface p-6 sm:p-8" aria-hidden>
       <p className="mb-1.5 text-sm font-medium">{t.expenses.what}</p>
-      <div className="flex h-12 items-center rounded-xl border border-pine px-4 ring-1 ring-pine">
+      <div className="flex h-12 items-center rounded-xl border border-brand px-4 ring-1 ring-brand">
         <span className="text-[15px]">{typed.slice(0, shown)}</span>
         {!done && <span className="ms-0.5 h-5 w-0.5 animate-pulse bg-ink" />}
       </div>
@@ -334,7 +334,7 @@ function CategoryDemo() {
               animate={{ opacity: 1 }}
               className="flex items-center gap-1.5 text-xs text-muted"
             >
-              <Sparkles className="size-3.5 text-pine" />
+              <Sparkles className="size-3.5 text-brand" />
               {t.expenses.autoPicked}
             </motion.p>
           )}
@@ -347,7 +347,7 @@ function CategoryDemo() {
             <div
               key={slug}
               className={`flex items-center gap-2 rounded-xl border p-2 text-sm transition-[border-color,background-color,box-shadow] duration-300 ${
-                picked ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine" : "border-line"
+                picked ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line"
               }`}
             >
               <CategoryIcon category={CATEGORY[slug]} size="sm" />
@@ -393,7 +393,7 @@ function ForecastDemo() {
         <motion.path
           d={line}
           fill="none"
-          stroke="var(--color-pine)"
+          stroke="var(--color-brand)"
           strokeWidth={3}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -406,7 +406,7 @@ function ForecastDemo() {
           y1={y(running[today - 1])}
           x2={x(DAYS)}
           y2={y(forecast)}
-          stroke="var(--color-pine)"
+          stroke="var(--color-brand)"
           strokeWidth={3}
           strokeDasharray="7 7"
           strokeLinecap="round"
@@ -419,7 +419,7 @@ function ForecastDemo() {
           cy={y(forecast)}
           r={6}
           fill="var(--color-surface)"
-          stroke="var(--color-pine)"
+          stroke="var(--color-brand)"
           strokeWidth={3}
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : undefined}

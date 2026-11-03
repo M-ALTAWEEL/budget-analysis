@@ -35,7 +35,7 @@ export function TwoFactorStep() {
 
   return (
     <View style={{ gap: 16 }}>
-      <ShieldCheck size={40} color={colors.pine} />
+      <ShieldCheck size={40} color={colors.brand} />
       <Text display weight="semibold" size={30} accessibilityRole="header">{t.account.stepTitle}</Text>
       <Text tone="muted">{t.account.stepText}</Text>
       <Field
@@ -53,7 +53,7 @@ export function TwoFactorStep() {
       <FormError message={error} />
       <Button onPress={submit} loading={busy} disabled={code.trim().length < 6}>{t.account.verify}</Button>
       <Pressable onPress={cancelTwoFactor} accessibilityRole="button" hitSlop={8} style={{ alignSelf: "flex-start" }}>
-        <Text size={14} weight="semibold" tone="pine">{t.account.backToLogin}</Text>
+        <Text size={14} weight="semibold" tone="brand">{t.account.backToLogin}</Text>
       </Pressable>
     </View>
   );

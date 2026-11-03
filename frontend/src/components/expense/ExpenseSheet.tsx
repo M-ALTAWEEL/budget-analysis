@@ -155,7 +155,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
     >
       <div className="space-y-4">
         {expense?.source === "group" && (
-          <p className="rounded-xl bg-pine-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
+          <p className="rounded-xl bg-brand-soft px-3.5 py-2.5 text-sm">{t.groups.copyNote}</p>
         )}
         {!expense && (
           <QuickAddBar
@@ -203,7 +203,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
           <legend className="mb-1.5 text-sm font-medium">{t.expenses.category}</legend>
           {autoPicked && (
             <p className="mb-2 flex items-center gap-1.5 text-xs text-muted" aria-live="polite">
-              <Sparkles className="size-3.5 text-pine" aria-hidden />
+              <Sparkles className="size-3.5 text-brand" aria-hidden />
               {t.expenses.autoPicked}
             </p>
           )}
@@ -222,7 +222,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
                     onClick={() => setPickedUuid(category.uuid)}
                     className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
                       selected
-                        ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine"
+                        ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand"
                         : "border-line hover:border-ink/30"
                     }`}
                   >
@@ -255,7 +255,7 @@ function ExpenseSheet({ expense, onClose }: { expense: Expense | null; onClose: 
               role="switch"
               checked={repeat}
               onChange={(e) => setRepeat(e.target.checked)}
-              className="mt-1 size-5 shrink-0 accent-pine"
+              className="mt-1 size-5 shrink-0 accent-brand"
             />
           </label>
         )}

@@ -123,10 +123,10 @@ function WrappedBanner() {
       accessibilityRole="link"
       style={({ pressed }) => ({
         marginBottom: 24, flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12,
-        borderRadius: 16, backgroundColor: colors.pine, paddingHorizontal: 20, paddingVertical: 16, opacity: pressed ? 0.9 : 1,
+        borderRadius: 16, backgroundColor: colors.brand, paddingHorizontal: 20, paddingVertical: 16, opacity: pressed ? 0.9 : 1,
       })}>
-      <Text weight="semibold" tone="onPine" style={{ flex: 1 }}>{t.wrapped.ready(monthLabel(previous))}</Text>
-      <Text size={14} weight="semibold" tone="onPine">{t.wrapped.see}</Text>
+      <Text weight="semibold" tone="onBrand" style={{ flex: 1 }}>{t.wrapped.ready(monthLabel(previous))}</Text>
+      <Text size={14} weight="semibold" tone="onBrand">{t.wrapped.see}</Text>
     </Pressable>
   );
 }

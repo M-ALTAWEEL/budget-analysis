@@ -34,7 +34,7 @@ export function DateField({
         accessibilityRole="button"
         accessibilityLabel={`${label}: ${value ? dayLabel(value) : placeholder ?? ""}`}
         style={{
-          minHeight: 46, borderRadius: 12, borderWidth: 1, borderColor: open ? colors.pine : colors.line,
+          minHeight: 46, borderRadius: 12, borderWidth: 1, borderColor: open ? colors.brand : colors.line,
           backgroundColor: colors.surface, paddingHorizontal: 14, flexDirection: "row", alignItems: "center", gap: 8,
         }}>
         <CalendarDays size={18} color={colors.muted} />
@@ -53,7 +53,7 @@ export function DateField({
           maximumDate={max ? fromISO(max) : undefined}
           minimumDate={min ? fromISO(min) : undefined}
           themeVariant={dark ? "dark" : "light"}
-          accentColor={colors.pine}
+          accentColor={colors.brand}
           locale={locale}
           onChange={(event, date) => {
             if (Platform.OS !== "ios") setOpen(false);

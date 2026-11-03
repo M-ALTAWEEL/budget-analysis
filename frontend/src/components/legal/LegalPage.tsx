@@ -58,12 +58,12 @@ export function LegalPage({ documents }: { documents: Record<Locale, LegalDocume
           <h2 className="font-display text-xl font-semibold">{doc.contact}</h2>
           <ul className="mt-3 space-y-2 text-[17px]">
             <li>
-              <a href={REPO_ISSUES} className="font-semibold text-pine hover:underline">
+              <a href={REPO_ISSUES} className="font-semibold text-brand hover:underline">
                 GitHub
               </a>
             </li>
             <li>
-              <a href={LINKEDIN} className="font-semibold text-pine hover:underline">
+              <a href={LINKEDIN} className="font-semibold text-brand hover:underline">
                 LinkedIn
               </a>
             </li>
@@ -71,13 +71,13 @@ export function LegalPage({ documents }: { documents: Record<Locale, LegalDocume
         </section>
 
         <div className="mt-14 flex flex-wrap gap-6">
-          <Link href="/" className="font-semibold text-pine hover:underline">
+          <Link href="/" className="font-semibold text-brand hover:underline">
             {doc.back}
           </Link>
-          <Link href="/privacy" className="font-semibold text-pine hover:underline">
+          <Link href="/privacy" className="font-semibold text-brand hover:underline">
             {t.landing.privacy}
           </Link>
-          <Link href="/terms" className="font-semibold text-pine hover:underline">
+          <Link href="/terms" className="font-semibold text-brand hover:underline">
             {t.landing.terms}
           </Link>
         </div>

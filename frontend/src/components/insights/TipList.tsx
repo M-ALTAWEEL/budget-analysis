@@ -30,7 +30,7 @@ export function TipList({ tips }: { tips: Tips }) {
       ))}
       {weekday && (
         <li className="flex items-start gap-3 px-4 py-3 text-[15px]">
-          <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-pine-soft text-pine">
+          <span className="inline-flex size-8 shrink-0 items-center justify-center rounded-lg bg-brand-soft text-brand">
             <CalendarDays className="size-4" aria-hidden />
           </span>
           <p>

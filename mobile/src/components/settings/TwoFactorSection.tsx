@@ -63,7 +63,7 @@ export function TwoFactorSection() {
     <SettingsBlock title={t.account.twoFactorTitle}>
       <Card>
         <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 8 }}>
-          <ShieldCheck size={16} color={enabled ? colors.pine : colors.muted} style={{ marginTop: 2 }} />
+          <ShieldCheck size={16} color={enabled ? colors.brand : colors.muted} style={{ marginTop: 2 }} />
           <Text size={14} tone={enabled ? "ink" : "muted"} style={{ flex: 1 }}>
             {enabled ? t.account.twoFactorOn(status.data?.backup_codes_left ?? 0) : t.account.twoFactorOff}
           </Text>

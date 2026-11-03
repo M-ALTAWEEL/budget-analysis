@@ -77,7 +77,7 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
                 onClick={() => onOpen(group.uuid)}
                 className="flex w-full items-center gap-4 px-5 py-4 text-start hover:bg-ink/[0.03]"
               >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-pine/10 text-pine">
+                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
                   <Users className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -125,7 +125,7 @@ function DebtsLink() {
       href="/debts"
       className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <HandCoins className="size-5 shrink-0 text-pine" aria-hidden />
+      <HandCoins className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>

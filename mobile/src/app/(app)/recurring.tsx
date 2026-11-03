@@ -39,7 +39,7 @@ export default function RecurringScreen() {
             <Text display weight="semibold" size={24} accessibilityRole="header">{t.recurring.title}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.recurring.intro}</Text>
           </View>
-          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setOpen({ open: true, rule: null })}>
+          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setOpen({ open: true, rule: null })}>
             {t.recurring.add}
           </Button>
         </View>
@@ -56,7 +56,7 @@ export default function RecurringScreen() {
         ) : (
           <>
             <View style={{ marginBottom: 24, alignItems: "center", gap: 8, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 24, paddingVertical: 28 }}>
-              <Repeat size={24} color={colors.pine} />
+              <Repeat size={24} color={colors.brand} />
               <Text tone="muted" accessibilityRole="header">{t.recurring.monthlyTotal}</Text>
               <Text display weight="semibold" size={30}>{money(recurring.data.monthly_total, recurring.data.currency)}</Text>
               <Text size={14} tone="muted">{t.recurring.activeCount(active.length)}</Text>

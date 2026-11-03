@@ -5,7 +5,7 @@ import { fontFamily, type Weight } from "@/components/ui/fonts";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useColors, type Palette } from "@/theme/ThemeProvider";
 
-type Tone = "ink" | "muted" | "pine" | "berry" | "marigold" | "onPine";
+type Tone = "ink" | "muted" | "brand" | "berry" | "marigold" | "onBrand";
 
 /**
  * All text in the app. `display` is the heading font (Bricolage), otherwise the body font.
@@ -38,10 +38,10 @@ export function Text({
   const toneColor: Record<Tone, keyof Palette> = {
     ink: "ink",
     muted: "muted",
-    pine: "pine",
+    brand: "brand",
     berry: "berry",
     marigold: "marigoldInk",
-    onPine: "onPine",
+    onBrand: "onBrand",
   };
   const align: TextStyle["textAlign"] = center ? "center" : end !== rtl ? "right" : "left";
   return (

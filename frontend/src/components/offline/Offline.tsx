@@ -76,7 +76,7 @@ export function PendingExpenses() {
           <p className="font-semibold">{t.offline.waiting(pending.length)}</p>
           <p className="text-sm text-muted">{t.offline.waitingHint}</p>
         </div>
-        <button type="button" onClick={() => void flush()} className="shrink-0 text-sm font-semibold text-pine hover:underline">
+        <button type="button" onClick={() => void flush()} className="shrink-0 text-sm font-semibold text-brand hover:underline">
           {t.offline.retry}
         </button>
       </div>

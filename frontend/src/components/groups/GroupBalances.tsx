@@ -42,7 +42,7 @@ export function GroupBalances({ group }: { group: GroupDetail }) {
         {t.groups.balances}
       </h2>
       <div className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
-        <p className={`font-semibold ${myNet < 0 ? "text-berry" : myNet > 0 ? "text-pine" : ""}`}>
+        <p className={`font-semibold ${myNet < 0 ? "text-berry" : myNet > 0 ? "text-brand" : ""}`}>
           {myNet < 0 ? t.groups.youOwe(money(-myNet)) : myNet > 0 ? t.groups.youAreOwed(money(myNet)) : t.groups.allSettled}
         </p>
         {balances.data.debts.length > 0 && (

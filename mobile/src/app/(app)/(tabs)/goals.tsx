@@ -32,7 +32,7 @@ export default function GoalsScreen() {
           <Text display weight="semibold" size={24} accessibilityRole="header">{t.goals.title}</Text>
           <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.goals.intro}</Text>
         </View>
-        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setOpen({ kind: "goal", goal: null })}>
+        <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setOpen({ kind: "goal", goal: null })}>
           {t.goals.add}
         </Button>
       </View>
@@ -79,8 +79,8 @@ function ChallengesLink() {
       <Flame size={20} color={colors.marigold} />
       <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{running > 0 ? t.challenges.linkSummary(running) : t.challenges.title}</Text>
       {invites > 0 && (
-        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.pine }}>
-          <Text size={12} weight="semibold" tone="onPine">{invites}</Text>
+        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
+          <Text size={12} weight="semibold" tone="onBrand">{invites}</Text>
         </View>
       )}
       <ChevronRight size={20} color={colors.muted} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />

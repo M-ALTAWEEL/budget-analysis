@@ -90,8 +90,8 @@ function BackLink({ onBack }: { onBack: () => void }) {
   const colors = useColors();
   return (
     <Pressable onPress={onBack} accessibilityRole="button" hitSlop={8} style={{ marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 8, alignSelf: "flex-start" }}>
-      <ArrowLeft size={16} color={colors.pine} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
-      <Text size={14} weight="semibold" tone="pine">{t.groups.back}</Text>
+      <ArrowLeft size={16} color={colors.brand} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+      <Text size={14} weight="semibold" tone="brand">{t.groups.back}</Text>
     </Pressable>
   );
 }
@@ -155,8 +155,8 @@ function Members({ group }: { group: GroupDetail }) {
 
 function RoleIcon({ role }: { role: GroupMember["role"] }) {
   const colors = useColors();
-  if (role === "owner") return <Crown size={20} color={colors.pine} />;
-  if (role === "admin") return <Shield size={20} color={colors.pine} />;
+  if (role === "owner") return <Crown size={20} color={colors.brand} />;
+  if (role === "admin") return <Shield size={20} color={colors.brand} />;
   return <View style={{ width: 20 }} />;
 }
 
@@ -268,7 +268,7 @@ function AutoAdd({ group }: { group: GroupDetail }) {
             setError(null);
             change.mutate(value);
           }}
-          trackColor={{ true: colors.pine, false: colors.line }}
+          trackColor={{ true: colors.brand, false: colors.line }}
           thumbColor="#fff"
         />
       </View>

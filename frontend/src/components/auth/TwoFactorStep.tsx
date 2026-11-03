@@ -38,7 +38,7 @@ export function TwoFactorStep() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <ShieldCheck className="size-10 text-pine" aria-hidden />
+      <ShieldCheck className="size-10 text-brand" aria-hidden />
       <h1 className="font-display text-3xl font-semibold">{t.account.stepTitle}</h1>
       <p className="text-muted">{t.account.stepText}</p>
       <Field
@@ -60,7 +60,7 @@ export function TwoFactorStep() {
       <button
         type="button"
         onClick={cancelTwoFactor}
-        className="text-sm font-semibold text-pine underline-offset-4 hover:underline"
+        className="text-sm font-semibold text-brand underline-offset-4 hover:underline"
       >
         {t.account.backToLogin}
       </button>

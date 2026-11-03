@@ -144,7 +144,7 @@ function ImportLink() {
       href="/import"
       className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <FileUp className="size-5 shrink-0 text-pine" aria-hidden />
+      <FileUp className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.imports.link}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>
@@ -164,7 +164,7 @@ function RecurringLink() {
       href="/recurring"
       className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
-      <Repeat className="size-5 shrink-0 text-pine" aria-hidden />
+      <Repeat className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
       <ChevronRight className="size-5 shrink-0 text-muted rtl:-scale-x-100" aria-hidden />
     </Link>

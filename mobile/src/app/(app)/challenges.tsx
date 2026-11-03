@@ -43,7 +43,7 @@ export default function ChallengesScreen() {
             <Text display weight="semibold" size={24} accessibilityRole="header">{t.challenges.title}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.challenges.intro}</Text>
           </View>
-          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setCreating(true)}>
+          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setCreating(true)}>
             {t.challenges.add}
           </Button>
         </View>
@@ -60,14 +60,14 @@ export default function ChallengesScreen() {
                 <Text weight="semibold">{t.challenges.streak(data!.streak)}</Text>
               </View>
               <View style={box}>
-                <Trophy size={20} color={colors.pine} />
+                <Trophy size={20} color={colors.brand} />
                 <Text weight="semibold">{t.challenges.wins(data!.wins)}</Text>
                 {data!.badges.length > 0 && (
                   <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6 }}>
                     {data!.badges.map((badge) => (
-                      <View key={badge} style={{ flexDirection: "row", alignItems: "center", gap: 4, borderRadius: 999, backgroundColor: colors.pineSoft, paddingHorizontal: 8, paddingVertical: 2 }}>
-                        <Award size={12} color={colors.pine} />
-                        <Text size={12} weight="semibold" tone="pine">{t.challenges.badges[badge as keyof typeof t.challenges.badges] ?? badge}</Text>
+                      <View key={badge} style={{ flexDirection: "row", alignItems: "center", gap: 4, borderRadius: 999, backgroundColor: colors.brandSoft, paddingHorizontal: 8, paddingVertical: 2 }}>
+                        <Award size={12} color={colors.brand} />
+                        <Text size={12} weight="semibold" tone="brand">{t.challenges.badges[badge as keyof typeof t.challenges.badges] ?? badge}</Text>
                       </View>
                     ))}
                   </View>
@@ -113,8 +113,8 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
   const remove = useDeleteChallenge();
   const [confirming, setConfirming] = useState(false);
   const progress = challengeProgress(c, words);
-  const toneName = c.status === "won" ? "pine" : c.status === "lost" ? "berry" : "muted";
-  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? colors.berry : colors.pine;
+  const toneName = c.status === "won" ? "brand" : c.status === "lost" ? "berry" : "muted";
+  const bar = c.status === "lost" || (c.kind === "spend_under" && progress.ratio > 0.85) ? colors.berry : colors.brand;
   const when =
     c.status === "upcoming"
       ? t.challenges.startsOn(shortDate(c.starts_on))
@@ -134,8 +134,8 @@ function ChallengeCard({ challenge: c }: { challenge: Challenge }) {
         {c.category ? (
           <CategoryIcon category={c.category} />
         ) : (
-          <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.pine}1a` }}>
-            <Flame size={20} color={colors.pine} />
+          <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+            <Flame size={20} color={colors.brand} />
           </View>
         )}
         <View style={{ flex: 1, minWidth: 0 }}>
@@ -196,7 +196,7 @@ function OpenCard({ challenge: c }: { challenge: OpenChallenge }) {
   }
 
   return (
-    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.pine, backgroundColor: colors.pineSoft, padding: 16 }}>
+    <View style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 16 }}>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text weight="semibold">{describeChallenge(c, words, user.base_currency)}</Text>
         <Text size={14} tone="muted">{t.challenges.openBy(c.by, c.group)}</Text>

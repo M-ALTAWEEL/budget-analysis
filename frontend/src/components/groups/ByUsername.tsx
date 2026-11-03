@@ -90,7 +90,7 @@ export function ByUsername({ group }: { group: GroupDetail }) {
       </form>
       <FormError message={error} />
       {sentTo && (
-        <p role="status" className="text-sm text-pine">
+        <p role="status" className="text-sm text-brand">
           {t.groups.sentTo(sentTo)}
         </p>
       )}

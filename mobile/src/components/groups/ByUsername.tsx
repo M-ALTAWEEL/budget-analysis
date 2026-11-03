@@ -79,7 +79,7 @@ export function ByUsername({ group }: { group: GroupDetail }) {
         <Button variant="secondary" loading={send.isPending} disabled={full || !username.trim()} onPress={submit}>{t.groups.send}</Button>
       </View>
       <FormError message={error} />
-      {sentTo && <Text size={14} tone="pine">{t.groups.sentTo(sentTo)}</Text>}
+      {sentTo && <Text size={14} tone="brand">{t.groups.sentTo(sentTo)}</Text>}
       {(pending.data?.length ?? 0) > 0 && (
         <View style={{ gap: 6 }}>
           {pending.data?.map((request) => (

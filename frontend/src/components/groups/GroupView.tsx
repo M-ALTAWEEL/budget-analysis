@@ -78,7 +78,7 @@ function BackLink({ onBack }: { onBack: () => void }) {
     <button
       type="button"
       onClick={onBack}
-      className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-pine hover:underline"
+      className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-brand hover:underline"
     >
       <ArrowLeft className="size-4 rtl:-scale-x-100" aria-hidden />
       {t.groups.back}
@@ -163,8 +163,8 @@ function Members({ group }: { group: GroupDetail }) {
 }
 
 function RoleIcon({ role }: { role: GroupMember["role"] }) {
-  if (role === "owner") return <Crown className="size-5 shrink-0 text-pine" aria-hidden />;
-  if (role === "admin") return <Shield className="size-5 shrink-0 text-pine" aria-hidden />;
+  if (role === "owner") return <Crown className="size-5 shrink-0 text-brand" aria-hidden />;
+  if (role === "admin") return <Shield className="size-5 shrink-0 text-brand" aria-hidden />;
   return <span className="size-5 shrink-0" aria-hidden />;
 }
 
@@ -300,7 +300,7 @@ function AutoAdd({ group }: { group: GroupDetail }) {
             setError(null);
             change.mutate(e.target.checked);
           }}
-          className="mt-1 size-5 shrink-0 accent-pine"
+          className="mt-1 size-5 shrink-0 accent-brand"
         />
       </label>
       <FormError message={error} />

@@ -58,15 +58,15 @@ export function GoalCard({ goal, onAddMoney, onEdit }: { goal: Goal; onAddMoney:
         accessibilityRole="progressbar"
         accessibilityLabel={goal.name}
         accessibilityValue={{ min: 0, max: 100, now: Math.round(progress * 100), text: percent(Number(goal.progress)) }}
-        style={{ marginTop: 16, height: 10, borderRadius: 5, overflow: "hidden", backgroundColor: colors.pineSoft }}>
-        <Animated.View style={{ height: 10, borderRadius: 5, backgroundColor: colors.pine, width: width.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] }) }} />
+        style={{ marginTop: 16, height: 10, borderRadius: 5, overflow: "hidden", backgroundColor: colors.brandSoft }}>
+        <Animated.View style={{ height: 10, borderRadius: 5, backgroundColor: colors.brand, width: width.interpolate({ inputRange: [0, 1], outputRange: ["0%", "100%"] }) }} />
       </View>
       <Text size={14} tone="muted" end style={{ marginTop: 4 }}>{percent(Number(goal.progress))}</Text>
 
-      <Text size={15} weight={goal.achieved ? "semibold" : "regular"} tone={goal.achieved ? "pine" : "ink"} style={{ marginTop: 8 }}>{status}</Text>
+      <Text size={15} weight={goal.achieved ? "semibold" : "regular"} tone={goal.achieved ? "brand" : "ink"} style={{ marginTop: 8 }}>{status}</Text>
 
       <View style={{ marginTop: 20, flexDirection: "row", flexWrap: "wrap", gap: 8 }}>
-        <Button small icon={<Plus size={16} color={colors.onPine} />} onPress={onAddMoney}>{t.goals.addMoney}</Button>
+        <Button small icon={<Plus size={16} color={colors.onBrand} />} onPress={onAddMoney}>{t.goals.addMoney}</Button>
         <Button small variant="secondary" icon={<Pencil size={16} color={colors.ink} />} onPress={onEdit}>{t.goals.edit}</Button>
       </View>
 

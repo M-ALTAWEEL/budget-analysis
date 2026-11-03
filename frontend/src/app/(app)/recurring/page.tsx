@@ -55,7 +55,7 @@ export default function RecurringPage() {
       ) : (
         <>
           <section className="mb-8 flex flex-col items-center gap-2 rounded-2xl border border-line bg-surface px-6 py-7 text-center">
-            <Repeat className="size-6 text-pine" aria-hidden />
+            <Repeat className="size-6 text-brand" aria-hidden />
             <h2 className="text-muted">{t.recurring.monthlyTotal}</h2>
             <p className="tabular font-display text-3xl font-semibold">
               {money(recurring.data.monthly_total, recurring.data.currency)}

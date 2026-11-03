@@ -32,7 +32,7 @@ export function Field({
           minHeight: 46,
           borderRadius: 12,
           borderWidth: 1,
-          borderColor: focused ? colors.pine : colors.line,
+          borderColor: focused ? colors.brand : colors.line,
           backgroundColor: colors.surface,
         }}>
         <TextInput
@@ -140,12 +140,12 @@ export function Select<T extends string>({
                     alignItems: "center",
                     paddingHorizontal: 20,
                     paddingVertical: 14,
-                    backgroundColor: pressed ? colors.pineSoft : "transparent",
+                    backgroundColor: pressed ? colors.brandSoft : "transparent",
                   })}>
                   <Text style={{ flex: 1 }} weight={option.value === value ? "semibold" : "regular"}>
                     {option.label}
                   </Text>
-                  {option.value === value && <Check size={18} color={colors.pine} />}
+                  {option.value === value && <Check size={18} color={colors.brand} />}
                 </Pressable>
               ))}
             </ScrollView>

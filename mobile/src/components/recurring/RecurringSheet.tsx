@@ -112,8 +112,8 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
                   onPress={() => setCategoryUuid(category.uuid)}
                   style={{
                     width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, padding: 8,
-                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.pine : colors.line,
-                    backgroundColor: selected ? colors.pineSoft : colors.surface,
+                    borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
+                    backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>
                   <CategoryIcon category={category} size="sm" />
                   <Text size={14} weight={selected ? "semibold" : "regular"} numberOfLines={1} style={{ flex: 1 }}>{categoryName(category)}</Text>

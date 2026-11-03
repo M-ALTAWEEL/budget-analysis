@@ -14,7 +14,7 @@ import { todayISO } from "@/lib/month";
 import { monthChange, skylineStats, spendingStats, yearOfSpending, type SkylineFormat } from "@/lib/skyline";
 
 // Healthy → caution → overspent, the app's own colours: they follow light/dark and the accent.
-const PALETTE = ["var(--color-pine-soft)", "var(--color-pine)", "var(--color-marigold)", "var(--color-berry)"];
+const PALETTE = ["var(--color-brand-soft)", "var(--color-brand)", "var(--color-marigold)", "var(--color-berry)"];
 
 /**
  * The Overview's "Your year of spending": one line comparing this month with the same days

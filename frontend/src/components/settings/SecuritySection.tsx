@@ -134,7 +134,7 @@ function ChangePassword() {
       />
       <FormError message={error} />
       {notice && (
-        <p role="status" className="text-sm text-pine">
+        <p role="status" className="text-sm text-brand">
           {notice}
         </p>
       )}
@@ -234,7 +234,7 @@ function DeviceRow({
         </p>
         <p className="text-sm text-muted">
           {session.current ? (
-            <span className="font-semibold text-pine">{t.settings.security.thisDevice}</span>
+            <span className="font-semibold text-brand">{t.settings.security.thisDevice}</span>
           ) : null}
           {session.current && details.length > 0 ? " · " : null}
           {details.join(" · ")}

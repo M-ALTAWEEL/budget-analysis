@@ -39,7 +39,7 @@ export function IconColorPicker({
                 onClick={() => onIcon(choice)}
                 className={`flex aspect-square items-center justify-center rounded-lg border transition-colors ${
                   selected
-                    ? "border-pine bg-pine-soft text-pine-dark ring-1 ring-pine"
+                    ? "border-brand bg-brand-soft text-brand-dark ring-1 ring-brand"
                     : "border-line text-muted hover:text-ink"
                 }`}
               >

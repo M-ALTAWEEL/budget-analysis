@@ -55,7 +55,7 @@ export function GoalCard({
 
       {/* progress meter: fill = how much of the target is saved */}
       <div
-        className="mt-4 h-2.5 overflow-hidden rounded-full bg-pine-soft"
+        className="mt-4 h-2.5 overflow-hidden rounded-full bg-brand-soft"
         role="meter"
         aria-label={goal.name}
         aria-valuemin={0}
@@ -64,7 +64,7 @@ export function GoalCard({
         aria-valuetext={percent(progress)}
       >
         <motion.div
-          className="h-full rounded-full bg-pine"
+          className="h-full rounded-full bg-brand"
           initial={reduceMotion ? false : { width: 0 }}
           animate={{ width: `${progress * 100}%` }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -72,7 +72,7 @@ export function GoalCard({
       </div>
       <p className="mt-1 text-end text-sm text-muted tabular">{percent(progress)}</p>
 
-      <p className={`mt-2 text-[15px] ${goal.achieved ? "font-semibold text-pine" : ""}`}>{status}</p>
+      <p className={`mt-2 text-[15px] ${goal.achieved ? "font-semibold text-brand" : ""}`}>{status}</p>
 
       <div className="mt-5 flex flex-wrap gap-2">
         <Button onClick={onAddMoney} className="h-10 px-4">

@@ -57,7 +57,7 @@ export function NotificationsSection() {
               disabled={busy || permission === "denied"}
               accessibilityLabel={row.title}
               onValueChange={(value) => void change(row.field, value)}
-              trackColor={{ true: colors.pine, false: colors.line }}
+              trackColor={{ true: colors.brand, false: colors.line }}
               thumbColor="#fff"
             />
           </View>

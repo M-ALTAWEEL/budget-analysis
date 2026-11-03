@@ -206,7 +206,7 @@ export function GroupExpenseSheet({
                   aria-checked={selected}
                   onClick={() => setCategory(c.slug)}
                   className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
-                    selected ? "border-pine bg-pine-soft font-semibold ring-1 ring-pine" : "border-line hover:border-ink/30"
+                    selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line hover:border-ink/30"
                   }`}
                 >
                   <CategoryIcon category={c} size="sm" />
@@ -269,7 +269,7 @@ export function GroupExpenseSheet({
                       type="checkbox"
                       checked={on}
                       onChange={() => toggle(m.uuid)}
-                      className="size-4 accent-pine"
+                      className="size-4 accent-brand"
                     />
                     <span className="truncate">
                       <bdi>{m.display_name}</bdi>

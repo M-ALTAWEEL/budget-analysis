@@ -45,7 +45,7 @@ export function GroupExpenses({ group }: { group: GroupDetail }) {
     <View>
       <View style={{ marginBottom: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
         <Text display weight="semibold" size={18} accessibilityRole="header">{t.groups.chat}</Text>
-        <Button small icon={<Plus size={16} color={colors.onPine} />} onPress={() => setOpen({ kind: "sheet", expense: null })}>
+        <Button small icon={<Plus size={16} color={colors.onBrand} />} onPress={() => setOpen({ kind: "sheet", expense: null })}>
           {t.groups.addExpense}
         </Button>
       </View>
@@ -101,11 +101,11 @@ function Message({ item, me, group, onEdit }: { item: ActivityItem; me: string |
       <View
         style={{
           width: "92%", borderRadius: 16, borderWidth: 1, paddingHorizontal: 16, paddingVertical: 12,
-          borderColor: mine ? `${colors.pine}4d` : colors.line,
-          backgroundColor: mine ? colors.pineSoft : colors.surface,
+          borderColor: mine ? `${colors.brand}4d` : colors.line,
+          backgroundColor: mine ? colors.brandSoft : colors.surface,
           ...(mine ? { borderBottomEndRadius: 6 } : { borderBottomStartRadius: 6 }),
         }}>
-        {!mine && item.by && <Text size={12} weight="semibold" tone="pine" style={{ marginBottom: 4 }}>{item.by.display_name}</Text>}
+        {!mine && item.by && <Text size={12} weight="semibold" tone="brand" style={{ marginBottom: 4 }}>{item.by.display_name}</Text>}
         {item.expense && <ExpenseBody expense={item.expense} me={me} group={group} onEdit={onEdit} />}
         {item.settlement && <SettlementBody settlement={item.settlement} me={me} group={group} />}
         <Text size={11} tone="muted" end style={{ marginTop: 6 }}>{time}</Text>
@@ -134,7 +134,7 @@ function ExpenseBody({ expense, me, group, onEdit }: { expense: GroupExpense; me
   });
   const link = (label: string, onPress: () => void) => (
     <Pressable onPress={onPress} accessibilityRole="button" hitSlop={6}>
-      <Text size={14} tone="pine">{label}</Text>
+      <Text size={14} tone="brand">{label}</Text>
     </Pressable>
   );
 
@@ -150,7 +150,7 @@ function ExpenseBody({ expense, me, group, onEdit }: { expense: GroupExpense; me
       </View>
       <View style={{ flexDirection: "row", flexWrap: "wrap", alignItems: "center", columnGap: 12, rowGap: 4 }}>
         <Text size={14} tone="muted">{expense.my_share !== null ? t.groups.yourShare(money(expense.my_share)) : t.groups.notYours}</Text>
-        {settled && <Text size={14} weight="semibold" tone="pine">{t.groups.paidChip}</Text>}
+        {settled && <Text size={14} weight="semibold" tone="brand">{t.groups.paidChip}</Text>}
         {link(t.groups.splitBetween, () => setShowShares((v) => !v))}
         {expense.can_edit && link(t.groups.edit, () => onEdit(expense))}
       </View>
@@ -160,7 +160,7 @@ function ExpenseBody({ expense, me, group, onEdit }: { expense: GroupExpense; me
             <View key={share.member.uuid} style={{ flexDirection: "row", justifyContent: "space-between", gap: 12 }}>
               <Text size={14} numberOfLines={1} style={{ flex: 1 }}>
                 {name(share.member)}
-                {expense.paid_back.includes(share.member.uuid) ? <Text size={14} tone="pine"> ✓</Text> : null}
+                {expense.paid_back.includes(share.member.uuid) ? <Text size={14} tone="brand"> ✓</Text> : null}
               </Text>
               <Text size={14}>{money(share.amount)}</Text>
             </View>
@@ -188,8 +188,8 @@ function SettlementBody({ settlement, me, group }: { settlement: Settlement; me:
   });
   return (
     <View style={{ flexDirection: "row", alignItems: "flex-start", gap: 12 }}>
-      <View style={{ width: 32, height: 32, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.pine}26` }}>
-        <HandCoins size={16} color={colors.pine} />
+      <View style={{ width: 32, height: 32, borderRadius: 8, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}26` }}>
+        <HandCoins size={16} color={colors.brand} />
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>
         <Text weight="semibold">{t.groups.paidBack(name(settlement.from_member), name(settlement.to_member), money(settlement.amount, group.currency))}</Text>

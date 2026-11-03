@@ -200,7 +200,7 @@ function ChangeEmail({ run }: { run: Run }) {
         />
         <FormError message={error} />
         {sent && (
-          <p role="status" className="flex items-center gap-2 text-sm text-pine">
+          <p role="status" className="flex items-center gap-2 text-sm text-brand">
             <Mail className="size-4" aria-hidden />
             {t.account.changeEmailSent}
           </p>
@@ -247,7 +247,7 @@ function ExportData({ run }: { run: Run }) {
         {t.account.exportButton}
       </Button>
       {state === "done" && (
-        <p role="status" className="text-sm text-pine">
+        <p role="status" className="text-sm text-brand">
           {t.account.exportDone}
         </p>
       )}

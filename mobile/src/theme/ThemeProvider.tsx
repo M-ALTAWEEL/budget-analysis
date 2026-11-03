@@ -16,15 +16,15 @@ const LIGHT = {
   ink: "#16302b",
   muted: "#5b6f69",
   line: "#d5ded9",
-  pine: "#1e6b57",
-  pineDark: "#17543f",
-  pineSoft: "#dcebe5",
+  brand: "#1e6b57",
+  brandDark: "#17543f",
+  brandSoft: "#dcebe5",
   marigold: "#c98516",
   marigoldInk: "#9a6408",
   marigoldSoft: "#f8ecd6",
   berry: "#b23c63",
   berrySoft: "#f6e3ea",
-  onPine: "#ffffff",
+  onBrand: "#ffffff",
   panel: "#1e6b57",
   logo: "#15172A",
 };
@@ -35,15 +35,15 @@ const DARK: Palette = {
   ink: "#e4ece9",
   muted: "#93a69f",
   line: "#2a3934",
-  pine: "#5cc4a0",
-  pineDark: "#7fd6b7",
-  pineSoft: "#1c3a31",
+  brand: "#5cc4a0",
+  brandDark: "#7fd6b7",
+  brandSoft: "#1c3a31",
   marigold: "#e5a53c",
   marigoldInk: "#e5a53c",
   marigoldSoft: "#3a2e17",
   berry: "#ef7fa3",
   berrySoft: "#3a1f2a",
-  onPine: "#0b1f19",
+  onBrand: "#0b1f19",
   panel: "#12443a",
   logo: "#FFFFFF",
 };
@@ -53,16 +53,16 @@ export type Palette = typeof LIGHT;
 /** Only the "pine" family changes with the accent: berry and marigold keep their meaning. */
 const ACCENT_COLORS: Record<Exclude<Accent, "pine">, { light: Partial<Palette>; dark: Partial<Palette> }> = {
   ocean: {
-    light: { pine: "#1d5fa8", pineDark: "#164a85", pineSoft: "#dce7f5", panel: "#1d5fa8" },
-    dark: { pine: "#6aa7ec", pineDark: "#8dbdf2", pineSoft: "#182b44", onPine: "#0b1a2e", panel: "#163a66" },
+    light: { brand: "#1d5fa8", brandDark: "#164a85", brandSoft: "#dce7f5", panel: "#1d5fa8" },
+    dark: { brand: "#6aa7ec", brandDark: "#8dbdf2", brandSoft: "#182b44", onBrand: "#0b1a2e", panel: "#163a66" },
   },
   plum: {
-    light: { pine: "#6b3fa0", pineDark: "#55307f", pineSoft: "#ebe2f5", panel: "#6b3fa0" },
-    dark: { pine: "#b18ce6", pineDark: "#c6a9ee", pineSoft: "#2c2140", onPine: "#1c1230", panel: "#3f2766" },
+    light: { brand: "#6b3fa0", brandDark: "#55307f", brandSoft: "#ebe2f5", panel: "#6b3fa0" },
+    dark: { brand: "#b18ce6", brandDark: "#c6a9ee", brandSoft: "#2c2140", onBrand: "#1c1230", panel: "#3f2766" },
   },
   graphite: {
-    light: { pine: "#3d4a5c", pineDark: "#2c3644", pineSoft: "#e3e7ed", panel: "#3d4a5c" },
-    dark: { pine: "#a9b6c8", pineDark: "#c2ccda", pineSoft: "#252c36", onPine: "#111720", panel: "#2b3442" },
+    light: { brand: "#3d4a5c", brandDark: "#2c3644", brandSoft: "#e3e7ed", panel: "#3d4a5c" },
+    dark: { brand: "#a9b6c8", brandDark: "#c2ccda", brandSoft: "#252c36", onBrand: "#111720", panel: "#2b3442" },
   },
 };
 

@@ -53,9 +53,9 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   }
 
   return (
-    <View style={{ borderRadius: 12, borderWidth: 1, borderStyle: "dashed", borderColor: colors.pine, backgroundColor: colors.pineSoft, padding: 12, gap: 8 }}>
+    <View style={{ borderRadius: 12, borderWidth: 1, borderStyle: "dashed", borderColor: colors.brand, backgroundColor: colors.brandSoft, padding: 12, gap: 8 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-        <Mic size={16} color={colors.pine} />
+        <Mic size={16} color={colors.brand} />
         <Text size={14} weight="semibold">{t.quickAdd.label}</Text>
       </View>
       <View style={{ flexDirection: "row", gap: 8 }}>
@@ -85,9 +85,9 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
           disabled={busy || !text.trim()}
           accessibilityRole="button"
           accessibilityLabel={t.quickAdd.fill}
-          style={{ flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 10, backgroundColor: colors.pine, paddingHorizontal: 12, opacity: busy || !text.trim() ? 0.5 : 1 }}>
-          <Wand2 size={16} color={colors.onPine} />
-          <Text size={14} weight="semibold" tone="onPine">{t.quickAdd.fill}</Text>
+          style={{ flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 10, backgroundColor: colors.brand, paddingHorizontal: 12, opacity: busy || !text.trim() ? 0.5 : 1 }}>
+          <Wand2 size={16} color={colors.onBrand} />
+          <Text size={14} weight="semibold" tone="onBrand">{t.quickAdd.fill}</Text>
         </Pressable>
       </View>
       <Text size={12} tone={message && message !== t.quickAdd.scanning ? "berry" : "muted"}>{message ?? t.quickAdd.hint}</Text>

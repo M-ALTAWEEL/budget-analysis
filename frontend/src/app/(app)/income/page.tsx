@@ -114,7 +114,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
   return (
     <section className="mb-8 space-y-4">
       <div className="grid grid-cols-3 gap-3">
-        <Stat label={t.income.total} value={money(data.total, data.currency)} tone="text-pine" />
+        <Stat label={t.income.total} value={money(data.total, data.currency)} tone="text-brand" />
         <Stat label={t.income.spent} value={money(data.spent, data.currency)} />
         <Stat label={t.income.net} value={money(data.net, data.currency)} tone={negative ? "text-berry" : "text-ink"} />
       </div>
@@ -124,7 +124,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
           {data.by_kind.map((k, i) => (
             <div
               key={k.kind}
-              className={["bg-pine", "bg-sky-500", "bg-amber-500", "bg-violet-500", "bg-slate-400"][i % 5]}
+              className={["bg-brand", "bg-sky-500", "bg-amber-500", "bg-violet-500", "bg-slate-400"][i % 5]}
               style={{ width: `${(Number(k.total) / Number(data.total)) * 100}%` }}
             />
           ))}
@@ -168,7 +168,7 @@ function IncomeRow({ income, monthCurrency, onEdit }: { income: Income; monthCur
   return (
     <li>
       <button type="button" onClick={onEdit} className="flex w-full items-center gap-4 px-5 py-4 text-start hover:bg-ink/[0.03]">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-pine/10 text-pine">
+        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
           <Wallet className="size-5" aria-hidden />
         </span>
         <span className="min-w-0 flex-1">
@@ -181,7 +181,7 @@ function IncomeRow({ income, monthCurrency, onEdit }: { income: Income; monthCur
           {other && income.converted === null && <span className="block text-xs text-berry">{t.income.noRate}</span>}
         </span>
         <span className="tabular shrink-0 text-end">
-          <span className="block font-semibold text-pine">+{money(income.amount, income.currency)}</span>
+          <span className="block font-semibold text-brand">+{money(income.amount, income.currency)}</span>
           {other && income.converted !== null && (
             <span className="block text-xs text-muted">≈ {money(income.converted, monthCurrency)}</span>
           )}

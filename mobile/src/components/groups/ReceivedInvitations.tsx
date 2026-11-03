@@ -37,12 +37,12 @@ export function ReceivedInvitations({ onJoined }: { onJoined: (groupUuid: string
   return (
     <View style={{ marginBottom: 40 }}>
       <View style={{ marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <Mail size={20} color={colors.pine} />
+        <Mail size={20} color={colors.brand} />
         <Text display weight="semibold" size={18} accessibilityRole="header">{t.groups.invitations}</Text>
       </View>
       <View style={{ gap: 12 }}>
         {requests.data.map((request) => (
-          <View key={request.uuid} style={{ gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.pine}66`, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
+          <View key={request.uuid} style={{ gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
             <View>
               <Text weight="semibold" numberOfLines={1}>{request.group_name}</Text>
               <Text size={14} tone="muted">

@@ -37,8 +37,8 @@ export function ForgotPasswordForm({ onBack }: { onBack: () => void }) {
     <View style={{ gap: 16 }}>
       <Text display weight="semibold" size={30} accessibilityRole="header">{t.account.forgotTitle}</Text>
       {sent ? (
-        <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.pine}4d`, backgroundColor: colors.pineSoft, paddingHorizontal: 16, paddingVertical: 12 }}>
-          <MailCheck size={20} color={colors.pine} />
+        <View accessibilityLiveRegion="polite" style={{ flexDirection: "row", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.brand}4d`, backgroundColor: colors.brandSoft, paddingHorizontal: 16, paddingVertical: 12 }}>
+          <MailCheck size={20} color={colors.brand} />
           <Text size={15} style={{ flex: 1 }}>{t.account.linkSent}</Text>
         </View>
       ) : (
@@ -50,7 +50,7 @@ export function ForgotPasswordForm({ onBack }: { onBack: () => void }) {
         </>
       )}
       <Pressable onPress={onBack} accessibilityRole="link" style={{ alignSelf: "flex-start" }}>
-        <Text size={14} weight="semibold" tone="pine">{t.account.backToLogin}</Text>
+        <Text size={14} weight="semibold" tone="brand">{t.account.backToLogin}</Text>
       </Pressable>
     </View>
   );

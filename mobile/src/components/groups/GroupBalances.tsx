@@ -59,7 +59,7 @@ function BalanceCard({
   const others = data.debts.filter((d) => !mine.includes(d));
   return (
     <Card>
-      <Text weight="semibold" tone={myNet < 0 ? "berry" : myNet > 0 ? "pine" : "ink"}>
+      <Text weight="semibold" tone={myNet < 0 ? "berry" : myNet > 0 ? "brand" : "ink"}>
         {myNet < 0 ? t.groups.youOwe(money(-myNet)) : myNet > 0 ? t.groups.youAreOwed(money(myNet)) : t.groups.allSettled}
       </Text>
       {data.debts.length > 0 && (

@@ -38,7 +38,7 @@ export default function DebtsScreen() {
             <Text display weight="semibold" size={24} accessibilityRole="header">{t.debts.title}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.debts.intro}</Text>
           </View>
-          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onPine} />} onPress={() => setOpen({ kind: "debt", debt: null })}>
+          <Button style={{ alignSelf: "flex-start" }} icon={<Plus size={20} color={colors.onBrand} />} onPress={() => setOpen({ kind: "debt", debt: null })}>
             {t.debts.add}
           </Button>
         </View>
@@ -56,7 +56,7 @@ export default function DebtsScreen() {
           <>
             <View style={{ marginBottom: 24, flexDirection: "row", gap: 12 }}>
               {[
-                { label: t.debts.owedToYou, value: debts.data.owed_to_you, color: colors.pine },
+                { label: t.debts.owedToYou, value: debts.data.owed_to_you, color: colors.brand },
                 { label: t.debts.youOwe, value: debts.data.you_owe, color: colors.berry },
               ].map((box) => (
                 <View key={box.label} style={{ flex: 1, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16 }}>
@@ -86,7 +86,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
   const [showPayments, setShowPayments] = useState(false);
   const settled = debt.settled_on !== null;
   const lent = debt.direction === "lent";
-  const accent = lent ? colors.pine : colors.berry;
+  const accent = lent ? colors.brand : colors.berry;
   const status = settled
     ? t.debts.settledOn(shortDate(debt.settled_on!))
     : debt.overdue
@@ -117,7 +117,7 @@ function DebtCard({ debt, onEdit, onPay }: { debt: Debt; onEdit: () => void; onP
 
       {Number(debt.paid) > 0 && !settled && (
         <View style={{ height: 6, borderRadius: 999, backgroundColor: colors.line, overflow: "hidden" }}>
-          <View style={{ height: "100%", width: `${paidRatio * 100}%`, borderRadius: 999, backgroundColor: colors.pine }} />
+          <View style={{ height: "100%", width: `${paidRatio * 100}%`, borderRadius: 999, backgroundColor: colors.brand }} />
         </View>
       )}
 

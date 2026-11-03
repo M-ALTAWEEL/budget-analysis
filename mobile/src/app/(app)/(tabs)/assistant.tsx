@@ -71,8 +71,8 @@ export default function AssistantScreen() {
             <Text display weight="semibold" size={24} accessibilityRole="header">{t.assistant.title}</Text>
             <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.assistant.intro}</Text>
             <View style={{ marginTop: 8, flexDirection: "row", alignItems: "center", gap: 6 }}>
-              <Sparkles size={16} color={colors.pine} />
-              <Text size={14} tone="pine">{t.assistant.local}</Text>
+              <Sparkles size={16} color={colors.brand} />
+              <Text size={14} tone="brand">{t.assistant.local}</Text>
             </View>
           </View>
 
@@ -85,8 +85,8 @@ export default function AssistantScreen() {
                 entering={FadeInDown.duration(200)}
                 style={{ flexDirection: "row", justifyContent: message.from === "student" ? "flex-end" : "flex-start" }}>
                 {message.from === "student" ? (
-                  <View style={{ maxWidth: "85%", borderRadius: 16, borderBottomEndRadius: 6, backgroundColor: colors.pine, paddingHorizontal: 16, paddingVertical: 10 }}>
-                    <Text size={15} tone="onPine" accessibilityLabel={`${t.assistant.you}: ${message.text}`}>{message.text}</Text>
+                  <View style={{ maxWidth: "85%", borderRadius: 16, borderBottomEndRadius: 6, backgroundColor: colors.brand, paddingHorizontal: 16, paddingVertical: 10 }}>
+                    <Text size={15} tone="onBrand" accessibilityLabel={`${t.assistant.you}: ${message.text}`}>{message.text}</Text>
                   </View>
                 ) : (
                   <View style={{ maxWidth: "90%", borderRadius: 16, borderBottomStartRadius: 6, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
@@ -133,9 +133,9 @@ export default function AssistantScreen() {
             accessibilityLabel={t.assistant.send}
             style={({ pressed }) => ({
               width: 48, height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center",
-              backgroundColor: pressed ? colors.pineDark : colors.pine, opacity: disabled ? 0.5 : 1, transform: [{ scale: pressed ? 0.95 : 1 }],
+              backgroundColor: pressed ? colors.brandDark : colors.brand, opacity: disabled ? 0.5 : 1, transform: [{ scale: pressed ? 0.95 : 1 }],
             })}>
-            <SendHorizontal size={20} color={colors.onPine} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
+            <SendHorizontal size={20} color={colors.onBrand} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />
           </Pressable>
         </View>
       </KeyboardAvoidingView>
