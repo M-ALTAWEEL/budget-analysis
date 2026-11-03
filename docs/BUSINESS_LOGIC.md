@@ -1,8 +1,8 @@
 # Business Logic
 
-**Budget Analysis** · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
+**ibudgi** (formerly Budget Analysis) · Version 1.0 · 27 October 2026 · Owner: Mouhammed Altaweel
 
-This document states the business rules of Budget Analysis: what the product calculates,
+This document states the business rules of ibudgi: what the product calculates,
 what it allows, what it refuses, and why. It is the reference for product decisions, tests
 and support. Where a rule is enforced, the module is named so it can be checked in code.
 
@@ -34,7 +34,7 @@ Related documents: [`SAD.docx`](SAD.docx) (architecture), [`design/accounts.md`]
 
 ## 1. Product scope
 
-Budget Analysis helps students and young people living away from home see **how much of
+ibudgi helps students and young people living away from home see **how much of
 their allowance is left, whether it will last the month, and where it goes**, and share
 costs with the people they live with.
 
@@ -228,8 +228,8 @@ server, website and app):
 3. **Nothing is kept**: the photo is read in memory and forgotten, and nothing is saved until
    the person taps Add. At most 30 photos an hour; up to 6 MB (the website shrinks photos
    first).
-4. Free for now; in phase 7 it becomes part of Plus. The app's camera arrives with the next
-   app build (expo-image-picker); until then its scan button says so.
+4. Free for now; in phase 7 it becomes part of Plus. In the app the camera asks for
+   permission once (expo-image-picker); the photo is sent at low JPEG quality.
 
 ### 6.8 Adding expenses offline (feature F13)
 **Rules** (`frontend/src/lib/offline.ts`, shared with the app; `expenses.client_id`):
@@ -246,6 +246,34 @@ server, website and app):
    person signing in on the same device never sends them.
 6. Only adding works offline; editing, deleting and opening the app signed out still need a
    connection. Pages already open keep showing what they last loaded.
+
+### 6.9 Bank statement import (feature F11, Plus)
+**Rules** (`app/ml/statement.py`, `app/domain/imports/`):
+
+1. The person uploads their bank's statement as **Excel, CSV or PDF** (website: a file;
+   app: the system file picker). Nothing is saved at this step and the file isn't kept.
+2. **Reading.** A table with headers (date, description, amount, or debit and credit, in
+   English, Turkish or Arabic) is read by its columns. Anything else, such as a PDF turned
+   into Excel, is read as lines: a date opens a transaction; Turkish amounts ("1.234,56")
+   and number cells give the amount and the balance; lines out of place are joined back.
+   Where balances are known, previous balance + amount = balance decides which number is
+   which and the amount's sign. The carried-over balance plus all amounts equals the
+   closing balance.
+3. **Understanding** (Turkish banks, Kuveyt Türk first): a card purchase at a shop, a bill
+   (with the company's name, in Bills), a transfer to or from a person, a credit-card
+   payment, a cash deposit, a refund. Descriptions are shortened ("SEYRA MARKET",
+   "Transfer to Tüba Şenol"); long card and account numbers are dropped.
+4. **Suggestions:** purchases and bills become expenses (category suggested as usual);
+   transfers, deposits and refunds are left out for the person to decide (a transfer may
+   be rent, a split or a loan); a credit-card payment is always left out unless picked,
+   because the card's purchases are counted already. Lines in a month without a budget,
+   and lines already added (same day and amount), start unticked.
+5. **Adding:** picked lines become expenses (in the statement's currency, the main one by
+   default) or income. Each expense gets an id from its day, amount and description, so
+   importing the same statement twice adds nothing the second time; income is matched by
+   day, amount and source. Lines in a month without a budget are counted and skipped.
+6. At most 500 lines per import, 2,000 lines read, 6 MB per file, 20 imports an hour.
+7. Free for now; in phase 7 it becomes part of Plus.
 
 ## 7. Categories and automatic categorization
 
@@ -306,13 +334,23 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 3. Forecast = spent so far + (average everyday spending × days left).
 4. Days are counted from the budget month's start day, not from the 1st.
 
-### 8.4 Comparison with last month
-1. Compares the **same number of days** of both months (days 1–18 against days 1–18), never
-   a partial month against a whole one.
-2. Shown only if last month has a budget in the **same currency** and at least one day of
-   this month has passed. A fresh start hides it.
-3. Changes within **±5%** are shown as "about the same". Spending less is the positive
-   direction.
+### 8.4 Your year of spending (comparison with last month)
+The Overview section "Your year of spending" (`lib/skyline.ts`, shared by the website and the
+app) starts with **one line** comparing this month with last month, then shows the year:
+1. The line compares the **same number of days** of both months (days 1–18 against days
+   1–18), never a partial month against a whole one. Changes within **±5%** read "about the
+   same"; spending less is the positive direction. Without a budget last month, or with one in
+   another currency, the line says why there is nothing to compare.
+2. The chart shows **every day of the last 12 budget months** (up to today), coloured, and in
+   3D raised, by what was spent that day: four levels split by the day's share of a big day
+   (the 95th percentile, so one huge purchase doesn't flatten the rest). Colours go from
+   healthy to caution to overspent (pine, marigold, berry). Months without a budget, or
+   budgeted in another currency than this month, are left empty.
+3. Under it: spent in 12 months, the biggest day, the longest run of days without spending,
+   and the run without spending that reaches today. A month without a budget ends a run.
+4. The website draws it on a canvas (`components/ui/ContributionSkyline.tsx`, adapted from
+   21st.dev's Contribution Skyline) with a camera swing between the flat map and the skyline;
+   the app draws the same scene with SVG and fades between the two views.
 
 ### 8.5 Tips
 **Rules** (`app/domain/budget/tips.py`):
@@ -383,6 +421,20 @@ Overspending the whole budget is not an alert: the tank already says it prominen
 5. Only the person's own expenses are used; nothing is sent to the rates provider but two
    currency codes and a date.
 6. Free for now; in phase 7 it becomes part of Plus.
+
+### 8.10 Home-screen widget (feature F12, Android)
+**Rules** (`mobile/src/widget/`, `mobile/src/components/widget/WidgetSync.tsx`):
+
+1. A widget for the Android home screen: what is **left this month** (or how much over), spent
+   of the budget with a bar, and **+ Add expense**, which opens the app with the new-expense
+   sheet (`budgetanalysis://add-expense`). Tapping elsewhere opens the app.
+2. The app writes a small snapshot of the current budget month (texts already in the person's
+   language) whenever its numbers change; the widget reads it, also when the app is closed,
+   and Android refreshes it at least every 30 minutes.
+3. Without a budget for this month it says so; signed out (or before the first sign-in) it
+   only offers to open the app. **Signing out clears the numbers** from the widget.
+4. The widget is a platform-only feature, like push notifications (section 15). An iPhone
+   widget needs an iOS extension and comes with the iPhone release.
 
 ## 9. Savings goals
 
@@ -635,16 +687,49 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
    budgets, expenses, categories, goals or groups. Every admin action is in the audit log
    and in the person's own security activity. The privacy policy says so.
 
+### 14.1 Customer support
+**Rules** (`app/domain/support/`):
+
+1. Anyone signed in writes to the team from **Settings › Help and feedback** (website and app):
+   a topic (problem, idea, question, account, other), a subject and a message. The app or
+   website version and the platform are sent along. Someone who can't sign in uses
+   **Contact us** on the sign-in page and leaves an email address.
+2. Each message starts a **conversation**. The team answers from the admin dashboard
+   (**Support**, website only, admins with 2FA and a recent sign-in). The answer appears in
+   the conversation, arrives as a **push notification** (it opens Help and feedback) and by
+   **email** in the person's language. A new answer is marked until opened.
+3. The person can write again; the conversation goes back to "waiting for us". Admins can
+   close it. Every answer and close is in the audit log.
+4. A copy of each new message goes to the team's inbox (`SUPPORT_EMAIL`) when it is set.
+5. Limits: 10 new messages an hour and 10 open conversations per person; 5 an hour per
+   address for the contact form; 4,000 characters per message. People see only their own.
+6. Conversations are in the data export and are deleted with the account.
+
 ## 15. Platform parity
 
 1. The website, iPhone app and Android app offer **the same features and rules**.
 2. Types, texts in three languages, API calls and the month and money rules are **one shared
    copy**, copied from the website into the app by a script; CI fails if they drift.
-3. Platform-only features: app lock and push notifications (mobile), keyboard and large-screen
+3. Platform-only features: app lock, push notifications and the home-screen widget (mobile), keyboard and large-screen
    layouts (web). Links sent by email open the website. **Invitation links** open the app on
    Android when it is installed (App Links), and the website otherwise; opened while signed
    out, the app asks for sign-in first, then shows the invitation.
 4. The admin dashboard is **website only** (section 17).
+5. **Brand, launch and loading.** The product is called **ibudgi** everywhere people see it
+   (both apps, emails, SMS, push, the 2FA issuer); the app's bundle identifier, Android
+   package and slug keep the old name. Brand colours and the logo's shapes are one shared
+   file (`lib/brand.ts`); the app's own theme (pine, marigold, berry) is unchanged.
+   - **Launch** (app: `components/brand/Preloader.tsx`; website: `components/brand/preloaderScript.ts`):
+     the bars rise, the coin drops, the name appears; if the app is not ready at 1.75 s the
+     bars wave until it is; then the tall bar stretches over the screen in white, and the white
+     fades out as the page fades in. The app shows it once per cold start (the native
+     splash is plain indigo, hidden on the preloader's first frame); the website only on the
+     first visit (`localStorage` flag `ib-preloaded`), never longer than 3.5 s, and the page
+     is in the HTML underneath. With reduced motion: the app shows the still logo and fades;
+     the website skips it.
+   - **Loading:** every loading state uses the "fill up" loader (`IbudgiLoader`): 48 by
+     default, 72 for a whole page, 24 inside buttons. With reduced motion it is the still
+     logo, gently pulsing.
 
 ## 16. Invariants checked by tests
 
@@ -677,6 +762,8 @@ Full design: [`design/accounts.md`](design/accounts.md); verification: [`securit
 | A sentence gives the same amount, currency, day and description in all three languages, and saves nothing | `test_quick_add.py` |
 | A receipt's total is never the tax, subtotal or change; the photo is never kept | `test_receipt.py` |
 | The same expense sent twice from offline is added once, and only for its own person | `test_offline.py` |
+| People see only their own support conversations; only admins see the inbox, and every answer is audited | `test_support.py` |
+| A statement adds up from the carried-over to the closing balance, and importing it twice adds nothing | `test_statement_import.py` |
 
 ## 17. Admin dashboard
 

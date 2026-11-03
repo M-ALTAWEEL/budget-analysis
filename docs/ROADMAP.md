@@ -1,6 +1,6 @@
-# Budget Analysis: Product Roadmap
+# ibudgi: Product Roadmap
 
-> The plan that takes Budget Analysis from a portfolio project to a commercial product on
+> The plan that takes ibudgi (formerly Budget Analysis) from a portfolio project to a commercial product on
 > the web, iPhone and Android. Each phase ships something complete and tested; the status
 > table below is updated when a phase closes.
 >
@@ -29,7 +29,7 @@ comes first; what depends on it (groups, mobile, payments) comes after.
 
 | Topic | Decision |
 |---|---|
-| Name | **Budget Analysis** (a custom domain is bought at Activation) |
+| Name | **ibudgi** (renamed from Budget Analysis; a custom domain is bought at Activation) |
 | Market | Worldwide, with Turkey and the Arab world first |
 | Platforms | Web (Next.js) and iPhone/Android (React Native with Expo), all on one API |
 | Sign-in methods | Email and password, Google, **Apple**, **phone number** (SMS; WhatsApp as the cheaper channel) |
@@ -140,9 +140,11 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **F7 Shared household budget (Plus)**: one monthly total for the whole group with category limits, what is left, and who paid how much; set by the group admins
 - [x] **F8 Inflation and currency view (Plus)**: six months of spending in the person's currency and in a steady one at each month's rate (ECB rates, kept once fetched); purchases that got more expensive
 - [x] **F9 Add an expense by voice**: one sentence in English, Arabic or Turkish fills in the form (browser speech recognition on the website, the keyboard microphone in the app)
-- [x] **F10 Receipt scan (Plus)**: a photo fills in total, date and shop (Tesseract, Turkish / English / Arabic); nothing is kept. The app camera needs `expo-image-picker` in the next build
-- [ ] F11 Bank statement import (Plus)
-- [ ] F12 Home-screen widget
+- [x] **F10 Receipt scan (Plus)**: a photo fills in total, date and shop (Tesseract, Turkish / English / Arabic); nothing is kept. In the app through `expo-image-picker`
+- [x] **F11 Bank statement import (Plus)**: Excel, CSV or PDF (Kuveyt Türk first, any bank with a table); every line with a suggestion; transfers and card payments left to the person; importing twice adds nothing
+- [x] **F12 Home-screen widget** (Android): left this month, a progress bar and + Add expense; cleared on sign-out. iPhone widget with the iPhone release
+- [x] **Customer support**: Help and feedback in Settings, Contact us on the sign-in page, an inbox in the admin dashboard; answers by push and email
+- [x] **ibudgi brand**: new name, icon, splash and logo; a launch animation (app on every cold start, website on the first visit) and the "fill up" loader everywhere
 - [x] **F13 Offline mode**: new expenses wait on the device without a connection and are sent by themselves when it is back; a device-made id stops duplicates
 
 ## Phase 7: Subscriptions, payments and coupons

@@ -11,6 +11,8 @@ export const ACTION_LABELS: Record<string, string> = {
   currency_added: "Added currency",
   currency_hidden: "Hid currency",
   currency_shown: "Showed currency",
+  support_answer: "Answered a support message",
+  support_close: "Closed a support message",
 };
 
 /** The name of a currency in a language, from the browser's own list (any ISO code), to

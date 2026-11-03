@@ -1,6 +1,6 @@
 import type { Locale } from "@/i18n/config";
 
-// Shapes returned by the Budget Analysis API. Money is always a string ("120.50"):
+// Shapes returned by the ibudgi API. Money is always a string ("120.50"):
 // the backend uses exact decimals, and JavaScript numbers are floats.
 
 /** An ISO 4217 code ("TRY"). The list lives on the server, so admins can add currencies:
@@ -446,4 +446,69 @@ export interface InflationView {
     last_price: string;
     change: number;
   }[];
+}
+
+// ── customer support ────────────────────────────────────────────────────────
+
+export type SupportTopic = "problem" | "idea" | "question" | "account" | "other";
+
+export interface SupportTicket {
+  uuid: string;
+  topic: SupportTopic;
+  subject: string;
+  status: "open" | "answered" | "closed";
+  created_at: string;
+  last_message_at: string;
+  unread: boolean; // an answer not opened yet
+  messages: { from_support: boolean; author: string; body: string; created_at: string }[];
+}
+
+export interface SupportInput {
+  topic: SupportTopic;
+  subject: string;
+  message: string;
+  platform?: string;
+}
+
+// ── bank statement import (feature F11) ─────────────────────────────────────
+
+export type StatementKind =
+  | "purchase" | "bill" | "card_payment" | "transfer_out" | "transfer_in" | "deposit" | "refund" | "other";
+
+export interface StatementRow {
+  day: string;
+  label: string;
+  original: string;
+  amount: string;
+  direction: "out" | "in";
+  kind: StatementKind;
+  suggestion: "expense" | "income" | "skip";
+  category: Category | null;
+  duplicate: boolean; // an expense with the same day and amount is already there
+  has_budget: boolean;
+}
+
+export interface StatementPreview {
+  rows: StatementRow[];
+  currency: Currency;
+  first_day: string;
+  last_day: string;
+  money_out: string;
+  money_in: string;
+}
+
+export interface StatementImportRow {
+  day: string;
+  description: string;
+  amount: string;
+  as: "expense" | "income";
+  category_uuid?: string | null;
+  income_kind?: IncomeKind;
+}
+
+export interface StatementImportResult {
+  expenses: number;
+  income: number;
+  already_there: number;
+  no_budget: number;
 }

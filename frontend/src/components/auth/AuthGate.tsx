@@ -19,6 +19,6 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     router.replace(invite ? `/join?token=${encodeURIComponent(invite)}` : "/overview");
   }, [status, router]);
 
-  if (status !== "anonymous") return <PageLoader />;
+  if (status !== "anonymous") return <PageLoader size={72} />;
   return <>{children}</>;
 }

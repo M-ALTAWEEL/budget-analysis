@@ -1,7 +1,7 @@
 "use client";
 
 import { useQuery } from "@tanstack/react-query";
-import { ChevronRight, LogOut, Monitor, Moon, Shapes, Sun } from "lucide-react";
+import { ChevronRight, LifeBuoy, LogOut, Monitor, Moon, Shapes, Sun } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -18,6 +18,7 @@ import { LOCALES, LOCALE_INFO } from "@/i18n/config";
 import { useI18n } from "@/i18n/I18nProvider";
 import { useErrorMessage } from "@/lib/errors";
 import { updateMe } from "@/services/auth";
+import { useSupport } from "@/hooks/queries";
 import { getVersion } from "@/services/system";
 import { ACCENTS, useTheme, type ThemePreference } from "@/theme/ThemeProvider";
 import type { Currency } from "@/types/api";
@@ -127,6 +128,8 @@ export default function SettingsPage() {
           <ChevronRight className="size-5 text-muted rtl:-scale-x-100" aria-hidden />
         </Link>
 
+        <SupportLink />
+
         <section aria-labelledby="account">
           <h2 id="account" className="mb-3 font-display text-lg font-semibold">
             {t.settings.account}
@@ -235,5 +238,28 @@ function SecondCurrency() {
       </CurrencySelect>
       {error && <p className="mt-2 text-sm text-berry">{error}</p>}
     </section>
+  );
+}
+
+/** Help and feedback, with a dot when the team has answered. */
+function SupportLink() {
+  const { t } = useI18n();
+  const tickets = useSupport();
+  const unread = tickets.data?.filter((ticket) => ticket.unread).length ?? 0;
+  return (
+    <Link
+      href="/support"
+      className="flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 text-[15px] hover:border-ink/30"
+    >
+      <LifeBuoy className="size-5 text-muted" aria-hidden />
+      <span className="flex-1">
+        <span className="block font-semibold">{t.support.link}</span>
+        <span className="block text-sm text-muted">{t.support.linkHint}</span>
+      </span>
+      {unread > 0 && (
+        <span className="grid size-6 place-items-center rounded-full bg-pine text-xs font-semibold text-white">{unread}</span>
+      )}
+      <ChevronRight className="size-5 text-muted rtl:-scale-x-100" aria-hidden />
+    </Link>
   );
 }

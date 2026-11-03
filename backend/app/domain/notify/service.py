@@ -91,7 +91,7 @@ class GroupNotifications:
         if invitee is None or invitee.id == actor.id or not invitee.notify_groups:
             return []
         devices = await self._devices([invitee.id])
-        title = "Budget Analysis"
+        title = "ibudgi"
         return [
             PushMessage(
                 to=device.token,

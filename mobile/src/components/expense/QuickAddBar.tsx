@@ -1,3 +1,4 @@
+import * as ImagePicker from "expo-image-picker";
 import { Camera, Mic, Wand2 } from "lucide-react-native";
 import { useState } from "react";
 import { Pressable, TextInput, View } from "react-native";
@@ -6,24 +7,6 @@ import { Text } from "@/components/ui/Text";
 import { useI18n } from "@/i18n/I18nProvider";
 import { quickAdd, readReceipt, type QuickAdd } from "@/services/expenses";
 import { useColors } from "@/theme/ThemeProvider";
-
-// The camera comes from expo-image-picker, a native module that ships in the next app
-// build. Until then it isn't there: the require sits in try/catch, which Metro treats as
-// optional, and the scan button says the app needs updating.
-type Picker = {
-  requestCameraPermissionsAsync: () => Promise<{ granted: boolean }>;
-  launchCameraAsync: (options: { mediaTypes: string[]; quality: number; base64: boolean }) => Promise<{
-    canceled: boolean;
-    assets?: { base64?: string | null }[] | null;
-  }>;
-};
-let picker: Picker | null = null;
-try {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports
-  picker = require("expo-image-picker") as Picker;
-} catch {
-  picker = null;
-}
 
 /** Feature F9: say the expense with the keyboard's microphone (or type it) in one
  *  sentence; the form below is filled in. No extra permission: the keyboard does the
@@ -51,10 +34,9 @@ export function QuickAddBar({ onFound }: { onFound: (found: QuickAdd) => void })
   }
 
   async function scan() {
-    if (!picker) return setMessage(t.quickAdd.scanNeedsUpdate);
-    const permission = await picker.requestCameraPermissionsAsync();
+    const permission = await ImagePicker.requestCameraPermissionsAsync();
     if (!permission.granted) return;
-    const shot = await picker.launchCameraAsync({ mediaTypes: ["images"], quality: 0.3, base64: true });
+    const shot = await ImagePicker.launchCameraAsync({ mediaTypes: ["images"], quality: 0.3, base64: true });
     const base64 = shot.assets?.[0]?.base64;
     if (shot.canceled || !base64) return;
     setBusy(true);

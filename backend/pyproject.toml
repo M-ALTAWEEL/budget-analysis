@@ -23,6 +23,7 @@ dependencies = [
     "reportlab>=4.2",  # PDF reports (feature F5)
     "pytesseract>=0.3.13",  # receipt photos (feature F10); Tesseract itself: see the Dockerfile
     "pillow>=11.0",
+    "pypdf>=5.0",  # bank statements as PDF (feature F11)
 ]
 
 [project.optional-dependencies]

@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "Budget Analysis",
+    "name": "ibudgi",
     "slug": "budget-analysis",
     "version": "0.1.0",
     "orientation": "portrait",
@@ -8,16 +8,14 @@
     "scheme": "budgetanalysis",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "supportsTablet": false,
       "bundleIdentifier": "com.budgetanalysis.app"
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#1f6f54",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#3A36DB",
+        "foregroundImage": "./assets/images/android-icon-foreground.png"
       },
       "predictiveBackGestureEnabled": false,
       "package": "com.budgetanalysis.app",
@@ -52,9 +50,9 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#1f6f54",
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 76
+          "backgroundColor": "#3A36DB",
+          "image": "./assets/images/splash-blank.png",
+          "imageWidth": 72
         }
       ],
       "expo-secure-store",
@@ -63,13 +61,13 @@
       [
         "expo-local-authentication",
         {
-          "faceIDPermission": "Budget Analysis uses Face ID to lock the app, so only you can see your budget."
+          "faceIDPermission": "ibudgi uses Face ID to lock the app, so only you can see your budget."
         }
       ],
       [
         "expo-notifications",
         {
-          "color": "#1f6f54"
+          "color": "#3A36DB"
         }
       ]
     ],

@@ -25,9 +25,9 @@ PER_NUMBER_PER_DAY = 5
 WRONG_CODE = "This code is wrong or has expired. Ask for a new one."
 
 _TEXT = {
-    "en": "Budget Analysis code: {code}. It works for 5 minutes. Never share it.",
-    "ar": "رمز Budget Analysis: {code}. صالح لمدة 5 دقائق. لا تشاركه مع أحد.",
-    "tr": "Budget Analysis kodu: {code}. 5 dakika geçerlidir. Kimseyle paylaşma.",
+    "en": "ibudgi code: {code}. It works for 5 minutes. Never share it.",
+    "ar": "رمز ibudgi: {code}. صالح لمدة 5 دقائق. لا تشاركه مع أحد.",
+    "tr": "ibudgi kodu: {code}. 5 dakika geçerlidir. Kimseyle paylaşma.",
 }
 
 

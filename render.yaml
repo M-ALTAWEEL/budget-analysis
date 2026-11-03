@@ -33,6 +33,8 @@ services:
         sync: false # same value as EDGE_SECRET on Vercel (Production)
       - key: CRON_SECRET
         sync: false # same value as the CRON_SECRET repository secret (daily job)
+      - key: SUPPORT_EMAIL
+        sync: false # the team's inbox for new support messages (optional)
       - key: EMAIL_BACKEND
         value: none # until a real provider is switched on (phase 8); console is refused here
       - key: TOTP_ENCRYPTION_KEY
@@ -67,6 +69,8 @@ services:
         sync: false # same value as EDGE_SECRET on Vercel (Preview)
       - key: CRON_SECRET
         sync: false # same value as the STAGING_CRON_SECRET repository secret (daily job)
+      - key: SUPPORT_EMAIL
+        sync: false # the team's inbox for new support messages (optional)
       - key: EMAIL_BACKEND
         value: console # emails (with their links) appear in this service's Logs
       - key: TOTP_ENCRYPTION_KEY

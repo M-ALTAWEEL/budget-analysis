@@ -57,7 +57,7 @@ function spentBy(day: number) {
   return MONTH_OF_EXPENSES.filter((e) => e.day <= day).reduce((sum, e) => sum + e.amount, 0);
 }
 
-/** For people coming in from a link: what Budget Analysis is, shown rather than told. */
+/** For people coming in from a link: what ibudgi is, shown rather than told. */
 export function Landing() {
   const { t } = useI18n();
   return (

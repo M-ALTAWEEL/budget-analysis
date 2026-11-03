@@ -75,6 +75,11 @@ export function LoginForm() {
           {t.auth.createOne}
         </Link>
       </p>
+      <p className="text-sm">
+        <Link href="/contact" className="text-muted underline-offset-4 hover:text-ink hover:underline">
+          {t.support.contactLink}
+        </Link>
+      </p>
       <Agreement />
     </form>
   );

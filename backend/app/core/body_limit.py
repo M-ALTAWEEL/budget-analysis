@@ -14,7 +14,10 @@ from starlette.types import ASGIApp, Message, Receive, Scope, Send
 MAX_BODY_BYTES = 1_000_000
 # The one exception: a receipt photo (feature F10). The website shrinks it first (about
 # 0.5 MB); the app sends it at low JPEG quality.
-LARGER = {"/api/v1/expenses/receipt": 6_000_000}
+LARGER = {
+    "/api/v1/expenses/receipt": 6_000_000,
+    "/api/v1/imports/statement": 6_000_000,  # a bank statement (feature F11)
+}
 
 
 class BodySizeLimitMiddleware:

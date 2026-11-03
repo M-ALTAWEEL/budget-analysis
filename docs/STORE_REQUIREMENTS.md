@@ -105,6 +105,7 @@ Precise Location, Other Data.
 | **Sign in with Apple** must be offered when Google sign-in is (guideline 4.8) | ⬜ Required before the iPhone release (phase 8) |
 | Privacy policy URL | `https://budgetanalysis.vercel.app/privacy` |
 | Face ID usage text (`NSFaceIDUsageDescription`) | ✅ In `mobile/app.json` |
+| Camera usage text (`NSCameraUsageDescription`, receipt scan) | ✅ In `mobile/app.config.ts` (expo-image-picker plugin) |
 | Notifications asked only after the person turns them on | ✅ Settings → Notifications |
 | Demo account for review | Same as Google Play |
 | Export compliance | Only standard HTTPS encryption: answer that the app uses exempt encryption (`ITSAppUsesNonExemptEncryption = false`) |
