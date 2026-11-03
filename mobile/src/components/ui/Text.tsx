@@ -8,7 +8,7 @@ import { useColors, type Palette } from "@/theme/ThemeProvider";
 type Tone = "ink" | "muted" | "brand" | "ok" | "berry" | "marigold" | "onBrand";
 
 /**
- * All text in the app. `display` is the heading font (Bricolage), otherwise the body font.
+ * All text in the app. `display` is a heading (Geist, at least semibold), otherwise body text.
  * It follows the language: Readex Pro and right-to-left in Arabic. Numbers keep their
  * width (tabular) so amounts line up.
  */
