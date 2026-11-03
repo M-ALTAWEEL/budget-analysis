@@ -42,7 +42,7 @@ export function ReceivedInvitations({ onJoined }: { onJoined: (groupUuid: string
       </View>
       <View style={{ gap: 12 }}>
         {requests.data.map((request) => (
-          <View key={request.uuid} style={{ gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
+          <View key={request.uuid} style={{ gap: 12, borderRadius: 18, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
             <View>
               <Text weight="semibold" numberOfLines={1}>{request.group_name}</Text>
               <Text size={14} tone="muted">

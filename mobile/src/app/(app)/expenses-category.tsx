@@ -40,7 +40,7 @@ export default function CategoryExpensesScreen() {
         <MonthSwitcher />
       </View>
 
-      <View style={{ marginBottom: 24, alignItems: "center", gap: 10, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 24, paddingVertical: 28 }}>
+      <View style={{ marginBottom: 24, alignItems: "center", gap: 10, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 24, paddingVertical: 28 }}>
         {category && <CategoryIcon category={category} />}
         <Text tone="muted" accessibilityRole="header" style={{ textAlign: "center" }}>
           {t.expenses.categoryTotal(category ? categoryName(category) : "", monthName(month))}
@@ -54,7 +54,7 @@ export default function CategoryExpensesScreen() {
       ) : expenses.isError ? (
         <LoadError message={errorMessage(expenses.error)} onRetry={() => void expenses.refetch()} />
       ) : shown.length === 0 ? (
-        <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
+        <Text size={15} tone="muted" style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
           {t.expenses.categoryEmpty}
         </Text>
       ) : (

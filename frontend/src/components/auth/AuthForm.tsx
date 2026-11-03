@@ -38,7 +38,7 @@ export function LoginForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="font-display text-3xl font-semibold">{t.auth.loginTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.auth.loginTitle}</h1>
       <GoogleButton />
       <PhoneSignIn />
       <Field
@@ -117,7 +117,7 @@ export function RegisterForm() {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h1 className="font-display text-3xl font-semibold">{t.auth.registerTitle}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.auth.registerTitle}</h1>
       <GoogleButton currency={currency} />
       <PhoneSignIn currency={currency} />
       <Field

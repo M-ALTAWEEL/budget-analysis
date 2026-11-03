@@ -38,7 +38,7 @@ export function AlertList({ alerts, currency }: { alerts: Alert[]; currency: Cur
           return (
             <li
               key={`${alert.kind}-${"category" in alert ? alert.category.uuid : ""}`}
-              className={`flex items-start gap-3 rounded-xl px-4 py-3 text-[15px] ${
+              className={`flex items-start gap-3 rounded-control px-4 py-3 text-[15px] ${
                 critical ? "bg-berry-soft" : "bg-marigold-soft"
               }`}
             >

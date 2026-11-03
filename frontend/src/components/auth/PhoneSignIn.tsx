@@ -100,7 +100,7 @@ function PhoneSteps({
 
   return (
     <div
-      className="space-y-4 rounded-2xl border border-line bg-surface p-4"
+      className="space-y-4 rounded-card border border-line bg-surface shadow-card p-4"
       // This sits inside the email form: Enter here sends the code, not that form.
       onKeyDown={(event) => {
         if (event.key !== "Enter" || !(event.target instanceof HTMLInputElement)) return;

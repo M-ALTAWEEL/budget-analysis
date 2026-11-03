@@ -23,11 +23,11 @@ export function ContactForm() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="font-display text-2xl font-semibold">{t.support.contactTitle}</h1>
+        <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.support.contactTitle}</h1>
         <p className="mt-1 text-muted">{t.support.contactIntro}</p>
       </div>
       {sent ? (
-        <p className="flex items-center gap-2 rounded-xl bg-brand-soft px-4 py-3 font-semibold text-brand">
+        <p className="flex items-center gap-2 rounded-control bg-brand-soft px-4 py-3 font-semibold text-brand">
           <CheckCircle2 className="size-5" aria-hidden />
           {t.support.contactSent}
         </p>

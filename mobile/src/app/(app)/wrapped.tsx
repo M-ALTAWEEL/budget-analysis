@@ -55,7 +55,7 @@ export default function WrappedScreen() {
       {report.isPending ? (
         <PageLoader />
       ) : notFound ? (
-        <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24 }}>
+        <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24 }}>
           <Text tone="muted">{t.wrapped.noBudget}</Text>
         </View>
       ) : report.isError ? (

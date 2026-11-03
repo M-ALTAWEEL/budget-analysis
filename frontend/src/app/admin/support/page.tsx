@@ -71,7 +71,7 @@ function Inbox() {
         <p className="text-muted">Nothing here.</p>
       ) : (
         <>
-          <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+          <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
             {inbox.data.items.map((row) => (
               <li key={row.uuid}>
                 <Link href={`/admin/support?t=${row.uuid}`} className="block px-5 py-3 hover:bg-ink/[0.03]">
@@ -155,7 +155,7 @@ function Ticket({ uuid }: { uuid: string }) {
           <Panel title="Conversation">
             <ul className="space-y-3">
               {ticket.data.thread.map((m, i) => (
-                <li key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[15px] ${m.from_support ? "ms-auto bg-brand-soft" : "bg-ink/5"}`}>
+                <li key={i} className={`max-w-[85%] rounded-tile px-4 py-2.5 text-[15px] ${m.from_support ? "ms-auto bg-brand-soft" : "bg-ink/5"}`}>
                   <p className="mb-0.5 text-xs font-semibold text-muted">
                     {m.author} · {formatDateTime(m.created_at)}
                   </p>
@@ -171,7 +171,7 @@ function Ticket({ uuid }: { uuid: string }) {
               rows={5}
               maxLength={4000}
               placeholder="Write in the person's language. They get it in the app, by push and by email."
-              className="w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[15px]"
+              className="w-full rounded-control border border-line bg-surface px-3.5 py-2.5 text-[15px]"
             />
             <div className="mt-3 flex flex-wrap gap-2">
               <Button

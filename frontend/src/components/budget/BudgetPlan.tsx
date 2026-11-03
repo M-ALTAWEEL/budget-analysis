@@ -102,14 +102,14 @@ export function AllocationEditor({
 
   return (
     <form onSubmit={handleSubmit}>
-      <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+      <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
         {categories.map((category) => (
           <li key={category.uuid} className="flex items-center gap-4 px-4 py-3 sm:px-5">
             <CategoryIcon category={category} />
             <label htmlFor={`limit-${category.uuid}`} className="flex-1 font-semibold">
               {categoryName(category)}
             </label>
-            <div className="flex w-40 items-center rounded-xl border border-line bg-surface transition-shadow focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
+            <div className="flex w-40 items-center rounded-control border border-line bg-surface transition-shadow focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
               <input
                 id={`limit-${category.uuid}`}
                 inputMode="decimal"

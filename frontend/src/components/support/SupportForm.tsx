@@ -71,7 +71,7 @@ export function SupportForm({
           maxLength={4000}
           rows={5}
           required
-          className="w-full rounded-xl border border-line bg-surface px-3.5 py-2.5 text-[15px] focus:border-brand focus:outline-none"
+          className="w-full rounded-control border border-line bg-surface px-3.5 py-2.5 text-[15px] focus:border-brand focus:outline-none"
         />
       </label>
       <FormError message={problem ?? error} />

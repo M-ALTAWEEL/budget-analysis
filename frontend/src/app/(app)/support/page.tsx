@@ -29,14 +29,14 @@ export default function SupportPage() {
         {t.nav.settings}
       </Link>
       <header className="mb-8">
-        <h1 className="flex items-center gap-2 font-display text-2xl font-semibold">
+        <h1 className="flex items-center gap-2 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
           <LifeBuoy className="size-6 text-brand" aria-hidden />
           {t.support.title}
         </h1>
         <p className="mt-1 max-w-prose text-[15px] text-muted">{t.support.intro}</p>
       </header>
 
-      <section className="mb-10 rounded-2xl border border-line bg-surface px-5 py-5">
+      <section className="mb-10 rounded-card border border-line bg-surface shadow-card px-5 py-5">
         <h2 className="mb-4 font-display text-lg font-semibold">{t.support.newTitle}</h2>
         <SupportForm
           sending={write.isPending}
@@ -98,7 +98,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
   }
 
   return (
-    <li className="rounded-2xl border border-line bg-surface">
+    <li className="rounded-card border border-line bg-surface shadow-card">
       <button type="button" onClick={toggle} aria-expanded={expanded} className="flex w-full items-center gap-3 px-5 py-4 text-start">
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
@@ -116,7 +116,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
         <div className="border-t border-line px-5 py-4">
           <ul className="space-y-3">
             {ticket.messages.map((m, i) => (
-              <li key={i} className={`max-w-[85%] rounded-2xl px-4 py-2.5 text-[15px] ${m.from_support ? "bg-brand-soft" : "ms-auto bg-ink/5"}`}>
+              <li key={i} className={`max-w-[85%] rounded-tile px-4 py-2.5 text-[15px] ${m.from_support ? "bg-brand-soft" : "ms-auto bg-ink/5"}`}>
                 <p className="mb-0.5 text-xs font-semibold text-muted">{m.from_support ? t.support.team : t.support.you}</p>
                 <p className="whitespace-pre-wrap"><bdi>{m.body}</bdi></p>
               </li>
@@ -128,7 +128,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
               onChange={(e) => setText(e.target.value)}
               placeholder={t.support.replyPlaceholder}
               maxLength={4000}
-              className="min-w-0 flex-1 rounded-xl border border-line bg-surface px-3.5 py-2 text-[15px]"
+              className="min-w-0 flex-1 rounded-control border border-line bg-surface px-3.5 py-2 text-[15px]"
             />
             <Button type="submit" variant="secondary" loading={reply.isPending}>
               {t.support.reply}

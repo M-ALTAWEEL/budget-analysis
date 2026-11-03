@@ -33,12 +33,12 @@ export function JoinView() {
       <Card>
         <p className="text-muted">{t.groups.signInToJoin}</p>
         <div className="flex flex-wrap gap-2">
-          <Link href="/login" className="inline-flex h-11 items-center rounded-xl bg-brand px-5 font-semibold text-on-brand">
+          <Link href="/login" className="inline-flex h-11 items-center rounded-control bg-brand px-5 font-semibold text-on-brand">
             {t.auth.logIn}
           </Link>
           <Link
             href="/register"
-            className="inline-flex h-11 items-center rounded-xl border border-line bg-surface px-5 font-semibold"
+            className="inline-flex h-11 items-center rounded-control border border-line bg-surface px-5 font-semibold"
           >
             {t.auth.createAccount}
           </Link>
@@ -113,7 +113,7 @@ function Card({ children }: { children: React.ReactNode }) {
   const { t } = useI18n();
   return (
     <div className="space-y-5">
-      <h1 className="flex items-center gap-3 font-display text-2xl font-semibold">
+      <h1 className="flex items-center gap-3 font-display text-2xl font-semibold tracking-tight sm:text-3xl">
         <Users className="size-6 text-brand" aria-hidden />
         {t.groups.joinTitle}
       </h1>

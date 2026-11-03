@@ -73,7 +73,7 @@ export function GoalSheet({ goal, onClose }: { goal: Goal | null; onClose: () =>
   return (
     <Sheet title={goal ? t.goals.editTitle : t.goals.newTitle} onClose={onClose} onSubmit={handleSubmit}>
       <div className="space-y-5">
-        <div className="flex items-center gap-3 rounded-2xl border border-line px-4 py-3" aria-hidden>
+        <div className="flex items-center gap-3 rounded-tile border border-line px-4 py-3" aria-hidden>
           <CategoryIcon category={{ icon, color }} />
           <span className="truncate font-semibold">{name.trim() || t.goals.namePlaceholder}</span>
         </div>

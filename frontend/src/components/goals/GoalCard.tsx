@@ -38,7 +38,7 @@ export function GoalCard({
   const reduceMotion = useReducedMotion();
 
   return (
-    <article className="flex flex-col rounded-2xl border border-line bg-surface p-5">
+    <article className="flex flex-col rounded-card border border-line bg-surface shadow-card p-5">
       <header className="flex items-center gap-3">
         <CategoryIcon category={goal} />
         <h2 className="min-w-0 flex-1 truncate font-display text-lg font-semibold">{goal.name}</h2>

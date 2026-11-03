@@ -30,7 +30,7 @@ export function LanguageMenu() {
       </Pressable>
       <Modal visible={open} transparent animationType="fade" onRequestClose={() => setOpen(false)}>
         <Pressable onPress={() => setOpen(false)} style={{ flex: 1, backgroundColor: "#00000040", justifyContent: "center", padding: 40 }}>
-          <View style={{ borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingVertical: 4, overflow: "hidden" }}>
+          <View style={{ borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingVertical: 4, overflow: "hidden" }}>
             {LOCALES.map((code) => (
               <Pressable
                 key={code}

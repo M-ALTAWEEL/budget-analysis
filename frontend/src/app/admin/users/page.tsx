@@ -21,7 +21,7 @@ export default function AdminUsersPage() {
     <>
       <PageTitle hint="Search by the start of an email, username, name or phone number.">Users</PageTitle>
 
-      <label className="mb-5 flex h-11 items-center gap-2 rounded-xl border border-line bg-surface px-3.5 focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
+      <label className="mb-5 flex h-11 items-center gap-2 rounded-control border border-line bg-surface px-3.5 focus-within:border-brand focus-within:ring-3 focus-within:ring-brand/20">
         <Search className="size-4 text-muted" aria-hidden />
         <span className="sr-only">Search users</span>
         <input
@@ -46,7 +46,7 @@ export default function AdminUsersPage() {
           <p className="mb-2 text-sm text-muted" aria-live="polite">
             {data.total} {data.total === 1 ? "account" : "accounts"}
           </p>
-          <div className={`overflow-x-auto rounded-2xl border border-line bg-surface ${isFetching ? "opacity-70" : ""}`}>
+          <div className={`overflow-x-auto rounded-card border border-line bg-surface shadow-card ${isFetching ? "opacity-70" : ""}`}>
             <table className="w-full min-w-[640px] text-start text-[15px]">
               <thead className="border-b border-line text-sm text-muted">
                 <tr>

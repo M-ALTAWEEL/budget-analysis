@@ -75,7 +75,7 @@ export function SpendingYear({ month }: { month: string }) {
     <div>
       <div className="flex items-center gap-3">
         {change.direction && (
-          <span className={`grid size-[38px] shrink-0 place-items-center rounded-xl ${badge}`}>
+          <span className={`grid size-[38px] shrink-0 place-items-center rounded-control ${badge}`}>
             <Icon className="size-5" aria-hidden />
           </span>
         )}
@@ -98,7 +98,7 @@ export function SpendingYear({ month }: { month: string }) {
           locale={intl}
         />
       ) : (
-        <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">{t.skyline.empty}</p>
+        <p className="rounded-tile border border-dashed border-line px-5 py-6 text-[15px] text-muted">{t.skyline.empty}</p>
       )}
     </div>
   );

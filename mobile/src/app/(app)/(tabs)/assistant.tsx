@@ -87,11 +87,11 @@ export default function AssistantScreen() {
                 entering={FadeInDown.duration(200)}
                 style={{ flexDirection: "row", justifyContent: message.from === "student" ? "flex-end" : "flex-start" }}>
                 {message.from === "student" ? (
-                  <View style={{ maxWidth: "85%", borderRadius: 16, borderBottomEndRadius: 6, backgroundColor: colors.brand, paddingHorizontal: 16, paddingVertical: 10 }}>
+                  <View style={{ maxWidth: "85%", borderRadius: 18, borderBottomEndRadius: 6, backgroundColor: colors.brand, paddingHorizontal: 16, paddingVertical: 10 }}>
                     <Text size={15} tone="onBrand" accessibilityLabel={`${t.assistant.you}: ${message.text}`}>{message.text}</Text>
                   </View>
                 ) : (
-                  <View style={{ maxWidth: "90%", borderRadius: 16, borderBottomStartRadius: 6, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
+                  <View style={{ maxWidth: "90%", borderRadius: 18, borderBottomStartRadius: 6, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 12 }}>
                     {message.from === "assistant" ? (
                       <AnswerText answer={message.answer} onAsk={send} />
                     ) : (
@@ -103,7 +103,7 @@ export default function AssistantScreen() {
             ))}
             {ask.isPending && (
               <View style={{ flexDirection: "row" }} accessibilityLabel={t.assistant.thinking}>
-                <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 10 }}>
+                <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 16, paddingVertical: 10 }}>
                   <Typing />
                 </View>
               </View>
@@ -123,7 +123,7 @@ export default function AssistantScreen() {
             returnKeyType="send"
             onSubmitEditing={() => send(draft)}
             style={{
-              flex: 1, minWidth: 0, height: 48, borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface,
+              flex: 1, minWidth: 0, height: 48, borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface,
               paddingHorizontal: 16, fontSize: 16, color: colors.ink, fontFamily: fontFamily(false, "regular", locale === "ar"),
               textAlign: dir === "rtl" ? "right" : "left",
             }}
@@ -134,7 +134,7 @@ export default function AssistantScreen() {
             accessibilityRole="button"
             accessibilityLabel={t.assistant.send}
             style={({ pressed }) => ({
-              width: 48, height: 48, borderRadius: 12, alignItems: "center", justifyContent: "center",
+              width: 48, height: 48, borderRadius: 14, alignItems: "center", justifyContent: "center",
               backgroundColor: pressed ? colors.brandDark : colors.brand, opacity: disabled ? 0.5 : 1, transform: [{ scale: pressed ? 0.95 : 1 }],
             })}>
             <SendHorizontal size={20} color={colors.onBrand} style={dir === "rtl" ? { transform: [{ scaleX: -1 }] } : undefined} />

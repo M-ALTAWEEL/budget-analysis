@@ -53,13 +53,13 @@ export function GroupExpenses({ group }: { group: GroupDetail }) {
       {activity.isError ? (
         <LoadError message={errorMessage(activity.error)} onRetry={() => void activity.refetch()} />
       ) : activity.isPending ? (
-        <View style={{ height: 128, borderRadius: 16, backgroundColor: `${colors.ink}0d` }} />
+        <View style={{ height: 128, borderRadius: 18, backgroundColor: `${colors.ink}0d` }} />
       ) : items.length === 0 ? (
-        <Text size={15} tone="muted" style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
+        <Text size={15} tone="muted" style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 32 }}>
           {t.groups.noExpenses}
         </Text>
       ) : (
-        <View style={{ gap: 12, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: `${colors.ink}05`, padding: 12 }}>
+        <View style={{ gap: 12, borderRadius: 18, borderWidth: 1, borderColor: colors.line, backgroundColor: `${colors.ink}05`, padding: 12 }}>
           {activity.hasNextPage && (
             <Button small variant="ghost" style={{ alignSelf: "center" }} loading={activity.isFetchingNextPage} onPress={() => void activity.fetchNextPage()}>
               {t.groups.earlier}
@@ -100,7 +100,7 @@ function Message({ item, me, group, onEdit }: { item: ActivityItem; me: string |
     <View style={{ flexDirection: "row", justifyContent: mine ? "flex-end" : "flex-start" }}>
       <View
         style={{
-          width: "92%", borderRadius: 16, borderWidth: 1, paddingHorizontal: 16, paddingVertical: 12,
+          width: "92%", borderRadius: 18, borderWidth: 1, paddingHorizontal: 16, paddingVertical: 12,
           borderColor: mine ? `${colors.brand}4d` : colors.line,
           backgroundColor: mine ? colors.brandSoft : colors.surface,
           ...(mine ? { borderBottomEndRadius: 6 } : { borderBottomStartRadius: 6 }),
@@ -155,7 +155,7 @@ function ExpenseBody({ expense, me, group, onEdit }: { expense: GroupExpense; me
         {expense.can_edit && link(t.groups.edit, () => onEdit(expense))}
       </View>
       {showShares && (
-        <View style={{ gap: 4, borderRadius: 12, backgroundColor: `${colors.surface}b3`, paddingHorizontal: 12, paddingVertical: 8 }}>
+        <View style={{ gap: 4, borderRadius: 14, backgroundColor: `${colors.surface}b3`, paddingHorizontal: 12, paddingVertical: 8 }}>
           {expense.shares.map((share) => (
             <View key={share.member.uuid} style={{ flexDirection: "row", justifyContent: "space-between", gap: 12 }}>
               <Text size={14} numberOfLines={1} style={{ flex: 1 }}>

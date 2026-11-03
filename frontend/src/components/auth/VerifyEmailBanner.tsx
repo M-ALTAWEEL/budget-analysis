@@ -33,7 +33,7 @@ export function VerifyEmailBanner() {
   }
 
   return (
-    <div role="status" className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-line bg-surface px-4 py-3 text-sm">
+    <div role="status" className="mb-6 flex flex-wrap items-center gap-x-3 gap-y-1 rounded-card border border-line bg-surface shadow-card px-4 py-3 text-sm">
       <MailWarning className="size-5 shrink-0 text-brand" aria-hidden />
       <p className="min-w-0 flex-1">{error ?? (state === "sent" ? t.account.resent : t.account.banner)}</p>
       {state !== "sent" && (

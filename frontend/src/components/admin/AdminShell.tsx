@@ -73,7 +73,7 @@ function Sidebar() {
               key={href}
               href={href}
               aria-current={active ? "page" : undefined}
-              className={`flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] ${
+              className={`flex shrink-0 items-center gap-3 rounded-control px-3 py-2.5 text-[15px] ${
                 active ? "bg-brand-soft font-semibold text-brand-dark" : "text-muted hover:bg-ink/5 hover:text-ink"
               }`}
             >
@@ -84,7 +84,7 @@ function Sidebar() {
         })}
         <Link
           href="/overview"
-          className="flex shrink-0 items-center gap-3 rounded-xl px-3 py-2.5 text-[15px] text-muted hover:bg-ink/5 hover:text-ink lg:mt-6"
+          className="flex shrink-0 items-center gap-3 rounded-control px-3 py-2.5 text-[15px] text-muted hover:bg-ink/5 hover:text-ink lg:mt-6"
         >
           <ArrowLeft className="size-5" aria-hidden />
           Back to the app
@@ -115,7 +115,7 @@ function NotFoundPage() {
 function TwoFactorFirst() {
   return (
     <Centered>
-      <div className="rounded-2xl border border-line bg-surface px-6 py-6">
+      <div className="rounded-card border border-line bg-surface shadow-card px-6 py-6">
         <ShieldAlert className="size-7 text-marigold-ink" aria-hidden />
         <h1 className="mt-3 font-display text-xl font-semibold">Turn on two-factor authentication</h1>
         <p className="mt-2 text-[15px] text-muted">
@@ -124,7 +124,7 @@ function TwoFactorFirst() {
         </p>
         <Link
           href="/settings"
-          className="mt-5 inline-flex h-11 items-center rounded-xl bg-brand px-5 text-[15px] font-semibold text-on-brand hover:bg-brand-dark"
+          className="mt-5 inline-flex h-11 items-center rounded-control bg-brand px-5 text-[15px] font-semibold text-on-brand hover:bg-brand-dark"
         >
           Open Settings
         </Link>

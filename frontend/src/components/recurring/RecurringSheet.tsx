@@ -111,7 +111,7 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
                   role="radio"
                   aria-checked={selected}
                   onClick={() => setCategoryUuid(category.uuid)}
-                  className={`flex items-center gap-2 rounded-xl border p-2 text-start text-sm transition-colors ${
+                  className={`flex items-center gap-2 rounded-control border p-2 text-start text-sm transition-colors ${
                     selected ? "border-brand bg-brand-soft font-semibold ring-1 ring-brand" : "border-line hover:border-ink/30"
                   }`}
                 >
@@ -138,7 +138,7 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
           <Field label={t.recurring.endsOn} type="date" value={endsOn} onChange={(e) => setEndsOn(e.target.value)} />
         </div>
 
-        <label className="flex cursor-pointer items-start gap-4 rounded-xl border border-line px-4 py-3">
+        <label className="flex cursor-pointer items-start gap-4 rounded-control border border-line px-4 py-3">
           <span className="min-w-0 flex-1">
             <span className="block font-semibold">{t.recurring.remind}</span>
             <span className="mt-0.5 block text-sm text-muted">{t.recurring.remindHint}</span>

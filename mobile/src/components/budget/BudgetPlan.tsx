@@ -88,7 +88,7 @@ export function AllocationEditor({ summary, month, categories }: { summary: Budg
           <Row key={category.uuid}>
             <CategoryIcon category={category} />
             <Text weight="semibold" numberOfLines={1} style={{ flex: 1 }}>{categoryName(category)}</Text>
-            <View style={{ width: 150, flexDirection: "row", alignItems: "center", borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface }}>
+            <View style={{ width: 150, flexDirection: "row", alignItems: "center", borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface }}>
               <TextInput
                 accessibilityLabel={categoryName(category)}
                 keyboardType="decimal-pad"

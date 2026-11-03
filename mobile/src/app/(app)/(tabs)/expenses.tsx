@@ -37,7 +37,7 @@ export default function ExpensesScreen() {
       ) : expenses.isError ? (
         <LoadError message={errorMessage(expenses.error)} onRetry={() => void expenses.refetch()} />
       ) : expenses.data.length === 0 ? (
-        <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
+        <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40 }}>
           <Text display weight="semibold" size={20}>{t.expenses.empty(monthName(month))}</Text>
           <Text size={15} tone="muted" style={{ marginTop: 4 }}>{t.expenses.emptyHint}</Text>
           {summary.data && (
@@ -70,7 +70,7 @@ function ImportLink() {
       onPress={() => router.push("/import" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 24, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <FileUp size={20} color={colors.brand} />
@@ -95,7 +95,7 @@ function RecurringLink() {
       onPress={() => router.push("/recurring" as Href)}
       accessibilityRole="link"
       style={({ pressed }) => ({
-        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1,
+        marginBottom: 12, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1,
         borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : colors.surface, paddingHorizontal: 20, paddingVertical: 16,
       })}>
       <Repeat size={20} color={colors.brand} />

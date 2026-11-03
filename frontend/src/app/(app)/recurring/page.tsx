@@ -34,7 +34,7 @@ export default function RecurringPage() {
       </Link>
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.recurring.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.recurring.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.recurring.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setOpen({ open: true, rule: null })}>
@@ -48,13 +48,13 @@ export default function RecurringPage() {
       ) : recurring.isError ? (
         <LoadError message={errorMessage(recurring.error)} onRetry={() => recurring.refetch()} />
       ) : recurring.data.items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line px-6 py-10">
+        <div className="rounded-tile border border-dashed border-line px-6 py-10">
           <p className="font-display text-xl font-semibold">{t.recurring.empty}</p>
           <p className="mt-1 text-[15px] text-muted">{t.recurring.emptyHint}</p>
         </div>
       ) : (
         <>
-          <section className="mb-8 flex flex-col items-center gap-2 rounded-2xl border border-line bg-surface px-6 py-7 text-center">
+          <section className="mb-8 flex flex-col items-center gap-2 rounded-card border border-line bg-surface shadow-card px-6 py-7 text-center">
             <Repeat className="size-6 text-brand" aria-hidden />
             <h2 className="text-muted">{t.recurring.monthlyTotal}</h2>
             <p className="tabular font-display text-3xl font-semibold">
@@ -62,7 +62,7 @@ export default function RecurringPage() {
             </p>
             <p className="text-sm text-muted">{t.recurring.activeCount(active.length)}</p>
           </section>
-          <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+          <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
             {recurring.data.items.map((rule) => (
               <RecurringRow key={rule.uuid} rule={rule} onOpen={() => setOpen({ open: true, rule })} />
             ))}

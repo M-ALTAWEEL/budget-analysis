@@ -29,7 +29,7 @@ export default function CategoriesPage() {
     <>
       <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.categories.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.categories.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.categories.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setEditing({ open: true, category: null })}>
@@ -49,11 +49,11 @@ export default function CategoriesPage() {
               {t.categories.yours}
             </h2>
             {own.length === 0 ? (
-              <p className="rounded-2xl border border-dashed border-line px-5 py-6 text-[15px] text-muted">
+              <p className="rounded-tile border border-dashed border-line px-5 py-6 text-[15px] text-muted">
                 {t.categories.yoursEmpty}
               </p>
             ) : (
-              <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+              <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
                 {own.map((category) => (
                   <li key={category.uuid}>
                     <button
@@ -81,7 +81,7 @@ export default function CategoriesPage() {
               {builtIn.map((category) => (
                 <li
                   key={category.uuid}
-                  className="flex items-center gap-2 rounded-xl border border-line bg-surface p-2 text-sm"
+                  className="flex items-center gap-2 rounded-control border border-line bg-surface p-2 text-sm"
                 >
                   <CategoryIcon category={category} size="sm" />
                   <span className="truncate">{categoryName(category)}</span>

@@ -196,7 +196,7 @@ function Invites({ group }: { group: GroupDetail }) {
         {fresh?.url ? (
           <View style={{ gap: 12 }}>
             {fresh.qr_svg && (
-              <View style={{ alignSelf: "center", borderRadius: 12, backgroundColor: "#fff", padding: 8 }}>
+              <View style={{ alignSelf: "center", borderRadius: 14, backgroundColor: "#fff", padding: 8 }}>
                 <Image source={{ uri: fresh.qr_svg }} style={{ width: 180, height: 180 }} contentFit="contain" />
               </View>
             )}

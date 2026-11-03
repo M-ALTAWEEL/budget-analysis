@@ -45,7 +45,7 @@ export default function IncomePage() {
       </Link>
       <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.income.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.income.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.income.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setOpen({ kind: "income", income: null })}>
@@ -62,7 +62,7 @@ export default function IncomePage() {
       ) : income.isError ? (
         <LoadError message={errorMessage(income.error)} onRetry={() => income.refetch()} />
       ) : income.data.items.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line px-6 py-10">
+        <div className="rounded-tile border border-dashed border-line px-6 py-10">
           <p className="font-display text-xl font-semibold">{t.income.empty}</p>
           <p className="mt-1 text-[15px] text-muted">{t.income.emptyHint}</p>
           <Button type="button" variant="secondary" className="mt-5" onClick={copyPrevious} loading={copy.isPending}>
@@ -73,7 +73,7 @@ export default function IncomePage() {
       ) : (
         <>
           <Totals data={income.data} month={month} />
-          <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+          <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
             {income.data.items.map((item) => (
               <IncomeRow
                 key={item.uuid}
@@ -139,7 +139,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
           ))}
         </ul>
       )}
-      <div className="flex flex-col gap-3 rounded-2xl border border-line bg-surface px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-[15px] text-muted">
           {data.budget !== null ? t.income.budgetIs(money(data.budget, data.currency)) : t.income.noBudget}
         </p>
@@ -155,7 +155,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
 
 function Stat({ label, value, tone = "text-ink" }: { label: string; value: string; tone?: string }) {
   return (
-    <div className="rounded-2xl border border-line bg-surface px-4 py-4">
+    <div className="rounded-card border border-line bg-surface shadow-card px-4 py-4">
       <h2 className="text-sm text-muted">{label}</h2>
       <p className={`tabular truncate font-display text-xl font-semibold ${tone}`}>{value}</p>
     </div>
@@ -168,7 +168,7 @@ function IncomeRow({ income, monthCurrency, onEdit }: { income: Income; monthCur
   return (
     <li>
       <button type="button" onClick={onEdit} className="flex w-full items-center gap-4 px-5 py-4 text-start hover:bg-ink/[0.03]">
-        <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
+        <span className="grid size-10 shrink-0 place-items-center rounded-control bg-brand/10 text-brand">
           <Wallet className="size-5" aria-hidden />
         </span>
         <span className="min-w-0 flex-1">

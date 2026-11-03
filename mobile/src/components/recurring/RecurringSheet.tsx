@@ -111,7 +111,7 @@ export function RecurringSheet({ rule, onClose }: { rule: RecurringExpense | nul
                   accessibilityState={{ checked: selected }}
                   onPress={() => setCategoryUuid(category.uuid)}
                   style={{
-                    width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, padding: 8,
+                    width: "48.5%", flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 14, padding: 8,
                     borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
                     backgroundColor: selected ? colors.brandSoft : colors.surface,
                   }}>

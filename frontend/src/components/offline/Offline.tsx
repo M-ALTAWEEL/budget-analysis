@@ -69,7 +69,7 @@ export function PendingExpenses() {
   const { t, money } = useI18n();
   if (pending.length === 0) return null;
   return (
-    <section className="mb-8 rounded-2xl border border-dashed border-marigold bg-marigold/5 px-5 py-4">
+    <section className="mb-8 rounded-tile border border-dashed border-marigold bg-marigold/5 px-5 py-4">
       <div className="flex items-center gap-3">
         <CloudOff className="size-5 shrink-0 text-marigold" aria-hidden />
         <div className="min-w-0 flex-1">

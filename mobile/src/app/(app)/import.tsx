@@ -87,7 +87,7 @@ export default function ImportScreen() {
       <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 20 }}>{t.imports.intro}</Text>
 
       {result && (
-        <View style={{ borderRadius: 16, backgroundColor: colors.brandSoft, padding: 16, marginBottom: 16, gap: 2 }}>
+        <View style={{ borderRadius: 18, backgroundColor: colors.brandSoft, padding: 16, marginBottom: 16, gap: 2 }}>
           <Text weight="semibold" tone="brand">{t.imports.done(result.expenses, result.income)}</Text>
           {(result.already_there > 0 || result.no_budget > 0) && (
             <Text size={14} tone="muted">{t.imports.skipped(result.already_there, result.no_budget)}</Text>
@@ -96,7 +96,7 @@ export default function ImportScreen() {
       )}
 
       {!preview ? (
-        <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24, gap: 14, alignItems: "center" }}>
+        <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, padding: 24, gap: 14, alignItems: "center" }}>
           <Button icon={<FileUp size={20} color={colors.onBrand} />} onPress={() => void pick()} loading={busy}>
             {busy ? t.imports.reading : result ? t.imports.another : t.imports.choose}
           </Button>
@@ -104,7 +104,7 @@ export default function ImportScreen() {
         </View>
       ) : (
         <View style={{ gap: 12 }}>
-          <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 10 }}>
+          <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 10 }}>
             <Text weight="semibold">{t.imports.period(shortDate(preview.first_day), shortDate(preview.last_day))}</Text>
             <Text size={14} tone="muted">{t.imports.totals(money(preview.money_out, preview.currency), money(preview.money_in, preview.currency))}</Text>
             <Button onPress={() => void add()} loading={busy} disabled={count === 0}>{`${t.imports.add} (${count})`}</Button>

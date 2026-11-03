@@ -69,7 +69,7 @@ export default function AdminCurrenciesPage() {
       </PageTitle>
 
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
-        <div className="overflow-x-auto rounded-2xl border border-line bg-surface">
+        <div className="overflow-x-auto rounded-card border border-line bg-surface shadow-card">
           <table className="w-full min-w-[600px] text-start text-[15px]">
             <thead className="border-b border-line text-sm text-muted">
               <tr>

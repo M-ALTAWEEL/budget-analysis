@@ -44,7 +44,7 @@ function Choice({ selected, onSelect, children, half }: { selected: boolean; onS
       accessibilityState={{ checked: selected }}
       onPress={onSelect}
       style={{
-        width: half ? "48.5%" : "100%", flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 12,
+        width: half ? "48.5%" : "100%", flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 14,
         borderWidth: selected ? 2 : 1, borderColor: selected ? colors.brand : colors.line,
         backgroundColor: selected ? colors.brandSoft : colors.surface,
         paddingHorizontal: selected ? 15 : 16, paddingVertical: selected ? 11 : 12,
@@ -110,7 +110,7 @@ export default function SettingsScreen() {
         <Pressable
           onPress={() => router.push("/categories")}
           accessibilityRole="link"
-          style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
+          style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
           <Shapes size={20} color={colors.muted} />
           <Text size={15} weight="semibold" style={{ flex: 1 }}>{t.settings.manageCategories}</Text>
           <ChevronRight size={20} color={colors.muted} style={locale === "ar" ? { transform: [{ scaleX: -1 }] } : undefined} />
@@ -231,14 +231,14 @@ function SupportLink() {
     <Pressable
       onPress={() => router.push("/support" as Href)}
       accessibilityRole="link"
-      style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
+      style={{ flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16 }}>
       <LifeBuoy size={20} color={colors.muted} />
       <View style={{ flex: 1 }}>
         <Text size={15} weight="semibold">{t.support.link}</Text>
         <Text size={13} tone="muted">{t.support.linkHint}</Text>
       </View>
       {unread > 0 && (
-        <View style={{ minWidth: 24, height: 24, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
+        <View style={{ minWidth: 24, height: 24, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: colors.brand }}>
           <Text size={12} weight="semibold" tone="onBrand">{unread}</Text>
         </View>
       )}

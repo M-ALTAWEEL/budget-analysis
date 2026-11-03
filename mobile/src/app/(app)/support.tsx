@@ -36,7 +36,7 @@ export default function SupportScreen() {
       </View>
       <Text size={15} tone="muted" style={{ marginTop: 4, marginBottom: 24 }}>{t.support.intro}</Text>
 
-      <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, marginBottom: 32, gap: 12 }}>
+      <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, marginBottom: 32, gap: 12 }}>
         <Text display weight="semibold" size={18}>{t.support.newTitle}</Text>
         <SupportForm
           sending={write.isPending}
@@ -98,7 +98,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
   }
 
   return (
-    <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface }}>
+    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface }}>
       <Pressable onPress={toggle} accessibilityRole="button" accessibilityState={{ expanded }} style={{ flexDirection: "row", alignItems: "center", gap: 12, padding: 16 }}>
         <View style={{ flex: 1, minWidth: 0, gap: 2 }}>
           <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
@@ -121,7 +121,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
             <View
               key={i}
               style={{
-                maxWidth: "85%", borderRadius: 16, paddingHorizontal: 14, paddingVertical: 10,
+                maxWidth: "85%", borderRadius: 18, paddingHorizontal: 14, paddingVertical: 10,
                 alignSelf: m.from_support ? "flex-start" : "flex-end",
                 backgroundColor: m.from_support ? colors.brandSoft : `${colors.ink}0d`,
               }}>
@@ -136,7 +136,7 @@ function Conversation({ ticket }: { ticket: SupportTicket }) {
               placeholder={t.support.replyPlaceholder}
               placeholderTextColor={colors.muted}
               maxLength={4000}
-              style={{ flex: 1, borderRadius: 12, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 12, paddingVertical: 8, color: colors.ink, textAlign: dir === "rtl" ? "right" : "left" }}
+              style={{ flex: 1, borderRadius: 14, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 12, paddingVertical: 8, color: colors.ink, textAlign: dir === "rtl" ? "right" : "left" }}
             />
             <Button small variant="secondary" onPress={() => void send()} loading={reply.isPending}>{t.support.reply}</Button>
           </View>

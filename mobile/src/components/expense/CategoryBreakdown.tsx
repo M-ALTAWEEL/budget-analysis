@@ -17,7 +17,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
   if (shares.length === 0) return null;
 
   return (
-    <View style={{ marginBottom: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingVertical: 20 }}>
+    <View style={{ marginBottom: 32, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingVertical: 20 }}>
       <Text weight="semibold" accessibilityRole="header" style={{ marginBottom: 16, paddingHorizontal: 20 }}>{t.expenses.byCategory}</Text>
       <View accessibilityElementsHidden importantForAccessibility="no-hide-descendants" style={{ flexDirection: "row", height: 12, gap: 2, borderRadius: 999, overflow: "hidden", marginHorizontal: 20 }}>
         {shares.map(({ category, share }) => (
@@ -32,7 +32,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
             accessibilityRole="button"
             accessibilityLabel={`${categoryName(category)}, ${shareLabel(share, percent)}, ${money(spent, summary.currency)}`}
             style={({ pressed }) => ({
-              width: 96, alignItems: "center", gap: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.line,
+              width: 96, alignItems: "center", gap: 8, borderRadius: 14, borderWidth: 1, borderColor: colors.line,
               paddingHorizontal: 8, paddingVertical: 12, backgroundColor: pressed ? `${colors.ink}08` : "transparent",
             })}>
             <Text size={14} tone="muted" numberOfLines={1}>{categoryName(category)}</Text>

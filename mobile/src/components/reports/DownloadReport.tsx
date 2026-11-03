@@ -46,7 +46,7 @@ export function DownloadReport({ month }: { month: string }) {
               onPress={() => void get(period, format)}
               accessibilityRole="button"
               style={({ pressed }) => ({
-                flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 12, borderWidth: 1, borderColor: colors.line,
+                flexDirection: "row", alignItems: "center", gap: 6, borderRadius: 14, borderWidth: 1, borderColor: colors.line,
                 paddingHorizontal: 12, paddingVertical: 7, opacity: busy !== null ? 0.5 : 1,
                 backgroundColor: pressed ? `${colors.ink}0d` : "transparent",
               })}>

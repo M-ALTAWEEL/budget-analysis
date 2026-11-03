@@ -35,7 +35,7 @@ export function GroupHousehold({ group }: { group: GroupDetail }) {
   const isLast = month >= shiftMonth(calendarMonth(), 1);
 
   return (
-    <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 12 }}>
+    <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 16, gap: 12 }}>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
         <Home size={20} color={colors.brand} />
         <Text display weight="semibold" size={18} style={{ flex: 1 }}>{t.household.title}</Text>
@@ -179,7 +179,7 @@ function HouseholdSheet({ group, month, data, onClose }: { group: GroupDetail; m
         <Text size={14} weight="semibold">{t.household.limits}</Text>
         <View style={{ gap: 8 }}>
           {GROUP_CATEGORIES.map((c) => (
-            <View key={c.slug} style={{ flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 8, paddingVertical: 6 }}>
+            <View key={c.slug} style={{ flexDirection: "row", alignItems: "center", gap: 8, borderRadius: 14, borderWidth: 1, borderColor: colors.line, paddingHorizontal: 8, paddingVertical: 6 }}>
               <CategoryIcon category={c} size="sm" />
               <Text size={14} style={{ flex: 1 }}>{t.categories.names[c.slug as keyof typeof t.categories.names]}</Text>
               <TextInput

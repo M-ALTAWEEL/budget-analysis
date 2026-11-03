@@ -47,7 +47,7 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
     <>
       <header className="mb-10 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold">{t.groups.title}</h1>
+          <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.groups.title}</h1>
           <p className="mt-1 max-w-prose text-[15px] text-muted">{t.groups.intro}</p>
         </div>
         <Button className="shrink-0" onClick={() => setCreating(true)}>
@@ -65,11 +65,11 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
       ) : groups.isError ? (
         <LoadError message={errorMessage(groups.error)} onRetry={() => groups.refetch()} />
       ) : groups.data.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-line px-5 py-8 text-[15px] text-muted">
+        <p className="rounded-tile border border-dashed border-line px-5 py-8 text-[15px] text-muted">
           {t.groups.empty}
         </p>
       ) : (
-        <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+        <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
           {groups.data.map((group) => (
             <li key={group.uuid}>
               <button
@@ -77,7 +77,7 @@ function GroupList({ onOpen }: { onOpen: (uuid: string) => void }) {
                 onClick={() => onOpen(group.uuid)}
                 className="flex w-full items-center gap-4 px-5 py-4 text-start hover:bg-ink/[0.03]"
               >
-                <span className="grid size-10 shrink-0 place-items-center rounded-xl bg-brand/10 text-brand">
+                <span className="grid size-10 shrink-0 place-items-center rounded-control bg-brand/10 text-brand">
                   <Users className="size-5" aria-hidden />
                 </span>
                 <span className="min-w-0 flex-1">
@@ -123,7 +123,7 @@ function DebtsLink() {
   return (
     <Link
       href="/debts"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-8 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <HandCoins className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>

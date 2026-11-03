@@ -110,7 +110,7 @@ export function PendingSharesBanner() {
     <Pressable
       onPress={() => router.navigate("/groups")}
       accessibilityRole="link"
-      style={{ marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 16, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.brandSoft, paddingHorizontal: 20, paddingVertical: 14 }}>
+      style={{ marginBottom: 32, flexDirection: "row", alignItems: "center", gap: 12, borderRadius: 18, borderWidth: 1, borderColor: `${colors.brand}66`, backgroundColor: colors.brandSoft, paddingHorizontal: 20, paddingVertical: 14 }}>
       <Wallet size={20} color={colors.brand} />
       <Text size={15} weight="semibold" style={{ flex: 1 }}>{t.groups.pendingCount(count)}</Text>
     </Pressable>

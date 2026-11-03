@@ -114,7 +114,7 @@ function ChangePassword() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3 rounded-2xl border border-line bg-surface px-5 py-4">
+    <form onSubmit={handleSubmit} className="space-y-3 rounded-card border border-line bg-surface shadow-card px-5 py-4">
       <Field
         label={t.account.currentPassword}
         type="password"
@@ -178,7 +178,7 @@ function Devices() {
 
   return (
     <div className="space-y-3">
-      <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+      <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
         {sessions?.map((session) => (
           <DeviceRow
             key={session.uuid}

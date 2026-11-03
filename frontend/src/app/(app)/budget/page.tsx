@@ -76,7 +76,7 @@ function IncomeLink({ month }: { month: string }) {
   return (
     <Link
       href="/income"
-      className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-3 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Wallet className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>
@@ -91,7 +91,7 @@ function WrappedLink({ month }: { month: string }) {
   return (
     <Link
       href={`/wrapped?month=${month}`}
-      className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-3 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Sparkles className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.wrapped.title}</span>
@@ -106,7 +106,7 @@ function InflationLink() {
   return (
     <Link
       href="/inflation"
-      className="mb-10 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-10 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <TrendingUp className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.inflation.link}</span>

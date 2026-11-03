@@ -52,7 +52,7 @@ export function ContributionSheet({ goal, onClose }: { goal: Goal; onClose: () =
   return (
     <Sheet title={t.goals.moneyTitle(goal.name)} onClose={onClose} footer={<Button onPress={submit} loading={add.isPending}>{t.goals.save}</Button>}>
       <View style={{ gap: 16 }}>
-        <View accessibilityRole="radiogroup" style={{ flexDirection: "row", gap: 4, borderRadius: 12, backgroundColor: `${colors.ink}0d`, padding: 4 }}>
+        <View accessibilityRole="radiogroup" style={{ flexDirection: "row", gap: 4, borderRadius: 14, backgroundColor: `${colors.ink}0d`, padding: 4 }}>
           {kinds.map(({ value, label, icon: Icon }) => {
             const selected = kind === value;
             const disabled = value === "withdrawal" && !canWithdraw;

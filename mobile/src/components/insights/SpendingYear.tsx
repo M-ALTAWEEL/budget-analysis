@@ -270,7 +270,7 @@ export function SpendingYear({ month }: { month: string }) {
     <View>
       <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
         {change.direction && (
-          <View style={{ width: 38, height: 38, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: badge.bg }}>
+          <View style={{ width: 38, height: 38, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: badge.bg }}>
             <ChangeIcon size={20} color={badge.fg} />
           </View>
         )}
@@ -293,7 +293,7 @@ export function SpendingYear({ month }: { month: string }) {
         <Text
           size={15}
           tone="muted"
-          style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
+          style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 20, paddingVertical: 24 }}>
           {t.skyline.empty}
         </Text>
       ) : (

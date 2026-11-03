@@ -14,7 +14,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
   if (shares.length === 0) return null;
 
   return (
-    <section aria-labelledby="by-category" className="mb-8 rounded-2xl border border-line bg-surface p-5 sm:p-6">
+    <section aria-labelledby="by-category" className="mb-8 rounded-card border border-line bg-surface shadow-card p-5 sm:p-6">
       <h2 id="by-category" className="mb-4 font-semibold">
         {t.expenses.byCategory}
       </h2>
@@ -28,7 +28,7 @@ export function CategoryBreakdown({ summary }: { summary: BudgetSummary }) {
           <li key={category.uuid}>
             <Link
               href={`/expenses?category=${category.uuid}`}
-              className="flex h-full flex-col items-center gap-2 rounded-xl border border-line px-2 py-3 text-center transition-colors hover:bg-ink/[0.03]"
+              className="flex h-full flex-col items-center gap-2 rounded-control border border-line px-2 py-3 text-center transition-colors hover:bg-ink/[0.03]"
             >
               <span className="w-full truncate text-sm text-muted">{categoryName(category)}</span>
               <CategoryIcon category={category} />

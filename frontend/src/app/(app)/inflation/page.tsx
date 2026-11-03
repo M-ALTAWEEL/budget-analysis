@@ -23,7 +23,7 @@ export default function InflationPage() {
         <ArrowLeft className="size-4 rtl:-scale-x-100" aria-hidden />
         {t.nav.budget}
       </Link>
-      <h1 className="font-display text-2xl font-semibold">{t.inflation.title}</h1>
+      <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">{t.inflation.title}</h1>
       {view.isPending ? (
         <PageLoader />
       ) : view.isError ? (
@@ -44,11 +44,11 @@ function Body({ data }: { data: InflationView }) {
     <>
       <p className="mt-1 mb-8 max-w-prose text-[15px] text-muted">{t.inflation.intro(data.stable_currency)}</p>
       {data.months.length === 0 ? (
-        <p className="rounded-2xl border border-dashed border-line px-6 py-8 text-muted">{t.inflation.empty}</p>
+        <p className="rounded-tile border border-dashed border-line px-6 py-8 text-muted">{t.inflation.empty}</p>
       ) : (
         <div className="space-y-8">
           {data.change_local !== null && data.change_stable !== null && (
-            <section className="rounded-2xl bg-brand px-6 py-5 text-white">
+            <section className="rounded-tile bg-brand px-6 py-5 text-white">
               <p className="font-display text-lg font-semibold">
                 {t.inflation.summary(data.change_local, data.change_stable, data.stable_currency)}
               </p>
@@ -56,7 +56,7 @@ function Body({ data }: { data: InflationView }) {
             </section>
           )}
 
-          <section className="rounded-2xl border border-line bg-surface px-5 py-5">
+          <section className="rounded-card border border-line bg-surface shadow-card px-5 py-5">
             <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
               <h2 className="font-display text-lg font-semibold">{t.inflation.monthsTitle}</h2>
               <div className="flex gap-4 text-xs text-muted">
@@ -93,7 +93,7 @@ function Body({ data }: { data: InflationView }) {
             {data.prices.length === 0 ? (
               <p className="text-[15px] text-muted">{t.inflation.pricesEmpty}</p>
             ) : (
-              <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+              <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
                 {data.prices.map((p) => (
                   <li key={p.label} className="flex items-center gap-3 px-5 py-3">
                     <CategoryIcon category={p.category} size="sm" />

@@ -67,7 +67,7 @@ function Expenses() {
       ) : expenses.isError ? (
         <LoadError message={errorMessage(expenses.error)} onRetry={() => expenses.refetch()} />
       ) : expenses.data.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-line px-6 py-10">
+        <div className="rounded-tile border border-dashed border-line px-6 py-10">
           <p className="font-display text-xl font-semibold">{t.expenses.empty(monthName(month))}</p>
           <p className="mt-1 text-[15px] text-muted">{t.expenses.emptyHint}</p>
           <Button className="mt-5" onClick={() => openSheet()}>
@@ -80,11 +80,11 @@ function Expenses() {
           {categoryUuid === null && <RecurringLink />}
           {categoryUuid === null && <ImportLink />}
           {shown.length === 0 ? (
-            <p className="rounded-2xl border border-dashed border-line px-6 py-8 text-muted">
+            <p className="rounded-tile border border-dashed border-line px-6 py-8 text-muted">
               {t.expenses.categoryEmpty}
             </p>
           ) : (
-            <ul className="divide-y divide-line rounded-2xl border border-line bg-surface">
+            <ul className="divide-y divide-line rounded-card border border-line bg-surface shadow-card">
               <AnimatePresence initial={false}>
                 {shown.map((expense) => (
                   <ExpenseRow key={expense.uuid} expense={expense} budgetCurrency={currency} />
@@ -122,7 +122,7 @@ function CategoryHeader({
         <ArrowLeft className="size-4 rtl:-scale-x-100" aria-hidden />
         {t.expenses.allExpenses}
       </Link>
-      <div className="flex flex-col items-center gap-3 rounded-2xl border border-line bg-surface px-6 py-7 text-center">
+      <div className="flex flex-col items-center gap-3 rounded-card border border-line bg-surface shadow-card px-6 py-7 text-center">
         {category && <CategoryIcon category={category} />}
         <h1 className="text-muted">{t.expenses.categoryTotal(name, monthName(month))}</h1>
         {summary && (
@@ -142,7 +142,7 @@ function ImportLink() {
   return (
     <Link
       href="/import"
-      className="mb-8 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-8 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <FileUp className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{t.imports.link}</span>
@@ -162,7 +162,7 @@ function RecurringLink() {
   return (
     <Link
       href="/recurring"
-      className="mb-3 flex items-center gap-3 rounded-2xl border border-line bg-surface px-5 py-4 transition-colors hover:bg-ink/[0.03]"
+      className="mb-3 flex items-center gap-3 rounded-card border border-line bg-surface shadow-card px-5 py-4 transition-colors hover:bg-ink/[0.03]"
     >
       <Repeat className="size-5 shrink-0 text-brand" aria-hidden />
       <span className="min-w-0 flex-1 truncate font-semibold">{label}</span>

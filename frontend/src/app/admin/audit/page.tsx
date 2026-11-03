@@ -25,7 +25,7 @@ export default function AdminAuditPage() {
         <LoadError message="The audit log could not be loaded." onRetry={() => void refetch()} />
       ) : (
         <>
-          <div className={`overflow-x-auto rounded-2xl border border-line bg-surface ${isFetching ? "opacity-70" : ""}`}>
+          <div className={`overflow-x-auto rounded-card border border-line bg-surface shadow-card ${isFetching ? "opacity-70" : ""}`}>
             <table className="w-full min-w-[640px] text-[15px]">
               <thead className="border-b border-line text-sm text-muted">
                 <tr>

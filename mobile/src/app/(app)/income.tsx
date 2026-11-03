@@ -65,7 +65,7 @@ export default function IncomeScreen() {
         ) : income.isError ? (
           <LoadError message={errorMessage(income.error)} onRetry={() => void income.refetch()} />
         ) : income.data.items.length === 0 ? (
-          <View style={{ borderRadius: 16, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40, gap: 4 }}>
+          <View style={{ borderRadius: 18, borderWidth: 1, borderStyle: "dashed", borderColor: colors.line, paddingHorizontal: 24, paddingVertical: 40, gap: 4 }}>
             <Text display weight="semibold" size={20}>{t.income.empty}</Text>
             <Text size={15} tone="muted">{t.income.emptyHint}</Text>
             <Button variant="secondary" style={{ alignSelf: "flex-start", marginTop: 16 }} icon={<Copy size={16} color={colors.ink} />} onPress={copyPrevious} loading={copy.isPending}>
@@ -75,7 +75,7 @@ export default function IncomeScreen() {
         ) : (
           <>
             <Totals data={income.data} month={month} />
-            <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" }}>
+            <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, overflow: "hidden" }}>
               {income.data.items.map((item, i) => (
                 <IncomeRow key={item.uuid} income={item} first={i === 0} monthCurrency={income.data.currency} onEdit={() => setOpen({ kind: "income", income: item })} />
               ))}
@@ -116,7 +116,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
     <View style={{ marginBottom: 24, gap: 16 }}>
       <View style={{ flexDirection: "row", gap: 8 }}>
         {stats.map((box) => (
-          <View key={box.label} style={{ flex: 1, borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 12 }}>
+          <View key={box.label} style={{ flex: 1, borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, padding: 12 }}>
             <Text size={13} tone="muted">{box.label}</Text>
             <Text display weight="semibold" size={16} numberOfLines={1} style={{ color: box.color }}>{money(box.value, data.currency)}</Text>
           </View>
@@ -137,7 +137,7 @@ function Totals({ data, month }: { data: IncomeMonth; month: string }) {
           </View>
         </>
       )}
-      <View style={{ borderRadius: 16, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16, gap: 12 }}>
+      <View style={{ borderRadius: 24, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface, paddingHorizontal: 20, paddingVertical: 16, gap: 12 }}>
         <Text size={15} tone="muted">
           {data.budget !== null ? t.income.budgetIs(money(data.budget, data.currency)) : t.income.noBudget}
         </Text>
@@ -163,7 +163,7 @@ function IncomeRow({ income, first, monthCurrency, onEdit }: { income: Income; f
         flexDirection: "row", alignItems: "center", gap: 16, paddingHorizontal: 20, paddingVertical: 16,
         borderTopWidth: first ? 0 : 1, borderColor: colors.line, backgroundColor: pressed ? `${colors.ink}08` : "transparent",
       })}>
-      <View style={{ width: 40, height: 40, borderRadius: 12, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
+      <View style={{ width: 40, height: 40, borderRadius: 14, alignItems: "center", justifyContent: "center", backgroundColor: `${colors.brand}1a` }}>
         <Wallet size={20} color={colors.brand} />
       </View>
       <View style={{ flex: 1, minWidth: 0 }}>

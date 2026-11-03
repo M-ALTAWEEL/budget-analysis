@@ -169,7 +169,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
             pointerEvents="none"
             style={{
               position: "absolute", top: 0, left: tooltipLeft, width: 160, zIndex: 10,
-              borderRadius: 12, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface,
+              borderRadius: 14, borderWidth: 1, borderColor: colors.line, backgroundColor: colors.surface,
               paddingHorizontal: 12, paddingVertical: 8,
               shadowColor: "#000", shadowOpacity: 0.12, shadowRadius: 12, shadowOffset: { width: 0, height: 4 }, elevation: 6,
             }}>
@@ -198,7 +198,7 @@ export function PaceChart({ daily, month }: { daily: DailySpending; month: strin
             <Text size={14} tone="muted">{table ? "▾ " : "▸ "}{t.insights.showTable}</Text>
           </Pressable>
           {table && (
-            <View style={{ marginTop: 8, borderRadius: 12, borderWidth: 1, borderColor: colors.line, overflow: "hidden" }}>
+            <View style={{ marginTop: 8, borderRadius: 14, borderWidth: 1, borderColor: colors.line, overflow: "hidden" }}>
               {[null, ...running.map((_, i) => i)].map((i) => (
                 <View
                   key={i ?? "head"}
