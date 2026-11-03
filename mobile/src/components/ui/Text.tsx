@@ -44,7 +44,7 @@ export function Text({
     marigold: "marigoldInk",
     onBrand: "onBrand",
   };
-  const align: TextStyle["textAlign"] = center ? "center" : end !== rtl ? "right" : "left";
+  const align: TextStyle["textAlign"] = center ? "center" : Boolean(end) !== rtl ? "right" : "left";
   return (
     <NativeText
       // Android measures some Arabic text a little short and cuts the last word off
