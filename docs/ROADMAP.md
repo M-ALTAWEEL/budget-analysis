@@ -146,6 +146,10 @@ Features meant for Plus are built free now and gated by entitlements in phase 7.
 - [x] **Customer support**: Help and feedback in Settings, Contact us on the sign-in page, an inbox in the admin dashboard; answers by push and email
 - [x] **ibudgi brand**: new name, icon, splash and logo; a launch animation (app on every cold start, website on the first visit) and the "fill up" loader everywhere
 - [x] **F13 Offline mode**: new expenses wait on the device without a connection and are sent by themselves when it is back; a device-made id stops duplicates
+- [ ] **ibudgi design** (`docs/design/design-system.md`), three pull requests:
+  - [ ] Foundations: the indigo palette with ok green, Geist, shape and motion tokens
+  - [ ] Building blocks, navigation, search menu, the Overview as a bento grid, the year chart restyled
+  - [ ] Every other screen, the sign-in panel, the admin dashboard and the landing page; new store screenshots
 
 ## Phase 7: Subscriptions, payments and coupons
 - [ ] An **entitlements** table: what is free and what is paid. Code asks "is this allowed?", never "did they pay?"
